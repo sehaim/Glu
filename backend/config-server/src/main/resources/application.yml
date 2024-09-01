@@ -1,0 +1,18 @@
+server:
+    port: 9000
+
+spring:
+    application:
+        name: glu-config
+    cloud:
+        config:
+            server:
+                git:
+                    uri: git@github.com:E-Glu/glu-config.git
+                    ignore-local-ssh-settings: true
+                    private-key: |
+                        -----BEGIN EC PRIVATE KEY-----
+                        MHcCAQEEIJhFGcWxtDDvVSBW3pk69UmSNA6BQJ6QiW2RBsDFa5PnoAoGCCqGSM49
+                        AwEHoUQDQgAE+3x/AbOFMeglcUvJ/E5x+gULPbaZ7frC1HWw74+Q/5IiAOK/q4PD
+                        DmZ+wAPrxPUgmW+XL8sqiLGcYvroViMDxw==
+                        -----END EC PRIVATE KEY-----
