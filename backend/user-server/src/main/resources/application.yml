@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: glu-user
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ----- Config Server에서 처리 -----
+  # Cloud
+  cloud:
+    config:
+      enabled: false
+
+  # MySQL
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/glu
+    username: root
+    password:
+
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create
