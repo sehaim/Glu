@@ -1,0 +1,17 @@
+:root {
+  --RED: #ec2e2e;
+  --PINK: #ff9b9b;
+  --LIGHTPINK: #ffc8c8;
+  --ORANGE: #ffd972;
+  --YELLOW: #fffec4;
+  --LIGHTGREEN: #cbffa9;
+  --GREEN: #33b893;
+  --SKYBLUE: #b4e4ff;
+  --BLUE: #3d99ed;
+  --GRAY: #989898;
+  --LIGHTGRAY: #efefef;
+  --BLACK: #000000;
+  --WHITE: #ffffff;
+  --TEXT_PRIMARY: #4b4019;
+  --TEXT_SECONDARY: #767676;
+}
