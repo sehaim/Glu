@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: glu-gateway
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:http://glu-eureka:8761/eureka}
