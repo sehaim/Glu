@@ -1,3 +1,6 @@
+server:
+  port: 8083
+
 spring:
   application:
     name: glu-problem
@@ -10,17 +13,14 @@ spring:
     config:
       enabled: false
 
-  # MySQL
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/glu
-    username: root
-    password:
+  data:
+    mongodb:
+      uri: mongodb+srv://S11P22A506:denr23bdoE@ssafy.ngivl.mongodb.net/S11P22A506?authSource=admin
 
-  # JPA
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
-    open-in-view: false
-    show-sql: true
-    hibernate:
-      ddl-auto: create
+#  # JPA
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQLDialect
+#    open-in-view: false
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: create
