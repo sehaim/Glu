@@ -42,4 +42,9 @@ public class Problem extends BaseTimeDocument {
 		this.questionType = questionType;
 		this.metadata = metadata;
 	}
+
+	public enum Status{
+		CORRECT,
+		WRONG
+	}
 }
