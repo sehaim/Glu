@@ -1,24 +1,28 @@
-package com.ssafy.glu.problem.repository;
+package com.ssafy.glu.problem.domain.problem.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import com.ssafy.glu.problem.MockFactory;
+import com.ssafy.glu.problem.util.MockFactory;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 
-@SpringBootTest
-@Transactional
-@Profile("test")
+@DataMongoTest
+@ActiveProfiles("test")
 class ProblemRepositoryTest {
 	@Autowired
 	private ProblemRepository problemRepository;
+
+	@BeforeEach
+	public void setUp() {
+		problemRepository.deleteAll();
+	}
 
 	@Test
 	void problemSaveTest() {
