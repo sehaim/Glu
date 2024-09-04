@@ -4,13 +4,15 @@ server:
 spring:
   application:
     name: glu-problem
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:test}
   # Cloud
   cloud:
     config:
       enabled: false
-
   data:
     mongodb:
-      uri: mongodb+srv://S11P22A506:denr23bdoE@ssafy.ngivl.mongodb.net/S11P22A506?authSource=admin
+      host: localhost
+      port: 27017
+
+  mongodb:
+    embedded:
+      version: 4.0.21
