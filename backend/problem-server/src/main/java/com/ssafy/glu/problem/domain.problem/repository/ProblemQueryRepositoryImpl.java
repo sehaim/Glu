@@ -20,8 +20,9 @@ public class ProblemQueryRepositoryImpl extends QuerydslRepositorySupport implem
     public Page<Problem> findByCondition(ProblemSearchCondition condition, Pageable pageable) {
         return from(problem)
                 .where(
-                        levelEq(condition.problemLevelCode())
-
+                        levelEq(condition.problemLevelCode()),
+                        typeEq(condition.problemTypeCode()),
+                        detailTypeEq(condition.ProblemTypeDetailCode())
                 )
                 .fetchPage(pageable);
     }
