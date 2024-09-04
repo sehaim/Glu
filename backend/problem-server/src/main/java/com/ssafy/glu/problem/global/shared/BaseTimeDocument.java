@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Getter
-@Document // MongoDB 문서임을 나타냅니다.
+@Document
 public abstract class BaseTimeDocument {
 
     @CreatedDate
