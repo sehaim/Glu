@@ -1,4 +1,4 @@
-package com.ssafy.glu.problem;
+package com.ssafy.glu.problem.util;
 
 import java.util.Random;
 import java.util.UUID;
