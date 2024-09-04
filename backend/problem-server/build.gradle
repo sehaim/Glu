@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.3'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 group = 'com.ssafy.glu'
@@ -56,6 +57,16 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.6'
     // logback
     implementation 'ch.qos.logback:logback-classic:1.4.1'
+
+    //==QueryDsl==//
+    implementation 'com.querydsl:querydsl-core'
+//    implementation 'com.querydsl:querydsl-mongodb'
+    implementation('com.querydsl:querydsl-mongodb') {
+        exclude group: 'org.mongodb', module: 'mongo-java-driver' // MongoDB 드라이버를 Spring과 QueryDSL이 각각 가지고 있어서 충돌
+    }
+    implementation  "com.querydsl:querydsl-apt"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 dependencyManagement {
@@ -64,6 +75,27 @@ dependencyManagement {
     }
 }
 
+// 컴파일러 옵션에 annotationProcessor 직접 지정
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+def querydslGeneratedDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    springDataMongo = true
+    querydslSourcesDir = querydslGeneratedDir
+}
+
+sourceSets {
+    main.java.srcDir querydslGeneratedDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
