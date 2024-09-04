@@ -38,6 +38,28 @@ public class MockFactory {
 			.build();
 	}
 
+	public static Problem createProblem(String problemLevelCode) {
+		// 랜덤한 문자열 생성
+		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
+		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
+		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
+
+		Map<String,Object> metadata = new HashMap<>();
+
+		metadata.put("options", List.of("option1", "option2", "option3"));
+		metadata.put("imageUrl", "url");
+
+		return Problem.builder()
+				.title(randomTitle)
+				.content(randomContent)
+				.solution(randomSolution)
+				.level(createProblemLevel(problemLevelCode))
+				.problemType(createProblemTypeDetail())
+				.questionType(createQuestionType())
+				.metadata(metadata)
+				.build();
+	}
+
 	public static ProblemLevel createProblemLevel() {
 		// 랜덤한 ProblemLevel 객체 생성
 		String level = "0"+RANDOM.nextInt(3);
@@ -47,6 +69,16 @@ public class MockFactory {
 			.problemLevelCode(code)
 			.name(name)
 			.build();
+	}
+
+	public static ProblemLevel createProblemLevel(String problemCodeLevelCode) {
+		// 랜덤한 ProblemLevel 객체 생성
+		String level = "0"+RANDOM.nextInt(3);
+		String name = "LV " + level;
+		return ProblemLevel.builder()
+				.problemLevelCode(problemCodeLevelCode)
+				.name(name)
+				.build();
 	}
 
 	public static ProblemTypeDetail createProblemTypeDetail() {
