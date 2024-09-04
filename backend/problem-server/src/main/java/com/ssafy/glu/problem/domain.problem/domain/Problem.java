@@ -8,7 +8,7 @@ import com.ssafy.glu.problem.global.shared.BaseTimeDocument;
 import lombok.Builder;
 import lombok.Getter;
 
-@Document // 실제 몽고 DB 컬렉션 이름
+@Document
 @Getter
 public class Problem extends BaseTimeDocument {
 	@Id
