@@ -1,20 +1,15 @@
 package com.ssafy.glu.problem.domain.problem.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@Document
 @Getter
-@Builder
 @AllArgsConstructor
+@Builder
 @ToString
-public class ProblemLevel {
-	@Id
-	private String problemLevelCode;
+public class QuestionType {
+	private String questionTypeCode;
 	private String name;
 }
