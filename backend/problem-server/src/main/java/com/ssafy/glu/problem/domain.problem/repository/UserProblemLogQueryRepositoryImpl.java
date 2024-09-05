@@ -68,7 +68,7 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 	}
 
 	SortOperation sortByCreatedDate() {
-		return Aggregation.sort(Sort.by(Sort.Direction.ASC, "createdDate"));
+		return Aggregation.sort(Sort.by(Sort.Direction.DESC, "createdDate"));
 	}
 
 	GroupOperation groupByProblemId() {

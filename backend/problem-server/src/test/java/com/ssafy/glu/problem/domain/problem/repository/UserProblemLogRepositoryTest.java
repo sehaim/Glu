@@ -56,9 +56,9 @@ class UserProblemLogRepositoryTest {
 		// 유저별 풀이 기록 등록
 		for (Long userId : userIdList) {
 			for (Problem problem : problemList) {
+				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
+				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
 				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,true));
-				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
-				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
 			}
 		}
 	}
