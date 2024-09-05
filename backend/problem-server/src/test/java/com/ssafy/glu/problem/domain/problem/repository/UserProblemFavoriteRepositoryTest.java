@@ -71,4 +71,26 @@ class UserProblemFavoriteRepositoryTest {
 		assertThat(exists).isTrue();
 		log.info("===== 문제 찜 존재 여부 확인 UserId : {}, Problem : {} =====", 1L, problem);
 	}
+
+	@Test
+	void deleteByUserIdAndProblemTest() {
+		// Given
+		Problem problem = problemRepository.save(MockFactory.createProblem());
+		UserProblemFavorite userProblemFavorite = UserProblemFavorite.builder()
+			.userId(1L)
+			.problem(problem)
+			.build();
+		userProblemFavoriteRepository.save(userProblemFavorite);
+
+		// When
+		List<UserProblemFavorite> userProblemFavoriteList = userProblemFavoriteRepository.findAll();
+
+		userProblemFavoriteRepository.deleteByUserIdAndProblem(1L, problem);
+		boolean existsAfterDelete = userProblemFavoriteRepository.existsByUserIdAndProblem(1L, problem);
+
+		// Then
+		assertThat(userProblemFavoriteList).hasSize(1);
+		assertThat(existsAfterDelete).isFalse();
+		log.info("===== 문제 찜 취소 확인 UserId : {}, Problem : {} =====", 1L, problem);
+	}
 }
