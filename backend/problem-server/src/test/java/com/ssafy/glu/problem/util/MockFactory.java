@@ -11,11 +11,13 @@ import com.ssafy.glu.problem.domain.problem.domain.ProblemLevel;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemType;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetail;
 import com.ssafy.glu.problem.domain.problem.domain.QuestionType;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 
 public class MockFactory {
 
 	private static final Random RANDOM = new Random();
 
+	//===== Problem =====//
 	public static Problem createProblem() {
 		// 랜덤한 문자열 생성
 		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
@@ -115,6 +117,20 @@ public class MockFactory {
 			.build();
 	}
 
+	//===== UserProblemLog =====//
+	public static UserProblemLog createUserProblemLog(Long userId, Problem problem, boolean isCorrect) {
+		// 랜덤한 문자열 생성
+		String randomAnswer = "Answer " + UUID.randomUUID().toString().substring(0, 8);
+		int randomSolveTime = RANDOM.nextInt(10);
+
+		return UserProblemLog.builder()
+			.userId(userId)
+			.problem(problem)
+			.userAnswer(randomAnswer)
+			.isCorrect(isCorrect)
+			.solvedTime(randomSolveTime)
+			.build();
+	}
 
 
 }
