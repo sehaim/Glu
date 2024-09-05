@@ -5,23 +5,60 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
+import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredException;
+import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
 	private final ProblemRepository problemRepository;
+	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 
 	@Override
 	public List<UserProblemLogResponse> getUserProblemLogList(Long userId, UserProblemLogSearchCondition condition,
 		Pageable pageable) {
 
-		
-
 		return List.of();
+	}
+
+	@Override
+	public void createUserProblemFavorite(Long userId, String problemId) {
+		log.info("===== 문제 찜 요청 - 유저 : {}, 문제: {} =====", userId, problemId);
+
+		// 문제 존재 여부 확인
+		Problem problem = getProblemOrThrow(problemId);
+		log.info("===== 문제 [{}] 찾았습니다 =====", problem);
+
+		// 찜 존재 여부 확인
+		validateFavoriteNotRegistered(userId, problem);
+
+		UserProblemFavorite userProblemFavorite = UserProblemFavorite.builder()
+			.userId(userId)
+			.problem(problem)
+			.build();
+		log.info("===== 문제 찜 추가 - 유저 : {}, 문제: {} =====", userId, problemId);
+
+		userProblemFavoriteRepository.save(userProblemFavorite);
+	}
+
+	private Problem getProblemOrThrow(String problemId) {
+		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+	}
+
+	private void validateFavoriteNotRegistered(Long userId, Problem problem) {
+		if (userProblemFavoriteRepository.existsByUserIdAndProblem(userId, problem)) {
+			log.warn("===== 사용자 [{}]가 이미 문제 [{}]를 찜한 상태 =====", userId, problem);
+			throw new FavoriteAlreadyRegisteredException();
+		}
 	}
 }
