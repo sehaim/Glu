@@ -10,6 +10,7 @@ import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredException;
+import com.ssafy.glu.problem.domain.problem.exception.FavoriteNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
@@ -51,14 +52,38 @@ public class ProblemServiceImpl implements ProblemService {
 		userProblemFavoriteRepository.save(userProblemFavorite);
 	}
 
+	@Override
+	public void deleteUserProblemFavorite(Long userId, String problemId) {
+		log.info("===== 문제 찜 취소 - 유저 : {}, 문제 : {} =====", userId, problemId);
+
+		// 문제 존재 여부 확인
+		Problem problem = getProblemOrThrow(problemId);
+		log.info("===== 문제 [{}] 찾았습니다 =====", problem);
+
+		// 찜 존재 여부 확인
+		validateFavoriteRegistered(userId, problem);
+
+		userProblemFavoriteRepository.deleteByUserIdAndProblem(userId, problem);
+	}
+
+	// 문제 존재 여부 판단
 	private Problem getProblemOrThrow(String problemId) {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
+	// 이전에 찜 했는지 판단 => 이전에 찜이 있으면 오류
 	private void validateFavoriteNotRegistered(Long userId, Problem problem) {
 		if (userProblemFavoriteRepository.existsByUserIdAndProblem(userId, problem)) {
 			log.warn("===== 사용자 [{}]가 이미 문제 [{}]를 찜한 상태 =====", userId, problem);
 			throw new FavoriteAlreadyRegisteredException();
+		}
+	}
+
+	// 이전에 찜 했는지 판단 => 이전에 찜이 없으면 오류
+	private void validateFavoriteRegistered(Long userId, Problem problem) {
+		if (!userProblemFavoriteRepository.existsByUserIdAndProblem(userId, problem)) {
+			log.warn("===== 사용자 [{}]가 [{}]를 찜하지 않은 상태 =====", userId, problem);
+			throw new FavoriteNotFoundException();
 		}
 	}
 }
