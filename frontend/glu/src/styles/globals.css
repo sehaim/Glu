@@ -5,3 +5,36 @@ body {
 
   box-sizing: border-box;
 }
+
+* {
+  margin: 0px;
+  padding: 0px;
+
+  box-sizing: border-box;
+}
+
+/* 폰트 적용 */
+@font-face {
+  font-family: 'BMJUA';
+  src: url('../assets/fonts/BMJUA.ttf');
+}
+
+@font-face {
+  font-family: 'PTBOLD';
+  src: url('../assets/fonts/평택반도체 Bold.ttf');
+}
+
+@font-face {
+  font-family: 'PT';
+  src: url('../assets/fonts/평택반도체 Regular.ttf');
+}
+
+@font-face {
+  font-family: 'HDBOLD';
+  src: url('../assets/fonts/Hakgyoansim Dunggeunmiso TTF B.ttf');
+}
+
+@font-face {
+  font-family: 'HD';
+  src: url('../assets/fonts/Hakgyoansim Dunggeunmiso TTF R.ttf');
+}
