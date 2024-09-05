@@ -9,4 +9,6 @@ import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
 @Repository
 public interface UserProblemFavoriteRepository extends MongoRepository<UserProblemFavorite, String> {
 	boolean existsByUserIdAndProblem(Long userId, Problem problem);
+
+	void deleteByUserIdAndProblem(Long userId, Problem problem);
 }
