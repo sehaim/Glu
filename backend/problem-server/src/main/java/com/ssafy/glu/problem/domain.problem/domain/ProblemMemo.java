@@ -30,4 +30,10 @@ public class ProblemMemo {
 		this.problem = problem;
 		this.contents = contents;
 	}
+
+	public void updateContents(String contents) {
+		if (contents != null) {
+			this.contents = contents;
+		}
+	}
 }
