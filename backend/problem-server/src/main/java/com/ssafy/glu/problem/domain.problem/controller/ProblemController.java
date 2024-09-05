@@ -1,5 +1,7 @@
 package com.ssafy.glu.problem.domain.problem.controller;
 
+import static com.ssafy.glu.problem.global.util.HeaderUtil.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,7 @@ public class ProblemController {
 	private final ProblemService problemService;
 
 	@PostMapping("/{problemId}/favorite")
-	public ResponseEntity<Void> createUserProblemFavorite(@RequestHeader("userId") Long userId,
+	public ResponseEntity<Void> createUserProblemFavorite(@RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId) {
 		problemService.createUserProblemFavorite(userId, problemId);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
