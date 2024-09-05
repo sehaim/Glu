@@ -5,12 +5,18 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
@@ -20,9 +26,11 @@ import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCond
 import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @DataMongoTest
 @ActiveProfiles("test")
+@DirtiesContext
 @Slf4j
 class UserProblemLogRepositoryTest {
 	@Autowired
@@ -37,11 +45,14 @@ class UserProblemLogRepositoryTest {
 
 	@BeforeEach
 	public void setUp() {
+		problemRepository.deleteAll();
 		userProblemLogRepository.deleteAll();
+
 		problemList = new ArrayList<>();
 		for (int i = 0; i < NUM_PROBLEMS; i++) {
 			problemList.add(problemRepository.save(MockFactory.createProblem()));
 		}
+
 		// 유저별 풀이 기록 등록
 		for (Long userId : userIdList) {
 			for (Problem problem : problemList) {
@@ -82,9 +93,10 @@ class UserProblemLogRepositoryTest {
 			.status(Problem.Status.WRONG)
 			.build();
 
+		userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problemList.get(0),false));
+
 		Page<Problem> result = userProblemLogRepository.findByCondition(userId, condition, Pageable.ofSize(10));
 
-		userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problemList.get(0),false));
 
 		log.info("검색된 문제 수 : {}",result.getContent().size());
 		assertThat(result.getTotalElements()).isEqualTo(1);
