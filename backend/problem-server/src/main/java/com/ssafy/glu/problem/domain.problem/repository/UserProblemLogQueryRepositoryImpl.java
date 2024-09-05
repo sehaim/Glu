@@ -7,8 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
@@ -26,25 +25,23 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 	public Page<Problem> findByCondition(Long userId, UserProblemLogSearchCondition condition, Pageable pageable) {
 		// 검색 조건 빌딩
 		Criteria criteria = new Criteria();
-
 		userIdEq(criteria, userId);
-		problemTypeEq(criteria, condition.problemTypeCode());
 
 		Criteria lastCriteria = new Criteria();
 		statusEq(lastCriteria, condition.status());
+		problemTypeEq(lastCriteria, condition.problemTypeCode());
 
 		// 집계 파이프라인
 		Aggregation aggregation = Aggregation.newAggregation(
-			Aggregation.match(criteria),
-			Aggregation.lookup("problem", "problemId", "_id", "problems"),
-			Aggregation.unwind("problems"),
-			Aggregation.sort(Sort.by(Sort.Direction.DESC, "createdDate")),
-			Aggregation.group("problems._id") // 문제로 그룹화
-				.first("problems").as("problem"),
-			Aggregation.match(lastCriteria),
-			Aggregation.project("problem"), // 필요한 필드만 추출
-			Aggregation.skip(pageable.getOffset()),
-			Aggregation.limit(pageable.getPageSize())
+				matchByCriteria(criteria),
+				sortByCreatedDate(),
+				groupByProblemId(),
+				matchByCriteria(lastCriteria),
+				lookupProblem(),
+				unwindProblem(),
+				projectProblem(),
+				skipPagination(pageable.getOffset()),
+				limitPagination(pageable.getPageSize())
 		);
 
 		// 문제 리스트 가져오기
@@ -53,19 +50,51 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 
 		// 전체 데이터 수를 계산하기 위해 집계 쿼리 실행
 		Aggregation countAggregation = Aggregation.newAggregation(
-			Aggregation.match(criteria),
-			Aggregation.lookup("problem", "problemId", "_id", "problems"),
-			Aggregation.unwind("problems"),
-			Aggregation.group("problems._id") // 문제로 그룹화
-				.first("problems").as("problem"),
-			Aggregation.match(lastCriteria),
-			Aggregation.count().as("count")
+				matchByCriteria(criteria),
+				sortByCreatedDate(),
+				groupByProblemId(),
+				matchByCriteria(lastCriteria),
+				Aggregation.count().as("count")
 		);
 
 		AggregationResults<CountResult> countResults = template.aggregate(countAggregation, "userProblemLog", CountResult.class);
 		long total = countResults.getMappedResults().stream().mapToLong(CountResult::getCount).sum();
 
 		return new PageImpl<>(problems, pageable, total);
+	}
+
+	MatchOperation matchByCriteria(Criteria criteria) {
+		return Aggregation.match(criteria);
+	}
+
+	SortOperation sortByCreatedDate() {
+		return Aggregation.sort(Sort.by(Sort.Direction.ASC, "createdDate"));
+	}
+
+	GroupOperation groupByProblemId() {
+		return Aggregation.group("problemId")
+				.first("problemId").as("problemId")
+				.first("isCorrect").as("isCorrect");
+	}
+
+	LookupOperation lookupProblem() {
+		return Aggregation.lookup("problem", "problemId", "_id", "problem");
+	}
+
+	UnwindOperation unwindProblem() {
+		return Aggregation.unwind("problem");
+	}
+
+	ProjectionOperation projectProblem() {
+		return Aggregation.project("problem");
+	}
+
+	AggregationOperation skipPagination(long offset) {
+		return Aggregation.skip(offset);
+	}
+
+	AggregationOperation limitPagination(int size) {
+		return Aggregation.limit(size);
 	}
 
 	private void userIdEq(Criteria criteria, Long userId) {
