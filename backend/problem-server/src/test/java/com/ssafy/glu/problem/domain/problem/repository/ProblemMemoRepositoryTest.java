@@ -37,12 +37,7 @@ class ProblemMemoRepositoryTest {
 	void updateProblemMemoContentTest() {
 		// Given
 		Problem problem = problemRepository.save(MockFactory.createProblem());
-		String originalContent = "Original Content " + UUID.randomUUID().toString().substring(0, 8);
-		ProblemMemo problemMemo = ProblemMemo.builder()
-			.userId(1L)
-			.contents(originalContent)
-			.problem(problem)
-			.build();
+		ProblemMemo problemMemo = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
 		ProblemMemo savedProblemMemo = problemMemoRepository.save(problemMemo);
 		String updatedContent = "Updated Content " + UUID.randomUUID().toString().substring(0, 8);
 
@@ -54,7 +49,19 @@ class ProblemMemoRepositoryTest {
 		ProblemMemo updatedProblemMemo = problemMemoRepository.findById(savedProblemMemo.getProblemMemoId())
 			.orElseThrow(
 				ProblemMemoNotFoundException::new);
-		assertThat(updatedProblemMemo.getContents()).isEqualTo(updatedContent);
+		assertThat(updatedProblemMemo.getContent()).isEqualTo(updatedContent);
+	}
 
+	@Test
+	void deleteProblemMemoTest() {
+		// Given
+		Problem problem = problemRepository.save(MockFactory.createProblem());
+		ProblemMemo problemMemo = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+
+		// When
+		problemMemoRepository.deleteById(problemMemo.getProblemMemoId());
+
+		// Then
+		assertThat(problemMemoRepository.count()).isZero();
 	}
 }
