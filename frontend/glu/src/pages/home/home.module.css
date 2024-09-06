@@ -35,6 +35,8 @@
 }
 
 #section1-image-wrapper {
+  justify-content: center;
+  align-items: center;
   width: 40%;
 }
 
@@ -182,7 +184,15 @@
 
 @media (max-width: 768px) {
   .section {
-    padding: 32px;
+    padding: 0px;
+  }
+
+  .section-title {
+    font-size: 32px;
+  }
+
+  .section-describe {
+    font-size: 16px;
   }
 
   .section1 {
@@ -197,5 +207,23 @@
 
   #section1-image-wrapper {
     width: 100%;
+  }
+
+  #section3-graph-wrapper {
+    flex-direction: column;
+  }
+
+  .section2-title {
+    font-size: 24px;
+  }
+
+  .section2-describe {
+    font-size: 16px;
+  }
+
+  #graph-image {
+    max-width: 200px;
+    width: 80%;
+    margin-right: 0px;
   }
 }

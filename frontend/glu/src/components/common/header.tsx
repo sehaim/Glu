@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Link from 'next/link';
 import styles from './header.module.css';
 
 const getHeaderStyle = (color: string) => {
@@ -24,19 +25,44 @@ export default function Header({ color }: { color: string }) {
   return (
     <div className={styles.container} style={headerStyle}>
       <div className={styles.content}>
-        <nav className={styles.nav_menu}>
+        <nav className={styles['info-menu-mobile']}>
           <ul>
             <li>
-              <h1 className={styles.logo}>Glu</h1>
+              <Link href="/">
+                <h1 className={styles.logo}>Glu</h1>
+              </Link>
+            </li>
+            <li>
+              종합
+              <br />
+              테스트
+            </li>
+            <li>
+              유형
+              <br />
+              테스트
+            </li>
+          </ul>
+        </nav>
+        <nav className={styles['info-menu']}>
+          <ul>
+            <li>
+              <Link href="/">
+                <h1 className={styles.logo}>Glu</h1>
+              </Link>
             </li>
             <li>종합 테스트</li>
             <li>유형별 테스트</li>
           </ul>
         </nav>
-        <nav className={styles.info_menu}>
+        <nav className={styles['user-menu']}>
           <ul>
-            <li>로그인</li>
-            <li>회원가입</li>
+            <li>
+              <Link href="/login">로그인</Link>
+            </li>
+            <li>
+              <Link href="/register">회원가입</Link>
+            </li>
           </ul>
         </nav>
       </div>

@@ -1,5 +1,5 @@
 import GlobalLayout from '@/components/layout/global-layout';
-import '@/styles/globals.css';
+import '@/styles/global.css';
 import '@/styles/color.css';
 import type { AppProps } from 'next/app';
 import { ReactNode } from 'react';
