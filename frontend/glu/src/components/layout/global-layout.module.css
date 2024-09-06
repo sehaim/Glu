@@ -1,6 +1,7 @@
 .container {
   background-color: var(--YELLOW);
   width: 100%;
+  min-width: 400px;
   min-height: 100vh;
   margin: 0 auto;
 }
