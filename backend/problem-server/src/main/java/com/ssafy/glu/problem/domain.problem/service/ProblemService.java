@@ -1,7 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
@@ -10,7 +9,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
 
 public interface ProblemService {
-	List<UserProblemLogResponse> getUserProblemLogList(Long userId, UserProblemLogSearchCondition condition, Pageable pageable);
+	Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition, Pageable pageable);
 	// ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
 	ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request);
 	// void deleteMemo(String problemMemoId);

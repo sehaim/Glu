@@ -10,9 +10,4 @@ spring:
       enabled: false
   data:
     mongodb:
-      host: localhost
-      port: 27017
-
-  mongodb:
-    embedded:
-      version: 4.0.21
+      uri: mongodb://localhost:27017/test

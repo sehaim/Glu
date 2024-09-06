@@ -15,6 +15,6 @@ import lombok.ToString;
 @ToString
 public class ProblemLevel {
 	@Id
-	private String problemLevelCode;
-	private String name;
+	private final String problemLevelCode;
+	private final String name;
 }

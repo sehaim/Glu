@@ -15,8 +15,6 @@ import lombok.ToString;
 @ToString
 public class ProblemTypeDetail {
 	@Id
-	private String problemTypeDetailCode;
-	private String name;
-
-	private ProblemType problemType;
+	private final String problemTypeDetailCode;
+	private final String name;
 }
