@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.ssafy.glu.problem.util.MockFactory;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
 

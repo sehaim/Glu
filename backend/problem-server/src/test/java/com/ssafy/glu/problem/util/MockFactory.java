@@ -36,6 +36,7 @@ public class MockFactory {
 			.problemLevel(createProblemLevel())
 			.problemType(createProblemType())
 			.problemTypeDetail(createProblemTypeDetail())
+			.problemType(createProblemType())
 			.questionType(createQuestionType())
 			.metadata(metadata)
 			.build();
@@ -132,6 +133,4 @@ public class MockFactory {
 			.solvedTime(randomSolveTime)
 			.build();
 	}
-
-
 }
