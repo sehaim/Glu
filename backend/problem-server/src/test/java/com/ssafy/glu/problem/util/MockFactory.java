@@ -33,8 +33,9 @@ public class MockFactory {
 			.title(randomTitle)
 			.content(randomContent)
 			.solution(randomSolution)
-			.level(createProblemLevel())
-			.problemType(createProblemTypeDetail())
+			.problemLevel(createProblemLevel())
+			.problemType(createProblemType())
+			.problemTypeDetail(createProblemTypeDetail())
 			.questionType(createQuestionType())
 			.metadata(metadata)
 			.build();
@@ -55,8 +56,9 @@ public class MockFactory {
 				.title(randomTitle)
 				.content(randomContent)
 				.solution(randomSolution)
-				.level(createProblemLevel(problemLevelCode))
-				.problemType(createProblemTypeDetail())
+				.problemLevel(createProblemLevel(problemLevelCode))
+				.problemType(createProblemType())
+				.problemTypeDetail(createProblemTypeDetail())
 				.questionType(createQuestionType())
 				.metadata(metadata)
 				.build();
@@ -90,7 +92,6 @@ public class MockFactory {
 		String name = "유형 " + num;
 		return ProblemTypeDetail.builder()
 			.problemTypeDetailCode(problemTypeDetailCode)
-			.problemType(createProblemType())
 			.name(name)
 			.build();
 	}

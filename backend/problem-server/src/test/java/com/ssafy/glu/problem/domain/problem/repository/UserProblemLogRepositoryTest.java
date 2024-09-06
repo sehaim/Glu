@@ -5,28 +5,21 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -44,7 +37,7 @@ class UserProblemLogRepositoryTest {
 	private final int NUM_LOGS_LOGS_PER_USER = 3;
 
 	@BeforeEach
-	public void setUp() {
+	public void setUp() throws InterruptedException {
 		problemRepository.deleteAll();
 		userProblemLogRepository.deleteAll();
 
@@ -57,7 +50,9 @@ class UserProblemLogRepositoryTest {
 		for (Long userId : userIdList) {
 			for (Problem problem : problemList) {
 				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
+				Thread.sleep(1L);
 				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
+				Thread.sleep(1L);
 				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,true));
 			}
 		}
@@ -81,7 +76,7 @@ class UserProblemLogRepositoryTest {
 			.status(Problem.Status.CORRECT)
 			.build();
 
-		Page<Problem> problemList = userProblemLogRepository.findByCondition(userId, condition, Pageable.ofSize(10));
+		Page<Problem> problemList = userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, Pageable.ofSize(10));
 
 		assertThat(problemList.getTotalElements()).isEqualTo(3);
 	}
@@ -95,7 +90,7 @@ class UserProblemLogRepositoryTest {
 
 		userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problemList.get(0),false));
 
-		Page<Problem> result = userProblemLogRepository.findByCondition(userId, condition, Pageable.ofSize(10));
+		Page<Problem> result = userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, Pageable.ofSize(10));
 
 
 		log.info("검색된 문제 수 : {}",result.getContent().size());
