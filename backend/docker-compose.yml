@@ -8,13 +8,6 @@ services:
       - glu-network
     ports:
       - '${EUREKA_PORT}:${EUREKA_PORT}'
-  glu-config:
-    container_name: glu-config
-    image: ssafyglu/glu-config:latest
-    networks:
-      - glu-network
-    ports:
-      - '${CONFIG_PORT}:${CONFIG_PORT}'
   glu-gateway:
     container_name: glu-gateway
     image: ssafyglu/glu-gateway:latest
@@ -22,6 +15,19 @@ services:
       - glu-network
     ports:
       - '${GATEWAY_PORT}:${GATEWAY_PORT}'
+    depends_on:
+      - glu-eureka
+      - glu-config
+      - glu-problem
+  glu-config:
+    container_name: glu-config
+    image: ssafyglu/glu-config:latest
+    networks:
+      - glu-network
+    ports:
+      - '${CONFIG_PORT}:${CONFIG_PORT}'
+    depends_on:
+      - glu-eureka
   glu-problem:
     container_name: glu-problem
     image: ssafyglu/glu-problem:latest
@@ -29,6 +35,8 @@ services:
       - glu-network
     ports:
       - '${PROBLEM_PORT}:${PROBLEM_PORT}'
+    depends_on:
+      - glu-eureka
 
 networks:
   glu-network:
