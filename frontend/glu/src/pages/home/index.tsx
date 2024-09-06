@@ -134,7 +134,7 @@ export default function Home() {
           <img
             id={styles.graph_image}
             src="/images/home/home_graph.png"
-            alt="Graph Image"
+            alt="Graph"
           />
           <p className={styles.section_describe}>
             세 가지 유형의 테스트 결과를 바탕으로 그래프를 제공하여 학습 상태를
@@ -149,7 +149,9 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.section3_content_wrapper}>
-          <button className={styles.section3_button}>테스트 보러가기</button>
+          <button type="button" className={styles.section3_button}>
+            테스트 보러가기
+          </button>
         </div>
       </section>
     </div>
