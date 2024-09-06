@@ -12,7 +12,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
 public interface ProblemService {
 	List<UserProblemLogResponse> getUserProblemLogList(Long userId, UserProblemLogSearchCondition condition, Pageable pageable);
 	// ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
-	ProblemMemoResponse updateProblemMemo(String problemMemoId, ProblemMemoUpdateRequest request);
+	ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request);
 	// void deleteMemo(String problemMemoId);
 	// List<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable);
 	// List<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, Pageable pageable);
