@@ -50,15 +50,15 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 메모 업데이트 요청 - 사용자 Id : {}, 메모 Id : {}, 메모 내용 : {} =====", userId, problemMemoId, request);
 
+		ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
+
+		// 문제가 존재하는지랑
+		validateProblemExist(problemMemo);
+
+		// 사용자 권한이 있는지
+		validateProblemMemoUpdateAuthorized(userId, problemMemo);
+
 		try {
-			ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
-
-			// 문제가 존재하는지랑
-			validateProblemExist(problemMemo);
-
-			// 사용자 권한이 있는지
-			validateProblemMemoUpdateAuthorized(userId, problemMemo);
-
 			return problemService.updateProblemMemo(userId, problemMemoId, request);
 		} catch (Exception exception) {
 			throw new ProblemMemoUpdateFailedException(exception);
@@ -71,15 +71,15 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 메모 삭제 요청 - 사용자 Id : {}, 메모 Id : {} =====", userId, problemMemoId);
 
+		ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
+
+		// 문제가 존재하는지랑
+		validateProblemExist(problemMemo);
+
+		// 사용자 권한이 있는지
+		validateProblemMemoDeleteAuthorized(userId, problemMemo);
+
 		try {
-			ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
-
-			// 문제가 존재하는지랑
-			validateProblemExist(problemMemo);
-
-			// 사용자 권한이 있는지
-			validateProblemMemoDeleteAuthorized(userId, problemMemo);
-
 			problemService.deleteProblemMemo(userId, problemMemoId);
 		} catch (Exception exception) {
 			throw new ProblemMemoDeleteFailedException(exception);
@@ -92,11 +92,11 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 찜 생성 요청 - 사용자 Id : {}, 문제 Id : {} =====", userId, problemId);
 
+		Problem problem = getProblemOrThrow(problemId);
+
+		validateFavoriteNotRegistered(userId, problem);
+
 		try {
-			Problem problem = getProblemOrThrow(problemId);
-
-			validateFavoriteNotRegistered(userId, problem);
-
 			problemService.createUserProblemFavorite(userId, problemId);
 		} catch (Exception exception) {
 			throw new FavoriteRegistrationFailedException(exception);
@@ -108,13 +108,13 @@ public class ProblemValidationService implements ProblemService {
 		// 검증
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 찜 취소 요청 - 사용자 Id : {}, 문제 Id : {} =====", userId, problemId);
+
+		Problem problem = getProblemOrThrow(problemId);
+
+		validateFavoriteRegistered(userId, problem);
+
 		try {
-			Problem problem = getProblemOrThrow(problemId);
-
-			validateFavoriteRegistered(userId, problem);
-
 			problemService.deleteUserProblemFavorite(userId, problemId);
-
 		} catch (Exception exception) {
 			throw new FavoriteCancelFailedException(exception);
 		}
