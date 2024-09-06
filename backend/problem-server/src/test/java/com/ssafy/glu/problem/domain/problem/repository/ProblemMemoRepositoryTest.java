@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
@@ -34,6 +36,22 @@ class ProblemMemoRepositoryTest {
 	}
 
 	@Test
+	void createProblemMemoTest() {
+		// Given
+		Problem problem = problemRepository.save(MockFactory.createProblem());
+		long beforeCreateProblemMemo = problemMemoRepository.count();
+
+		ProblemMemo problemMemo = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+
+		// When
+		problemMemoRepository.save(problemMemo);
+		long afterCreateProblemMemo = problemMemoRepository.count();
+
+		// Then
+		assertThat(afterCreateProblemMemo - beforeCreateProblemMemo).isOne();
+	}
+
+	@Test
 	void updateProblemMemoContentTest() {
 		// Given
 		Problem problem = problemRepository.save(MockFactory.createProblem());
@@ -57,11 +75,31 @@ class ProblemMemoRepositoryTest {
 		// Given
 		Problem problem = problemRepository.save(MockFactory.createProblem());
 		ProblemMemo problemMemo = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+		long beforeDeletedCount = problemMemoRepository.count();
 
 		// When
 		problemMemoRepository.deleteById(problemMemo.getProblemMemoId());
+		long afterDeletedCount = problemMemoRepository.count();
 
 		// Then
-		assertThat(problemMemoRepository.count()).isZero();
+		assertThat(beforeDeletedCount - afterDeletedCount).isOne();
+	}
+
+	@Test
+	void findAllBuProblemTest() {
+		// Given
+		Problem problem = problemRepository.save(MockFactory.createProblem());
+
+		ProblemMemo problemMemo1 = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+		ProblemMemo problemMemo2 = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+		ProblemMemo problemMemo3 = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+		ProblemMemo problemMemo4 = problemMemoRepository.save(MockFactory.createProblemMemo(1L, problem));
+
+		// When
+		Page<ProblemMemo> result = problemMemoRepository.findAllByProblemOrderByCreatedDateDesc(problem,
+			Pageable.unpaged());
+
+		// Then
+		assertThat(result.getContent()).hasSize(4);
 	}
 }

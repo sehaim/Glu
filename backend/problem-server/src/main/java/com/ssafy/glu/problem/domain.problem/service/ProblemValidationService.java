@@ -101,6 +101,14 @@ public class ProblemValidationService implements ProblemService {
 	}
 
 	@Override
+	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
+		// 검증
+		log.info("검증 로직 서비스");
+		Problem problem = getProblemOrThrow(problemId);
+		return problemService.getProblemMemoList(userId, problemId, pageable);
+	}
+
+	@Override
 	public void createUserProblemFavorite(Long userId, String problemId) {
 		// 검증
 		log.info("검증 로직 서비스");

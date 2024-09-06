@@ -16,7 +16,7 @@ public interface ProblemService {
 	ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
 	ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request);
 	void deleteProblemMemo(Long userId, String problemMemoId);
-	// List<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable);
+	Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable);
 	// List<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, Pageable pageable);
 	void createUserProblemFavorite(Long userId, String problemId);
 	void deleteUserProblemFavorite(Long userId, String problemId);
