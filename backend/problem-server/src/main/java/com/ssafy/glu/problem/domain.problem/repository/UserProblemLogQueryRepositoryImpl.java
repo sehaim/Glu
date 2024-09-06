@@ -22,7 +22,7 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 	}
 
 	@Override
-	public Page<Problem> findByCondition(Long userId, UserProblemLogSearchCondition condition, Pageable pageable) {
+	public Page<Problem> findAllProblemInLogByCondition(Long userId, UserProblemLogSearchCondition condition, Pageable pageable) {
 		// 검색 조건 빌딩
 		Criteria criteria = new Criteria();
 		userIdEq(criteria, userId);
@@ -36,10 +36,10 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 				matchByCriteria(criteria),
 				sortByCreatedDate(),
 				groupByProblemId(),
-				matchByCriteria(lastCriteria),
 				lookupProblem(),
 				unwindProblem(),
-				projectProblem(),
+				matchByCriteria(lastCriteria),
+				replaceRootToProblem(),
 				skipPagination(pageable.getOffset()),
 				limitPagination(pageable.getPageSize())
 		);
@@ -85,8 +85,8 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 		return Aggregation.unwind("problem");
 	}
 
-	ProjectionOperation projectProblem() {
-		return Aggregation.project("problem");
+	ReplaceRootOperation replaceRootToProblem() {
+		return Aggregation.replaceRoot("problem");
 	}
 
 	AggregationOperation skipPagination(long offset) {
@@ -106,7 +106,7 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 	}
 
 	private void problemTypeEq(Criteria criteria, String problemTypeCode) {
-		if(problemTypeCode != null) criteria.and("problem.problemTypeCode").is(problemTypeCode);
+		if(problemTypeCode != null) criteria.and("problem.problemType._id").is(problemTypeCode);
 	}
 
 }

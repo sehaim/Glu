@@ -28,14 +28,14 @@ public class ProblemQueryRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     public BooleanExpression levelEq(String problemLevelCode) {
-        return problemLevelCode != null ? problem.level.problemLevelCode.eq(problemLevelCode) : null;
+        return problemLevelCode != null ? problem.problemLevel.problemLevelCode.eq(problemLevelCode) : null;
     }
 
     public BooleanExpression typeEq(String problemTypeCode) {
-        return problemTypeCode != null ? problem.problemType.problemType.problemTypeCode.eq(problemTypeCode) : null;
+        return problemTypeCode != null ? problem.problemType.problemTypeCode.eq(problemTypeCode) : null;
     }
 
     public BooleanExpression detailTypeEq(String problemDetailTypeCode) {
-        return problemDetailTypeCode != null ? problem.problemType.problemTypeDetailCode.eq(problemDetailTypeCode) : null;
+        return problemDetailTypeCode != null ? problem.problemTypeDetail.problemTypeDetailCode.eq(problemDetailTypeCode) : null;
     }
 }
