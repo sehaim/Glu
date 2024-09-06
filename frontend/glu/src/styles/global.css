@@ -18,6 +18,26 @@ a {
   color: inherit;
 }
 
+input {
+  font-family: 'PT';
+  font-size: 18px;
+  height: 40px;
+  border-radius: 10px;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: var(--GRAY);
+  margin: 10px 0;
+  padding: 10px;
+  &::placeholder {
+    color: var(--TEXT_SECONDARY);
+  }
+  &:focus {
+    border-width: 2px;
+    border-color: var(--PINK);
+    outline: none;
+  }
+}
+
 /* 폰트 적용 */
 @font-face {
   font-family: 'BMJUA';
@@ -42,8 +62,4 @@ a {
 @font-face {
   font-family: 'HD';
   src: url('../assets/fonts/Hakgyoansim Dunggeunmiso TTF R.ttf');
-}
-
-input {
-  font-family: 'PT';
 }

@@ -1,0 +1,36 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section {
+  width: 300px;
+  height: 500px;
+}
+
+.title {
+  font-family: 'HDBOLD';
+  font-size: 32px;
+  color: var(--TEXT_PRIMARY);
+  text-align: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-item {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.input-label {
+  font-family: 'PT';
+  font-size: 18px;
+  color: var(--TEXT_SECONDARY);
+}
