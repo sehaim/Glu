@@ -29,8 +29,15 @@ public class ProblemController {
 	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(@RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemMemoId") String problemMemoId,
 		@RequestBody ProblemMemoUpdateRequest problemMemoUpdateRequest) {
-		return ResponseEntity.status(HttpStatus.CREATED)
+		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.updateProblemMemo(userId, problemMemoId, problemMemoUpdateRequest));
+	}
+
+	@DeleteMapping("/memo/{problemMemoId}")
+	public ResponseEntity<Void> deleteUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemMemoId") String problemMemoId) {
+		problemService.deleteProblemMemo(userId, problemMemoId);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@PostMapping("/{problemId}/favorite")
