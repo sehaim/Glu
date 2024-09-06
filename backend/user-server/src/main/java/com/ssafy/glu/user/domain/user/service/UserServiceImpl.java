@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserService {
 		List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(userId);
 
 		return UserResponse.builder()
+			.id(userId)
 			.dayCount(findUser.getDayCount())
 			.score(findUser.getStage())
 			.level(findUser.getExp())
