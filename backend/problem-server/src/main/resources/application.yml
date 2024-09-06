@@ -15,7 +15,8 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb+srv://S11P22A506:denr23bdoE@ssafy.ngivl.mongodb.net/S11P22A506?authSource=admin
+#      uri: mongodb+srv://S11P22A506:denr23bdoE@ssafy.ngivl.mongodb.net/S11P22A506?authSource=admin
+      uri: mongodb://localhost:27017/local
 
 #  # JPA
 #  jpa:
