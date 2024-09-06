@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
@@ -34,6 +35,11 @@ public class ProblemServiceImpl implements ProblemService {
 	public Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition,
 		Pageable pageable) {
 		return userProblemLogRepository.findAllProblemInLogByCondition(userId,condition,pageable).map(problem->UserProblemLogResponse.of(problem,condition.status()));
+	}
+
+	@Override
+	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
+		return ProblemMemoResponse.of(problemMemoRepository.save(request.toDocument(userId,getProblemOrThrow(problemId))));
 	}
 
 	@Override

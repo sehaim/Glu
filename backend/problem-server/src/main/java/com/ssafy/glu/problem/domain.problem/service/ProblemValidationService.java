@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
@@ -15,6 +16,7 @@ import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredE
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteCancelFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteRegistrationFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoCreateFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoDeleteFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoDeletedUnauthorizedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoNotFoundException;
@@ -42,6 +44,18 @@ public class ProblemValidationService implements ProblemService {
 	public Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition,
 		Pageable pageable) {
 		return problemService.getProblemListByLog(userId, condition, pageable);
+	}
+
+	@Override
+	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
+		log.info("===== 문제 메모 생성 요청 - 문제 Id : {}, 메모 내용 : {} =====", problemId, request);
+		try {
+			ProblemMemoResponse response = problemService.createProblemMemo(userId,problemId,request);
+			log.info("===== 문제 메모 생성 완료 - 변경된 메모 : {} =====", response);
+			return response;
+		}catch (Exception exception){
+			throw new ProblemMemoCreateFailedException(exception);
+		}
 	}
 
 	@Override

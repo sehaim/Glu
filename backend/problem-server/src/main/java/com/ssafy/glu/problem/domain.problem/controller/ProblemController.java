@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
@@ -39,6 +40,14 @@ public class ProblemController {
 	) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.getProblemListByLog(userId, condition, pageable));
+	}
+
+	@PostMapping("{problemId}/memo")
+	public ResponseEntity<ProblemMemoResponse> createUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemId") String problemId,
+		@RequestBody ProblemMemoCreateRequest request) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(problemService.createProblemMemo(userId, problemId, request));
 	}
 
 	@PutMapping("/memo/{problemMemoId}")
