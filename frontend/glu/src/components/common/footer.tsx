@@ -6,7 +6,7 @@ export default function Footer() {
       <div className={styles.content}>
         <div className={styles['content-line']}>
           <div className={styles['content-item']}>
-            © 2024 Ditto Inc. All rights reserved.
+            © 2024 Glu Inc. All rights reserved.
           </div>
         </div>
         <div className={styles['content-line']}>
