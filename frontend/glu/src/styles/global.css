@@ -43,3 +43,7 @@ a {
   font-family: 'HD';
   src: url('../assets/fonts/Hakgyoansim Dunggeunmiso TTF R.ttf');
 }
+
+input {
+  font-family: 'PT';
+}
