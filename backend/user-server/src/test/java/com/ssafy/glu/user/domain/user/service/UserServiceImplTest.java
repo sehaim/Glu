@@ -13,7 +13,7 @@ import org.springframework.test.annotation.Rollback;
 
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
-import com.ssafy.glu.user.domain.user.dto.request.RegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
@@ -34,10 +34,10 @@ class UserServiceImplTest {
 	@Rollback(false)
 	void register() {
 		// Given
-		RegisterRequest registerRequest = new RegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		UserRegisterRequest userRegisterRequest = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
 
 		// When
-		Long id = userService.register(registerRequest);
+		Long id = userService.register(userRegisterRequest);
 
 		// Then
 		Users savedUser = userRepository.findById(id).orElseThrow();

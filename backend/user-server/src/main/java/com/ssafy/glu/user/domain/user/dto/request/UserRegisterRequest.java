@@ -2,8 +2,7 @@ package com.ssafy.glu.user.domain.user.dto.request;
 
 import java.time.LocalDate;
 
-public record RegisterRequest (
-
+public record UserRegisterRequest(
 	String loginId,
 	String password,
 	String nickname,

@@ -9,12 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class UserProblemType extends BaseTimeEntity {
 
 	@Id
@@ -32,10 +37,4 @@ public class UserProblemType extends BaseTimeEntity {
 
 	private String problemTypeCode;
 
-	public UserProblemType(Users user, String problemTypeCode) {
-		this.level = 0;
-		this.score = 0;
-		this.user = user;
-		this.problemTypeCode = problemTypeCode;
-	}
 }
