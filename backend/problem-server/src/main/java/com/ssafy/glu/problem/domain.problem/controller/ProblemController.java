@@ -33,11 +33,12 @@ public class ProblemController {
 
 	@GetMapping("/solve")
 	public ResponseEntity<Page<UserProblemLogResponse>> getProblemListInLog(
-		@RequestHeader("X-User-Id") Long userId,
+		@RequestHeader(USER_ID) Long userId,
 		@ModelAttribute UserProblemLogSearchCondition condition,
 		Pageable pageable
 	) {
-		return ResponseEntity.ok(problemService.getProblemListByLog(userId, condition, pageable));
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(problemService.getProblemListByLog(userId, condition, pageable));
 	}
 
 	@PutMapping("/memo/{problemMemoId}")
