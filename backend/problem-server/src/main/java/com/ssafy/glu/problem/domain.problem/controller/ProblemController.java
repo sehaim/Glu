@@ -7,10 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/problems")
 public class ProblemController {
 	private final ProblemService problemService;
+
+	@PutMapping("/memo/{problemMemoId}")
+	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemMemoId") String problemMemoId,
+		@RequestBody ProblemMemoUpdateRequest problemMemoUpdateRequest) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(problemService.updateProblemMemo(userId, problemMemoId, problemMemoUpdateRequest));
+	}
 
 	@PostMapping("/{problemId}/favorite")
 	public ResponseEntity<Void> createUserProblemFavorite(@RequestHeader(USER_ID) Long userId,
