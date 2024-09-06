@@ -1,5 +1,6 @@
 package com.ssafy.glu.user.domain.user.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,9 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> login(RegisterRequest registerRequest) {
+	public ResponseEntity<Void> login(RegisterRequest registerRequest) {
 		userService.register(registerRequest);
-		return ResponseEntity.ok("가입 완료");
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 }

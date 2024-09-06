@@ -35,13 +35,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Long register(RegisterRequest registerRequest) {
 
-		String loginId = registerRequest.getLoginId();
-		String nickname = registerRequest.getNickname();
-		String password = registerRequest.getPassword();
-		LocalDate birth = registerRequest.getBirth();
-		String encodedPassword = passwordEncoder.encode(password);
+		String encodedPassword = passwordEncoder.encode(registerRequest.password());
 
-		Users user = new Users(loginId, nickname, encodedPassword, birth);
+		Users user = new Users(registerRequest.loginId(),
+			registerRequest.nickname(),
+			encodedPassword,
+			registerRequest.birth());
 
 		//유저 저장
 		Users saveUser = userRepository.save(user);
