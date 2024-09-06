@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
@@ -49,6 +50,21 @@ class UserServiceImplTest {
 
 		List<UserProblemType> problemTypes = userProblemTypeRepository.findAllByUserId(id);
 		assertEquals(3, problemTypes.size(), "User should have 3 problem types");
+	}
+
+	@Test
+	void getUser() {
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		// When
+		UserResponse user = userService.getUser(id);
+
+		// Then
+		assertEquals("ssafy", user.getNickname(), "Nickname should match");
+		assertNotNull(user.getProblemTypeList(), "ProblemTypeList should not be null");
+		assertEquals(3, user.getProblemTypeList().size(), "User should have 3 problem types");
 	}
 
 }

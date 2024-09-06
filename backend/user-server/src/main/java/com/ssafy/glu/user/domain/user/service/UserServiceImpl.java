@@ -84,6 +84,9 @@ public class UserServiceImpl implements UserService {
 			.build();
 	}
 
+	/**
+	 * 변환 시키기 userProblemlist => ProblemTypeList
+	 */
 	private static List<ProblemTypeList> getProblemTypeLists(List<UserProblemType> userProblemTypes) {
 		List<ProblemTypeList> problemTypeList = new ArrayList<>();
 
