@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import styles from './home.module.css';
 import TestButton from '@/components/common/buttons/testButton';
+import styles from './home.module.css';
 
 export default function Home() {
   return (
