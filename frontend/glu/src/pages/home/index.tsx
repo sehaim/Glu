@@ -114,7 +114,7 @@ export default function Home(): JSX.Element {
           ref={section2TextRef}
           className={styles.hidden}
         >
-          <h3 className={styles['section-title']}>글루레벨테스트</h3>
+          <h3 className={styles['section-title']}>글루 레벨테스트</h3>
           <p className={styles['section-describe']}>
             레벨 테스트는 문해력 진단을 위한 3가지 문제 유형으로 구성되어
             있습니다.
@@ -159,7 +159,7 @@ export default function Home(): JSX.Element {
           ref={section3ContentRef}
           className={styles.hidden}
         >
-          <h3 className={styles['section-title']}>성장에맞춘학습</h3>
+          <h3 className={styles['section-title']}>성장에 맞춘 학습</h3>
           <div id={styles['section3-graph-wrapper']}>
             <img
               id={styles['graph-image']}
