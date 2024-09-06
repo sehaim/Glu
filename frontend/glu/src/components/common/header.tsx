@@ -61,7 +61,7 @@ export default function Header({ color }: { color: string }) {
               <Link href="/login">로그인</Link>
             </li>
             <li>
-              <Link href="/register">회원가입</Link>
+              <Link href="/signup">회원가입</Link>
             </li>
           </ul>
         </nav>
