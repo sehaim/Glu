@@ -1,5 +1,6 @@
 package com.ssafy.glu.user.domain.user.domain;
 
+import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.global.shared.BaseTimeEntity;
 
 import jakarta.persistence.Column;
