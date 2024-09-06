@@ -1,25 +1,69 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: glu-gateway
   cloud:
     gateway:
       routes:
-        - id: GLU-AUTH
-          uri: http://glu-auth:${AUTH_PORT:8081}
-          predicates:
-            - Path=/api/auth/**
-        - id: GLU-USER
-          uri: http://glu-user:${USER_PORT:8082}
-          predicates:
-            - Path=/api/users/**
-        - id: GLU-PROBLEM
-          uri: http://glu-problem:${PROBLEM_PORT:8083}
-          predicates:
-            - Path=/api/problems/**
-        - id: GLU-COMMON
-          uri: http://glu-common:${COMMON_PORT:8084}
+        - id: common-router
+          uri: lb://GLU-COMMON
           predicates:
             - Path=/api/common/**
+        - id: common-swagger
+          uri: lb://GLU-COMMON
+          predicates:
+            - Path=/docs/glu-common/**
+          filters:
+            - RewritePath=/docs/glu-common/(?<path>.*), /$\{path}
+        - id: problem-router
+          uri: lb://GLU-PROBLEM
+          predicates:
+            - Path=/api/problems/**
+        - id: problem-swagger
+          uri: lb://GLU-PROBLEM
+          predicates:
+            - Path=/docs/glu-problem/**
+          filters:
+            - RewritePath=/docs/glu-problem/(?<path>.*), /$\{path}
+        - id: user-router
+          uri: lb://GLU-USER
+          predicates:
+            - Path=/api/users/**
+        - id: user-swagger
+          uri: lb://GLU-USER
+          predicates:
+            - Path=/docs/glu-user/**
+          filters:
+            - RewritePath=/docs/glu-user/(?<path>.*), /$\{path}
+        - id: auth-router
+          uri: lb://GLU-AUTH
+          predicates:
+            - Path=/api/auth/**
+        - id: auth-swagger
+          uri: lb://GLU-AUTH
+          predicates:
+            - Path=/docs/glu-auth/**
+          filters:
+            - RewritePath=/docs/glu-auth/(?<path>.*), /$\{path}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    use-root-path: true
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - url: /docs/glu-common/v3/api-docs
+        name: glu-common
+      - url: /docs/glu-problem/v3/api-docs
+        name: glu-problem
+      - url: /docs/glu-user/v3/api-docs
+        name: glu-user
+      - url: /docs/glu-auth/v3/api-docs
+        name: glu-auth
 
 eureka:
   client:
