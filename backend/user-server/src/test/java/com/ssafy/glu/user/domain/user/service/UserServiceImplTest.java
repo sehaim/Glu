@@ -31,7 +31,7 @@ class UserServiceImplTest {
 
 
 	@Test
-	@Rollback(false)
+	// @Rollback(false)
 	void register() {
 		// Given
 		UserRegisterRequest userRegisterRequest = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));

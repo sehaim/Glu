@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
@@ -45,12 +46,11 @@ public class UserServiceImpl implements UserService {
 		//유저 저장
 		Users saveUser = userRepository.save(user);
 
-		//유저 문제타입 저장유형코드
-		String[] codes = new String[] {"PT01", "PT02", "PT03"};
-		for (String code : codes) {
-			
+		// 유저 문제타입 저장
+		for (ProblemType problemType : ProblemType.values()) {
+
 			UserProblemType userProblemType = UserProblemType.builder()
-				.problemTypeCode(code)
+				.problemTypeCode(problemType)
 				.user(saveUser)
 				.build();
 

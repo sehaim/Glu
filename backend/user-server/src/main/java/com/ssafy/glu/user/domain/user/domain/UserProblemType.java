@@ -4,6 +4,8 @@ import com.ssafy.glu.user.global.shared.BaseTimeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +39,7 @@ public class UserProblemType extends BaseTimeEntity {
 	@JoinColumn(name = "user_id")
 	private Users user;
 
-	private String problemTypeCode;
+	@Enumerated(EnumType.STRING)
+	private ProblemType problemTypeCode;
 
 }
