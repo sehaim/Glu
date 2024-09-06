@@ -36,14 +36,13 @@ export default function Home() {
             section2TextRef.current.classList.remove(styles.hidden);
             section2ContentRef.current.classList.add(styles.visible);
             section2ContentRef.current.classList.remove(styles.hidden);
-          }else{
+          } else {
             section2TextRef.current.classList.add(styles.hidden);
             section2TextRef.current.classList.remove(styles.visible);
             section2ContentRef.current.classList.add(styles.hidden);
             section2ContentRef.current.classList.remove(styles.visible);
           }
         }
-
       });
     }, observerOptions);
 
@@ -72,7 +71,7 @@ export default function Home() {
             준비되었습니다.
           </p>
         </div>
-        <div 
+        <div
           id={styles.section1_image_wrapper}
           ref={section1ImageRef}
           className={styles.hidden}
@@ -84,7 +83,10 @@ export default function Home() {
           />
         </div>
       </section>
-      <section ref={section2Ref} className={`${styles.section} ${styles.section2}`}>
+      <section
+        ref={section2Ref}
+        className={`${styles.section} ${styles.section2}`}
+      >
         <div
           id={styles.section2_text_wrapper}
           ref={section2TextRef}
@@ -96,7 +98,7 @@ export default function Home() {
             있습니다.
           </p>
         </div>
-        <div 
+        <div
           id={styles.section2_content_wrapper}
           ref={section2ContentRef}
           className={styles.hidden}
@@ -136,10 +138,14 @@ export default function Home() {
           />
           <p className={styles.section_describe}>
             세 가지 유형의 테스트 결과를 바탕으로 그래프를 제공하여 학습 상태를
-            시각적으로 보여줍니다.<br />그래프를 통해 각 유형별 성취도를 쉽게 확인할
-            수 있으며, 결과에 따라 유형별로 맞춤형 학습 난이도를 조정하고 적절한
-            학습 콘텐츠를 추천해 드립니다.<br />따라서 학습 성장을 명확하게 추적하고,
-            지속적으로 향상시킬 수 있습니다.
+            시각적으로 보여줍니다.
+            <br />
+            그래프를 통해 각 유형별 성취도를 쉽게 확인할 수 있으며, 결과에 따라
+            유형별로 맞춤형 학습 난이도를 조정하고 적절한 학습 콘텐츠를 추천해
+            드립니다.
+            <br />
+            따라서 학습 성장을 명확하게 추적하고, 지속적으로 향상시킬 수
+            있습니다.
           </p>
         </div>
         <div className={styles.section3_content_wrapper}>

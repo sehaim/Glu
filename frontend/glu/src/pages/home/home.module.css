@@ -1,151 +1,150 @@
-.container{
-    width: 100%;
-    background-color: var(--YELLOW);
+.container {
+  width: 100%;
+  background-color: var(--YELLOW);
 }
 
-.section{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    min-height: calc(100vh - 60px);
-    padding: 64px;
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 60px);
+  padding: 64px;
 }
 
-.section_title{
-    color: var(--TEXT_PRIMARY);
-    font-family: 'HDBOLD';
-    font-size: 42px;
+.section_title {
+  color: var(--TEXT_PRIMARY);
+  font-family: 'HDBOLD';
+  font-size: 42px;
 }
 
-.section_describe{
-    color: var(--TEXT_SECONDARY);
-    font-family: 'PT';
-    font-size: 18px;
-    line-height: 24px;
-    margin-top: 24px;
+.section_describe {
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 18px;
+  line-height: 24px;
+  margin-top: 24px;
 }
 
-#section1_text_wrapper{
-    flex-direction: column;
-    width: 60%;
-    animation: slideUpBounce 3s ease-in-out 1;
+#section1_text_wrapper {
+  flex-direction: column;
+  width: 60%;
+  animation: slideUpBounce 3s ease-in-out 1;
 }
 
-#section1_image_wrapper{
-    width: 40%;
+#section1_image_wrapper {
+  width: 40%;
 }
 
 #main_character {
-    width: 100%;
-    max-width: 400px;
-    animation: slideUpBounce 3.5s ease-in-out 1;
-    
+  width: 100%;
+  max-width: 400px;
+  animation: slideUpBounce 3.5s ease-in-out 1;
 }
 
-.section2{
-    flex-direction: column;
-    align-items: flex-start;
+.section2 {
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-#section2_text_wrapper{
-    flex-direction: column;
-    width: 60%;
-    animation: slideInFromRightBounce 3s ease-in-out 1;
+#section2_text_wrapper {
+  flex-direction: column;
+  width: 60%;
+  animation: slideInFromRightBounce 3s ease-in-out 1;
 }
 
-#section2_content_wrapper{
-    flex-direction: column;
-    margin-top: 48px;
-    animation: slideInFromRightBounce 3.5s ease-in-out 1;
+#section2_content_wrapper {
+  flex-direction: column;
+  margin-top: 48px;
+  animation: slideInFromRightBounce 3.5s ease-in-out 1;
 }
 
-.section2_title{
-    color: var(--PINK);
-    font-family: 'HDBOLD';
-    font-size: 24px;
+.section2_title {
+  color: var(--PINK);
+  font-family: 'HDBOLD';
+  font-size: 24px;
 }
 
-.section2_describe{
-    color: var(--TEXT_SECONDARY);
-    font-family: 'PT';
-    font-size: 18px;
-    line-height: 24px;
-    margin-top: 8px;
-    margin-bottom: 24px;
+.section2_describe {
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 18px;
+  line-height: 24px;
+  margin-top: 8px;
+  margin-bottom: 24px;
 }
 
-.section3{
-    background-color: skyblue;
-    flex-direction: column;
-    align-items: flex-start;
+.section3 {
+  background-color: skyblue;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.section3_content_wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 48px;
-    width: 100%;
+.section3_content_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+  width: 100%;
 }
 
-#graph_image{
-    max-width: 200px;
-    width: 40%;
-    aspect-ratio: 1 / 1;
-    margin-right: 40px;
+#graph_image {
+  max-width: 200px;
+  width: 40%;
+  aspect-ratio: 1 / 1;
+  margin-right: 40px;
 }
 
-.section3_button{
-    background-color: vaR(--PINK);
-    color: var(--WHITE);
-    border: 0px;
-    border-radius: 10px;
-    padding: 16px 36px;
-    cursor: pointer;
-    font-family: 'BMJUA';
-    font-size: 18px;
+.section3_button {
+  background-color: vaR(--PINK);
+  color: var(--WHITE);
+  border: 0px;
+  border-radius: 10px;
+  padding: 16px 36px;
+  cursor: pointer;
+  font-family: 'BMJUA';
+  font-size: 18px;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
-  
+
 .visible {
-    display: flex;
+  display: flex;
 }
 
 @keyframes slideUpBounce {
-    0% {
-      transform: translateY(50%); /* 시작할 때 화면 아래에 위치 */
-      opacity: 0; /* 요소가 처음에 보이지 않음 */
-    }
-    25% {
-      transform: translateY(-20px); /* 위로 약간 튕김 */
-      opacity: 1; /* 요소가 서서히 나타남 */
-    }
-    50% {
-      transform: translateY(10px); /* 다시 아래로 살짝 내려옴 */
-    }
-    100% {
-      transform: translateY(0); /* 최종적으로 제자리에 고정 */
-    }
+  0% {
+    transform: translateY(50%); /* 시작할 때 화면 아래에 위치 */
+    opacity: 0; /* 요소가 처음에 보이지 않음 */
   }
-  
+  25% {
+    transform: translateY(-20px); /* 위로 약간 튕김 */
+    opacity: 1; /* 요소가 서서히 나타남 */
+  }
+  50% {
+    transform: translateY(10px); /* 다시 아래로 살짝 내려옴 */
+  }
+  100% {
+    transform: translateY(0); /* 최종적으로 제자리에 고정 */
+  }
+}
+
 @keyframes slideInFromRightBounce {
-    0% {
-      transform: translateX(50%); /* 화면 밖 오른쪽에서 시작 */
-      opacity: 0; /* 처음에는 투명 */
-    }
-    30% {
-      transform: translateX(-20px); /* 중간에 오른쪽으로 약간 튕기는 느낌 */
-      opacity: 1; /* 서서히 나타남 */
-    }
-    50%{
-      transform: translateX(10px); /* 최종적으로 제자리에 고정 */
-    }
-    100% {
-      transform: translateX(0); /* 최종적으로 제자리에 고정 */
-    }
+  0% {
+    transform: translateX(50%); /* 화면 밖 오른쪽에서 시작 */
+    opacity: 0; /* 처음에는 투명 */
+  }
+  30% {
+    transform: translateX(-20px); /* 중간에 오른쪽으로 약간 튕기는 느낌 */
+    opacity: 1; /* 서서히 나타남 */
+  }
+  50% {
+    transform: translateX(10px); /* 최종적으로 제자리에 고정 */
+  }
+  100% {
+    transform: translateX(0); /* 최종적으로 제자리에 고정 */
+  }
 }
