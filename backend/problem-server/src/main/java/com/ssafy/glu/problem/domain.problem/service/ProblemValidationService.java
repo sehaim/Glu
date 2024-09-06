@@ -87,6 +87,14 @@ public class ProblemValidationService implements ProblemService {
 	}
 
 	@Override
+	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
+		// 검증
+		log.info("검증 로직 서비스");
+		problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+		return problemService.getProblemMemoList(userId, problemId, pageable);
+	}
+
+	@Override
 	public void createUserProblemFavorite(Long userId, String problemId) {
 		// 검증
 		log.info("검증 로직 서비스");
@@ -123,6 +131,7 @@ public class ProblemValidationService implements ProblemService {
 	// ===== 찾기 로직 =====
 	// 문제 존재 여부 판단
 	private Problem getProblemOrThrow(String problemId) {
+		log.info("들어갔어?");
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
