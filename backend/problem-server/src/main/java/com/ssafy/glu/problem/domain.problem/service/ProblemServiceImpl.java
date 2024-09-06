@@ -16,6 +16,7 @@ import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemMemoRepository;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,12 @@ public class ProblemServiceImpl implements ProblemService {
 	private final ProblemRepository problemRepository;
 	private final ProblemMemoRepository problemMemoRepository;
 	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
+	private final UserProblemLogRepository userProblemLogRepository;
 
 	@Override
-	public Page<UserProblemLogResponse> getUserProblemLogList(Long userId, UserProblemLogSearchCondition condition,
+	public Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition,
 		Pageable pageable) {
-
-		return null;
+		return userProblemLogRepository.findAllProblemInLogByCondition(userId,condition,pageable).map(problem->UserProblemLogResponse.of(problem,condition.status()));
 	}
 
 	@Override

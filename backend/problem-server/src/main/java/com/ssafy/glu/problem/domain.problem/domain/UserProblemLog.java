@@ -2,6 +2,8 @@ package com.ssafy.glu.problem.domain.problem.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.ssafy.glu.problem.global.shared.BaseTimeDocument;
 
@@ -24,14 +26,16 @@ public class UserProblemLog extends BaseTimeDocument {
 
 	private final Long userId;
 
-	private final String problemId;
+	@Field("problemId")
+	@DocumentReference(lazy = true)
+	private final Problem problem;
 
 	@Builder
-	public UserProblemLog(boolean isCorrect, String userAnswer, Integer solvedTime, Long userId, String problemId) {
+	public UserProblemLog(boolean isCorrect, String userAnswer, Integer solvedTime, Long userId, Problem problem) {
 		this.isCorrect = isCorrect;
 		this.userAnswer = userAnswer;
 		this.solvedTime = solvedTime;
 		this.userId = userId;
-		this.problemId = problemId;
+		this.problem = problem;
 	}
 }

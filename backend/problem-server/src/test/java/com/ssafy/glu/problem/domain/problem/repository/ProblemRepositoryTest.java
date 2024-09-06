@@ -8,10 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.ssafy.glu.problem.util.MockFactory;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +47,7 @@ class ProblemRepositoryTest {
 		assertThat(savedProblem.getTitle()).isEqualTo(problem.getTitle());
 		assertThat(savedProblem.getContent()).isEqualTo(problem.getContent());
 		assertThat(savedProblem.getSolution()).isEqualTo(problem.getSolution());
-		assertThat(savedProblem.getLevel().getProblemLevelCode()).isEqualTo(problem.getLevel().getProblemLevelCode());
+		assertThat(savedProblem.getProblemLevel().getProblemLevelCode()).isEqualTo(problem.getProblemLevel().getProblemLevelCode());
 	}
 
 	@Test
@@ -59,4 +62,26 @@ class ProblemRepositoryTest {
 		assertThat(foundProblem.getProblemId()).isEqualTo(problem.getProblemId());
 	}
 
+	@Test
+	void searchProblemTest() {
+		String problemLevelCode1 = "PL01";
+		String problemLevelCode2 = "PL02";
+		String problemLevelCode3 = "PL03";
+
+		int numLevel1 = 2;
+		int numLevel2 = 7;
+		int numLevel3 = 4;
+
+		for (int i = 0; i < numLevel1; i++) problemRepository.save(MockFactory.createProblem(problemLevelCode1));
+		for (int i = 0; i < numLevel2; i++) problemRepository.save(MockFactory.createProblem(problemLevelCode2));
+		for (int i = 0; i < numLevel3; i++) problemRepository.save(MockFactory.createProblem(problemLevelCode3));
+
+		ProblemSearchCondition condition = ProblemSearchCondition.builder()
+				.problemLevelCode(problemLevelCode2)
+				.build();
+
+		Page<Problem> problemList = problemRepository.findByCondition(condition, Pageable.ofSize(10));
+
+		assertThat(problemList.getTotalElements()).isEqualTo(numLevel2);
+	}
 }
