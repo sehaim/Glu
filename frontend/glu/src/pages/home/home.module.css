@@ -11,15 +11,16 @@
   height: 100%;
   min-height: calc(100vh - 60px);
   padding: 64px;
+  overflow: hidden;
 }
 
-.section_title {
+.section-title {
   color: var(--TEXT_PRIMARY);
   font-family: 'HDBOLD';
   font-size: 42px;
 }
 
-.section_describe {
+.section-describe {
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   font-size: 18px;
@@ -27,17 +28,17 @@
   margin-top: 24px;
 }
 
-#section1_text_wrapper {
+#section1-text-wrapper {
   flex-direction: column;
   width: 60%;
   animation: slideUpBounce 3s ease-in-out 1;
 }
 
-#section1_image_wrapper {
+#section1-image-wrapper {
   width: 40%;
 }
 
-#main_character {
+#main-character {
   width: 100%;
   max-width: 400px;
   animation: slideUpBounce 3.5s ease-in-out 1;
@@ -48,25 +49,24 @@
   align-items: flex-start;
 }
 
-#section2_text_wrapper {
+#section2-text-wrapper {
   flex-direction: column;
-  width: 60%;
   animation: slideInFromRightBounce 3s ease-in-out 1;
 }
 
-#section2_content_wrapper {
+#section2-content-wrapper {
   flex-direction: column;
   margin-top: 48px;
   animation: slideInFromRightBounce 3.5s ease-in-out 1;
 }
 
-.section2_title {
+.section2-title {
   color: var(--PINK);
   font-family: 'HDBOLD';
   font-size: 24px;
 }
 
-.section2_describe {
+.section2-describe {
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   font-size: 18px;
@@ -76,12 +76,22 @@
 }
 
 .section3 {
-  background-color: skyblue;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.section3_content_wrapper {
+#section3-text-wrapper {
+  animation: slideUpBounce 3s ease-in-out 1;
+}
+
+#section3-content-wrapper {
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  animation: popIn 2s ease-in-out 1;
+}
+
+#section3-graph-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,15 +99,23 @@
   width: 100%;
 }
 
-#graph_image {
+#graph-image {
   max-width: 200px;
   width: 40%;
   aspect-ratio: 1 / 1;
   margin-right: 40px;
 }
 
-.section3_button {
-  background-color: vaR(--PINK);
+#section3-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+  width: 100%;
+}
+
+#section3-button {
+  background-color: var(--PINK);
   color: var(--WHITE);
   border: 0px;
   border-radius: 10px;
@@ -146,5 +164,38 @@
   }
   100% {
     transform: translateX(0); /* 최종적으로 제자리에 고정 */
+  }
+}
+
+/* 애니메이션 정의 */
+@keyframes popIn {
+  0% {
+    transform: scale(0); /* 크기 0에서 시작 */
+  }
+  80% {
+    transform: scale(1.1); /* 약간 커졌다가 */
+  }
+  100% {
+    transform: scale(1); /* 정상 크기로 돌아옴 */
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 32px;
+  }
+
+  .section1 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #section1-text-wrapper {
+    width: 100%;
+  }
+
+  #section1-image-wrapper {
+    width: 100%;
   }
 }
