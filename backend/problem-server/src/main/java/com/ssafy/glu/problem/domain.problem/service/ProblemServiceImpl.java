@@ -33,7 +33,8 @@ public class ProblemServiceImpl implements ProblemService {
 	@Override
 	public Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition,
 		Pageable pageable) {
-		return userProblemLogRepository.findAllProblemInLogByCondition(userId,condition,pageable).map(problem->UserProblemLogResponse.of(problem,condition.status()));
+		return userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, pageable)
+			.map(problem -> UserProblemLogResponse.of(problem, condition.status()));
 	}
 
 	@Override
@@ -55,6 +56,14 @@ public class ProblemServiceImpl implements ProblemService {
 	public void deleteProblemMemo(Long userId, String problemMemoId) {
 		log.info("===== 문제 메모 삭제 요청 - 메모 Id : {} =====", problemMemoId);
 		problemMemoRepository.deleteById(problemMemoId);
+	}
+
+	@Override
+	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
+		Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+
+		return problemMemoRepository.findAllByProblemOrderByCreatedDateDesc(problem, pageable)
+			.map(ProblemMemoResponse::of);
 	}
 
 	@Override
