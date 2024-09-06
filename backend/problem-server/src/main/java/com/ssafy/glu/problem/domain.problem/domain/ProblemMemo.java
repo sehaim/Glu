@@ -16,7 +16,7 @@ public class ProblemMemo {
 	@Id
 	private String problemMemoId;
 
-	private String contents;
+	private String content;
 
 	private final Long userId;
 
@@ -25,15 +25,15 @@ public class ProblemMemo {
 	private final Problem problem;
 
 	@Builder
-	public ProblemMemo(Long userId, Problem problem, String contents) {
+	public ProblemMemo(Long userId, Problem problem, String content) {
 		this.userId = userId;
 		this.problem = problem;
-		this.contents = contents;
+		this.content = content;
 	}
 
-	public void updateContents(String contents) {
-		if (contents != null) {
-			this.contents = contents;
+	public void updateContent(String content) {
+		if (content != null) {
+			this.content = content;
 		}
 	}
 }

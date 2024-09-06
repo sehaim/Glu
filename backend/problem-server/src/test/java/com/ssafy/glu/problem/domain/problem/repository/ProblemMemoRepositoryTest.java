@@ -34,7 +34,7 @@ class ProblemMemoRepositoryTest {
 	}
 
 	@Test
-	void updateProblemMemoContentsTest() {
+	void updateProblemMemoContentTest() {
 		// Given
 		Problem problem = problemRepository.save(MockFactory.createProblem());
 		String originalContent = "Original Content " + UUID.randomUUID().toString().substring(0, 8);
@@ -47,7 +47,7 @@ class ProblemMemoRepositoryTest {
 		String updatedContent = "Updated Content " + UUID.randomUUID().toString().substring(0, 8);
 
 		// When
-		savedProblemMemo.updateContents(updatedContent);
+		savedProblemMemo.updateContent(updatedContent);
 		problemMemoRepository.save(savedProblemMemo);
 
 		// Then

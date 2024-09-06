@@ -4,7 +4,7 @@ import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 
 public record ProblemMemoResponse(
 	String problemMemoId,
-	String contents
+	String content
 ) {
 	public static ProblemMemoResponse of(ProblemMemo problemMemo) {
 		return new ProblemMemoResponse(problemMemo.getProblemMemoId(), problemMemo.getContents());
