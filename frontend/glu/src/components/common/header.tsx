@@ -23,21 +23,23 @@ export default function Header({ color }: { color: string }) {
 
   return (
     <div className={styles.container} style={headerStyle}>
-      <nav className={styles.nav_menu}>
-        <ul>
-          <li>
-            <h1 className={styles.logo}>Glu</h1>
-          </li>
-          <li>종합 테스트</li>
-          <li>유형별 테스트</li>
-        </ul>
-      </nav>
-      <nav className={styles.info_menu}>
-        <ul>
-          <li>로그인</li>
-          <li>회원가입</li>
-        </ul>
-      </nav>
+      <div className={styles.content}>
+        <nav className={styles.nav_menu}>
+          <ul>
+            <li>
+              <h1 className={styles.logo}>Glu</h1>
+            </li>
+            <li>종합 테스트</li>
+            <li>유형별 테스트</li>
+          </ul>
+        </nav>
+        <nav className={styles.info_menu}>
+          <ul>
+            <li>로그인</li>
+            <li>회원가입</li>
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 }
