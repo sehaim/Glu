@@ -28,14 +28,14 @@ const getHeaderStyle = (color: string, isScrolled: boolean) => {
 };
 
 export default function Header({ color }: { color: string }) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(true);
   const [prevScrollY, setPrevScrollY] = useState(0); // 이전 스크롤 위치를 저장
 
   useEffect(() => {
     const handleScroll = throttle(() => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY >= prevScrollY) {
+      if (currentScrollY >= prevScrollY || currentScrollY < 10) {
         setIsScrolled(true); // 스크롤이 아래로 내려갔을 때 흰색으로 설정
       } else {
         setIsScrolled(false); // 스크롤이 위로 올라가면 투명으로 설정
