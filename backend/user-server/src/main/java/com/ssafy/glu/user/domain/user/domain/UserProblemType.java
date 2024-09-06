@@ -27,9 +27,11 @@ public class UserProblemType extends BaseTimeEntity {
 	@Column(name = "user_problem_type_id")
 	private Long id;
 
-	private Integer level;
+	@Builder.Default
+	private Integer level = 0;
 
-	private Integer score;
+	@Builder.Default
+	private Integer score = 0;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")

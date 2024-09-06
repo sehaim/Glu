@@ -34,9 +34,12 @@ public class Users extends BaseTimeEntity {
 	private String password;
 	private LocalDate birth;
 	private Boolean isDeleted;
-	private Integer stage;
-	private Integer exp;
-	private Integer dayCount;
+	@Builder.Default
+	private Integer stage = 0;
+	@Builder.Default
+	private Integer exp = 0;
+	@Builder.Default
+	private Integer dayCount = 0;
 
 	public void updateUser(String password, String nickname) {
 		if(StringUtils.hasText(password)) this.password = password;

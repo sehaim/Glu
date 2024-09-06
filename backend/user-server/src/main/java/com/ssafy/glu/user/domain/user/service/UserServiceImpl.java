@@ -40,9 +40,6 @@ public class UserServiceImpl implements UserService {
 			.nickname(userRegisterRequest.nickname())
 			.password(encodedPassword)
 			.birth(userRegisterRequest.birth())
-			.exp(0)
-			.stage(0)
-			.dayCount(0)
 			.build();
 
 		//유저 저장
@@ -55,8 +52,6 @@ public class UserServiceImpl implements UserService {
 			UserProblemType userProblemType = UserProblemType.builder()
 				.problemTypeCode(code)
 				.user(saveUser)
-				.level(0)
-				.score(0)
 				.build();
 
 			userProblemTypeRepository.save(userProblemType);

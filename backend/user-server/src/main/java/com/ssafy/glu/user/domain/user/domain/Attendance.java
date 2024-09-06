@@ -27,7 +27,8 @@ public class Attendance {
 	@Column(name = "attendance_id")
 	private Long id;
 
-	private LocalDateTime attendanceDate;
+	@Builder.Default
+	private LocalDateTime attendanceDate = LocalDateTime.now();
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
