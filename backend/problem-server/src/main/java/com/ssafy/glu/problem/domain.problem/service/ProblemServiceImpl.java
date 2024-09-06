@@ -50,6 +50,9 @@ public class ProblemServiceImpl implements ProblemService {
 		validateProblemMemoUpdateAuthorized(userId, problemMemo);
 
 		problemMemo.updateContents(request.contents());
+		log.info("===== 문제 메모 업데이트 완료 - 변경된 메모 : {} =====", problemMemo);
+
+		problemMemoRepository.save(problemMemo);
 
 		return new ProblemMemoResponse(problemMemo.getProblemMemoId(), problemMemo.getContents());
 	}
