@@ -1,6 +1,25 @@
 spring:
   application:
     name: glu-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: GLU-AUTH
+          uri: http://glu-auth:${AUTH_PORT:8081}
+          predicates:
+            - Path=/api/auth/**
+        - id: GLU-USER
+          uri: http://glu-user:${USER_PORT:8082}
+          predicates:
+            - Path=/api/users/**
+        - id: GLU-PROBLEM
+          uri: http://glu-problem:${PROBLEM_PORT:8083}
+          predicates:
+            - Path=/api/problems/**
+        - id: GLU-COMMON
+          uri: http://glu-common:${COMMON_PORT:8084}
+          predicates:
+            - Path=/api/common/**
 
 eureka:
   client:
