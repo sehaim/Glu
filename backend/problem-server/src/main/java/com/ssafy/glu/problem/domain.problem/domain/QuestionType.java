@@ -15,6 +15,6 @@ import lombok.ToString;
 @ToString
 public class QuestionType {
 	@Id
-	private String questionTypeCode;
-	private String name;
+	private final String questionTypeCode;
+	private final String name;
 }
