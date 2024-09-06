@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemLevel;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemType;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetail;
 import com.ssafy.glu.problem.domain.problem.domain.QuestionType;
@@ -24,7 +25,7 @@ public class MockFactory {
 		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
 		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
 
-		Map<String,Object> metadata = new HashMap<>();
+		Map<String, Object> metadata = new HashMap<>();
 
 		metadata.put("options", List.of("option1", "option2", "option3"));
 		metadata.put("imageUrl", "url");
@@ -67,7 +68,7 @@ public class MockFactory {
 
 	public static ProblemLevel createProblemLevel() {
 		// 랜덤한 ProblemLevel 객체 생성
-		String level = "0"+RANDOM.nextInt(3);
+		String level = "0" + RANDOM.nextInt(3);
 		String code = "PL" + level;
 		String name = "LV " + level;
 		return ProblemLevel.builder()
@@ -88,8 +89,8 @@ public class MockFactory {
 
 	public static ProblemTypeDetail createProblemTypeDetail() {
 		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0"+RANDOM.nextInt(3);
-		String problemTypeDetailCode = "0"+RANDOM.nextInt(3);
+		String num = "0" + RANDOM.nextInt(3);
+		String problemTypeDetailCode = "0" + RANDOM.nextInt(3);
 		String name = "유형 " + num;
 		return ProblemTypeDetail.builder()
 			.problemTypeDetailCode(problemTypeDetailCode)
@@ -99,7 +100,7 @@ public class MockFactory {
 
 	public static ProblemType createProblemType() {
 		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0"+RANDOM.nextInt(3);
+		String num = "0" + RANDOM.nextInt(3);
 		String problemTypeCode = "PB" + num;
 		String name = "유형 " + num;
 		return ProblemType.builder()
@@ -110,12 +111,22 @@ public class MockFactory {
 
 	public static QuestionType createQuestionType() {
 		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0"+RANDOM.nextInt(3);
+		String num = "0" + RANDOM.nextInt(3);
 		String questionTypeCode = "Q" + num;
 		String name = "질문 유형 " + num;
 		return QuestionType.builder()
 			.questionTypeCode(questionTypeCode)
 			.name(name)
+			.build();
+	}
+
+	public static ProblemMemo createProblemMemo(Long userId, Problem problem) {
+		// 랜덤한 ProblemMemo 객체 생성
+		String content = "내용 " + UUID.randomUUID().toString().substring(0, 8);
+		return ProblemMemo.builder()
+			.userId(userId)
+			.problem(problem)
+			.content(content)
 			.build();
 	}
 

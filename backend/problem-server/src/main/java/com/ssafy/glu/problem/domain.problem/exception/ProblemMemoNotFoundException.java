@@ -11,4 +11,8 @@ public class ProblemMemoNotFoundException extends ServiceException {
 	public ProblemMemoNotFoundException() {
 		super(ErrorCode.PROBLEM_MEMO_NOT_FOUND);
 	}
+
+	public ProblemMemoNotFoundException(Exception exception) {
+		super(ErrorCode.PROBLEM_MEMO_NOT_FOUND, exception);
+	}
 }

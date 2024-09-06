@@ -11,4 +11,8 @@ public class FavoriteAlreadyRegisteredException extends ServiceException {
 	public FavoriteAlreadyRegisteredException() {
 		super(ErrorCode.FAVORITE_ALREADY_REGISTERED);
 	}
+
+	public FavoriteAlreadyRegisteredException(Exception exception) {
+		super(ErrorCode.FAVORITE_ALREADY_REGISTERED, exception);
+	}
 }

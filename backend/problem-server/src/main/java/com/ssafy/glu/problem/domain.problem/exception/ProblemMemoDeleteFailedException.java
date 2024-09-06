@@ -7,12 +7,12 @@ import com.ssafy.glu.problem.global.error.ErrorCode;
 import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class ProblemMemoUpdateFailedException extends ServiceException {
-	public ProblemMemoUpdateFailedException() {
-		super(ErrorCode.PROBLEM_MEMO_UPDATE_FAILED);
+public class ProblemMemoDeleteFailedException extends ServiceException {
+	public ProblemMemoDeleteFailedException() {
+		super(ErrorCode.PROBLEM_MEMO_DELETE_FAILED);
 	}
 
-	public ProblemMemoUpdateFailedException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_UPDATE_FAILED, exception);
+	public ProblemMemoDeleteFailedException(Exception exception) {
+		super(ErrorCode.PROBLEM_MEMO_DELETE_FAILED, exception);
 	}
 }

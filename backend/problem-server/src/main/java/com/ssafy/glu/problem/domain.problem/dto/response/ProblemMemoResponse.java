@@ -2,11 +2,19 @@ package com.ssafy.glu.problem.domain.problem.dto.response;
 
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 
+import lombok.Builder;
+
+@Builder
 public record ProblemMemoResponse(
 	String problemMemoId,
-	String contents
+	String content
 ) {
 	public static ProblemMemoResponse of(ProblemMemo problemMemo) {
-		return new ProblemMemoResponse(problemMemo.getProblemMemoId(), problemMemo.getContents());
+		if (problemMemo == null)
+			return null;
+		return ProblemMemoResponse.builder()
+			.problemMemoId(problemMemo.getProblemMemoId())
+			.content(problemMemo.getContent())
+			.build();
 	}
 }
