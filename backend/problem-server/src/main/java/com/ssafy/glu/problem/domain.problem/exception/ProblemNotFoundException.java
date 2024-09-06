@@ -11,4 +11,8 @@ public class ProblemNotFoundException extends ServiceException {
 	public ProblemNotFoundException() {
 		super(ErrorCode.PROBLEM_NOT_FOUND);
 	}
+
+	public ProblemNotFoundException(Exception exception) {
+		super(ErrorCode.PROBLEM_NOT_FOUND, exception);
+	}
 }

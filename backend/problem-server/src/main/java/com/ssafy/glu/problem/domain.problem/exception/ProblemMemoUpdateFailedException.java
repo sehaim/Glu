@@ -11,4 +11,8 @@ public class ProblemMemoUpdateFailedException extends ServiceException {
 	public ProblemMemoUpdateFailedException() {
 		super(ErrorCode.PROBLEM_MEMO_UPDATE_FAILED);
 	}
+
+	public ProblemMemoUpdateFailedException(Exception exception) {
+		super(ErrorCode.PROBLEM_MEMO_UPDATE_FAILED, exception);
+	}
 }

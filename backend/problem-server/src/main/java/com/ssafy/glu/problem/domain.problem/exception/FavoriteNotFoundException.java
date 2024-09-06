@@ -11,4 +11,8 @@ public class FavoriteNotFoundException extends ServiceException {
 	public FavoriteNotFoundException() {
 		super(ErrorCode.FAVORITE_NOT_FOUND);
 	}
+
+	public FavoriteNotFoundException(Exception exception) {
+		super(ErrorCode.FAVORITE_NOT_FOUND, exception);
+	}
 }

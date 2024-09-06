@@ -11,4 +11,8 @@ public class ProblemMemoUpdateUnauthorizedException extends ServiceException {
 	public ProblemMemoUpdateUnauthorizedException() {
 		super(ErrorCode.PROBLEM_MEMO_UPDATE_UNAUTHORIZED);
 	}
+
+	public ProblemMemoUpdateUnauthorizedException(Exception exception) {
+		super(ErrorCode.PROBLEM_MEMO_UPDATE_UNAUTHORIZED, exception);
+	}
 }
