@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import styles from './header.module.css';
 
@@ -29,27 +29,27 @@ const getHeaderStyle = (color: string, isScrolled: boolean) => {
 
 export default function Header({ color }: { color: string }) {
   const [isScrolled, setIsScrolled] = useState(true);
-  const [prevScrollY, setPrevScrollY] = useState(0); // 이전 스크롤 위치를 저장
+  const prevScrollYRef = useRef(0); // 이전 스크롤 값을 useRef로 관리
 
   useEffect(() => {
     const handleScroll = throttle(() => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY >= prevScrollY || currentScrollY < 10) {
+      if (currentScrollY >= prevScrollYRef.current || currentScrollY < 10) {
         setIsScrolled(true); // 스크롤이 아래로 내려갔을 때 흰색으로 설정
       } else {
         setIsScrolled(false); // 스크롤이 위로 올라가면 투명으로 설정
       }
 
-      setPrevScrollY(currentScrollY); // 이전 스크롤 위치 업데이트
-    }, 500); // 500ms 간격으로 스크롤 이벤트 처리
+      prevScrollYRef.current = currentScrollY; // useRef로 이전 스크롤 위치 업데이트
+    }, 100); // 100ms 간격으로 스크롤 이벤트 처리
 
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollY]);
+  }, []);
 
   const headerStyle = getHeaderStyle(color, isScrolled);
 
@@ -83,7 +83,7 @@ export default function Header({ color }: { color: string }) {
               </Link>
             </li>
             <li>종합 테스트</li>
-            <li>유형별 테스트</li>
+            <li>유형 테스트</li>
           </ul>
         </nav>
         <nav className={styles['user-menu']}>
