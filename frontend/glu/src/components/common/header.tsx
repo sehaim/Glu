@@ -15,14 +15,33 @@ function throttle(
   };
 }
 
+function debounce(
+  func: (event: Event) => void,
+  delay: number,
+): (event: Event) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null; // 타임아웃 ID를 저장할 변수
+
+  return function callback(event: Event) {
+    if (timeoutId) clearTimeout(timeoutId); // 이전 타임아웃이 있다면 취소
+
+    timeoutId = setTimeout(() => {
+      func(event); // 지정된 시간 후에 함수 실행
+    }, delay);
+  };
+}
+
 const getHeaderStyle = (color: string, isScrolled: boolean) => {
   const style: { [key: string]: string } = {};
 
   if (color === 'transparent') {
-    style['--background-color'] = 'transparent'; // color가 transparent면 항상 투명
+    style.backgroundColor = 'transparent'; // 카멜케이스로 수정
   } else {
-    style['--background-color'] = isScrolled ? 'var(--WHITE)' : 'transparent'; // 스크롤 여부에 따라 색상 변경
+    style.backgroundColor = isScrolled
+      ? 'rgba(255, 255, 255, 1)' // 스크롤 시 흰색
+      : 'transparent'; // 스크롤되지 않았을 때 투명
   }
+
+  style.transition = 'background-color 0.5s ease'; // transition도 backgroundColor로 적용
 
   return style;
 };
@@ -44,10 +63,18 @@ export default function Header({ color }: { color: string }) {
       prevScrollYRef.current = currentScrollY; // useRef로 이전 스크롤 위치 업데이트
     }, 100); // 100ms 간격으로 스크롤 이벤트 처리
 
+    const handleScrollEnd = debounce(() => {
+      if (window.scrollY < 10) {
+        setIsScrolled(true); // 스크롤이 멈췄을 때 상단이면 흰색 보장
+      }
+    }, 1000); // 스크롤이 멈춘 후 1000ms 후에 상태를 체크
+
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScrollEnd); // 스크롤 멈춤 이벤트 추가
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollEnd);
     };
   }, []);
 
