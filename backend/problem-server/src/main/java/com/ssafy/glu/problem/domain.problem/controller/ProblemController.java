@@ -2,6 +2,7 @@ package com.ssafy.glu.problem.domain.problem.controller;
 
 import static com.ssafy.glu.problem.global.util.HeaderUtil.*;
 
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,11 @@ public class ProblemController {
 	) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.getProblemMemoList(userId, problemId, pageable));
+	}
+
+	@GetMapping("/favorite")
+	public ResponseEntity<Page<ProblemBaseResponse>> getFavoriteProblemList(@RequestHeader(USER_ID) Long userId, Pageable pageable) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.getUserProblemFavoriteList(userId, pageable));
 	}
 
 	@PostMapping("/{problemId}/favorite")
