@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,9 @@ import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.global.util.CountResult;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRepository {
 	private final MongoTemplate template;
 
@@ -37,9 +41,16 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 	@Override
 	public Optional<UserProblemLog> findFirstByUserIdAndProblem(Long userId, Problem problem) {
 		Query query = new Query();
+
+		// problemId는 ObjectId로 변환
+		ObjectId problemObjectId = new ObjectId(problem.getProblemId());
+
+		// userId는 Long으로 비교
 		query.addCriteria(
-			Criteria.where("userId").is(userId).and("problemId").is(problem.getProblemId()));  // problemId 문자열로 조회
-		query.with(Sort.by(Sort.Direction.DESC, "createdDate")); // 최신 로그부터 조회
+			Criteria.where("userId").is(userId).and("problemId").is(problemObjectId));
+		query.with(Sort.by(Sort.Direction.DESC, "createdDate"));
+
+		log.info("===== Log 조회 - userId: {} and problemId: {} =====", userId, problemObjectId);
 		return Optional.ofNullable(template.findOne(query, UserProblemLog.class));
 	}
 
