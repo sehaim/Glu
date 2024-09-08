@@ -2,17 +2,29 @@ package com.ssafy.glu.problem.domain.problem.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ReplaceRootOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.global.util.CountResult;
 
 public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRepository {
@@ -20,6 +32,14 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 
 	public UserProblemLogQueryRepositoryImpl(MongoTemplate template) {
 		this.template = template;
+	}
+
+	public Optional<UserProblemLog> findFirstByUserIdAndProblem(Long userId, Problem problem) {
+		Query query = new Query();
+		query.addCriteria(
+			Criteria.where("userId").is(userId).and("problemId").is(problem.getProblemId()));  // problemId 문자열로 조회
+		query.with(Sort.by(Sort.Direction.DESC, "createdDate")); // 최신 로그부터 조회
+		return Optional.ofNullable(template.findOne(query, UserProblemLog.class));
 	}
 
 	@Override
