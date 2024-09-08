@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -106,6 +107,11 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 		Problem problem = getProblemOrThrow(problemId);
 		return problemService.getProblemMemoList(userId, problemId, pageable);
+	}
+
+	@Override
+	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, Pageable pageable) {
+		return problemService.getUserProblemFavoriteList(userId, pageable);
 	}
 
 	@Override
