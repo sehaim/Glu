@@ -1,5 +1,9 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
+import java.util.Optional;
+
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -70,6 +74,11 @@ public class ProblemServiceImpl implements ProblemService {
 
 		return problemMemoRepository.findAllByProblemOrderByCreatedDateDesc(problem, pageable)
 			.map(ProblemMemoResponse::of);
+	}
+
+	@Override
+	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, Pageable pageable) {
+		return userProblemFavoriteRepository.findAllFavoriteProblem(userId, pageable).map(ProblemBaseResponse::of);
 	}
 
 	@Override
