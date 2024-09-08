@@ -34,6 +34,7 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 		this.template = template;
 	}
 
+	@Override
 	public Optional<UserProblemLog> findFirstByUserIdAndProblem(Long userId, Problem problem) {
 		Query query = new Query();
 		query.addCriteria(
@@ -94,7 +95,8 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 		countPipeline.add(Aggregation.count().as("count"));
 		Aggregation countAggregation = Aggregation.newAggregation(countPipeline);
 
-		AggregationResults<CountResult> countResults = template.aggregate(countAggregation, "userProblemLog", CountResult.class);
+		AggregationResults<CountResult> countResults = template.aggregate(countAggregation, "userProblemLog",
+			CountResult.class);
 		long total = countResults.getMappedResults().stream().mapToLong(CountResult::getCount).sum();
 
 		return new PageImpl<>(problems, pageable, total);
@@ -159,15 +161,18 @@ public class UserProblemLogQueryRepositoryImpl implements UserProblemLogQueryRep
 	}
 
 	private void userIdEq(Criteria criteria, Long userId) {
-		if(userId != null) criteria.and("userId").is(userId);
+		if (userId != null)
+			criteria.and("userId").is(userId);
 	}
 
 	private void statusEq(Criteria criteria, Problem.Status status) {
-		if (status != null) criteria.and("isCorrect").is(Problem.Status.CORRECT.equals(status));
+		if (status != null)
+			criteria.and("isCorrect").is(Problem.Status.CORRECT.equals(status));
 	}
 
 	private void problemTypeEq(Criteria criteria, String problemTypeCode) {
-		if(problemTypeCode != null) criteria.and("problem.problemType._id").is(problemTypeCode);
+		if (problemTypeCode != null)
+			criteria.and("problem.problemType._id").is(problemTypeCode);
 	}
 
 }
