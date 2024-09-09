@@ -1,4 +1,4 @@
-package com.ssafy.glu.problem.domain.problem.exception;
+package com.ssafy.glu.problem.domain.problem.exception.status;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

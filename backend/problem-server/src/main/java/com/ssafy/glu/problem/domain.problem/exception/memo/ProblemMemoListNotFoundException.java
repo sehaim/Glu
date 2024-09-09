@@ -1,4 +1,4 @@
-package com.ssafy.glu.problem.domain.problem.exception;
+package com.ssafy.glu.problem.domain.problem.exception.memo;
 
 import com.ssafy.glu.problem.global.error.ErrorCode;
 import com.ssafy.glu.problem.global.error.ServiceException;
