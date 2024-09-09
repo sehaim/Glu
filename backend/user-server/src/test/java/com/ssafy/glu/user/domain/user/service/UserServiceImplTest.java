@@ -20,6 +20,7 @@ import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
+import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
@@ -145,6 +146,43 @@ class UserServiceImplTest {
 		assertFalse(attendanceData.isEmpty(), "Attendance data should not be empty");
 		assertEquals(30, attendanceData.get(0).totalSolvedProblemCnt());
 		assertEquals(10, attendanceData.get(1).totalSolvedProblemCnt());
+	}
+
+	@Transactional
+	@Test
+	void AttendTest() {
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		//when
+		userService.attend(id, 10);
+
+		//then
+		Attendance attendance = attendanceRepository.findFirstByOrderByAttendanceDateDesc().orElseThrow();
+		assertEquals(10, attendance.getTodaySolve());
+	}
+
+	@Transactional
+	@Test
+	void MultipleAttendTest() {
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		//when
+		userService.attend(id, 10);
+		userService.attend(id, 30);
+
+		//then
+		Attendance attendance = attendanceRepository.findFirstByOrderByAttendanceDateDesc().orElseThrow();
+		assertEquals(40, attendance.getTodaySolve());
+	}
+
+	@Transactional
+	@Test
+	void NoUserTest() {
+		assertThrows(UserNotFoundException.class, () -> userService.attend(100L, 100));
 	}
 
 

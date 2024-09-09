@@ -38,4 +38,8 @@ public class Attendance {
 	@JoinColumn(name = "user_id")
 	private Users users;
 
+	public void updateTodaySolve(int num) {
+		todaySolve += num;
+	}
+
 }
