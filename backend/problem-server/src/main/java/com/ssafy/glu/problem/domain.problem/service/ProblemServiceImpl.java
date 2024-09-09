@@ -12,6 +12,7 @@ import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
@@ -55,6 +56,21 @@ public class ProblemServiceImpl implements ProblemService {
 		userProblemStatusRepository.save(userProblemStatus);
 
 		// 메모 저장 후 응답 생성
+		return ProblemMemoResponse.of(memo);
+	}
+
+	@Override
+	public ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request) {
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
+
+		// 비즈니스 로직 분리
+		ProblemMemo memo = userProblemStatus.updateMemo(request.memoIndex(), request.content());
+
+		// 변경된 상태 저장
+		userProblemStatusRepository.save(userProblemStatus);
+
+		// 메모 수정 후 응답 생성
 		return ProblemMemoResponse.of(memo);
 	}
 

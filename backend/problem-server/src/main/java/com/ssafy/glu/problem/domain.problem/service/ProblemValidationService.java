@@ -1,7 +1,5 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
-import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,14 +8,14 @@ import org.springframework.stereotype.Service;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteCancelFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteRegistrationFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoCreateFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoDeleteFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoUpdateFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
@@ -45,11 +43,21 @@ public class ProblemValidationService implements ProblemService {
 	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
 		log.info("===== 문제 메모 생성 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 내용 : {} =====", userId, problemId, request);
 		try {
-			ProblemMemoResponse response = problemService.createProblemMemo(userId,problemId,request);
+			ProblemMemoResponse response = problemService.createProblemMemo(userId, problemId, request);
 			log.info("===== 문제 메모 생성 완료 - 변경된 메모 : {} =====", response);
 			return response;
-		}catch (Exception exception){
+		} catch (Exception exception) {
 			throw new ProblemMemoCreateFailedException(exception);
+		}
+	}
+
+	@Override
+	public ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request) {
+		log.info("===== 문제 메모 수정 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 내용 : {} =====", userId, problemId, request);
+		try {
+			return problemService.updateProblemMemo(userId, problemId, request);
+		} catch (Exception exception) {
+			throw new ProblemMemoUpdateFailedException(exception);
 		}
 	}
 
@@ -62,7 +70,8 @@ public class ProblemValidationService implements ProblemService {
 	}
 
 	@Override
-	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition, Pageable pageable) {
+	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition,
+		Pageable pageable) {
 		return problemService.getUserProblemFavoriteList(userId, condition, pageable);
 	}
 
@@ -105,7 +114,6 @@ public class ProblemValidationService implements ProblemService {
 	private Problem getProblemOrThrow(String problemId) {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
-
 
 	// ===== 검증 로직 =====
 
