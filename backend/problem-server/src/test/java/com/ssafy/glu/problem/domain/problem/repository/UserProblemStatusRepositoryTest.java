@@ -36,7 +36,7 @@ public class UserProblemStatusRepositoryTest {
 
 	private final int NUM_PROBLEMS = 3;
 	private List<Problem> problemList;
-	private final Long[] userIdList = {1L,2L,3L,4L};
+	private final Long[] userIdList = {1L, 2L, 3L, 4L};
 
 	@BeforeEach
 	public void setUp() throws InterruptedException {
@@ -50,10 +50,14 @@ public class UserProblemStatusRepositoryTest {
 
 		// 유저별 풀이 상태 등록
 		for (Long userId : userIdList) {
-			userProblemStatusRepository.save(MockFactory.createUserProblemStatus(userId,Problem.Status.CORRECT,problemList.get(0),
-				Map.of(1L,"메모1",2L,"메모2"),false));
-			userProblemStatusRepository.save(MockFactory.createUserProblemStatus(userId,Problem.Status.WRONG,problemList.get(1),Map.of(1L,"메모1"),true));
-			userProblemStatusRepository.save(MockFactory.createUserProblemStatus(userId,Problem.Status.WRONG,problemList.get(2),Map.of(),true));
+			userProblemStatusRepository.save(
+				MockFactory.createUserProblemStatus(userId, Problem.Status.CORRECT, problemList.get(0),
+					Map.of(1L, "메모1", 2L, "메모2"), false));
+			userProblemStatusRepository.save(
+				MockFactory.createUserProblemStatus(userId, Problem.Status.WRONG, problemList.get(1), Map.of(1L, "메모1"),
+					true));
+			userProblemStatusRepository.save(
+				MockFactory.createUserProblemStatus(userId, Problem.Status.WRONG, problemList.get(2), Map.of(), true));
 		}
 	}
 
@@ -82,7 +86,8 @@ public class UserProblemStatusRepositoryTest {
 			.status(Problem.Status.CORRECT)
 			.build();
 
-		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId, condition, Pageable.ofSize(10));
+		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId,
+			condition, Pageable.ofSize(10));
 
 		assertThat(userProblemStatusList.getTotalElements()).isEqualTo(1);
 	}
@@ -95,7 +100,8 @@ public class UserProblemStatusRepositoryTest {
 			.status(Problem.Status.WRONG)
 			.build();
 
-		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId, condition, Pageable.ofSize(10));
+		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId,
+			condition, Pageable.ofSize(10));
 
 		assertThat(userProblemStatusList.getTotalElements()).isEqualTo(2);
 	}
@@ -108,7 +114,8 @@ public class UserProblemStatusRepositoryTest {
 			.hasMemo(true)
 			.build();
 
-		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId, condition, Pageable.ofSize(10));
+		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId,
+			condition, Pageable.ofSize(10));
 
 		assertThat(userProblemStatusList.getTotalElements()).isEqualTo(2);
 	}
@@ -121,7 +128,8 @@ public class UserProblemStatusRepositoryTest {
 			.isFavorite(true)
 			.build();
 
-		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId, condition, Pageable.ofSize(10));
+		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId,
+			condition, Pageable.ofSize(10));
 
 		assertThat(userProblemStatusList.getTotalElements()).isEqualTo(2);
 	}
@@ -136,7 +144,8 @@ public class UserProblemStatusRepositoryTest {
 			.isFavorite(true)
 			.build();
 
-		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId, condition, Pageable.ofSize(10));
+		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId,
+			condition, Pageable.ofSize(10));
 
 		assertThat(userProblemStatusList.getTotalElements()).isEqualTo(1);
 	}
@@ -150,21 +159,23 @@ public class UserProblemStatusRepositoryTest {
 		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
 			problem.getProblemId()).orElseThrow(UserProblemStatusNotFoundException::new);
 
-		// Index 찾기
-		Long memoIndex = userProblemStatus.getMemoList().isEmpty() ? 1L :
-			userProblemStatus.getMemoList().stream().map(ProblemMemo::getMemoIndex).max(Long::compareTo).orElse(0L)
-				+ 1L;
+		String content = "새로운 메모 내용";
+
+		int beforeCount = userProblemStatus.getMemoList().size();
 
 		// 메모 추가
-		ProblemMemo problemMemo = ProblemMemo.builder().memoIndex(memoIndex).content("새로운 메모 내용").build();
+		ProblemMemo problemMemo = userProblemStatus.addMemo(content);
 
-		// 저장
-		userProblemStatus.getMemoList().add(problemMemo);
+		assertThat(problemMemo.getContent()).isEqualTo(content);
 
-		userProblemStatus.updateMemo(memoIndex, "수정된 메모 내용");
+		String newContent = "수정된 메모 내용";
 
-		assertThat(userProblemStatus.getMemoList().size()).isEqualTo(1);
-		assertThat(userProblemStatus.getMemoList().get(0).getMemoIndex()).isEqualTo(memoIndex);
-		assertThat(userProblemStatus.getMemoList().get(0).getContent()).isEqualTo("수정된 메모 내용");
+		userProblemStatus.updateMemo(problemMemo.getMemoIndex(), newContent);
+		userProblemStatusRepository.save(userProblemStatus);
+
+		int afterCount = userProblemStatus.getMemoList().size();
+
+		assertThat(userProblemStatus.getMemoList().size()).isEqualTo(afterCount);
+		assertThat(problemMemo.getContent()).isEqualTo(newContent);
 	}
 }

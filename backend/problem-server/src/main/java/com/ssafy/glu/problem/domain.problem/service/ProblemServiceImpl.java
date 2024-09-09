@@ -75,6 +75,16 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
+	public void deleteProblemMemo(Long userId, String problemId, Long memoIndex) {
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
+
+		userProblemStatus.deleteMemo(memoIndex);
+
+		userProblemStatusRepository.save(userProblemStatus);
+	}
+
+	@Override
 	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
 		Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 		return null;

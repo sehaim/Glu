@@ -77,14 +77,26 @@ public class ProblemValidationService implements ProblemService {
 		validateProblemIdIsNull(problemId);
 		validateMemoIndexIsNull(request.memoIndex());
 
-		// Status 존재 여부 검증
-		userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
-
 		try {
 			return problemService.updateProblemMemo(userId, problemId, request);
 		} catch (Exception exception) {
 			throw new ProblemMemoUpdateFailedException(exception);
+		}
+	}
+
+	@Override
+	public void deleteProblemMemo(Long userId, String problemId, Long memoIndex) {
+		log.info("===== 문제 메모 수정 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 인덱스 : {} =====", userId, problemId, memoIndex);
+
+		// Null 값 검증
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
+		validateMemoIndexIsNull(memoIndex);
+
+		try {
+			problemService.deleteProblemMemo(userId, problemId, memoIndex);
+		} catch (Exception exception) {
+			throw new ProblemMemoDeleteFailedException(exception);
 		}
 	}
 

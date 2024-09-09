@@ -48,6 +48,7 @@ public class UserProblemStatus extends BaseTimeDocument {
 		this.problem = problem;
 	}
 
+	// 메모 추가
 	public ProblemMemo addMemo(String content) {
 		ProblemMemo memo = ProblemMemo.builder()
 			.memoIndex(generateMemoIndex())
@@ -67,6 +68,14 @@ public class UserProblemStatus extends BaseTimeDocument {
 				return memo;
 			})
 			.orElseThrow(ProblemMemoNotFoundException::new);
+	}
+
+	// 메모 삭제
+	public void deleteMemo(Long memoIndex) {
+		boolean result = memoList.removeIf(memo -> memo.getMemoIndex().equals(memoIndex));
+		if (!result) {
+			throw new ProblemMemoNotFoundException();
+		}
 	}
 
 	// userProblemStatus에 있는 memolist 중에서 가장 큰 index 값보다 + 1 반환
