@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.ssafy.glu.problem.global.shared.BaseTimeDocument;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -35,6 +36,7 @@ public class UserProblemStatus extends BaseTimeDocument {
 	@DocumentReference(lazy = true)
 	private Problem problem;
 
+	@Builder
 	public UserProblemStatus(Problem.Status status, Integer attemptCount, Integer wrongCount, Long userId,
 		List<ProblemMemo> memoList, Boolean isFavorite, Problem problem) {
 		this.status = status;
