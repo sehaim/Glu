@@ -39,7 +39,6 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 				attendanceDateBetween(startDateTime, endDateTime)
 			)
 			.orderBy(attendance.attendanceDate.asc()) // 날짜 순으로 정렬
-			.groupBy(attendance.attendanceDate)
 			.fetch()
 			.stream()
 			.map(AttendanceResponse::of)
