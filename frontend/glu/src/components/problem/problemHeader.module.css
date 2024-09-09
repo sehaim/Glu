@@ -1,0 +1,130 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+}
+
+.status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0px;
+  padding-top: 36px;
+}
+
+.status-level {
+  color: var(--PINK);
+  font-family: 'BMJUA';
+  font-size: 24px;
+}
+
+.status-like-wrapper {
+  background-color: var(--WHITE);
+  padding: 4px 16px;
+  border-radius: 10px;
+}
+
+.status-like-icon {
+  color: var(--TEXT_SECONDARY);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.info-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.problem-type {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('/images/problem/cloud.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+  width: 160px;
+  height: 120px;
+  padding: 4px;
+  padding-top: 8px;
+  color: var(--WHITE);
+  font-family: 'BMJUA';
+  font-size: 20px;
+  text-align: center;
+  z-index: 2;
+}
+
+.problem-type-text {
+  background: radial-gradient(
+    circle,
+    var(--SKYBLUE) 30%,
+    rgba(255, 255, 255, 0.3) 60%,
+    rgba(255, 255, 255, 0) 90%
+  );
+  border-radius: 20%;
+}
+
+.problem-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--WHITE);
+  border: 2px dashed var(--SKYBLUE);
+  border-radius: 10px;
+  width: calc(100% - 80px);
+  min-height: 64px;
+  margin-left: 80px;
+  margin-top: 24px;
+  padding: 24px 80px;
+  padding-left: 96px;
+  font-family: 'BMJUA';
+  font-size: 18px;
+  z-index: 1; /* problem-type보다 낮게 설정 */
+}
+
+@media (max-width: 1024px) {
+  .container {
+    width: 640px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 400px;
+  }
+
+  .status-container {
+    padding-bottom: 0px;
+  }
+
+  .status-level {
+    font-size: 18px;
+  }
+
+  .problem-type {
+    width: 140px;
+    height: 108px;
+    font-size: 16px;
+  }
+
+  .problem-title {
+    width: 100%;
+    min-height: 48px;
+    margin-top: 56px;
+    margin-left: 0px;
+    padding-top: 48px;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-bottom: 32px;
+    font-family: 'BMJUA';
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 320px;
+  }
+}
