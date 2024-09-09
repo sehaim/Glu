@@ -14,6 +14,8 @@ public class ProblemMemo {
 	private String content;
 
 	public void updateContent(String content) {
-		this.content = content;
+		if (content != null) {
+			this.content = content;
+		}
 	}
 }
