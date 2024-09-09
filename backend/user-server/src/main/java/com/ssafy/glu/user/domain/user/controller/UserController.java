@@ -41,7 +41,7 @@ public class UserController {
 	@PutMapping
 	public ResponseEntity<Void> updateUser(@RequestHeader(USER_ID) Long userId, UserUpdateRequest userUpdateRequest) {
 		userService.updateUser(userId, userUpdateRequest);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 	@DeleteMapping
