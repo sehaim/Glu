@@ -17,13 +17,13 @@
 }
 
 .small {
-  font-size: 12px;
-  padding: 5px 10px;
+  font-size: 15px;
+  padding: 8px 15px;
 }
 
 .medium {
-  font-size: 16px;
-  padding: 10px 15px;
+  font-size: 20px;
+  padding: 10px 25px;
 }
 
 .large {

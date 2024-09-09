@@ -1,0 +1,32 @@
+.button {
+  border-radius: 10px;
+  background-color: var(--LIGHTPINK);
+  font-family: 'PT';
+  color: var(--TEXT_SECONDARY);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 3px 1px rgba(255, 155, 155, 0.5);
+}
+
+.small {
+  font-size: 13px;
+  padding: 5px 10px;
+}
+
+.medium {
+  font-size: 18px;
+  padding: 8px 15px;
+}
+
+.large {
+  font-size: 24px;
+  padding: 12px 20px;
+}
