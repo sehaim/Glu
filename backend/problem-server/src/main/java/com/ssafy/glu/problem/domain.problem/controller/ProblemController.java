@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
-import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
 
 import lombok.RequiredArgsConstructor;
@@ -48,21 +46,6 @@ public class ProblemController {
 		@RequestBody ProblemMemoCreateRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(problemService.createProblemMemo(userId, problemId, request));
-	}
-
-	@PutMapping("/memo/{problemMemoId}")
-	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(@RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemMemoId") String problemMemoId,
-		@RequestBody ProblemMemoUpdateRequest problemMemoUpdateRequest) {
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(problemService.updateProblemMemo(userId, problemMemoId, problemMemoUpdateRequest));
-	}
-
-	@DeleteMapping("/memo/{problemMemoId}")
-	public ResponseEntity<Void> deleteUserProblemMemo(@RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemMemoId") String problemMemoId) {
-		problemService.deleteProblemMemo(userId, problemMemoId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@GetMapping("/{problemId}/memo")
