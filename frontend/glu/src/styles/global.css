@@ -31,13 +31,17 @@ select {
   padding: 5px 10px;
   &::placeholder {
     color: var(--TEXT_SECONDARY);
-    font-size: 15px;
+    font-size: 14px;
   }
   &:focus {
     border-width: 2px;
     border-color: var(--PINK);
     outline: none;
   }
+}
+
+select {
+  font-size: 15px;
 }
 
 /* 폰트 적용 */
