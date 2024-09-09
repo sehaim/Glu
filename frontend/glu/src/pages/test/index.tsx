@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
+import ProblemOptionList from '@/components/problem/problemOptionList';
 import styles from './test.module.css';
 import dummyProblems from '../../mock/dummyProblems.json';
 import { Problem } from '../../types/ProblemTypes';
@@ -11,6 +12,10 @@ export default function Test() {
   useEffect(() => {
     setProblems(dummyProblems);
   }, []);
+
+  useEffect(() => {
+    console.log(problems);
+  }, [problems]);
 
   return (
     <div className={styles.container}>
@@ -25,7 +30,7 @@ export default function Test() {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={problem?.content} />
-              <div>선택지</div>
+              <ProblemOptionList problemOptions={problem?.problemOptions} />
             </div>
           </div>
         ))}
