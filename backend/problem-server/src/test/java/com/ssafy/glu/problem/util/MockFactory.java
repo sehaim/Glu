@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemLevel;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemType;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetail;
 import com.ssafy.glu.problem.domain.problem.domain.QuestionType;
@@ -121,6 +122,15 @@ public class MockFactory {
 			.build();
 	}
 
+	public static ProblemMemo createProblemMemo(Long memoIndex) {
+		// 랜덤한 ProblemMemo 객체 생성
+		String content = "내용 " + UUID.randomUUID().toString().substring(0, 8);
+		return ProblemMemo.builder()
+			.memoIndex(memoIndex)
+			.content(content)
+			.build();
+	}
+
 	//===== UserProblemLog =====//
 	public static UserProblemLog createUserProblemLog(Long userId, Problem problem, boolean isCorrect) {
 		// 랜덤한 문자열 생성
@@ -136,9 +146,25 @@ public class MockFactory {
 			.build();
 	}
 
+	//===== UserProblemStatus =====//
 	public static UserProblemStatus createUserProblemStatus(Long userId, Problem problem) {
 		return new UserProblemStatus(
 			Problem.Status.CORRECT, RANDOM.nextInt(5) + 5, RANDOM.nextInt(5), userId, new ArrayList<>(),
 			RANDOM.nextBoolean(), problem);
+	}
+	public static UserProblemStatus createUserProblemStatus(Long userId, Problem.Status status, Problem problem, Map<Long, String> memoList, boolean isFavorite) {
+		// 랜덤한 문자열 생성
+		int randomAttemptCount = RANDOM.nextInt(1,5);
+		int randomWrongCount = RANDOM.nextInt(randomAttemptCount);
+
+		return UserProblemStatus.builder()
+			.status(status)
+			.attemptCount(randomAttemptCount)
+			.wrongCount(randomWrongCount)
+			.userId(userId)
+			.memoList(memoList.entrySet().stream().map(entry->new ProblemMemo(entry.getKey(),entry.getValue())).toList())
+			.isFavorite(isFavorite)
+			.problem(problem)
+			.build();
 	}
 }

@@ -1,6 +1,7 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 
 import lombok.Builder;
 
@@ -16,6 +17,7 @@ public record ProblemBaseResponse(
 	ProblemTypeDetailResponse problemTypeDetail
 ) {
 	public static ProblemBaseResponse of(Problem problem, Problem.Status status) {
+		if(problem == null) return null;
 		return ProblemBaseResponse.builder()
 			.problemId(problem.getProblemId())
 			.title(problem.getTitle())
@@ -26,5 +28,9 @@ public record ProblemBaseResponse(
 			.problemType(ProblemTypeResponse.of(problem.getProblemType()))
 			.problemTypeDetail(ProblemTypeDetailResponse.of(problem.getProblemTypeDetail()))
 			.build();
+	}
+
+	public static ProblemBaseResponse of(UserProblemStatus userProblemStatus) {
+		return of(userProblemStatus.getProblem(), userProblemStatus.getStatus());
 	}
 }
