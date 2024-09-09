@@ -12,5 +12,5 @@ public record UserResponse (
 	Integer score,
 	String imageUrl,
 	Integer dayCount,
-	List<ProblemTypeList> problemTypeList
+	List<UserProblemTypeResponse> problemTypeList
 ){}

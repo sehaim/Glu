@@ -11,7 +11,7 @@ import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
-import com.ssafy.glu.user.domain.user.dto.response.ProblemTypeList;
+import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
@@ -89,20 +89,8 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 변환 시키기 userProblemlist => ProblemTypeList
 	 */
-	private static List<ProblemTypeList> getProblemTypeLists(List<UserProblemType> userProblemTypes) {
-		
-		List<ProblemTypeList> problemTypeList = new ArrayList<>();
-
-		for (UserProblemType userProblemType : userProblemTypes) {
-			problemTypeList.add(
-				new ProblemTypeList(
-					userProblemType.getLevel(),
-					userProblemType.getScore(),
-					userProblemType.getProblemTypeCode()
-				)
-			);
-		}
-		return problemTypeList;
+	private static List<UserProblemTypeResponse> getProblemTypeLists(List<UserProblemType> userProblemTypes) {
+		return userProblemTypes.stream().map(UserProblemTypeResponse::of).toList();
 	}
 
 }
