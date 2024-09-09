@@ -11,15 +11,21 @@ import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredException;
-import com.ssafy.glu.problem.domain.problem.exception.FavoriteCancelFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.FavoriteNotFoundException;
-import com.ssafy.glu.problem.domain.problem.exception.FavoriteRegistrationFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoCreateFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoUpdateFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteAlreadyRegisteredException;
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteCancelFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteRegistrationFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.memo.NullMemoIndexException;
+import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoCreateFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoDeleteFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoUpdateFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.problem.NullProblemIdException;
+import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.user.NullUserIdException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +38,27 @@ public class ProblemValidationService implements ProblemService {
 	private final ProblemService problemService;
 	private final ProblemRepository problemRepository;
 	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
+	private final UserProblemStatusRepository userProblemStatusRepository;
 
 	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
+		validateUserIdIsNull(userId);
 		return problemService.getProblemList(userId, condition, pageable);
 	}
 
 	@Override
 	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
 		log.info("===== 문제 메모 생성 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 내용 : {} =====", userId, problemId, request);
+
+		// Null 값 검증
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
+
+		// Status 존재 여부 검증
+		userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
+
 		try {
 			ProblemMemoResponse response = problemService.createProblemMemo(userId, problemId, request);
 			log.info("===== 문제 메모 생성 완료 - 변경된 메모 : {} =====", response);
@@ -54,6 +71,16 @@ public class ProblemValidationService implements ProblemService {
 	@Override
 	public ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request) {
 		log.info("===== 문제 메모 수정 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 내용 : {} =====", userId, problemId, request);
+
+		// Null 값 검증
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
+		validateMemoIndexIsNull(request.memoIndex());
+
+		// Status 존재 여부 검증
+		userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
+
 		try {
 			return problemService.updateProblemMemo(userId, problemId, request);
 		} catch (Exception exception) {
@@ -65,6 +92,9 @@ public class ProblemValidationService implements ProblemService {
 	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
 		// 검증
 		log.info("검증 로직 서비스");
+
+		validateUserIdIsNull(userId);
+
 		Problem problem = getProblemOrThrow(problemId);
 		return problemService.getProblemMemoList(userId, problemId, pageable);
 	}
@@ -72,6 +102,8 @@ public class ProblemValidationService implements ProblemService {
 	@Override
 	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
+		validateUserIdIsNull(userId);
+
 		return problemService.getUserProblemFavoriteList(userId, condition, pageable);
 	}
 
@@ -80,6 +112,9 @@ public class ProblemValidationService implements ProblemService {
 		// 검증
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 찜 생성 요청 - 사용자 Id : {}, 문제 Id : {} =====", userId, problemId);
+
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
 
 		Problem problem = getProblemOrThrow(problemId);
 
@@ -97,6 +132,9 @@ public class ProblemValidationService implements ProblemService {
 		// 검증
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 찜 취소 요청 - 사용자 Id : {}, 문제 Id : {} =====", userId, problemId);
+
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
 
 		Problem problem = getProblemOrThrow(problemId);
 
@@ -130,6 +168,24 @@ public class ProblemValidationService implements ProblemService {
 		if (!userProblemFavoriteRepository.existsByUserIdAndProblem(userId, problem)) {
 			log.warn("===== 사용자 [{}]가 [{}]를 찜하지 않은 상태 =====", userId, problem);
 			throw new FavoriteNotFoundException();
+		}
+	}
+
+	private void validateUserIdIsNull(Long userId) {
+		if (userId == null) {
+			throw new NullUserIdException();
+		}
+	}
+
+	private void validateProblemIdIsNull(String problemId) {
+		if (problemId == null) {
+			throw new NullProblemIdException();
+		}
+	}
+
+	private void validateMemoIndexIsNull(Long memoIndex) {
+		if (memoIndex == null) {
+			throw new NullMemoIndexException();
 		}
 	}
 }
