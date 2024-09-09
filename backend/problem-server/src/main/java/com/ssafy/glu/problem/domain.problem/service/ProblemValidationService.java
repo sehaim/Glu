@@ -77,10 +77,6 @@ public class ProblemValidationService implements ProblemService {
 		validateProblemIdIsNull(problemId);
 		validateMemoIndexIsNull(request.memoIndex());
 
-		// Status 존재 여부 검증
-		userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
-
 		try {
 			return problemService.updateProblemMemo(userId, problemId, request);
 		} catch (Exception exception) {
@@ -96,10 +92,6 @@ public class ProblemValidationService implements ProblemService {
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 		validateMemoIndexIsNull(memoIndex);
-
-		// Status 존재 여부 검증
-		userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
 
 		try {
 			problemService.deleteProblemMemo(userId, problemId, memoIndex);
