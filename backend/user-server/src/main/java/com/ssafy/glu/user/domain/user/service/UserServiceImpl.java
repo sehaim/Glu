@@ -10,6 +10,7 @@ import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
@@ -89,6 +90,37 @@ public class UserServiceImpl implements UserService {
 	 */
 	private static List<UserProblemTypeResponse> getProblemTypeLists(List<UserProblemType> userProblemTypes) {
 		return userProblemTypes.stream().map(UserProblemTypeResponse::of).toList();
+	}
+
+	/**
+	 * 유저 업데이트
+	 * 비밀번호 일치 체크후 업데이트
+	 */
+	@Transactional
+	@Override
+	public void updateUser(Long userId, UserUpdateRequest request) {
+
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+		//비밀번호 일치할때
+		if (passwordEncoder.matches(request.password(), findUser.getPassword())) {
+			String encodedPassword = passwordEncoder.encode(request.newPassword());
+			//유저 정보 업데이트
+			findUser.updateUser(encodedPassword, request.nickname());
+		}
+	}
+
+	/**
+	 * 유저 삭제
+	 * softdelete를 위해 user의 isdelete만 변경
+	 */
+	@Transactional
+	@Override
+	public void deleteUser(Long userId) {
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+		//유저 삭제
+		findUser.deleteUser();
 	}
 
 }

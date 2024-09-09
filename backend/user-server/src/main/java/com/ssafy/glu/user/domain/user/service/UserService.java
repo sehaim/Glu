@@ -1,12 +1,17 @@
 package com.ssafy.glu.user.domain.user.service;
 
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 
 public interface UserService {
 
-	public Long register(UserRegisterRequest userRegisterRequest);
+	Long register(UserRegisterRequest userRegisterRequest);
 
-	public UserResponse getUser(Long userId);
+	UserResponse getUser(Long userId);
+
+	void updateUser(Long userId, UserUpdateRequest userUpdateRequest);
+
+	void deleteUser(Long userId);
 
 }
