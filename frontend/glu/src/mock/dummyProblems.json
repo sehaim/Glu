@@ -1,0 +1,497 @@
+[
+  {
+    "problemId": 1,
+    "title": "Find the missing number in sequence",
+    "content": "Given a sequence of numbers, find the missing number.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "5"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "7"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "9"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "11"
+      }
+    ],
+    "solution": "7",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "SEQUENCE",
+      "name": "Mathematical Sequence"
+    }
+  },
+  {
+    "problemId": 2,
+    "title": "Identify the prime number",
+    "content": "Which of the following numbers is a prime number?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "12"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "17"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "20"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "25"
+      }
+    ],
+    "solution": "17",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "PRIME",
+      "name": "Prime Numbers"
+    }
+  },
+  {
+    "problemId": 3,
+    "title": "What is the capital of France?",
+    "content": "Select the correct capital city of France.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "Berlin"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "Paris"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "Madrid"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Rome"
+      }
+    ],
+    "solution": "Paris",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "GEO",
+      "problemTypeDetailCode": "CAPITALS",
+      "name": "Geography - Capitals"
+    }
+  },
+  {
+    "problemId": 4,
+    "title": "Basic addition problem",
+    "content": "Solve 8 + 6.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "12"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "14"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "15"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "16"
+      }
+    ],
+    "solution": "14",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "ADDITION",
+      "name": "Mathematics - Addition"
+    }
+  },
+  {
+    "problemId": 5,
+    "title": "Identify the chemical symbol for gold",
+    "content": "What is the chemical symbol for gold?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "Ag"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "Au"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "Pt"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Fe"
+      }
+    ],
+    "solution": "Au",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "SCIENCE",
+      "problemTypeDetailCode": "CHEMISTRY",
+      "name": "Chemistry - Elements"
+    }
+  },
+  {
+    "problemId": 6,
+    "title": "What is 10 multiplied by 5?",
+    "content": "Solve 10 * 5.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "45"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "50"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "55"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "60"
+      }
+    ],
+    "solution": "50",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "MULTIPLICATION",
+      "name": "Mathematics - Multiplication"
+    }
+  },
+  {
+    "problemId": 7,
+    "title": "Who wrote 'Hamlet'?",
+    "content": "Select the author of the play 'Hamlet'.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "William Shakespeare"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "Charles Dickens"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "Mark Twain"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Jane Austen"
+      }
+    ],
+    "solution": "William Shakespeare",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "LITERATURE",
+      "problemTypeDetailCode": "CLASSICS",
+      "name": "Literature - Classics"
+    }
+  },
+  {
+    "problemId": 8,
+    "title": "Square root of 64",
+    "content": "What is the square root of 64?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "6"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "7"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "8"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "9"
+      }
+    ],
+    "solution": "8",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "SQUARE_ROOT",
+      "name": "Mathematics - Square Roots"
+    }
+  },
+  {
+    "problemId": 9,
+    "title": "Which planet is closest to the sun?",
+    "content": "Select the planet that is closest to the sun.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "Venus"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "Earth"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "Mercury"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Mars"
+      }
+    ],
+    "solution": "Mercury",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "SCIENCE",
+      "problemTypeDetailCode": "ASTRONOMY",
+      "name": "Astronomy - Planets"
+    }
+  },
+  {
+    "problemId": 10,
+    "title": "Which country has the largest population?",
+    "content": "Which of the following countries has the largest population?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "United States"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "India"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "China"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Brazil"
+      }
+    ],
+    "solution": "China",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "GEO",
+      "problemTypeDetailCode": "POPULATION",
+      "name": "Geography - Population"
+    }
+  },
+  {
+    "problemId": 11,
+    "title": "Calculate 25% of 200",
+    "content": "What is 25% of 200?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "25"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "50"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "75"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "100"
+      }
+    ],
+    "solution": "50",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "PERCENTAGE",
+      "name": "Mathematics - Percentages"
+    }
+  },
+  {
+    "problemId": 12,
+    "title": "Which is the largest ocean?",
+    "content": "Select the largest ocean on Earth.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "Atlantic Ocean"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "Indian Ocean"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "Pacific Ocean"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Arctic Ocean"
+      }
+    ],
+    "solution": "Pacific Ocean",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "GEO",
+      "problemTypeDetailCode": "OCEANS",
+      "name": "Geography - Oceans"
+    }
+  },
+  {
+    "problemId": 13,
+    "title": "What is the freezing point of water?",
+    "content": "At what temperature does water freeze?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "0°C"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "32°C"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "100°C"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "-10°C"
+      }
+    ],
+    "solution": "0°C",
+    "problemLevel": {
+      "problemLevelCode": "EASY",
+      "name": "Beginner"
+    },
+    "problemType": {
+      "problemTypeCode": "SCIENCE",
+      "problemTypeDetailCode": "PHYSICS",
+      "name": "Physics - Temperature"
+    }
+  },
+  {
+    "problemId": 14,
+    "title": "Who discovered gravity?",
+    "content": "Which scientist is credited with discovering the law of gravity?",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "Albert Einstein"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "Isaac Newton"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "Galileo Galilei"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "Nikola Tesla"
+      }
+    ],
+    "solution": "Isaac Newton",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "SCIENCE",
+      "problemTypeDetailCode": "PHYSICS",
+      "name": "Physics - Gravity"
+    }
+  },
+  {
+    "problemId": 15,
+    "title": "What is 2 raised to the power of 5?",
+    "content": "Solve 2^5.",
+    "problemOptions": [
+      {
+        "problemOptionId": 1,
+        "option": "16"
+      },
+      {
+        "problemOptionId": 2,
+        "option": "32"
+      },
+      {
+        "problemOptionId": 3,
+        "option": "64"
+      },
+      {
+        "problemOptionId": 4,
+        "option": "128"
+      }
+    ],
+    "solution": "32",
+    "problemLevel": {
+      "problemLevelCode": "MEDIUM",
+      "name": "Intermediate"
+    },
+    "problemType": {
+      "problemTypeCode": "MATH",
+      "problemTypeDetailCode": "EXPONENTS",
+      "name": "Mathematics - Exponents"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+.problem-text {
+  width: 50%;
+  background-color: var(--WHITE);
+  border-radius: 10px;
+  padding: 24px;
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 18px;
+  line-height: 24px;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .problem-text {
+    width: 100%;
+    font-size: 16px;
+  }
+}
