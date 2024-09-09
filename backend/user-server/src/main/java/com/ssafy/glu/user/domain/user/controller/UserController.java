@@ -39,13 +39,13 @@ public class UserController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateUser(@RequestHeader(USER_ID) Long userId, UserUpdateRequest userUpdateRequest) {
+	public ResponseEntity<Void> updateUser(@RequestHeader(USER_ID) Long userId, UserUpdateRequest userUpdateRequest) {
 		userService.updateUser(userId, userUpdateRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteUser(@RequestHeader(USER_ID) Long userId) {
+	public ResponseEntity<Void> deleteUser(@RequestHeader(USER_ID) Long userId) {
 		userService.deleteUser(userId);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
