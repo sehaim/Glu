@@ -186,4 +186,21 @@ class UserServiceImplTest {
 	}
 
 
+	@Transactional
+	@Test
+	void UserCheckTest() {
+
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		//when
+		Boolean result1 = userService.checkUser("id1234");
+		Boolean result2 = userService.checkUser("id12345");
+
+		//then
+		assertTrue(result1);
+		assertFalse(result2);
+	}
+
 }

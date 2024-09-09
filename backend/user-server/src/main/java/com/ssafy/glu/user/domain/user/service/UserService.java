@@ -18,6 +18,8 @@ public interface UserService {
 
 	void deleteUser(Long userId);
 
+	Boolean checkUser(String loginId);
+
 	List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request);
 
 	void attend(Long userId, Integer solveNum);
