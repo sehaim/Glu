@@ -32,7 +32,7 @@ public class UserController {
 	@GetMapping("/")
 	public ResponseEntity<?> getUser(@RequestHeader(USER_ID) Long userId) {
 		UserResponse user = userService.getUser(userId);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
 
 }
