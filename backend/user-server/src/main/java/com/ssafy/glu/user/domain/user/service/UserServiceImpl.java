@@ -1,6 +1,5 @@
 package com.ssafy.glu.user.domain.user.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +25,6 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final UserProblemTypeRepository userProblemTypeRepository;
-
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	/**
