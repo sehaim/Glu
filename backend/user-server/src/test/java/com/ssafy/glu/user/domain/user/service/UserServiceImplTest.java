@@ -20,6 +20,7 @@ import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
+import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
@@ -178,7 +179,11 @@ class UserServiceImplTest {
 		assertEquals(40, attendance.getTodaySolve());
 	}
 
-
+	@Transactional
+	@Test
+	void NoUserTest() {
+		assertThrows(UserNotFoundException.class, () -> userService.attend(100L, 100));
+	}
 
 
 }
