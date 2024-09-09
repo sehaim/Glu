@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import styles from './header.module.css';
@@ -91,9 +92,11 @@ export default function Header({ color }: { color: string }) {
               </Link>
             </li>
             <li>
-              종합
-              <br />
-              테스트
+              <Link href="/test">
+                종합
+                <br />
+                테스트
+              </Link>
             </li>
             <li>
               유형
@@ -109,7 +112,9 @@ export default function Header({ color }: { color: string }) {
                 <h1 className={styles.logo}>Glu</h1>
               </Link>
             </li>
-            <li>종합 테스트</li>
+            <li>
+              <Link href="/test">종합 테스트</Link>
+            </li>
             <li>유형 테스트</li>
           </ul>
         </nav>
