@@ -1,11 +1,25 @@
 .container {
   display: flex;
-  flex-direction: column;
   margin: 5px 0;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .input-label {
   font-family: 'PT';
   font-size: 16px;
   color: var(--TEXT_SECONDARY);
+}
+
+#row {
+  flex-direction: row;
+  align-items: center;
+}
+
+#column {
+  flex-direction: column;
 }

@@ -2,7 +2,7 @@
   border-radius: 10px;
   background-color: var(--LIGHTPINK);
   font-family: 'PT';
-  color: var(--WHITE);
+  color: var(--TEXT_SECONDARY);
   border: none;
   cursor: pointer;
   text-align: center;
@@ -13,20 +13,20 @@
 
 .button:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 5px 3px rgba(255, 155, 155, 0.5);
+  box-shadow: 0 0 3px 1px rgba(255, 155, 155, 0.5);
 }
 
 .small {
-  font-size: 10px;
+  font-size: 13px;
   padding: 5px 10px;
 }
 
 .medium {
-  font-size: 15px;
+  font-size: 18px;
   padding: 8px 15px;
 }
 
 .large {
-  font-size: 20px;
+  font-size: 24px;
   padding: 12px 20px;
 }

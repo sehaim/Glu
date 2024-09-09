@@ -28,7 +28,7 @@ select {
   border-style: solid;
   border-color: var(--GRAY);
   margin: 7px 0;
-  padding: 8px;
+  padding: 5px 10px;
   &::placeholder {
     color: var(--TEXT_SECONDARY);
     font-size: 15px;

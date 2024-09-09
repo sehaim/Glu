@@ -1,8 +1,13 @@
 import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
+import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import styles from '../userRegist.module.css';
 
 export default function Login() {
+  const handleCheckId = () => {
+    console.log('중복확인');
+  };
+
   const handleSignUp = () => {
     console.log('회원가입'); // 나중에 삭제
   };
@@ -12,7 +17,13 @@ export default function Login() {
       <div className={styles.section}>
         <div className={styles.title}>회원가입</div>
         <div className={styles['input-container']}>
-          <InputItem label="아이디" placeholder="6자 이상의 영문, 숫자" />
+          <InputItem label="아이디" placeholder="6자 이상의 영문, 숫자">
+            <SecondaryButton
+              label="중복확인"
+              size="small"
+              onClick={handleCheckId}
+            />
+          </InputItem>
           <InputItem label="닉네임" placeholder="2자 이상의 영문, 한글" />
           <InputItem
             label="비밀번호"
