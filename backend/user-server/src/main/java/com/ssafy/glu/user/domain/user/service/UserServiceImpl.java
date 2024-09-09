@@ -10,11 +10,15 @@ import org.springframework.util.StringUtils;
 import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
+import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
+import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
+import com.ssafy.glu.user.domain.user.exception.DateInValidException;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
+import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
@@ -27,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final UserProblemTypeRepository userProblemTypeRepository;
+	private final AttendanceRepository attendanceRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	/**
@@ -125,6 +130,18 @@ public class UserServiceImpl implements UserService {
 
 		//유저 삭제
 		findUser.deleteUser();
+	}
+
+	/**
+	 * 출석정보 가져오기
+	 */
+	@Override
+	public List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request) {
+		//날짜 체크
+		if (request.year() < 1900 || request.year() > 2100 || request.month() < 1 || request.month() > 12) {
+			throw new DateInValidException();
+		}
+		return attendanceRepository.countAttendanceByYearAndMonth(userId, request);
 	}
 
 }

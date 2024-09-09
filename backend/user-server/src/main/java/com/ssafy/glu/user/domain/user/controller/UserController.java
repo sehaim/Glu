@@ -2,6 +2,8 @@ package com.ssafy.glu.user.domain.user.controller;
 
 import static com.ssafy.glu.user.global.util.HeaderUtil.*;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
+import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.service.UserService;
 
@@ -49,5 +53,12 @@ public class UserController {
 		userService.deleteUser(userId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
+
+	@GetMapping("/attendance")
+	public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId, AttendanceRequest request) {
+		List<AttendanceResponse> result = userService.getAttendance(userId, request);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
 
 }

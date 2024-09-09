@@ -30,6 +30,9 @@ public class Attendance {
 	@Builder.Default
 	private LocalDateTime attendanceDate = LocalDateTime.now();
 
+	@Builder.Default
+	private Integer todaySolve = 0;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private Users users;
