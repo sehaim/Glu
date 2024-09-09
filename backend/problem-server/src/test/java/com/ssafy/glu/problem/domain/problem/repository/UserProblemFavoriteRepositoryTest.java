@@ -16,6 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
 import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
@@ -128,7 +130,10 @@ class UserProblemFavoriteRepositoryTest {
 	void searchUserProblemFavoriteTest() {
 		Long userId = userIdList[0];
 
-		Page<Problem> problemList = userProblemFavoriteRepository.findAllFavoriteProblem(userId, Pageable.ofSize(10));
+		ProblemSearchCondition condition = ProblemSearchCondition.builder()
+			.build();
+
+		Page<Problem> problemList = userProblemFavoriteRepository.findAllFavoriteProblem(userId, condition, Pageable.ofSize(10));
 
 		assertThat(problemList.getTotalElements()).isEqualTo(3);
 	}

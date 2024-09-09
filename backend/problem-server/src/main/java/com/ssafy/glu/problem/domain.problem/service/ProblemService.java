@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ public interface ProblemService {
 	ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request);
 	void deleteProblemMemo(Long userId, String problemMemoId);
 	Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable);
-	Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, Pageable pageable);
+	Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition, Pageable pageable);
 	void createUserProblemFavorite(Long userId, String problemId);
 	void deleteUserProblemFavorite(Long userId, String problemId);
 

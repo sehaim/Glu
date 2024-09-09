@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 
 public class UserProblemFavoriteQueryRespositoryImpl implements UserProblemFavoriteQueryRespository {
 	private final MongoTemplate template;
@@ -27,7 +28,7 @@ public class UserProblemFavoriteQueryRespositoryImpl implements UserProblemFavor
 	}
 
 	@Override
-	public Page<Problem> findAllFavoriteProblem(Long userId, Pageable pageable) {
+	public Page<Problem> findAllFavoriteProblem(Long userId, ProblemSearchCondition condition, Pageable pageable) {
 		// 검색 조건 빌딩
 		Criteria criteria = new Criteria();
 		// 유저 ID로 필터링
