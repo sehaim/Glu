@@ -6,4 +6,6 @@ import com.ssafy.glu.user.domain.user.domain.Users;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
 
+	Boolean existsByLoginId(String loginId);
+
 }
