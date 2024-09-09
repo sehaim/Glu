@@ -1,16 +1,19 @@
 .container {
   width: 100%;
-  background-color: var(--YELLOW);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .section {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
+  max-width: 960px;
   height: 100%;
   min-height: calc(100vh - 60px);
-  padding: 64px;
 }
 
 .section-title {
@@ -27,9 +30,14 @@
   margin-top: 24px;
 }
 
+.section1 {
+  justify-content: space-between;
+}
+
 #section1-text-wrapper {
   flex-direction: column;
   width: 60%;
+  max-width: 520px;
   animation: slideUpBounce 3s ease-in-out 1;
 }
 
@@ -104,7 +112,7 @@
   max-width: 200px;
   width: 40%;
   aspect-ratio: 1 / 1;
-  margin-right: 40px;
+  margin-right: 60px;
 }
 
 #section3-button-wrapper {

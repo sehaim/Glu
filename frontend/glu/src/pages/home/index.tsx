@@ -1,7 +1,16 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import PrimaryButton from '@/components/common/buttons/primaryButton';
 import styles from './home.module.css';
 
 export default function Home(): JSX.Element {
+  const router = useRouter();
+
+  const handleButton = () => {
+    router.push('/');
+  };
+
   const section1Ref = useRef<HTMLElement | null>(null);
   const section1TextRef = useRef<HTMLDivElement | null>(null);
   const section1ImageRef = useRef<HTMLDivElement | null>(null);
@@ -182,9 +191,11 @@ export default function Home(): JSX.Element {
             </p>
           </div>
           <div id={styles['section3-button-wrapper']}>
-            <button type="button" id={styles['section3-button']}>
-              테스트 보러가기
-            </button>
+            <PrimaryButton
+              label="레벨 테스트 보러가기"
+              size="large"
+              onClick={handleButton}
+            />
           </div>
         </div>
       </section>
