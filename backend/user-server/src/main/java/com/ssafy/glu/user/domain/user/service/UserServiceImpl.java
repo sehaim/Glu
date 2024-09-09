@@ -1,12 +1,18 @@
 package com.ssafy.glu.user.domain.user.service;
 
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
+import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
+import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
@@ -19,7 +25,6 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final UserProblemTypeRepository userProblemTypeRepository;
-
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	/**
@@ -40,23 +45,17 @@ public class UserServiceImpl implements UserService {
 			.nickname(userRegisterRequest.nickname())
 			.password(encodedPassword)
 			.birth(userRegisterRequest.birth())
-			.exp(0)
-			.stage(0)
-			.dayCount(0)
 			.build();
 
 		//유저 저장
 		Users saveUser = userRepository.save(user);
 
-		//유저 문제타입 저장유형코드
-		String[] codes = new String[] {"PT01", "PT02", "PT03"};
-		for (String code : codes) {
-			
+		// 유저 문제타입 저장
+		for (ProblemType problemType : ProblemType.values()) {
+
 			UserProblemType userProblemType = UserProblemType.builder()
-				.problemTypeCode(code)
+				.problemTypeCode(problemType)
 				.user(saveUser)
-				.level(0)
-				.score(0)
 				.build();
 
 			userProblemTypeRepository.save(userProblemType);
@@ -64,4 +63,32 @@ public class UserServiceImpl implements UserService {
 
 		return saveUser.getId();
 	}
+
+	/**
+	 * 유저 정보 가져오기
+	 */
+	@Override
+	public UserResponse getUser(Long userId) {
+
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(userId);
+
+		return UserResponse.builder()
+			.id(userId)
+			.dayCount(findUser.getDayCount())
+			.score(findUser.getStage())
+			.level(findUser.getExp())
+			.imageUrl("tempImageURL")
+			.nickname(findUser.getNickname())
+			.problemTypeList(getProblemTypeLists(userProblemTypes))
+			.build();
+	}
+
+	/**
+	 * 변환 시키기 userProblemlist => ProblemTypeList
+	 */
+	private static List<UserProblemTypeResponse> getProblemTypeLists(List<UserProblemType> userProblemTypes) {
+		return userProblemTypes.stream().map(UserProblemTypeResponse::of).toList();
+	}
+
 }
