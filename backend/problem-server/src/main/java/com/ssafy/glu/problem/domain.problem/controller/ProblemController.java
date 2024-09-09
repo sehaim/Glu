@@ -2,6 +2,8 @@ package com.ssafy.glu.problem.domain.problem.controller;
 
 import static com.ssafy.glu.problem.global.util.HeaderUtil.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/problems")
 public class ProblemController {
+	private static final Logger log = LoggerFactory.getLogger(ProblemController.class);
 	private final ProblemService problemService;
 
 	@GetMapping("/solve")
@@ -36,6 +39,7 @@ public class ProblemController {
 		@ModelAttribute ProblemSearchCondition condition,
 		Pageable pageable
 	) {
+		log.info("condition : {}", condition);
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.getProblemList(userId, condition, pageable));
 	}

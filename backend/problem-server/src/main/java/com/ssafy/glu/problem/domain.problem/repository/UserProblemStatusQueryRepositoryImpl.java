@@ -12,6 +12,9 @@ import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupport
 	implements UserProblemStatusQueryRepository {
 
@@ -28,7 +31,7 @@ public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupp
 				statusEq(condition.status()),
 				levelEq(condition.problemLevelCode()),
 				typeEq(condition.problemTypeCode()),
-				detailTypeEq(condition.ProblemTypeDetailCode()),
+				detailTypeEq(condition.problemTypeDetailCode()),
 				memoListIsNotEmpty(condition.hasMemo()),
 				isFavoriteEq(condition.isFavorite())
 			)
@@ -44,18 +47,21 @@ public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupp
 	}
 
 	public BooleanExpression levelEq(String problemLevelCode) {
+		log.info("problemLevelCode : {}",problemLevelCode);
 		return problemLevelCode != null ? userProblemStatus.problem.problemLevel.problemLevelCode.eq(problemLevelCode) :
 			null;
 	}
 
 	public BooleanExpression typeEq(String problemTypeCode) {
+		log.info("problemTypeCode : {}",problemTypeCode);
 		return problemTypeCode != null ? userProblemStatus.problem.problemType.problemTypeCode.eq(problemTypeCode) :
 			null;
 	}
 
-	public BooleanExpression detailTypeEq(String problemDetailTypeCode) {
-		return problemDetailTypeCode != null ?
-			userProblemStatus.problem.problemTypeDetail.problemTypeDetailCode.eq(problemDetailTypeCode) : null;
+	public BooleanExpression detailTypeEq(String problemTypeDetailCode) {
+		log.info("problemTypeDetailCode : {}",problemTypeDetailCode);
+		return problemTypeDetailCode != null ?
+			userProblemStatus.problem.problemTypeDetail.problemTypeDetailCode.eq(problemTypeDetailCode) : null;
 	}
 
 	public BooleanExpression memoListIsNotEmpty(Boolean hasMemo) {
