@@ -1,26 +1,7 @@
-server:
-  port: 8083
-
 spring:
   application:
     name: glu-problem
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-
-  # ----- Config Server에서 처리 -----
-  # Cloud
-  cloud:
-    config:
-      enabled: false
-
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/local
-
-#  # JPA
-#  jpa:
-#    database-platform: org.hibernate.dialect.MySQLDialect
-#    open-in-view: false
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: create
+  config:
+    import: optional:configserver:http://admin:1234@j11a506.p.ssafy.io:${CONFIG_PORT}
