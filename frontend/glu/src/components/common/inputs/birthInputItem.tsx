@@ -16,8 +16,8 @@ export default function BirthInputItem({
 
   return (
     <div className={styles.container}>
-      <div className={styles.section} id={styles.year}>
-        <select name="year">
+      <div className={styles.section}>
+        <select name="year" disabled={!canEdit}>
           {years.map((year) => (
             <option key={year} value={year}>
               {year}
@@ -26,8 +26,8 @@ export default function BirthInputItem({
         </select>
         <div className={styles['input-label']}>년</div>
       </div>
-      <div className={styles.section} id={styles.date}>
-        <select name="month">
+      <div className={styles.section}>
+        <select name="month" disabled={!canEdit}>
           {months.map((month) => (
             <option key={month} value={month}>
               {month}
@@ -36,8 +36,8 @@ export default function BirthInputItem({
         </select>
         <div className={styles['input-label']}>월</div>
       </div>
-      <div className={styles.section} id={styles.date}>
-        <select name="day">
+      <div className={styles.section}>
+        <select name="day" disabled={!canEdit}>
           {days.map((day) => (
             <option key={day} value={day}>
               {day}

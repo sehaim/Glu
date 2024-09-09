@@ -16,11 +16,3 @@
   color: var(--TEXT_SECONDARY);
   margin-left: 6px;
 }
-
-#year {
-  width: 35%;
-}
-
-#date {
-  width: 26%;
-}

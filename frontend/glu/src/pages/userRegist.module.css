@@ -9,6 +9,9 @@
 .section {
   width: 300px;
   height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .title {
@@ -16,4 +19,10 @@
   font-size: 32px;
   color: var(--TEXT_PRIMARY);
   text-align: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
