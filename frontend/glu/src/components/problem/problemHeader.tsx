@@ -3,12 +3,14 @@ import { BsStar } from 'react-icons/bs';
 import styles from './problemHeader.module.css';
 
 interface ProblemHeaderProps {
+  problemIndex: number;
   problemLevel: string;
   problemType: string;
   problemTitle: string;
 }
 
 export default function ProblemHeader({
+  problemIndex,
   problemLevel,
   problemType,
   problemTitle,
@@ -27,7 +29,9 @@ export default function ProblemHeader({
         <div className={styles['problem-type']}>
           <div className={styles['problem-type-text']}>{problemType}</div>
         </div>
-        <div className={styles['problem-title']}>{problemTitle}</div>
+        <div className={styles['problem-title']}>
+          {problemIndex}. {problemTitle}
+        </div>
       </div>
     </div>
   );
