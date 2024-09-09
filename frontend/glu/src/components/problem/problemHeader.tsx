@@ -24,8 +24,10 @@ export default function ProblemHeader({
         </div>
       </div>
       <div className={styles['info-container']}>
-        <div className={styles['problem-type']}>{problemType}</div>
-        <div className={styles['problem-instruction']}>{problemTitle}</div>
+        <div className={styles['problem-type']}>
+          <div className={styles['problem-type-text']}>{problemType}</div>
+        </div>
+        <div className={styles['problem-title']}>{problemTitle}</div>
       </div>
     </div>
   );

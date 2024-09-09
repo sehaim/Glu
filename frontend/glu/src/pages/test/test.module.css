@@ -1,17 +1,34 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.problem-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.problem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .problem-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
-  padding: 64px 0px;
+  margin-top: 64px;
 }
 
 @media (max-width: 768px) {
   .problem-content {
     flex-direction: column;
-    padding: 48px 0px;
   }
 }

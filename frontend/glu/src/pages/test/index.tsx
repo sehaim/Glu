@@ -15,19 +15,21 @@ export default function Test() {
   return (
     <div className={styles.container}>
       테스트
-      {problems.map((problem) => (
-        <div key={problem.problemId}>
-          <ProblemHeader
-            problemLevel={problem?.problemLevel?.name}
-            problemType={problem?.problemType?.name}
-            problemTitle={problem?.title}
-          />
-          <div className={styles['problem-content']}>
-            <ProblemContentText problemContent={problem?.content} />
-            <div>선택지</div>
+      <div className={styles['problem-wrapper']}>
+        {problems.map((problem) => (
+          <div className={styles.problem} key={problem.problemId}>
+            <ProblemHeader
+              problemLevel={problem?.problemLevel?.name}
+              problemType={problem?.problemType?.name}
+              problemTitle={problem?.title}
+            />
+            <div className={styles['problem-content']}>
+              <ProblemContentText problemContent={problem?.content} />
+              <div>선택지</div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
