@@ -2,27 +2,24 @@ package com.ssafy.glu.problem.domain.problem.service;
 
 import java.util.Optional;
 
-import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
-import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
-import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoNotFoundException;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
-import com.ssafy.glu.problem.domain.problem.repository.ProblemMemoRepository;
+import com.ssafy.glu.problem.domain.problem.exception.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
 	private final ProblemRepository problemRepository;
-	private final ProblemMemoRepository problemMemoRepository;
 	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 	private final UserProblemLogRepository userProblemLogRepository;
+	private final UserProblemStatusRepository userProblemStatusRepository;
 
 	@Override
 	public Page<ProblemBaseResponse> getProblemListByLog(Long userId, ProblemSearchCondition condition,
@@ -45,49 +42,44 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
-		return ProblemMemoResponse.of(problemMemoRepository.save(request.toDocument(userId,getProblemOrThrow(problemId))));
-	}
+		// userId와 problemId로 UserProblemStatus를 찾기
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+				problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
 
-	@Override
-	public ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request) {
-		log.info("===== 문제 메모 업데이트 요청 - 메모 Id : {}, 메모 내용 : {} =====", problemMemoId, request);
+		// 해당 userId와 problemId에서 가장 큰 memoIndex 값을 찾고, 없으면 1로 설정
+		Long memoIndex = generateMemoIndex(userProblemStatus);
 
-		// 문제 메모 존재 여부 확인
-		ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
+		// 찾은 UserProblemStatus의 메모 목록에 새로운 메모 추가
+		userProblemStatus.getMemoList().put(memoIndex, request.content());
 
-		problemMemo.updateContent(request.content());
-		log.info("===== 문제 메모 업데이트 완료 - 변경된 메모 : {} =====", problemMemo);
+		// 변경된 상태 저장
+		userProblemStatusRepository.save(userProblemStatus);
 
-		problemMemoRepository.save(problemMemo);
-
-		return new ProblemMemoResponse(problemMemo.getProblemMemoId(), problemMemo.getContent());
-	}
-
-	@Override
-	public void deleteProblemMemo(Long userId, String problemMemoId) {
-		log.info("===== 문제 메모 삭제 요청 - 메모 Id : {} =====", problemMemoId);
-		problemMemoRepository.deleteById(problemMemoId);
+		// 메모 저장 후 응답 생성
+		return ProblemMemoResponse.of(memoIndex, request.content());
 	}
 
 	@Override
 	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
 		Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
-
-		return problemMemoRepository.findAllByProblemOrderByCreatedDateDesc(problem, pageable)
-			.map(ProblemMemoResponse::of);
+		return null;
 	}
 
 	@Override
-	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition, Pageable pageable) {
+	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition,
+		Pageable pageable) {
 		return userProblemFavoriteRepository.findAllFavoriteProblem(userId, condition, pageable)
 			.map(problem -> {
 				// 마지막 UserProblemLog를 problemId로 조회
-				Optional<UserProblemLog> lastLog = userProblemLogRepository.findFirstByUserIdAndProblem(userId, problem);
+				Optional<UserProblemLog> lastLog = userProblemLogRepository.findFirstByUserIdAndProblem(userId,
+					problem);
 
 				log.info("Problem ID: {}", problem.getProblemId());
 				log.info("Last Log Found: {}", lastLog.isPresent());
 
-				Problem.Status status = lastLog.map(log -> log.isCorrect() ? Problem.Status.CORRECT : Problem.Status.WRONG).orElse(null);
+				Problem.Status status = lastLog.map(
+					log -> log.isCorrect() ? Problem.Status.CORRECT : Problem.Status.WRONG).orElse(null);
 
 				// ProblemBaseResponse에 status 추가
 				return ProblemBaseResponse.of(problem, status);
@@ -127,8 +119,12 @@ public class ProblemServiceImpl implements ProblemService {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
-	// 문제 메모 존재 여부 판단
-	private ProblemMemo getProblemMemoOrThrow(String problemMemoId) {
-		return problemMemoRepository.findById(problemMemoId).orElseThrow(ProblemMemoNotFoundException::new);
+	// userProblemStatus에 있는 memolist 중에서 가장 큰 index 값보다 + 1 반환
+	// 중복되지 않는 index 값을 할당하기 위함
+	private Long generateMemoIndex(UserProblemStatus userProblemStatus) {
+		// 해당 userId와 problemId에서 memoList가 비어 있으면 1을 반환하고, 그렇지 않으면 가장 큰 인덱스에 1을 더함
+		return userProblemStatus.getMemoList().isEmpty() ? 1L :
+			userProblemStatus.getMemoList().keySet().stream().max(Long::compareTo).orElse(0L) + 1L;
 	}
+
 }
