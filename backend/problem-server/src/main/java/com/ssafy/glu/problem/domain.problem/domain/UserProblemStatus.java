@@ -32,8 +32,9 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	private Boolean isFavorite;
 
-	@Field("problemId")
-	@DocumentReference(lazy = true)
+	//== querydsl 조회를 위한 embedding 처리, 성능 개선 ==//
+	// @Field("problemId")
+	// @DocumentReference(lazy = true)
 	private Problem problem;
 
 	@Builder
