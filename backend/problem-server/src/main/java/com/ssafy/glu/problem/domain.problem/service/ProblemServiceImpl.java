@@ -48,22 +48,14 @@ public class ProblemServiceImpl implements ProblemService {
 				problemId)
 			.orElseThrow(UserProblemStatusNotFoundException::new);
 
-		// 해당 userId와 problemId에서 가장 큰 memoIndex 값을 찾고, 없으면 1로 설정
-		Long memoIndex = generateMemoIndex(userProblemStatus);
-
-		// 찾은 UserProblemStatus의 메모 목록에 새로운 메모 추가
-		userProblemStatus.getMemoList().add(
-			ProblemMemo.builder()
-				.memoIndex(memoIndex)
-				.content(request.content())
-				.build()
-		);
+		// 비즈니스 로직 분리
+		ProblemMemo memo = userProblemStatus.addMemo(request.content());
 
 		// 변경된 상태 저장
 		userProblemStatusRepository.save(userProblemStatus);
 
 		// 메모 저장 후 응답 생성
-		return ProblemMemoResponse.of(memoIndex, request.content());
+		return ProblemMemoResponse.of(memo);
 	}
 
 	@Override
@@ -123,16 +115,5 @@ public class ProblemServiceImpl implements ProblemService {
 	// 문제 존재 여부 판단
 	private Problem getProblemOrThrow(String problemId) {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
-	}
-
-	// userProblemStatus에 있는 memolist 중에서 가장 큰 index 값보다 + 1 반환
-	// 중복되지 않는 index 값을 할당하기 위함
-	private Long generateMemoIndex(UserProblemStatus userProblemStatus) {
-		// 해당 userId와 problemId에서 memoList가 비어 있으면 1을 반환하고, 그렇지 않으면 가장 큰 인덱스에 1을 더함
-		return userProblemStatus.getMemoList().isEmpty() ? 1L :
-			userProblemStatus.getMemoList().stream()
-				.map(ProblemMemo::getMemoIndex)
-				.max(Long::compareTo)
-				.orElse(0L) + 1L;
 	}
 }
