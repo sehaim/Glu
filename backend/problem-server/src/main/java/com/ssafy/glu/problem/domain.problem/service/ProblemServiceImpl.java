@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
@@ -51,7 +52,12 @@ public class ProblemServiceImpl implements ProblemService {
 		Long memoIndex = generateMemoIndex(userProblemStatus);
 
 		// 찾은 UserProblemStatus의 메모 목록에 새로운 메모 추가
-		userProblemStatus.getMemoList().put(memoIndex, request.content());
+		userProblemStatus.getMemoList().add(
+			ProblemMemo.builder()
+				.memoIndex(memoIndex)
+				.content(request.content())
+				.build()
+		);
 
 		// 변경된 상태 저장
 		userProblemStatusRepository.save(userProblemStatus);
@@ -124,7 +130,9 @@ public class ProblemServiceImpl implements ProblemService {
 	private Long generateMemoIndex(UserProblemStatus userProblemStatus) {
 		// 해당 userId와 problemId에서 memoList가 비어 있으면 1을 반환하고, 그렇지 않으면 가장 큰 인덱스에 1을 더함
 		return userProblemStatus.getMemoList().isEmpty() ? 1L :
-			userProblemStatus.getMemoList().keySet().stream().max(Long::compareTo).orElse(0L) + 1L;
+			userProblemStatus.getMemoList().stream()
+				.map(ProblemMemo::getMemoIndex)
+				.max(Long::compareTo)
+				.orElse(0L) + 1L;
 	}
-
 }

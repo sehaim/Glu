@@ -43,7 +43,7 @@ public class ProblemValidationService implements ProblemService {
 
 	@Override
 	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
-		log.info("===== 문제 메모 생성 요청 - 문제 Id : {}, 메모 내용 : {} =====", problemId, request);
+		log.info("===== 문제 메모 생성 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 내용 : {} =====", userId, problemId, request);
 		try {
 			ProblemMemoResponse response = problemService.createProblemMemo(userId,problemId,request);
 			log.info("===== 문제 메모 생성 완료 - 변경된 메모 : {} =====", response);

@@ -1,6 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.domain;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,7 +27,7 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	private Long userId;
 
-	private Map<Long, String> memoList;
+	private List<ProblemMemo> memoList;
 
 	private Boolean isFavorite;
 
@@ -36,7 +36,7 @@ public class UserProblemStatus extends BaseTimeDocument {
 	private Problem problem;
 
 	public UserProblemStatus(Problem.Status status, Integer attemptCount, Integer wrongCount, Long userId,
-		Map<Long, String> memoList, Boolean isFavorite, Problem problem) {
+		List<ProblemMemo> memoList, Boolean isFavorite, Problem problem) {
 		this.status = status;
 		this.attemptCount = attemptCount;
 		this.wrongCount = wrongCount;
