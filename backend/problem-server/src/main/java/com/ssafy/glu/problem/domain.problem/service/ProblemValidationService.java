@@ -8,24 +8,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteCancelFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteRegistrationFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoCreateFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoDeleteFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoDeletedUnauthorizedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoUpdateFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoUpdateUnauthorizedException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
-import com.ssafy.glu.problem.domain.problem.repository.ProblemMemoRepository;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 
@@ -39,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ProblemValidationService implements ProblemService {
 	private final ProblemService problemService;
 	private final ProblemRepository problemRepository;
-	private final ProblemMemoRepository problemMemoRepository;
 	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 
 	@Override
@@ -50,55 +43,13 @@ public class ProblemValidationService implements ProblemService {
 
 	@Override
 	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
-		log.info("===== 문제 메모 생성 요청 - 문제 Id : {}, 메모 내용 : {} =====", problemId, request);
+		log.info("===== 문제 메모 생성 요청 - 사용자 Id : {}, 문제 Id : {}, 메모 내용 : {} =====", userId, problemId, request);
 		try {
 			ProblemMemoResponse response = problemService.createProblemMemo(userId,problemId,request);
 			log.info("===== 문제 메모 생성 완료 - 변경된 메모 : {} =====", response);
 			return response;
 		}catch (Exception exception){
 			throw new ProblemMemoCreateFailedException(exception);
-		}
-	}
-
-	@Override
-	public ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request) {
-		// 검증
-		log.info("검증 로직 서비스");
-		log.info("===== 문제 메모 업데이트 요청 - 사용자 Id : {}, 메모 Id : {}, 메모 내용 : {} =====", userId, problemMemoId, request);
-
-		ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
-
-		// 문제가 존재하는지랑
-		validateProblemExist(problemMemo);
-
-		// 사용자 권한이 있는지
-		validateProblemMemoUpdateAuthorized(userId, problemMemo);
-
-		try {
-			return problemService.updateProblemMemo(userId, problemMemoId, request);
-		} catch (Exception exception) {
-			throw new ProblemMemoUpdateFailedException(exception);
-		}
-	}
-
-	@Override
-	public void deleteProblemMemo(Long userId, String problemMemoId) {
-		// 검증
-		log.info("검증 로직 서비스");
-		log.info("===== 문제 메모 삭제 요청 - 사용자 Id : {}, 메모 Id : {} =====", userId, problemMemoId);
-
-		ProblemMemo problemMemo = getProblemMemoOrThrow(problemMemoId);
-
-		// 문제가 존재하는지랑
-		validateProblemExist(problemMemo);
-
-		// 사용자 권한이 있는지
-		validateProblemMemoDeleteAuthorized(userId, problemMemo);
-
-		try {
-			problemService.deleteProblemMemo(userId, problemMemoId);
-		} catch (Exception exception) {
-			throw new ProblemMemoDeleteFailedException(exception);
 		}
 	}
 
@@ -155,33 +106,8 @@ public class ProblemValidationService implements ProblemService {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
-	// 문제 메모 존재 여부 판단
-	private ProblemMemo getProblemMemoOrThrow(String problemMemoId) {
-		return problemMemoRepository.findById(problemMemoId).orElseThrow(ProblemMemoNotFoundException::new);
-	}
 
 	// ===== 검증 로직 =====
-	private void validateProblemExist(ProblemMemo problemMemo) {
-		if (problemMemo.getProblem() == null) {
-			throw new ProblemNotFoundException();
-		}
-	}
-
-	// 사용자가 문제 메모를 수정할 수 있는지 권한 확인
-	private void validateProblemMemoUpdateAuthorized(Long userId, ProblemMemo problemMemo) {
-		if (userId != problemMemo.getUserId()) {
-			log.warn("===== 사용자 [{}]가 문제 메모 [{}]를 수정할 권한이 없습니다 =====", userId, problemMemo);
-			throw new ProblemMemoUpdateUnauthorizedException();
-		}
-	}
-
-	// 사용자가 문제 메모를 삭제할 수 있는지 권한 확인
-	private void validateProblemMemoDeleteAuthorized(Long userId, ProblemMemo problemMemo) {
-		if (userId != problemMemo.getUserId()) {
-			log.warn("===== 사용자 [{}]가 문제 메모 [{}]를 삭제할 권한이 없습니다 =====", userId, problemMemo);
-			throw new ProblemMemoDeletedUnauthorizedException();
-		}
-	}
 
 	// 이전에 찜 했는지 판단 => 이전에 찜이 있으면 오류
 	private void validateFavoriteNotRegistered(Long userId, Problem problem) {

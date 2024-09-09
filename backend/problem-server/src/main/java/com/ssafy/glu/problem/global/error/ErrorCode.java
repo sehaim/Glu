@@ -58,7 +58,9 @@ public enum ErrorCode {
     PREVIOUS_TEST_RESULT_NOT_FOUND(404, "PREVIOUS_TEST_RESULT_NOT_FOUND", "이전 테스트 결과를 찾을 수 없습니다."),
 
     // 테스트 결과 리스트 조회
-    TEST_RESULT_LIST_NOT_FOUND(404, "TEST_RESULT_LIST_NOT_FOUND", "테스트 결과 리스트를 찾을 수 없습니다.");
+    TEST_RESULT_LIST_NOT_FOUND(404, "TEST_RESULT_LIST_NOT_FOUND", "테스트 결과 리스트를 찾을 수 없습니다."),
+
+    USER_PROBLEM_STATUS_NOT_FOUND(404, "USER_PROBLEM_STATUS_NOT_FOUND", "문제 풀이 상태를 찾을 수 없습니다.");
 
     private final int httpStatus;
     private final String code;

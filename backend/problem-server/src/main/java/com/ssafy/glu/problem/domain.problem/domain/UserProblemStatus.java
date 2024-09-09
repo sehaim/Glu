@@ -45,4 +45,24 @@ public class UserProblemStatus extends BaseTimeDocument {
 		this.isFavorite = isFavorite;
 		this.problem = problem;
 	}
+
+	public ProblemMemo addMemo(String content) {
+		ProblemMemo memo = ProblemMemo.builder()
+			.memoIndex(generateMemoIndex())
+			.content(content)
+			.build();
+		memoList.add(memo);
+		return memo;
+	}
+
+	// userProblemStatus에 있는 memolist 중에서 가장 큰 index 값보다 + 1 반환
+	// 중복되지 않는 index 값을 할당하기 위함
+	public Long generateMemoIndex() {
+		// 해당 userId와 problemId에서 memoList가 비어 있으면 1을 반환하고, 그렇지 않으면 가장 큰 인덱스에 1을 더함
+		return memoList.isEmpty() ? 1L :
+			memoList.stream()
+				.map(ProblemMemo::getMemoIndex)
+				.max(Long::compareTo)
+				.orElse(0L) + 1L;
+	}
 }

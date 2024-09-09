@@ -33,7 +33,7 @@ class UserProblemLogRepositoryTest {
 
 	private final int NUM_PROBLEMS = 3;
 	private List<Problem> problemList;
-	private final Long[] userIdList = {1L,2L,3L,4L};
+	private final Long[] userIdList = {1L, 2L, 3L, 4L};
 	private final int NUM_LOGS_PER_USER = 3;
 
 	@BeforeEach
@@ -49,11 +49,11 @@ class UserProblemLogRepositoryTest {
 		// 유저별 풀이 기록 등록
 		for (Long userId : userIdList) {
 			for (Problem problem : problemList) {
-				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
+				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId, problem, false));
 				Thread.sleep(1L);
-				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,false));
+				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId, problem, false));
 				Thread.sleep(1L);
-				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problem,true));
+				userProblemLogRepository.save(MockFactory.createUserProblemLog(userId, problem, true));
 			}
 		}
 	}
@@ -62,7 +62,7 @@ class UserProblemLogRepositoryTest {
 	void saveUserProblemLogTest() {
 		List<UserProblemLog> userProblemLogList = userProblemLogRepository.findAll();
 
-		log.info("Saved Log : {}",userProblemLogList.get(0));
+		log.info("Saved Log : {}", userProblemLogList.get(0));
 
 		// 문제 수 체크
 		assertThat(userProblemLogList.size()).isEqualTo(userIdList.length * NUM_PROBLEMS * NUM_LOGS_PER_USER);
@@ -76,10 +76,12 @@ class UserProblemLogRepositoryTest {
 			.status(Problem.Status.CORRECT)
 			.build();
 
-		Page<Problem> problemList = userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, Pageable.ofSize(10));
+		Page<Problem> problemList = userProblemLogRepository.findAllProblemInLogByCondition(userId, condition,
+			Pageable.ofSize(10));
 
 		assertThat(problemList.getTotalElements()).isEqualTo(3);
 	}
+
 	@Test
 	void searchUserProblemLogOfWrongTest() {
 		Long userId = userIdList[0];
@@ -88,12 +90,12 @@ class UserProblemLogRepositoryTest {
 			.status(Problem.Status.WRONG)
 			.build();
 
-		userProblemLogRepository.save(MockFactory.createUserProblemLog(userId,problemList.get(0),false));
+		userProblemLogRepository.save(MockFactory.createUserProblemLog(userId, problemList.get(0), false));
 
-		Page<Problem> result = userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, Pageable.ofSize(10));
+		Page<Problem> result = userProblemLogRepository.findAllProblemInLogByCondition(userId, condition,
+			Pageable.ofSize(10));
 
-
-		log.info("검색된 문제 수 : {}",result.getContent().size());
+		log.info("검색된 문제 수 : {}", result.getContent().size());
 		assertThat(result.getTotalElements()).isEqualTo(1);
 	}
 }

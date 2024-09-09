@@ -6,15 +6,17 @@ import lombok.Builder;
 
 @Builder
 public record ProblemMemoResponse(
-	String problemMemoId,
+	Long memoIndex,
 	String content
 ) {
-	public static ProblemMemoResponse of(ProblemMemo problemMemo) {
-		if (problemMemo == null)
-			return null;
+	public static ProblemMemoResponse of(Long memoIndex, String content) {
 		return ProblemMemoResponse.builder()
-			.problemMemoId(problemMemo.getProblemMemoId())
-			.content(problemMemo.getContent())
+			.memoIndex(memoIndex)
+			.content(content)
 			.build();
+	}
+
+	public static ProblemMemoResponse of(ProblemMemo memo) {
+		return of(memo.getMemoIndex(), memo.getContent());
 	}
 }
