@@ -1,3 +1,4 @@
+import InputItem from '@/components/common/inputItem';
 import styles from '../userRegist.module.css';
 
 export default function Login() {
@@ -5,12 +6,10 @@ export default function Login() {
     <div className={styles.container}>
       <div className={styles.section}>
         <div className={styles.title}>회원가입</div>
-        <div className={styles['input-container']}>
-          <div className={styles['input-item']}>
-            <div className={styles['input-label']}>아이디</div>
-            <input type="text" />
-          </div>
-        </div>
+        <InputItem label="아이디" />
+        <InputItem label="닉네임" />
+        <InputItem label="비밀번호" />
+        <InputItem label="비밀번호 확인" />
       </div>
     </div>
   );

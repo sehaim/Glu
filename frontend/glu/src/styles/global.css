@@ -21,12 +21,12 @@ a {
 input {
   font-family: 'PT';
   font-size: 18px;
-  height: 40px;
+  height: 38px;
   border-radius: 10px;
   border-width: 0.5px;
   border-style: solid;
   border-color: var(--GRAY);
-  margin: 10px 0;
+  margin: 7px 0;
   padding: 10px;
   &::placeholder {
     color: var(--TEXT_SECONDARY);

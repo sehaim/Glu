@@ -1,0 +1,16 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-item {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+.input-label {
+  font-family: 'PT';
+  font-size: 16px;
+  color: var(--TEXT_SECONDARY);
+}
