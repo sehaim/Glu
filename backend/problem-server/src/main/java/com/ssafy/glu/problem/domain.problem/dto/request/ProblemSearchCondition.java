@@ -8,8 +8,9 @@ import lombok.Builder;
 public record ProblemSearchCondition(
 	Problem.Status status,
 	String problemTypeCode,
-	String ProblemTypeDetailCode,
+	String problemTypeDetailCode,
 	String problemLevelCode,
-	Boolean hasMemo
+	Boolean hasMemo,
+	Boolean isFavorite
 ) {
 }

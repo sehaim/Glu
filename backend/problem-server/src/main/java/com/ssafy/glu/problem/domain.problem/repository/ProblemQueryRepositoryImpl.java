@@ -22,7 +22,7 @@ public class ProblemQueryRepositoryImpl extends QuerydslRepositorySupport implem
                 .where(
                         levelEq(condition.problemLevelCode()),
                         typeEq(condition.problemTypeCode()),
-                        detailTypeEq(condition.ProblemTypeDetailCode())
+                        detailTypeEq(condition.problemTypeDetailCode())
                 )
                 .fetchPage(pageable);
     }

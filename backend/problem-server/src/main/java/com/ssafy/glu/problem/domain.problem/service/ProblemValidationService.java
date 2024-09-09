@@ -36,9 +36,9 @@ public class ProblemValidationService implements ProblemService {
 	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 
 	@Override
-	public Page<ProblemBaseResponse> getProblemListByLog(Long userId, ProblemSearchCondition condition,
+	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
-		return problemService.getProblemListByLog(userId, condition, pageable);
+		return problemService.getProblemList(userId, condition, pageable);
 	}
 
 	@Override
