@@ -78,4 +78,31 @@ public class UserProblemStatusRepositoryTest {
 		assertThat(userProblemStatus.getMemoList().get(0).getMemoIndex()).isEqualTo(memoIndex);
 		assertThat(userProblemStatus.getMemoList().get(0).getContent()).isEqualTo("새로운 메모 내용");
 	}
+
+	@Test
+	void updateMemo() {
+		Long userId = userIdList[0];
+		Problem problem = problemList.get(0);
+
+		// UserProblemStatus를 userId와 problemId로 조회
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problem.getProblemId()).orElseThrow(UserProblemStatusNotFoundException::new);
+
+		// Index 찾기
+		Long memoIndex = userProblemStatus.getMemoList().isEmpty() ? 1L :
+			userProblemStatus.getMemoList().stream().map(ProblemMemo::getMemoIndex).max(Long::compareTo).orElse(0L)
+				+ 1L;
+
+		// 메모 추가
+		ProblemMemo problemMemo = ProblemMemo.builder().memoIndex(memoIndex).content("새로운 메모 내용").build();
+
+		// 저장
+		userProblemStatus.getMemoList().add(problemMemo);
+
+		userProblemStatus.updateMemo(memoIndex, "수정된 메모 내용");
+
+		assertThat(userProblemStatus.getMemoList().size()).isEqualTo(1);
+		assertThat(userProblemStatus.getMemoList().get(0).getMemoIndex()).isEqualTo(memoIndex);
+		assertThat(userProblemStatus.getMemoList().get(0).getContent()).isEqualTo("수정된 메모 내용");
+	}
 }
