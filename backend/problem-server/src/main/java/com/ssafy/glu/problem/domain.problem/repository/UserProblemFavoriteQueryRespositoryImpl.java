@@ -28,9 +28,10 @@ public class UserProblemFavoriteQueryRespositoryImpl implements UserProblemFavor
 
 	@Override
 	public Page<Problem> findAllFavoriteProblem(Long userId, Pageable pageable) {
-		// 유저 ID로 필터링
+		// 검색 조건 빌딩
 		Criteria criteria = new Criteria();
-		criteria.and("userId").is(userId);
+		// 유저 ID로 필터링
+		userIdEq(criteria, userId);
 
 		// 집계 파이프라인 구성
 		Aggregation aggregation = Aggregation.newAggregation(
@@ -90,5 +91,10 @@ public class UserProblemFavoriteQueryRespositoryImpl implements UserProblemFavor
 	// 페이징 처리를 위한 limit 연산
 	private AggregationOperation limitPagination(int size) {
 		return Aggregation.limit(size);
+	}
+
+	private void userIdEq(Criteria criteria, Long userId) {
+		if (userId != null)
+			criteria.and("userId").is(userId);
 	}
 }
