@@ -1,5 +1,10 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
+import java.util.Optional;
+
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -73,6 +78,23 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
+	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition, Pageable pageable) {
+		return userProblemFavoriteRepository.findAllFavoriteProblem(userId, condition, pageable)
+			.map(problem -> {
+				// 마지막 UserProblemLog를 problemId로 조회
+				Optional<UserProblemLog> lastLog = userProblemLogRepository.findFirstByUserIdAndProblem(userId, problem);
+
+				log.info("Problem ID: {}", problem.getProblemId());
+				log.info("Last Log Found: {}", lastLog.isPresent());
+
+				Problem.Status status = lastLog.map(log -> log.isCorrect() ? Problem.Status.CORRECT : Problem.Status.WRONG).orElse(null);
+
+				// ProblemBaseResponse에 status 추가
+				return ProblemBaseResponse.of(problem, status);
+			});
+	}
+
+	@Override
 	public void createUserProblemFavorite(Long userId, String problemId) {
 		log.info("===== 문제 찜 요청 - 유저 : {}, 문제: {} =====", userId, problemId);
 
@@ -109,5 +131,4 @@ public class ProblemServiceImpl implements ProblemService {
 	private ProblemMemo getProblemMemoOrThrow(String problemMemoId) {
 		return problemMemoRepository.findById(problemMemoId).orElseThrow(ProblemMemoNotFoundException::new);
 	}
-
 }
