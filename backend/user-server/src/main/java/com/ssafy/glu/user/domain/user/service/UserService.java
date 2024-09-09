@@ -20,5 +20,7 @@ public interface UserService {
 
 	List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request);
 
+	void attend(Long userId, Integer solveNum);
+
 
 }

@@ -60,5 +60,10 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
+	@PostMapping("/attendance")
+	public ResponseEntity<Void> attend(@RequestHeader(USER_ID) Long userId, Integer solveNum) {
+		userService.attend(userId, solveNum);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 
 }

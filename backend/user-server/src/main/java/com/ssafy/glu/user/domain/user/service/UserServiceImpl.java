@@ -1,12 +1,15 @@
 package com.ssafy.glu.user.domain.user.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.ssafy.glu.user.domain.user.domain.Attendance;
 import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
@@ -141,6 +144,39 @@ public class UserServiceImpl implements UserService {
 			throw new DateInValidException();
 		}
 		return attendanceRepository.countAttendanceByYearAndMonth(userId, request);
+	}
+
+	/**
+	 * 문제 풀면 출석하기
+	 */
+	@Override
+	public void attend(Long userId, Integer solveNum) {
+
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+		// 가장 최근 출석 기록을 가져옴
+		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByOrderByAttendanceDateDesc();
+
+		// 오늘 날짜
+		LocalDateTime today = LocalDateTime.now();
+
+		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
+		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
+			Attendance newAttendance = Attendance.builder()
+				.users(findUser)
+				.todaySolve(solveNum)
+				.attendanceDate(today)
+				.build();
+			attendanceRepository.save(newAttendance);
+		} else {
+			// 출석 기록이 오늘 날짜와 같으면 오늘 문제 푼 수를 업데이트
+			Attendance lastAttend = lastAttendOpt.get();
+			lastAttend.updateTodaySolve(solveNum);
+		}
+	}
+
+	private boolean isSameDay(LocalDateTime date1, LocalDateTime date2) {
+		return date1.toLocalDate().isEqual(date2.toLocalDate());
 	}
 
 }
