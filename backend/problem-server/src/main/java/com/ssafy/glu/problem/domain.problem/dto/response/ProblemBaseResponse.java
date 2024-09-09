@@ -5,7 +5,7 @@ import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import lombok.Builder;
 
 @Builder
-public record UserProblemLogResponse(
+public record ProblemBaseResponse(
 	String problemId,
 	String title,
 	String content,
@@ -15,8 +15,8 @@ public record UserProblemLogResponse(
 	ProblemTypeResponse problemType,
 	ProblemTypeDetailResponse problemTypeDetail
 ) {
-	public static UserProblemLogResponse of(Problem problem, Problem.Status status) {
-		return UserProblemLogResponse.builder()
+	public static ProblemBaseResponse of(Problem problem, Problem.Status status) {
+		return ProblemBaseResponse.builder()
 			.problemId(problem.getProblemId())
 			.title(problem.getTitle())
 			.content(problem.getContent())

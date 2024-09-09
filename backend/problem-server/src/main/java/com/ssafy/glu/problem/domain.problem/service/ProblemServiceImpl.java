@@ -9,9 +9,9 @@ import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemMemoNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemMemoRepository;
@@ -32,10 +32,10 @@ public class ProblemServiceImpl implements ProblemService {
 	private final UserProblemLogRepository userProblemLogRepository;
 
 	@Override
-	public Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition,
+	public Page<ProblemBaseResponse> getProblemListByLog(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
 		return userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, pageable)
-			.map(problem -> UserProblemLogResponse.of(problem, condition.status()));
+			.map(problem -> ProblemBaseResponse.of(problem, condition.status()));
 	}
 
 	@Override

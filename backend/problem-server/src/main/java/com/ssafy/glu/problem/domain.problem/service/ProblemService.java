@@ -3,16 +3,14 @@ package com.ssafy.glu.problem.domain.problem.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.ssafy.glu.problem.domain.problem.domain.Problem;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 
 public interface ProblemService {
-	Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition, Pageable pageable);
+	Page<ProblemBaseResponse> getProblemListByLog(Long userId, ProblemSearchCondition condition, Pageable pageable);
 	ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
 	ProblemMemoResponse updateProblemMemo(Long userId, String problemMemoId, ProblemMemoUpdateRequest request);
 	void deleteProblemMemo(Long userId, String problemMemoId);
