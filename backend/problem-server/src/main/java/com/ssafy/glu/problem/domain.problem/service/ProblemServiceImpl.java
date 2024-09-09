@@ -36,10 +36,10 @@ public class ProblemServiceImpl implements ProblemService {
 	private final UserProblemStatusRepository userProblemStatusRepository;
 
 	@Override
-	public Page<ProblemBaseResponse> getProblemListByLog(Long userId, ProblemSearchCondition condition,
+	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
-		return userProblemLogRepository.findAllProblemInLogByCondition(userId, condition, pageable)
-			.map(problem -> ProblemBaseResponse.of(problem, condition.status()));
+		return userProblemStatusRepository.findAllProblemByCondition(userId, condition, pageable)
+			.map(ProblemBaseResponse::of);
 	}
 
 	@Override
