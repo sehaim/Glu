@@ -16,8 +16,8 @@ import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.exception.ProblemNotFoundException;
-import com.ssafy.glu.problem.domain.problem.exception.UserProblemStatusNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
