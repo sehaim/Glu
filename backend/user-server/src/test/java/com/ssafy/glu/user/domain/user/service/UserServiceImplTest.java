@@ -3,18 +3,24 @@ package com.ssafy.glu.user.domain.user.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.glu.user.domain.user.domain.Attendance;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
+import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
+import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
+import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
@@ -27,6 +33,8 @@ class UserServiceImplTest {
 	UserRepository userRepository;
 	@Autowired
 	UserProblemTypeRepository userProblemTypeRepository;
+	@Autowired
+	AttendanceRepository attendanceRepository;
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 
@@ -98,5 +106,46 @@ class UserServiceImplTest {
 		Users deletedUser = userRepository.findById(id).orElseThrow();
 		assertTrue(deletedUser.getIsDeleted(), "User should be marked as deleted");
 	}
+
+	@Transactional
+	@Test
+	void getAttendance() {
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		Users findUser = userRepository.findById(id).orElseThrow();
+
+		Attendance attendance1 = Attendance.builder()
+			.users(findUser)
+			.attendanceDate(LocalDateTime.now())
+			.todaySolve(10)
+			.build();
+
+		Attendance attendance2 = Attendance.builder()
+			.users(findUser)
+			.attendanceDate(LocalDate.now().atStartOfDay())
+			.todaySolve(30)
+			.build();
+
+		Attendance attendance3 = Attendance.builder()
+			.users(findUser)
+			.attendanceDate(LocalDateTime.now().minusMonths(1))
+			.todaySolve(100)
+			.build();
+
+		attendanceRepository.save(attendance1);
+		attendanceRepository.save(attendance2);
+		attendanceRepository.save(attendance3);
+
+		// When
+		List<AttendanceResponse> attendanceData = userService.getAttendance(id, new AttendanceRequest(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+
+		// Then
+		assertFalse(attendanceData.isEmpty(), "Attendance data should not be empty");
+		assertEquals(30, attendanceData.get(0).totalSolvedProblemCnt());
+		assertEquals(10, attendanceData.get(1).totalSolvedProblemCnt());
+	}
+
 
 }

@@ -1,5 +1,6 @@
 package com.ssafy.glu.user.domain.user.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -29,6 +30,9 @@ public class Attendance {
 
 	@Builder.Default
 	private LocalDateTime attendanceDate = LocalDateTime.now();
+
+	@Builder.Default
+	private Integer todaySolve = 0;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")

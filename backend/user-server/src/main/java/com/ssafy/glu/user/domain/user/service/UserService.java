@@ -1,7 +1,11 @@
 package com.ssafy.glu.user.domain.user.service;
 
+import java.util.List;
+
+import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
+import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 
 public interface UserService {
@@ -13,5 +17,8 @@ public interface UserService {
 	void updateUser(Long userId, UserUpdateRequest userUpdateRequest);
 
 	void deleteUser(Long userId);
+
+	List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request);
+
 
 }

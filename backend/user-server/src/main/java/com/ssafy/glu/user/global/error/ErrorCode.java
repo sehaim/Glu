@@ -18,7 +18,8 @@ public enum ErrorCode {
 
 
     //유저 없음
-    USER_NOT_FOUND(404, "USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다.");
+    USER_NOT_FOUND(404, "USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다."),
+    DATE_INVALID(400, "DATE_INVALID", "날짜 정보가 올바르지 않습니다.");
 
     private final int httpStatus;
     private final String code;
