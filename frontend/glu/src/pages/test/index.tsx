@@ -109,8 +109,6 @@ export default function Test() {
     // console.log('Submitting answers', answers);
   };
 
-  console.log(progressPercentage);
-
   return (
     <div className={styles.container}>
       {currentProblem && (
