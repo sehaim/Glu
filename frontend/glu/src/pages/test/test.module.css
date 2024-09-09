@@ -13,7 +13,7 @@
   width: 100%;
 }
 
-.problemZ {
+.problem {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,8 +54,40 @@
   cursor: pointer;
 }
 
+.progressbar {
+  position: relative;
+  width: 1000px;
+  height: 160px;
+  background: linear-gradient(
+    to bottom,
+    var(--YELLOW) 70%,
+    var(--LIGHTGREEN) 50%
+  ); /* Light yellow and green */
+}
+
+.progress-character {
+  position: absolute;
+  bottom: 10px;
+  width: 100px;
+  height: 120px;
+  transition: left 0.5s ease-in-out;
+  z-index: 2;
+}
+
+.progress-house {
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  width: 120px;
+  height: 120px;
+}
+
 @media (max-width: 1024px) {
   .problem-button-list {
+    width: 720px;
+  }
+
+  .progressbar {
     width: 720px;
   }
 }
@@ -68,10 +100,28 @@
   .problem-button-list {
     width: 400px;
   }
+
+  .progressbar {
+    width: 400px;
+  }
+
+  .progress-character {
+    width: 80px;
+    height: 100px;
+  }
+
+  .progress-house {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 @media (max-width: 480px) {
   .problem-button-list {
+    width: 320px;
+  }
+
+  .progressbar {
     width: 320px;
   }
 }

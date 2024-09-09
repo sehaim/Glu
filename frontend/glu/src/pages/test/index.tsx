@@ -7,7 +7,6 @@ import PrimaryButton from '@/components/common/buttons/primaryButton';
 import styles from './test.module.css';
 import dummyProblems from '../../mock/dummyProblems.json';
 import { Problem } from '../../types/ProblemTypes';
-
 interface ProblemAnswer {
   problemId: number;
   userAnswer: number; // 사용자의 선택
@@ -58,6 +57,11 @@ export default function Test() {
       });
     };
   }, [currentProblemIndex]);
+
+  const progressPercentage =
+    problems.length > 1
+      ? Math.floor((currentProblemIndex / (problems.length - 1)) * 100)
+      : 100; // 만약 문제가 1개라면 무조건 100%로 설정
 
   const currentProblem = problems[currentProblemIndex];
 
@@ -152,6 +156,19 @@ export default function Test() {
             onClick={handleNextProblem}
           />
         )}
+      </div>
+      <div className={styles.progressbar}>
+        <img
+          src="/images/glu_character.png"
+          alt="character"
+          className={styles['progress-character']}
+          style={{ left: `calc(${progressPercentage * 0.8 + 12}% - 60px` }}
+        />
+        <img
+          src="/images/problem/house.png"
+          alt="house"
+          className={styles['progress-house']}
+        />
       </div>
     </div>
   );
