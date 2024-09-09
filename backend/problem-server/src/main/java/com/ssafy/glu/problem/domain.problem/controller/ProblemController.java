@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
@@ -59,6 +60,14 @@ public class ProblemController {
 		@PathVariable("problemId") String problemId,
 		@RequestBody ProblemMemoUpdateRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.updateProblemMemo(userId, problemId, request));
+	}
+
+	@DeleteMapping("/{problemId}/memo")
+	public ResponseEntity<Void> deleteUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemId") String problemId,
+		@RequestParam("memoIndex") Long memoIndex) {
+		problemService.deleteProblemMemo(userId, problemId, memoIndex);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@GetMapping("/{problemId}/memo")
