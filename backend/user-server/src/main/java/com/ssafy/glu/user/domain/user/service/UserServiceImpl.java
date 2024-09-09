@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 		String encodedPassword = passwordEncoder.encode(userRegisterRequest.password());
 
 		Users user = Users.builder()
-			.loginId(userRegisterRequest.loginId())
+			.loginId(userRegisterRequest.id())
 			.nickname(userRegisterRequest.nickname())
 			.password(encodedPassword)
 			.birth(userRegisterRequest.birth())
@@ -132,6 +132,11 @@ public class UserServiceImpl implements UserService {
 
 		//유저 삭제
 		findUser.deleteUser();
+	}
+
+	@Override
+	public Boolean checkUser(String loginId) {
+		return userRepository.existsByLoginId(loginId);
 	}
 
 	/**

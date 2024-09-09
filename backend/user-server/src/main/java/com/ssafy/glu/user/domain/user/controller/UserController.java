@@ -54,6 +54,12 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
+	@GetMapping("/check")
+	public ResponseEntity<Boolean> checkUser(String id) {
+		Boolean result = userService.checkUser(id);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
 	@GetMapping("/attendance")
 	public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId, AttendanceRequest request) {
 		List<AttendanceResponse> result = userService.getAttendance(userId, request);
