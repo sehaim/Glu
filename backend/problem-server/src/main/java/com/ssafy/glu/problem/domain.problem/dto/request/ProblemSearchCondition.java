@@ -10,6 +10,7 @@ public record ProblemSearchCondition(
 	String problemTypeCode,
 	String ProblemTypeDetailCode,
 	String problemLevelCode,
-	Boolean hasMemo
+	Boolean hasMemo,
+	Boolean isFavorite
 ) {
 }
