@@ -54,22 +54,28 @@
   cursor: pointer;
 }
 
-.progressbar {
+.progressbar-container{
   position: relative;
+  padding-right: 0px 50px;
   width: 1000px;
-  height: 160px;
   background: linear-gradient(
     to bottom,
     var(--YELLOW) 70%,
     var(--LIGHTGREEN) 50%
-  ); /* Light yellow and green */
+  );
+}
+
+.progressbar {
+  position: relative;
+  width: 950px;
+  height: 160px;
 }
 
 .progress-character {
   position: absolute;
   bottom: 10px;
   width: 100px;
-  height: 120px;
+  height: 110px;
   transition: left 0.5s ease-in-out;
   z-index: 2;
 }
@@ -87,8 +93,12 @@
     width: 720px;
   }
 
-  .progressbar {
+  .progressbar-container {
     width: 720px;
+  }
+
+  .progressbar {
+    width: 670px;
   }
 }
 
@@ -101,18 +111,23 @@
     width: 400px;
   }
 
-  .progressbar {
+  .progressbar-container {
+    padding-right: 0px 60px;
     width: 400px;
   }
 
+  .progressbar {
+    width: 340px;
+  }
+
   .progress-character {
-    width: 80px;
-    height: 100px;
+    width: 70px;
+    height: 80px;
   }
 
   .progress-house {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
   }
 }
 
@@ -121,7 +136,11 @@
     width: 320px;
   }
 
-  .progressbar {
+  .progressbar-container {
     width: 320px;
+  }
+
+  .progressbar {
+    width: 260px;
   }
 }

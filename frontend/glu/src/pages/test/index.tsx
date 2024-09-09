@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -7,6 +6,7 @@ import PrimaryButton from '@/components/common/buttons/primaryButton';
 import styles from './test.module.css';
 import dummyProblems from '../../mock/dummyProblems.json';
 import { Problem } from '../../types/ProblemTypes';
+
 interface ProblemAnswer {
   problemId: number;
   userAnswer: number; // 사용자의 선택
@@ -60,7 +60,7 @@ export default function Test() {
 
   const progressPercentage =
     problems.length > 1
-      ? Math.floor((currentProblemIndex / (problems.length - 1)) * 100)
+      ? Math.floor((currentProblemIndex / problems.length) * 100)
       : 100; // 만약 문제가 1개라면 무조건 100%로 설정
 
   const currentProblem = problems[currentProblemIndex];
@@ -108,6 +108,8 @@ export default function Test() {
 
     // console.log('Submitting answers', answers);
   };
+
+  console.log(progressPercentage);
 
   return (
     <div className={styles.container}>
@@ -157,13 +159,15 @@ export default function Test() {
           />
         )}
       </div>
-      <div className={styles.progressbar}>
-        <img
-          src="/images/glu_character.png"
-          alt="character"
-          className={styles['progress-character']}
-          style={{ left: `calc(${progressPercentage * 0.8 + 12}% - 60px` }}
-        />
+      <div className={styles['progressbar-container']}>
+        <div className={styles.progressbar}>
+          <img
+            src="/images/glu_character.png"
+            alt="character"
+            className={styles['progress-character']}
+            style={{ left: `calc(${progressPercentage}%` }}
+          />
+        </div>
         <img
           src="/images/problem/house.png"
           alt="house"
