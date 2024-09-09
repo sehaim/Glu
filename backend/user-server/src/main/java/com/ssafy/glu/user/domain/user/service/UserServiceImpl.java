@@ -13,6 +13,7 @@ import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.response.ProblemTypeList;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
+import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserResponse getUser(Long userId) {
 
-		Users findUser = userRepository.findById(userId).orElseThrow();
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(userId);
 
 		return UserResponse.builder()
@@ -89,6 +90,7 @@ public class UserServiceImpl implements UserService {
 	 * 변환 시키기 userProblemlist => ProblemTypeList
 	 */
 	private static List<ProblemTypeList> getProblemTypeLists(List<UserProblemType> userProblemTypes) {
+		
 		List<ProblemTypeList> problemTypeList = new ArrayList<>();
 
 		for (UserProblemType userProblemType : userProblemTypes) {

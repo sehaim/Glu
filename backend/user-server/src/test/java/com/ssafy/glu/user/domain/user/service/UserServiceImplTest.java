@@ -61,10 +61,10 @@ class UserServiceImplTest {
 		UserResponse user = userService.getUser(id);
 
 		// Then
-		assertEquals(id, user.getId(), "User id should match");
-		assertEquals("ssafy", user.getNickname(), "Nickname should match");
-		assertNotNull(user.getProblemTypeList(), "ProblemTypeList should not be null");
-		assertEquals(3, user.getProblemTypeList().size(), "User should have 3 problem types");
+		assertEquals(id, user.id(), "User id should match");
+		assertEquals("ssafy", user.nickname(), "Nickname should match");
+		assertNotNull(user.problemTypeList(), "ProblemTypeList should not be null");
+		assertEquals(3, user.problemTypeList().size(), "User should have 3 problem types");
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class UserController {
 
 	@GetMapping("/")
 	public ResponseEntity<?> getUser(@RequestHeader(USER_ID) Long userId) {
-		userService.getUser(userId);
-		return ResponseEntity.ok("조회 완료");
+		UserResponse user = userService.getUser(userId);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
 	}
 
 }

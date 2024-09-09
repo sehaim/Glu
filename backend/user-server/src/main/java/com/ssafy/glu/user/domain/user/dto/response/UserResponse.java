@@ -3,17 +3,14 @@ package com.ssafy.glu.user.domain.user.dto.response;
 import java.util.List;
 
 import lombok.Builder;
-import lombok.Data;
 
-@Data
 @Builder
-public class UserResponse {
-
-	private Long id;
-	private String nickname;
-	private Integer level;
-	private Integer score;
-	private String imageUrl;
-	private Integer dayCount;
-	private List<ProblemTypeList> problemTypeList;
-}
+public record UserResponse (
+	Long id,
+	String nickname,
+	Integer level,
+	Integer score,
+	String imageUrl,
+	Integer dayCount,
+	List<ProblemTypeList> problemTypeList
+){}
