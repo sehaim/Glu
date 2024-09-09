@@ -9,9 +9,9 @@ import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteAlreadyRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteCancelFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.FavoriteNotFoundException;
@@ -41,7 +41,7 @@ public class ProblemValidationService implements ProblemService {
 	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 
 	@Override
-	public Page<UserProblemLogResponse> getProblemListByLog(Long userId, UserProblemLogSearchCondition condition,
+	public Page<ProblemBaseResponse> getProblemListByLog(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
 		return problemService.getProblemListByLog(userId, condition, pageable);
 	}

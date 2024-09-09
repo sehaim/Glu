@@ -9,6 +9,7 @@ public record ProblemSearchCondition(
 	Problem.Status status,
 	String problemTypeCode,
 	String ProblemTypeDetailCode,
-	String problemLevelCode
+	String problemLevelCode,
+	Boolean hasMemo
 ) {
 }

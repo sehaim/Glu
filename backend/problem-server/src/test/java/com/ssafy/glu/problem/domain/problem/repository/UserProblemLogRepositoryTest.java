@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
-import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ class UserProblemLogRepositoryTest {
 	private final int NUM_PROBLEMS = 3;
 	private List<Problem> problemList;
 	private final Long[] userIdList = {1L,2L,3L,4L};
-	private final int NUM_LOGS_LOGS_PER_USER = 3;
+	private final int NUM_LOGS_PER_USER = 3;
 
 	@BeforeEach
 	public void setUp() throws InterruptedException {
@@ -65,14 +65,14 @@ class UserProblemLogRepositoryTest {
 		log.info("Saved Log : {}",userProblemLogList.get(0));
 
 		// 문제 수 체크
-		assertThat(userProblemLogList.size()).isEqualTo(userIdList.length * NUM_PROBLEMS * NUM_LOGS_LOGS_PER_USER);
+		assertThat(userProblemLogList.size()).isEqualTo(userIdList.length * NUM_PROBLEMS * NUM_LOGS_PER_USER);
 	}
 
 	@Test
 	void searchUserProblemLogOfCorrectTest() {
 		Long userId = userIdList[0];
 
-		UserProblemLogSearchCondition condition = UserProblemLogSearchCondition.builder()
+		ProblemSearchCondition condition = ProblemSearchCondition.builder()
 			.status(Problem.Status.CORRECT)
 			.build();
 
@@ -84,7 +84,7 @@ class UserProblemLogRepositoryTest {
 	void searchUserProblemLogOfWrongTest() {
 		Long userId = userIdList[0];
 
-		UserProblemLogSearchCondition condition = UserProblemLogSearchCondition.builder()
+		ProblemSearchCondition condition = ProblemSearchCondition.builder()
 			.status(Problem.Status.WRONG)
 			.build();
 

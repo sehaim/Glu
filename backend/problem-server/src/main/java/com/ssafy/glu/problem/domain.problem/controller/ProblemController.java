@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
-import com.ssafy.glu.problem.domain.problem.dto.request.UserProblemLogSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.dto.response.UserProblemLogResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,9 +33,9 @@ public class ProblemController {
 	private final ProblemService problemService;
 
 	@GetMapping("/solve")
-	public ResponseEntity<Page<UserProblemLogResponse>> getProblemListInLog(
+	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(
 		@RequestHeader(USER_ID) Long userId,
-		@ModelAttribute UserProblemLogSearchCondition condition,
+		@ModelAttribute ProblemSearchCondition condition,
 		Pageable pageable
 	) {
 		return ResponseEntity.status(HttpStatus.OK)
