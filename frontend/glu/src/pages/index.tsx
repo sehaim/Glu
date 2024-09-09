@@ -23,11 +23,13 @@ export default function Home() {
             내 문해력 수준에 맞는 문제 추천 서비스를 통해 쉽고 재미있게 문해력을
             향상시킬 수 있습니다.
           </div>
-          <PrimaryButton
-            label="Glu 시작하기"
-            size="large"
-            onClick={handleStartButton}
-          />
+          <div className={styles['button-container']}>
+            <PrimaryButton
+              label="Glu 시작하기"
+              size="large"
+              onClick={handleStartButton}
+            />
+          </div>
         </div>
         <img
           className={styles['main-character']}

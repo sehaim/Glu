@@ -13,10 +13,7 @@ export default function PrimaryButton({
   onClick,
 }: PrimaryButtonProps) {
   return (
-    <button
-      className={`${styles['button-container']} ${styles[size]}`}
-      onClick={onClick}
-    >
+    <button className={`${styles.button} ${styles[size]}`} onClick={onClick}>
       {label}
     </button>
   );
