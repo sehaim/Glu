@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
@@ -105,6 +106,9 @@ public class UserServiceImpl implements UserService {
 		//비밀번호 일치할때
 		if (passwordEncoder.matches(request.password(), findUser.getPassword())) {
 			String encodedPassword = passwordEncoder.encode(request.newPassword());
+
+			//새로운 비밀번호가 비어있으면 null처리
+			if (StringUtils.hasText(request.newPassword())) encodedPassword = null;
 			//유저 정보 업데이트
 			findUser.updateUser(encodedPassword, request.nickname());
 		}
