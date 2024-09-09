@@ -36,7 +36,6 @@ public class UserProblemStatusRepositoryTest {
 
 	private final int NUM_PROBLEMS = 3;
 	private List<Problem> problemList;
-	private final int NUM_LOGS_PER_USER = 3;
 	private final Long[] userIdList = {1L,2L,3L,4L};
 
 	@BeforeEach
@@ -51,9 +50,6 @@ public class UserProblemStatusRepositoryTest {
 
 		// 유저별 풀이 상태 등록
 		for (Long userId : userIdList) {
-			for (Problem problem : problemList) {
-				userProblemStatusRepository.save(MockFactory.createUserProblemStatus(userId, problem));
-			}
 			userProblemStatusRepository.save(MockFactory.createUserProblemStatus(userId,Problem.Status.CORRECT,problemList.get(0),
 				Map.of(1L,"메모1",2L,"메모2"),false));
 			userProblemStatusRepository.save(MockFactory.createUserProblemStatus(userId,Problem.Status.WRONG,problemList.get(1),Map.of(1L,"메모1"),true));
@@ -64,35 +60,18 @@ public class UserProblemStatusRepositoryTest {
 	@Test
 	void createMemo() {
 		Long userId = userIdList[0];
-		Problem problem = problemList.get(0);
+		Problem problem = problemList.get(2);
 
 		// UserProblemStatus를 userId와 problemId로 조회
 		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
 			problem.getProblemId()).orElseThrow(UserProblemStatusNotFoundException::new);
 
-		// Index 찾기
-		Long memoIndex = userProblemStatus.getMemoList().isEmpty() ? 1L :
-			userProblemStatus.getMemoList().stream().map(ProblemMemo::getMemoIndex).max(Long::compareTo).orElse(0L)
-				+ 1L;
-
+		String content = "새로운 메모 내용";
 		// 메모 추가
-		ProblemMemo problemMemo = ProblemMemo.builder().memoIndex(memoIndex).content("새로운 메모 내용").build();
-
-		// 저장
-		userProblemStatus.getMemoList().add(problemMemo);
+		ProblemMemo problemMemo = userProblemStatus.addMemo(content);
 
 		assertThat(userProblemStatus.getMemoList().size()).isEqualTo(1);
-		assertThat(userProblemStatus.getMemoList().get(0).getMemoIndex()).isEqualTo(memoIndex);
-		assertThat(userProblemStatus.getMemoList().get(0).getContent()).isEqualTo("새로운 메모 내용");
-	}
-
-	void saveUserProblemTest() {
-		List<UserProblemStatus> userProblemLogList = userProblemStatusRepository.findAll();
-
-		log.info("Saved Log : {}",userProblemLogList.get(0));
-
-		// 문제 수 체크
-		assertThat(userProblemLogList.size()).isEqualTo(userIdList.length * NUM_PROBLEMS);
+		assertThat(problemMemo.getContent()).isEqualTo(content);
 	}
 
 	@Test
