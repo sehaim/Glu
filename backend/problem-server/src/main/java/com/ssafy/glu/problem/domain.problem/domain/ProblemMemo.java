@@ -11,5 +11,5 @@ import lombok.ToString;
 @ToString
 public class ProblemMemo {
 	private final Long memoIndex;
-	private final String content;
+	private String content;
 }

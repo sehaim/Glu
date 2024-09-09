@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,11 @@ import java.util.UUID;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemLevel;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemType;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetail;
 import com.ssafy.glu.problem.domain.problem.domain.QuestionType;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 
 public class MockFactory {
 
@@ -49,21 +50,21 @@ public class MockFactory {
 		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
 		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
 
-		Map<String,Object> metadata = new HashMap<>();
+		Map<String, Object> metadata = new HashMap<>();
 
 		metadata.put("options", List.of("option1", "option2", "option3"));
 		metadata.put("imageUrl", "url");
 
 		return Problem.builder()
-				.title(randomTitle)
-				.content(randomContent)
-				.solution(randomSolution)
-				.problemLevel(createProblemLevel(problemLevelCode))
-				.problemType(createProblemType())
-				.problemTypeDetail(createProblemTypeDetail())
-				.questionType(createQuestionType())
-				.metadata(metadata)
-				.build();
+			.title(randomTitle)
+			.content(randomContent)
+			.solution(randomSolution)
+			.problemLevel(createProblemLevel(problemLevelCode))
+			.problemType(createProblemType())
+			.problemTypeDetail(createProblemTypeDetail())
+			.questionType(createQuestionType())
+			.metadata(metadata)
+			.build();
 	}
 
 	public static ProblemLevel createProblemLevel() {
@@ -79,12 +80,12 @@ public class MockFactory {
 
 	public static ProblemLevel createProblemLevel(String problemCodeLevelCode) {
 		// 랜덤한 ProblemLevel 객체 생성
-		String level = "0"+RANDOM.nextInt(3);
+		String level = "0" + RANDOM.nextInt(3);
 		String name = "LV " + level;
 		return ProblemLevel.builder()
-				.problemLevelCode(problemCodeLevelCode)
-				.name(name)
-				.build();
+			.problemLevelCode(problemCodeLevelCode)
+			.name(name)
+			.build();
 	}
 
 	public static ProblemTypeDetail createProblemTypeDetail() {
@@ -120,16 +121,6 @@ public class MockFactory {
 			.build();
 	}
 
-	public static ProblemMemo createProblemMemo(Long userId, Problem problem) {
-		// 랜덤한 ProblemMemo 객체 생성
-		String content = "내용 " + UUID.randomUUID().toString().substring(0, 8);
-		return ProblemMemo.builder()
-			.userId(userId)
-			.problem(problem)
-			.content(content)
-			.build();
-	}
-
 	//===== UserProblemLog =====//
 	public static UserProblemLog createUserProblemLog(Long userId, Problem problem, boolean isCorrect) {
 		// 랜덤한 문자열 생성
@@ -143,5 +134,11 @@ public class MockFactory {
 			.isCorrect(isCorrect)
 			.solvedTime(randomSolveTime)
 			.build();
+	}
+
+	public static UserProblemStatus createUserProblemStatus(Long userId, Problem problem) {
+		return new UserProblemStatus(
+			Problem.Status.CORRECT, RANDOM.nextInt(5) + 5, RANDOM.nextInt(5), userId, new ArrayList<>(),
+			RANDOM.nextBoolean(), problem);
 	}
 }
