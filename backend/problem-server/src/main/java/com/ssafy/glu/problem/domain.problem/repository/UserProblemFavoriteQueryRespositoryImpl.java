@@ -37,7 +37,7 @@ public class UserProblemFavoriteQueryRespositoryImpl implements UserProblemFavor
 		// 집계 파이프라인 구성
 		Aggregation aggregation = Aggregation.newAggregation(
 			matchByCriteria(criteria),             // userId 기준으로 필터링
-			sortByCreatedDate(),                   // 생성일 기준 내림차순 정렬
+			sortByCondition(pageable),             // 정렬 (기본값은 createdDate)
 			lookupOperation(),                     // problem 컬렉션과 조인
 			unwindProblem(),                       // 문제 필드 배열을 풀어줌
 			matchNonNullProblem(),                 // problem 필드가 null이 아닌 경우만 필터링
@@ -65,8 +65,11 @@ public class UserProblemFavoriteQueryRespositoryImpl implements UserProblemFavor
 	}
 
 	// createdDate 기준으로 내림차순 정렬
-	private SortOperation sortByCreatedDate() {
-		return Aggregation.sort(Sort.by(Sort.Direction.DESC, "createdDate"));
+	private SortOperation sortByCondition(Pageable pageable) {
+		if (pageable.getSort().isSorted())
+			return Aggregation.sort(pageable.getSort());
+		else
+			return Aggregation.sort(Sort.by(Sort.Direction.DESC, "createdDate"));
 	}
 
 	// 배열을 개별 문서로 풀어줌
