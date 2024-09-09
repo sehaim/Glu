@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
+import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
@@ -65,6 +66,37 @@ class UserServiceImplTest {
 		assertEquals("ssafy", user.nickname(), "Nickname should match");
 		assertNotNull(user.problemTypeList(), "ProblemTypeList should not be null");
 		assertEquals(3, user.problemTypeList().size(), "User should have 3 problem types");
+	}
+
+	@Test
+	void updateUser() {
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		// When
+		UserUpdateRequest updateRequest = new UserUpdateRequest("newNickname", "1234", "12345");
+		userService.updateUser(id, updateRequest);
+
+		Users findUser = userRepository.findById(id).orElseThrow();
+
+		// Then
+		assertEquals("newNickname", findUser.getNickname(), "Nickname should be updated");
+		assertTrue(passwordEncoder.matches(updateRequest.newPassword(), findUser.getPassword()), "Password should match");
+	}
+
+	@Test
+	void deleteUser() {
+		// Given
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		// When
+		userService.deleteUser(id);
+
+		// Then
+		Users deletedUser = userRepository.findById(id).orElseThrow();
+		assertTrue(deletedUser.getIsDeleted(), "User should be marked as deleted");
 	}
 
 }
