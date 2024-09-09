@@ -1,7 +1,7 @@
 .button {
-  border-radius: 20px;
-  background-color: var(--PINK);
-  font-family: 'BMJUA';
+  border-radius: 10px;
+  background-color: var(--LIGHTPINK);
+  font-family: 'PT';
   color: var(--WHITE);
   border: none;
   cursor: pointer;
@@ -17,16 +17,16 @@
 }
 
 .small {
+  font-size: 10px;
+  padding: 5px 10px;
+}
+
+.medium {
   font-size: 15px;
   padding: 8px 15px;
 }
 
-.medium {
-  font-size: 20px;
-  padding: 10px 25px;
-}
-
 .large {
-  font-size: 24px;
-  padding: 12px 30px;
+  font-size: 20px;
+  padding: 12px 20px;
 }

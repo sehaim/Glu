@@ -1,9 +1,4 @@
-.input-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-item {
+.container {
   display: flex;
   flex-direction: column;
   margin: 5px 0;

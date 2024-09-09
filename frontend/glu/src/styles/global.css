@@ -18,18 +18,20 @@ a {
   color: inherit;
 }
 
-input {
+input,
+select {
   font-family: 'PT';
-  font-size: 18px;
+  font-size: 16px;
   height: 38px;
   border-radius: 10px;
   border-width: 0.5px;
   border-style: solid;
   border-color: var(--GRAY);
   margin: 7px 0;
-  padding: 10px;
+  padding: 8px;
   &::placeholder {
     color: var(--TEXT_SECONDARY);
+    font-size: 15px;
   }
   &:focus {
     border-width: 2px;

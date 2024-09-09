@@ -1,4 +1,4 @@
-import InputItem from '@/components/common/inputItem';
+import InputItem from '@/components/common/inputs/inputItem';
 import styles from '../userRegist.module.css';
 
 export default function Login() {
