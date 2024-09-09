@@ -6,7 +6,7 @@ import styles from './home.module.css';
 export default function Home() {
   const router = useRouter();
 
-  const handleStartButton = () => {
+  const handleButton = () => {
     router.push('/signup');
   };
 
@@ -27,7 +27,7 @@ export default function Home() {
             <PrimaryButton
               label="Glu 시작하기"
               size="large"
-              onClick={handleStartButton}
+              onClick={handleButton}
             />
           </div>
         </div>

@@ -55,6 +55,7 @@
 .button-container {
   transform: scale(0);
   width: 100%;
+  transform-origin: bottom left;
   animation: growAndShrink 1s ease-in-out 2s forwards;
 }
 
