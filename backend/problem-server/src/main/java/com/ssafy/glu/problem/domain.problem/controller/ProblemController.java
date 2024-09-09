@@ -37,7 +37,7 @@ public class ProblemController {
 		Pageable pageable
 	) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(problemService.getProblemListByLog(userId, condition, pageable));
+			.body(problemService.getProblemList(userId, condition, pageable));
 	}
 
 	@PostMapping("{problemId}/memo")
