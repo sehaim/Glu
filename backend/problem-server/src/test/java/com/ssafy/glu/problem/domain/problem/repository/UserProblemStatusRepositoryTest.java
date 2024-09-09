@@ -18,8 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
-import com.ssafy.glu.problem.domain.problem.exception.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.util.MockFactory;
 
 import lombok.extern.slf4j.Slf4j;
@@ -139,5 +139,32 @@ public class UserProblemStatusRepositoryTest {
 		Page<UserProblemStatus> userProblemStatusList = userProblemStatusRepository.findAllProblemByCondition(userId, condition, Pageable.ofSize(10));
 
 		assertThat(userProblemStatusList.getTotalElements()).isEqualTo(1);
+	}
+
+	@Test
+	void updateMemo() {
+		Long userId = userIdList[0];
+		Problem problem = problemList.get(0);
+
+		// UserProblemStatus를 userId와 problemId로 조회
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problem.getProblemId()).orElseThrow(UserProblemStatusNotFoundException::new);
+
+		// Index 찾기
+		Long memoIndex = userProblemStatus.getMemoList().isEmpty() ? 1L :
+			userProblemStatus.getMemoList().stream().map(ProblemMemo::getMemoIndex).max(Long::compareTo).orElse(0L)
+				+ 1L;
+
+		// 메모 추가
+		ProblemMemo problemMemo = ProblemMemo.builder().memoIndex(memoIndex).content("새로운 메모 내용").build();
+
+		// 저장
+		userProblemStatus.getMemoList().add(problemMemo);
+
+		userProblemStatus.updateMemo(memoIndex, "수정된 메모 내용");
+
+		assertThat(userProblemStatus.getMemoList().size()).isEqualTo(1);
+		assertThat(userProblemStatus.getMemoList().get(0).getMemoIndex()).isEqualTo(memoIndex);
+		assertThat(userProblemStatus.getMemoList().get(0).getContent()).isEqualTo("수정된 메모 내용");
 	}
 }

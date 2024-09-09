@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
-import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoNotFoundException;
 import com.ssafy.glu.problem.global.shared.BaseTimeDocument;
 
 import lombok.Builder;
@@ -56,6 +55,18 @@ public class UserProblemStatus extends BaseTimeDocument {
 			.build();
 		memoList.add(memo);
 		return memo;
+	}
+
+	// 메모 업데이트
+	public ProblemMemo updateMemo(Long memoIndex, String content) {
+		return memoList.stream()
+			.filter(memo -> memo.getMemoIndex().equals(memoIndex))
+			.findFirst()
+			.map(memo -> {
+				memo.updateContent(content);
+				return memo;
+			})
+			.orElseThrow(ProblemMemoNotFoundException::new);
 	}
 
 	// userProblemStatus에 있는 memolist 중에서 가장 큰 index 값보다 + 1 반환

@@ -12,4 +12,10 @@ import lombok.ToString;
 public class ProblemMemo {
 	private final Long memoIndex;
 	private String content;
+
+	public void updateContent(String content) {
+		if (content != null) {
+			this.content = content;
+		}
+	}
 }

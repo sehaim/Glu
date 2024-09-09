@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
@@ -44,12 +46,19 @@ public class ProblemController {
 			.body(problemService.getProblemList(userId, condition, pageable));
 	}
 
-	@PostMapping("{problemId}/memo")
+	@PostMapping("/{problemId}/memo")
 	public ResponseEntity<ProblemMemoResponse> createUserProblemMemo(@RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId,
 		@RequestBody ProblemMemoCreateRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(problemService.createProblemMemo(userId, problemId, request));
+	}
+
+	@PutMapping("/{problemId}/memo")
+	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemId") String problemId,
+		@RequestBody ProblemMemoUpdateRequest request) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.updateProblemMemo(userId, problemId, request));
 	}
 
 	@GetMapping("/{problemId}/memo")
