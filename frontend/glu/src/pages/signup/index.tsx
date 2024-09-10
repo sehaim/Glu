@@ -40,7 +40,7 @@ export default function Login() {
             placeholder="6자 이상의 영문, 숫자"
           >
             <SecondaryButton
-              label="중복확인"
+              label="중복 확인"
               size="small"
               onClick={handleCheckId}
             />
