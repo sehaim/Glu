@@ -19,21 +19,26 @@ export default function Test() {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
-  const [startTime, setStartTime] = useState<number>(0); // 문제 시작 시간
+  const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [, setTotalSolvedTime] = useState<number>(0);
 
   useEffect(() => {
     const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
     setProblems(fixedProblems);
 
-    const initialAnswers = fixedProblems.map((problem) => ({
-      problemId: problem.problemId,
-      problemAnswer: Number(problem.solution),
-      userAnswer: 0, // 기본값은 0
-      solvedTime: 0, // 기본 풀이 시간은 0
-    }));
+    const savedAnswers = sessionStorage.getItem('savedAnswers');
+    if (savedAnswers) {
+      setAnswers(JSON.parse(savedAnswers)); // 세션 스토리지에서 데이터를 불러옴
+    } else {
+      const initialAnswers = fixedProblems.map((problem) => ({
+        problemId: problem.problemId,
+        problemAnswer: Number(problem.solution),
+        userAnswer: 0, // 기본값은 0
+        solvedTime: 0, // 기본 풀이 시간은 0
+      }));
 
-    setAnswers(initialAnswers);
+      setAnswers(initialAnswers);
+    }
   }, []);
 
   useEffect(() => {
@@ -58,6 +63,7 @@ export default function Test() {
           solvedTime: previousSolvedTime + timeSpent,
         };
 
+        sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
         return updatedAnswers;
       });
     };
@@ -94,6 +100,9 @@ export default function Test() {
         userAnswer,
       };
       updatedAnswers[problemIndex] = updatedAnswer;
+
+      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
+
       return updatedAnswers;
     });
   };
@@ -115,7 +124,10 @@ export default function Test() {
       return updatedAnswers;
     });
 
-    //console.log('Submitting answers', answers);
+    // TODO: 삭제
+    // console.log('Submitting answers', answers);
+
+    sessionStorage.removeItem('savedAnswers');
   };
 
   return (
