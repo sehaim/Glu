@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
+import com.ssafy.glu.problem.global.util.PageUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +63,8 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+				problemId)
 			.orElseThrow(UserProblemStatusNotFoundException::new);
 
 		// 비즈니스 로직 분리
@@ -76,7 +79,8 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public void deleteProblemMemo(Long userId, String problemId, Long memoIndex) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+				problemId)
 			.orElseThrow(UserProblemStatusNotFoundException::new);
 
 		userProblemStatus.deleteMemo(memoIndex);
@@ -86,8 +90,12 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
-		Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
-		return null;
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problemId).orElseThrow(UserProblemStatusNotFoundException::new);
+
+		List<ProblemMemo> problemMemoList = userProblemStatus.getMemoList();
+
+		return PageUtil.convertListToPage(problemMemoList, pageable).map(ProblemMemoResponse::of);
 	}
 
 	@Override
