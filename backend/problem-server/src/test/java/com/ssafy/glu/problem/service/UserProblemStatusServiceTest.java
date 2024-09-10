@@ -21,7 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
+import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
@@ -72,16 +74,36 @@ public class UserProblemStatusServiceTest {
 
 	@Test
 	void getProblemMemoList() {
+		// Given
 		Long userId = userIdList[0];
 		Problem problem = problemList.get(0);
 
+		// When
 		Pageable pageable = PageRequest.of(0, 4);
 		Page<ProblemMemoResponse> pagedMemo = problemService.getProblemMemoList(userId, problem.getProblemId(),
 			pageable);
 
+		// Then
 		assertThat(pagedMemo.getTotalElements()).isEqualTo(2);
 		assertThat(pagedMemo.getTotalPages()).isEqualTo(1);
 		assertThat(pagedMemo.getNumberOfElements()).isEqualTo(2);
 		assertThat(pagedMemo.getContent().get(0).content()).isEqualTo("메모1");
+	}
+
+	@Test
+	void createFavoriteTest() {
+		// Given
+		Long userId = userIdList[0];
+		Problem problem = problemList.get(0);
+
+		// When
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problem.getProblemId()).orElseThrow(
+			UserProblemStatusNotFoundException::new);
+		userProblemStatus.createFavorite();
+		userProblemStatusRepository.save(userProblemStatus);
+
+		// Then
+		assertThat(userProblemStatus.getIsFavorite()).isEqualTo(true);
 	}
 }
