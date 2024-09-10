@@ -33,7 +33,7 @@ export default function Home() {
         </div>
         <img
           className={styles['main-character']}
-          src="/images/glu_character.png"
+          src="/images/glu_character_shadow.png"
           alt="Glu Character"
         />
       </div>

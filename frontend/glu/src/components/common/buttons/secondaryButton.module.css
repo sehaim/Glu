@@ -2,7 +2,7 @@
   border-radius: 10px;
   background-color: var(--LIGHTPINK);
   font-family: 'PT';
-  color: var(--TEXT_SECONDARY);
+  color: var(--TEXT_PRIMARY);
   border: none;
   cursor: pointer;
   text-align: center;
@@ -22,11 +22,11 @@
 }
 
 .medium {
-  font-size: 18px;
+  font-size: 15px;
   padding: 8px 15px;
 }
 
 .large {
-  font-size: 24px;
+  font-size: 18px;
   padding: 12px 20px;
 }

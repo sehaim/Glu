@@ -11,7 +11,7 @@ export default function Footer() {
         </div>
         <div className={styles['content-line']}>
           <div className={styles['content-item']}>
-            서울특별시 강남구 테헤란로 212, 801호
+            서울특별시 강남구 테헤란로 212, 1401호
           </div>
           <div className={styles['content-item']}>전화: 02-1234-5678</div>
           <div className={styles['content-item']}>이메일: support@Glu.com</div>

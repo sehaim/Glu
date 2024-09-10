@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
 }
 
 .section {
@@ -15,4 +14,10 @@
   font-size: 16px;
   color: var(--TEXT_SECONDARY);
   margin-left: 6px;
+}
+
+@media (max-width: 1120px) {
+  .container {
+    flex-wrap: wrap;
+  }
 }

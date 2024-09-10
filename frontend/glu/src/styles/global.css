@@ -40,8 +40,26 @@ select {
   }
 }
 
+input {
+  width: 100%;
+}
+
 select {
   font-size: 15px;
+}
+
+#page-container {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px;
+  width: 100%;
+  flex-grow: 1;
+}
+
+#page-title {
+  color: var(--TEXT_PRIMARY);
+  font-family: 'HDBOLD';
+  font-size: 36px;
 }
 
 /* 폰트 적용 */

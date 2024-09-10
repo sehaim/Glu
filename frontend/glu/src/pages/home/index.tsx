@@ -108,7 +108,7 @@ export default function Home(): JSX.Element {
         >
           <img
             id={styles['main-character']}
-            src="/images/glu_character.png"
+            src="/images/glu_character_shadow.png"
             alt="Glu Character"
             loading="lazy"
           />
@@ -192,7 +192,7 @@ export default function Home(): JSX.Element {
           </div>
           <div id={styles['section3-button-wrapper']}>
             <PrimaryButton
-              label="레벨 테스트 보러가기"
+              label="레벨 테스트 시작"
               size="large"
               onClick={handleButton}
             />

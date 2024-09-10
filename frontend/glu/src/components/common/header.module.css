@@ -1,5 +1,4 @@
 .container {
-  background-color: var(--background-color);
   position: sticky;
   top: 0;
   display: flex;

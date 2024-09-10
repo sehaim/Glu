@@ -27,7 +27,7 @@ export default function BirthInputItem({
       `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
     );
     if (onChange) {
-      onChange(birth); // 부모 컴포넌트로 값 전달
+      onChange(birth);
     }
   }, [year, month, day, birth, onChange]);
 
