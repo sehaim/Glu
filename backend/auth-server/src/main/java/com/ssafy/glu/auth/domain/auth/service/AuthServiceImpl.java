@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.glu.auth.domain.auth.domain.Users;
 import com.ssafy.glu.auth.domain.auth.dto.request.LoginRequest;
 import com.ssafy.glu.auth.domain.auth.exception.LoginInValidException;
+import com.ssafy.glu.auth.domain.auth.exception.TokenExpiredException;
 import com.ssafy.glu.auth.domain.auth.exception.UserNotFoundException;
 import com.ssafy.glu.auth.domain.auth.repository.UserRepository;
 import com.ssafy.glu.auth.domain.auth.util.JWTUtil;
@@ -67,6 +68,12 @@ public class AuthServiceImpl implements AuthService {
 	public void reissue(Long userId, HttpServletResponse httpResponse) {
 
 		userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+		String refreshToken = jwtTokenService.getRefreshToken(userId);
+
+		if (refreshToken == null || jwtUtil.isExpired(refreshToken)) {
+			throw new TokenExpiredException();
+		}
 
 		tokenSave(httpResponse, userId);
 
