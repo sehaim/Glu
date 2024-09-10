@@ -106,4 +106,28 @@ public class UserProblemStatusServiceTest {
 		// Then
 		assertThat(userProblemStatus.getIsFavorite()).isEqualTo(true);
 	}
+
+	@Test
+	void deleteFavoriteTest() {
+		// Given
+		Long userId = userIdList[0];
+		Problem problem = problemList.get(0);
+
+		// When
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problem.getProblemId()).orElseThrow(
+			UserProblemStatusNotFoundException::new);
+		userProblemStatus.createFavorite();
+		userProblemStatusRepository.save(userProblemStatus);
+
+		boolean beforeDelete = userProblemStatus.getIsFavorite();
+		userProblemStatus.deleteFavorite();
+		userProblemStatusRepository.save(userProblemStatus);
+		boolean afterDelete = userProblemStatus.getIsFavorite();
+
+		// Then
+		assertThat(beforeDelete).isEqualTo(true);
+		assertThat(afterDelete).isEqualTo(false);
+
+	}
 }
