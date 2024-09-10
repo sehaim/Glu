@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.MongoException;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
@@ -13,7 +14,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteAlreadyRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteCancelFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteNotFoundException;
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteNotRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteRegistrationFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.NullMemoIndexException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoCreateFailedException;
@@ -24,7 +25,6 @@ import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundExc
 import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.user.NullUserIdException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
-import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ProblemValidationService implements ProblemService {
 	private final ProblemService problemService;
 	private final ProblemRepository problemRepository;
-	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 	private final UserProblemStatusRepository userProblemStatusRepository;
 
 	@Override
@@ -113,14 +112,6 @@ public class ProblemValidationService implements ProblemService {
 	}
 
 	@Override
-	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition,
-		Pageable pageable) {
-		validateUserIdIsNull(userId);
-
-		return problemService.getUserProblemFavoriteList(userId, condition, pageable);
-	}
-
-	@Override
 	public void createUserProblemFavorite(Long userId, String problemId) {
 		// 검증
 		log.info("검증 로직 서비스");
@@ -167,23 +158,6 @@ public class ProblemValidationService implements ProblemService {
 	}
 
 	// ===== 검증 로직 =====
-
-	// 이전에 찜 했는지 판단 => 이전에 찜이 있으면 오류
-	private void validateFavoriteNotRegistered(Long userId, Problem problem) {
-		if (userProblemFavoriteRepository.existsByUserIdAndProblem(userId, problem)) {
-			log.warn("===== 사용자 [{}]가 이미 문제 [{}]를 찜한 상태 =====", userId, problem);
-			throw new FavoriteAlreadyRegisteredException();
-		}
-	}
-
-	// 이전에 찜 했는지 판단 => 이전에 찜이 없으면 오류
-	private void validateFavoriteRegistered(Long userId, Problem problem) {
-		if (!userProblemFavoriteRepository.existsByUserIdAndProblem(userId, problem)) {
-			log.warn("===== 사용자 [{}]가 [{}]를 찜하지 않은 상태 =====", userId, problem);
-			throw new FavoriteNotFoundException();
-		}
-	}
-
 	private void validateUserIdIsNull(Long userId) {
 		if (userId == null) {
 			throw new NullUserIdException();
