@@ -30,17 +30,19 @@ export default function InputItem({
         <div className={styles['input-label']}>{label}</div>
         {children}
       </div>
-      {isBirth ? (
-        <BirthInputItem onChange={onBirthChange} />
-      ) : (
-        <input
-          type={label.startsWith('비밀번호') ? 'password' : 'text'}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          disabled={!canEdit}
-        />
-      )}
+      <div id={styles[`${direction}-input`]}>
+        {isBirth ? (
+          <BirthInputItem onChange={onBirthChange} />
+        ) : (
+          <input
+            type={label.startsWith('비밀번호') ? 'password' : 'text'}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            disabled={!canEdit}
+          />
+        )}
+      </div>
     </div>
   );
 }

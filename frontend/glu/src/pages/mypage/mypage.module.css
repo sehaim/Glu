@@ -1,0 +1,23 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  max-width: 800px;
+  height: 370px;
+  justify-content: space-between;
+  align-self: center;
+  margin: auto;
+  padding-bottom: 40px;
+}
+
+.inline-items {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-container {
+  width: 65%;
+}

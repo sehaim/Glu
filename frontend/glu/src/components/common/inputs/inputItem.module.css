@@ -13,13 +13,20 @@
   font-family: 'PT';
   font-size: 16px;
   color: var(--TEXT_SECONDARY);
+  margin-right: 10px;
 }
 
 #row {
+  width: 100%;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 
 #column {
   flex-direction: column;
+}
+
+#row-input {
+  width: 60%;
 }
