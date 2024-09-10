@@ -5,12 +5,57 @@
   align-items: center;
 }
 
+.problem-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.left-navigation {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  margin-right: 40px;
+  padding: 60px 0px;
+}
+
+.problem-solved-title {
+  width: 120px;
+  color: var(--TEXT_SECONDARY);
+  font-size: 16px;
+  font-family: 'PTBOLD';
+  margin-bottom: 20px;
+}
+
+.problem-solved-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  width: 120px;
+  background-color: var(--WHITE);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'PT';
+}
+
+.problem-solved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.right-navigation {
+  display: none;
+}
+
 .problem-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
 .problem {
@@ -32,8 +77,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1000px;
-  margin: 48px 0px;
+  width: 820px;
+
+  margin: 64px 0px;
 }
 
 .problem-button-list button:first-child {
@@ -57,7 +103,7 @@
 .progressbar-container {
   position: relative;
   padding-right: 0px 50px;
-  width: 1000px;
+  width: 820px;
   background: linear-gradient(
     to bottom,
     var(--YELLOW) 70%,
@@ -67,7 +113,7 @@
 
 .progressbar {
   position: relative;
-  width: 950px;
+  width: 770px;
   height: 160px;
 }
 
@@ -86,6 +132,31 @@
   bottom: 20px;
   width: 120px;
   height: 120px;
+}
+
+@media (min-width: 1200px) {
+  .left-navigation {
+    display: flex;
+    width: 160px;
+  }
+
+  .right-navigation {
+    display: flex;
+    width: 160px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .left-navigation {
+    display: flex;
+    width: 240px;
+    margin-right: 80px;
+  }
+
+  .right-navigation {
+    display: flex;
+    width: 240px;
+  }
 }
 
 @media (max-width: 1024px) {
