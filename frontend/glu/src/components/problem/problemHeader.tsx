@@ -3,7 +3,7 @@ import { BsStar } from 'react-icons/bs';
 import styles from './problemHeader.module.css';
 
 interface ProblemHeaderProps {
-  problemIndex: number;
+  problemIndex?: number;
   problemLevel: string;
   problemType: string;
   problemTitle: string;
