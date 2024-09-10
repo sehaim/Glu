@@ -106,6 +106,7 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 
 		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
 
 		Problem problem = getProblemOrThrow(problemId);
 		return problemService.getProblemMemoList(userId, problemId, pageable);
