@@ -80,14 +80,6 @@ public class ProblemController {
 			.body(problemService.getProblemMemoList(userId, problemId, pageable));
 	}
 
-	@GetMapping("/favorite")
-	public ResponseEntity<Page<ProblemBaseResponse>> getFavoriteProblemList(@RequestHeader(USER_ID) Long userId,
-		@ModelAttribute ProblemSearchCondition condition,
-		Pageable pageable) {
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(problemService.getUserProblemFavoriteList(userId, condition, pageable));
-	}
-
 	@PostMapping("/{problemId}/favorite")
 	public ResponseEntity<Void> createUserProblemFavorite(@RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId) {

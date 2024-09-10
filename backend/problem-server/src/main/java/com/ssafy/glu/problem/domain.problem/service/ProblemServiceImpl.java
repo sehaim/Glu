@@ -1,26 +1,20 @@
 package com.ssafy.glu.problem.domain.problem.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
-import com.ssafy.glu.problem.domain.problem.domain.UserProblemFavorite;
-import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
-import com.ssafy.glu.problem.domain.problem.repository.UserProblemFavoriteRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 import com.ssafy.glu.problem.global.util.PageUtil;
@@ -33,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
 	private final ProblemRepository problemRepository;
-	private final UserProblemFavoriteRepository userProblemFavoriteRepository;
 	private final UserProblemLogRepository userProblemLogRepository;
 	private final UserProblemStatusRepository userProblemStatusRepository;
 
@@ -99,55 +92,22 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
-	public Page<ProblemBaseResponse> getUserProblemFavoriteList(Long userId, ProblemSearchCondition condition,
-		Pageable pageable) {
-		return userProblemFavoriteRepository.findAllFavoriteProblem(userId, condition, pageable)
-			.map(problem -> {
-				// 마지막 UserProblemLog를 problemId로 조회
-				Optional<UserProblemLog> lastLog = userProblemLogRepository.findFirstByUserIdAndProblem(userId,
-					problem);
-
-				log.info("Problem ID: {}", problem.getProblemId());
-				log.info("Last Log Found: {}", lastLog.isPresent());
-
-				Problem.Status status = lastLog.map(
-					log -> log.isCorrect() ? Problem.Status.CORRECT : Problem.Status.WRONG).orElse(null);
-
-				// ProblemBaseResponse에 status 추가
-				return ProblemBaseResponse.of(problem, status);
-			});
-	}
-
-	@Override
 	public void createUserProblemFavorite(Long userId, String problemId) {
 		log.info("===== 문제 찜 요청 - 유저 : {}, 문제: {} =====", userId, problemId);
 
-		// 문제 존재 여부 확인
-		Problem problem = getProblemOrThrow(problemId);
-		log.info("===== 문제 [{}] 찾았습니다 =====", problem);
-
-		UserProblemFavorite userProblemFavorite = UserProblemFavorite.builder()
-			.userId(userId)
-			.problem(problem)
-			.build();
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problemId).orElseThrow(UserProblemStatusNotFoundException::new);
 		log.info("===== 문제 찜 추가 - 유저 : {}, 문제: {} =====", userId, problemId);
 
-		userProblemFavoriteRepository.save(userProblemFavorite);
+		userProblemStatus.createFavorite();
+		userProblemStatusRepository.save(userProblemStatus);
 	}
 
 	@Override
 	public void deleteUserProblemFavorite(Long userId, String problemId) {
 		log.info("===== 문제 찜 취소 - 유저 : {}, 문제 : {} =====", userId, problemId);
 
-		// 문제 존재 여부 확인
-		Problem problem = getProblemOrThrow(problemId);
-		log.info("===== 문제 [{}] 찾았습니다 =====", problem);
 
-		userProblemFavoriteRepository.deleteByUserIdAndProblem(userId, problem);
-	}
 
-	// 문제 존재 여부 판단
-	private Problem getProblemOrThrow(String problemId) {
-		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 }

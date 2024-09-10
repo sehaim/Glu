@@ -49,7 +49,7 @@ public enum ErrorCode {
 
 	// 문제 찜 취소
 	FAVORITE_CANCEL_FAILED(500, "FAVORITE_CANCEL_FAILED", "문제 찜 취소에 실패했습니다."),
-	FAVORITE_NOT_FOUND(404, "FAVORITE_NOT_FOUND", "찜한 문제를 찾을 수 없습니다."),
+	FAVORITE_NOT_REGISTERED(400, "FAVORITE_NOT_REGISTERED", "찜한 문제가 아닙니다."),
 
 	// 문제 리스트 채점
 	GRADING_LIST_FAILED(500, "GRADING_LIST_FAILED", "문제 리스트 채점에 실패했습니다."),
