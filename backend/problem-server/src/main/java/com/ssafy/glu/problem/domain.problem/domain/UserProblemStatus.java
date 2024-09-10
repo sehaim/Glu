@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteAlreadyRegisteredException;
+import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteNotRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoNotFoundException;
 import com.ssafy.glu.problem.global.shared.BaseTimeDocument;
 
@@ -87,5 +89,13 @@ public class UserProblemStatus extends BaseTimeDocument {
 				.map(ProblemMemo::getMemoIndex)
 				.max(Long::compareTo)
 				.orElse(0L) + 1L;
+	}
+
+	// 찜 등록
+	public void createFavorite() {
+		// 이미 찜이 된 상태
+		if (isFavorite)
+			throw new FavoriteAlreadyRegisteredException();
+		this.isFavorite = true;
 	}
 }
