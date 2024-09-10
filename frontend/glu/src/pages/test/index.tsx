@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -7,6 +6,7 @@ import PrimaryButton from '@/components/common/buttons/primaryButton';
 import styles from './test.module.css';
 import dummyProblems from '../../mock/dummyProblems.json';
 import { Problem } from '../../types/ProblemTypes';
+
 interface ProblemAnswer {
   problemId: number;
   userAnswer: number; // 사용자의 선택
@@ -15,25 +15,31 @@ interface ProblemAnswer {
 }
 
 export default function Test() {
+  const PROBLEM_COUNT = 15; // 문제 개수 고정
   const [problems, setProblems] = useState<Problem[]>([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
-  const [answers, setAnswers] = useState<ProblemAnswer[]>([]); // 문제별 답변 상태
-  const [startTime, setStartTime] = useState<number>(0); // 문제 시작 시간
+  const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
+  const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
+  const [, setTotalSolvedTime] = useState<number>(0);
 
   useEffect(() => {
-    setProblems(dummyProblems);
+    const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
+    setProblems(fixedProblems);
+
+    const savedAnswers = sessionStorage.getItem('savedAnswers');
+    if (savedAnswers) {
+      setAnswers(JSON.parse(savedAnswers)); // 세션 스토리지에서 데이터를 불러옴
+    } else {
+      const initialAnswers = fixedProblems.map((problem) => ({
+        problemId: problem.problemId,
+        problemAnswer: Number(problem.solution),
+        userAnswer: 0, // 기본값은 0
+        solvedTime: 0, // 기본 풀이 시간은 0
+      }));
+
+      setAnswers(initialAnswers);
+    }
   }, []);
-
-  useEffect(() => {
-    const initialAnswers = problems.map((problem) => ({
-      problemId: problem.problemId,
-      problemAnswer: Number(problem.solution),
-      userAnswer: 0, // 기본값은 0
-      solvedTime: 0, // 기본 풀이 시간은 0
-    }));
-
-    setAnswers(initialAnswers);
-  }, [problems]);
 
   useEffect(() => {
     const start = Date.now();
@@ -42,6 +48,10 @@ export default function Test() {
     return () => {
       const end = Date.now();
       const timeSpent = Math.floor((end - start) / 1000);
+
+      setTotalSolvedTime(
+        (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
+      );
 
       setAnswers((prevAnswers) => {
         const updatedAnswers = [...prevAnswers];
@@ -53,6 +63,7 @@ export default function Test() {
           solvedTime: previousSolvedTime + timeSpent,
         };
 
+        sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
         return updatedAnswers;
       });
     };
@@ -60,7 +71,7 @@ export default function Test() {
 
   const progressPercentage =
     problems.length > 1
-      ? Math.floor((currentProblemIndex / (problems.length - 1)) * 100)
+      ? Math.floor((currentProblemIndex / problems.length) * 100)
       : 100; // 만약 문제가 1개라면 무조건 100%로 설정
 
   const currentProblem = problems[currentProblemIndex];
@@ -77,6 +88,10 @@ export default function Test() {
     }
   };
 
+  const handlProblemIndex = (index: number) => {
+    setCurrentProblemIndex(index);
+  };
+
   const handleAnswer = (problemIndex: number, userAnswer: number) => {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
@@ -85,6 +100,9 @@ export default function Test() {
         userAnswer,
       };
       updatedAnswers[problemIndex] = updatedAnswer;
+
+      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
+
       return updatedAnswers;
     });
   };
@@ -106,69 +124,105 @@ export default function Test() {
       return updatedAnswers;
     });
 
+    // TODO: 삭제
     // console.log('Submitting answers', answers);
+
+    sessionStorage.removeItem('savedAnswers');
   };
 
   return (
     <div className={styles.container}>
-      {currentProblem && (
-        <div className={styles['problem-wrapper']}>
-          <div className={styles.problem} key={currentProblem.problemId}>
-            <ProblemHeader
-              problemIndex={currentProblemIndex + 1}
-              problemLevel={currentProblem?.problemLevel?.name}
-              problemType={currentProblem?.problemType?.name}
-              problemTitle={currentProblem?.title}
-            />
-            <div className={styles['problem-content']}>
-              <ProblemContentText problemContent={currentProblem?.content} />
-              <ProblemOptionList
-                curSelectedIndex={answers[currentProblemIndex]?.userAnswer}
-                problemIndex={currentProblemIndex}
-                problemOptions={currentProblem?.problemOptions}
-                onAnswer={handleAnswer}
+      <div className={styles['problem-container']}>
+        <div className={styles['left-navigation']}>
+          <h5 className={styles['problem-solved-title']}>해결한 문제</h5>
+          <ul className={styles['problem-solved-list']}>
+            {answers.map((answer, index) => (
+              <button
+                key={answer.problemId} // 문제의 고유한 ID를 key로 사용
+                type="button"
+                className={`${styles['problem-solved-button']} ${answer.userAnswer !== 0 ? styles.answered : styles.unanswered} ${index === currentProblemIndex && styles['problem-solved-button-active']}`}
+                onClick={() => handlProblemIndex(index)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handlProblemIndex(index); // Enter나 Space 키로도 문제 이동 가능
+                  }
+                }}
+              >
+                <p className={styles['problem-solved-button-number']}>
+                  {index + 1}번
+                </p>
+                <p className={styles['problem-solved-button-status']}>
+                  {answer.userAnswer !== 0 ? '✅' : '❌'}
+                </p>
+              </button>
+            ))}
+          </ul>
+        </div>
+
+        {currentProblem && (
+          <div className={styles['problem-wrapper']}>
+            <div className={styles.problem} key={currentProblem.problemId}>
+              <ProblemHeader
+                problemIndex={currentProblemIndex + 1}
+                problemLevel={currentProblem?.problemLevel?.name}
+                problemType={currentProblem?.problemType?.name}
+                problemTitle={currentProblem?.title}
+              />
+              <div className={styles['problem-content']}>
+                <ProblemContentText problemContent={currentProblem?.content} />
+                <ProblemOptionList
+                  curSelectedIndex={answers[currentProblemIndex]?.userAnswer}
+                  problemIndex={currentProblemIndex}
+                  problemOptions={currentProblem?.problemOptions}
+                  onAnswer={handleAnswer}
+                />
+              </div>
+            </div>
+            {/* 이전/다음 문제로 이동하는 버튼 */}
+            <div className={styles['problem-button-list']}>
+              {currentProblemIndex > 0 ? (
+                <PrimaryButton
+                  size="small"
+                  label="이전 문제"
+                  onClick={handlePrevProblem}
+                />
+              ) : (
+                <div />
+              )}
+              {currentProblemIndex === problems.length - 1 ? (
+                <PrimaryButton
+                  size="small"
+                  label="제출하기"
+                  onClick={handleSubmit}
+                />
+              ) : (
+                <PrimaryButton
+                  size="small"
+                  label="다음 문제"
+                  onClick={handleNextProblem}
+                />
+              )}
+            </div>
+            {/* 프로그레스바 */}
+            <div className={styles['progressbar-container']}>
+              <div className={styles.progressbar}>
+                <img
+                  src="/images/glu_character.png"
+                  alt="character"
+                  className={styles['progress-character']}
+                  style={{ left: `calc(${progressPercentage}%` }}
+                />
+              </div>
+              <img
+                src="/images/problem/house.png"
+                alt="house"
+                className={styles['progress-house']}
               />
             </div>
           </div>
-        </div>
-      )}
-      {/* 이전/다음 문제로 이동하는 버튼 */}
-      <div className={styles['problem-button-list']}>
-        {currentProblemIndex > 0 ? (
-          <PrimaryButton
-            size="medium"
-            label="이전 문제"
-            onClick={handlePrevProblem}
-          />
-        ) : (
-          <div />
         )}
-        {currentProblemIndex === problems.length - 1 ? (
-          <PrimaryButton
-            size="medium"
-            label="제출하기"
-            onClick={handleSubmit}
-          />
-        ) : (
-          <PrimaryButton
-            size="medium"
-            label="다음 문제"
-            onClick={handleNextProblem}
-          />
-        )}
-      </div>
-      <div className={styles.progressbar}>
-        <img
-          src="/images/glu_character.png"
-          alt="character"
-          className={styles['progress-character']}
-          style={{ left: `calc(${progressPercentage * 0.8 + 12}% - 60px` }}
-        />
-        <img
-          src="/images/problem/house.png"
-          alt="house"
-          className={styles['progress-house']}
-        />
+
+        <div className={styles['right-navigation']} />
       </div>
     </div>
   );

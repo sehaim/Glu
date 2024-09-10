@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 1000px;
+  width: 820px;
 }
 
 .status-container {
