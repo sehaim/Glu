@@ -35,7 +35,7 @@ export default function InputItem({
           <BirthInputItem onChange={onBirthChange} />
         ) : (
           <input
-            type={label.startsWith('비밀번호') ? 'password' : 'text'}
+            type={label.includes('비밀번호') ? 'password' : 'text'}
             value={value}
             onChange={onChange}
             placeholder={placeholder}

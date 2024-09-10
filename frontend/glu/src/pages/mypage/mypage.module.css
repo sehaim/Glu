@@ -21,3 +21,10 @@
 .input-container {
   width: 65%;
 }
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 60px;
+}
