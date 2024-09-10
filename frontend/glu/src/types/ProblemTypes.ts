@@ -14,6 +14,13 @@ export interface ProblemType {
   name: string;
 }
 
+export interface SolvedProblemType {
+  correctCount: number;
+  problemType: {
+    problemTypeCode: string;
+    name: string;
+  };
+}
 export interface Problem {
   problemId: number;
   title: string;

@@ -1,29 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { SolvedProblem as Problem } from '@/types/ProblemTypes';
+import { useState, useEffect } from 'react';
+import { SolvedProblem, SolvedProblemType } from '@/types/ProblemTypes';
 import dummyResults from '@/mock/dummyResults.json';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import {
-  Chart,
-  RadarController,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import RadarChart from '@/components/problem/result/radarChart';
 import styles from './testResult.module.css';
-
-// Chart.js 모듈 등록
-Chart.register(
-  RadarController,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-);
 
 interface ApiResponse {
   totalCorrectCount: number;
@@ -32,20 +11,21 @@ interface ApiResponse {
   totalScore: number;
   isStageUp: boolean;
   stageUpUrl: string;
-  problemList: Problem[];
+  problemTypeList: SolvedProblemType[];
+  problemList: SolvedProblem[];
 }
 
 export default function TestResult() {
   const [, setTotalCorrectCount] = useState<number | null>(null);
   const [totalSolvedTime, setTotalSolvedTime] = useState<number | null>(null);
-  const [problemList, setProblemList] = useState<Problem[]>([]);
+  const [problemTypeList, setProblemTypeList] = useState<SolvedProblemType[]>(
+    [],
+  );
+  const [problemList, setProblemList] = useState<SolvedProblem[]>([]);
   const [acquiredScore, setAcquiredScore] = useState<number | null>(null);
   const [totalScore, setTotalScore] = useState<number | null>(null);
   const [, setIsStageUp] = useState<boolean>(false);
   const [, setStageUpUrl] = useState<string>('');
-
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstanceRef = useRef<Chart | null>(null); // Chart 인스턴스를 저장하는 ref
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +37,7 @@ export default function TestResult() {
 
       setTotalCorrectCount(response.totalCorrectCount);
       setTotalSolvedTime(response.totalSolvedTime);
+      setProblemTypeList(response.problemTypeList);
       setProblemList(response.problemList);
       setAcquiredScore(response.acquiredScore);
       setTotalScore(response.totalScore);
@@ -65,55 +46,6 @@ export default function TestResult() {
     };
 
     fetchData();
-
-    if (chartRef.current) {
-      const ctx = chartRef.current.getContext('2d');
-
-      // 기존 차트가 있으면 삭제
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-
-      if (ctx) {
-        const data = {
-          labels: ['독해', '어휘 및 문법', '추론'], // 레이다 차트의 각 축
-          datasets: [
-            {
-              label: '영역별 점수',
-              data: [70, 50, 30], // 예시 데이터
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
-              borderColor: 'rgba(255, 99, 132, 1)',
-              borderWidth: 1,
-            },
-          ],
-        };
-
-        chartInstanceRef.current = new Chart(ctx, {
-          type: 'radar',
-          data,
-          options: {
-            responsive: true, // 반응형 차트
-            maintainAspectRatio: false, // 차트의 비율을 유지하지 않음
-            scales: {
-              r: {
-                angleLines: {
-                  display: true,
-                },
-                suggestedMin: 0,
-                suggestedMax: 100,
-              },
-            },
-          },
-        });
-      }
-    }
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 차트를 삭제
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
   }, []);
 
   const formatTime = (totalSeconds: number | null) => {
@@ -181,8 +113,8 @@ export default function TestResult() {
           <div className={styles['result-item']}>
             <h5 className={styles['item-title']}>영역별 점수</h5>
             <div className={styles.canvasWrapper}>
-              {/* Chart.js 캔버스 */}
-              <canvas ref={chartRef} className={styles.chartCanvas} />
+              {/* RadarChart 컴포넌트 */}
+              <RadarChart problemTypeList={problemTypeList} />
             </div>
           </div>
         </div>
