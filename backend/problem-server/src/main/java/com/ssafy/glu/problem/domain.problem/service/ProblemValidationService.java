@@ -62,7 +62,7 @@ public class ProblemValidationService implements ProblemService {
 			ProblemMemoResponse response = problemService.createProblemMemo(userId, problemId, request);
 			log.info("===== 문제 메모 생성 완료 - 변경된 메모 : {} =====", response);
 			return response;
-		} catch (Exception exception) {
+		} catch (MongoException exception) {
 			throw new ProblemMemoCreateFailedException(exception);
 		}
 	}
@@ -78,7 +78,7 @@ public class ProblemValidationService implements ProblemService {
 
 		try {
 			return problemService.updateProblemMemo(userId, problemId, request);
-		} catch (Exception exception) {
+		} catch (MongoException exception) {
 			throw new ProblemMemoUpdateFailedException(exception);
 		}
 	}
@@ -94,7 +94,7 @@ public class ProblemValidationService implements ProblemService {
 
 		try {
 			problemService.deleteProblemMemo(userId, problemId, memoIndex);
-		} catch (Exception exception) {
+		} catch (MongoException exception) {
 			throw new ProblemMemoDeleteFailedException(exception);
 		}
 	}
@@ -117,16 +117,16 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 찜 생성 요청 - 사용자 Id : {}, 문제 Id : {} =====", userId, problemId);
 
+		// Null 값 검증
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 
+		// 문제 존재 여부 확인
 		Problem problem = getProblemOrThrow(problemId);
-
-		validateFavoriteNotRegistered(userId, problem);
 
 		try {
 			problemService.createUserProblemFavorite(userId, problemId);
-		} catch (Exception exception) {
+		} catch (MongoException exception) {
 			throw new FavoriteRegistrationFailedException(exception);
 		}
 	}
@@ -137,16 +137,16 @@ public class ProblemValidationService implements ProblemService {
 		log.info("검증 로직 서비스");
 		log.info("===== 문제 찜 취소 요청 - 사용자 Id : {}, 문제 Id : {} =====", userId, problemId);
 
+		// Null 값 검증
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 
+		// 문제 존재 여부 확인
 		Problem problem = getProblemOrThrow(problemId);
-
-		validateFavoriteRegistered(userId, problem);
 
 		try {
 			problemService.deleteUserProblemFavorite(userId, problemId);
-		} catch (Exception exception) {
+		} catch (MongoException exception) {
 			throw new FavoriteCancelFailedException(exception);
 		}
 	}
