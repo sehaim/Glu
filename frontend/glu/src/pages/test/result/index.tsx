@@ -16,6 +16,7 @@ interface ApiResponse {
 }
 
 export default function TestResult() {
+  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 추가
   const [, setTotalCorrectCount] = useState<number | null>(null);
   const [totalSolvedTime, setTotalSolvedTime] = useState<number | null>(null);
   const [problemTypeList, setProblemTypeList] = useState<SolvedProblemType[]>(
@@ -29,6 +30,7 @@ export default function TestResult() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
       const response: ApiResponse = await new Promise((resolve) => {
         setTimeout(() => {
           resolve(dummyResults);
@@ -43,6 +45,7 @@ export default function TestResult() {
       setTotalScore(response.totalScore);
       setIsStageUp(response.isStageUp);
       setStageUpUrl(response.stageUpUrl);
+      setLoading(false); // 데이터가 다 로드되면 로딩 상태를 false로 설정
     };
 
     fetchData();
@@ -72,6 +75,10 @@ export default function TestResult() {
       </tr>
     </>
   );
+
+  if (loading) {
+    return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
+  }
 
   return (
     <div className={styles.container}>
