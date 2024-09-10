@@ -63,6 +63,17 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 
+	@Override
+	public void logout(Long userId, HttpServletResponse httpResponse) {
+
+		//레디스에서 삭제
+		jwtTokenService.deleteRefreshToken(userId);
+
+		//쿠키에서 토큰 삭제
+		httpResponse.addCookie(removeCookie("access"));
+		httpResponse.addCookie(removeCookie("refresh"));
+	}
+
 	private Cookie createCookie(String key, String value, Long time) {
 		Cookie cookie = new Cookie(key, value);
 		cookie.setMaxAge(Math.toIntExact(time));
