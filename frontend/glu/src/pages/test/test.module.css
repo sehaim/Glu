@@ -25,7 +25,7 @@
   color: var(--TEXT_SECONDARY);
   font-size: 16px;
   font-family: 'PTBOLD';
-  margin-bottom: 20px;
+  margin-bottom: 32px;
 }
 
 .problem-solved-button {
@@ -35,10 +35,19 @@
   padding: 8px 24px;
   width: 120px;
   background-color: var(--WHITE);
+  color: var(--TEXT_SECONDARY);
   border: none;
   border-radius: 10px;
   cursor: pointer;
   font-family: 'PT';
+}
+
+.problem-solved-button:hover {
+  color: var(--PINK);
+}
+
+.problem-solved-button-active {
+  color: var(--PINK);
 }
 
 .problem-solved-list {

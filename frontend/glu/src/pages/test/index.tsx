@@ -115,7 +115,7 @@ export default function Test() {
       return updatedAnswers;
     });
 
-    console.log('Submitting answers', answers);
+    //console.log('Submitting answers', answers);
   };
 
   return (
@@ -128,7 +128,7 @@ export default function Test() {
               <button
                 key={answer.problemId} // 문제의 고유한 ID를 key로 사용
                 type="button"
-                className={`${styles['problem-solved-button']} ${answer.userAnswer !== 0 ? styles.answered : styles.unanswered}`}
+                className={`${styles['problem-solved-button']} ${answer.userAnswer !== 0 ? styles.answered : styles.unanswered} ${index === currentProblemIndex && styles['problem-solved-button-active']}`}
                 onClick={() => handlProblemIndex(index)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
