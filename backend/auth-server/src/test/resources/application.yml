@@ -10,6 +10,9 @@ spring:
       host: localhost
       port: 6379
 
+  jwt:
+    secret: aklsdjlkasjdlkjaskldjklasjdkljaslkdjaslkdjlk
+
   # ----- Config Server에서 처리 -----
   # Cloud
   cloud:
@@ -21,7 +24,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/glu
     username: root
-    password:
+    password: ssafy
 
   # JPA
   jpa:
