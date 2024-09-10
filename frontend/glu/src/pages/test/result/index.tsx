@@ -1,7 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SolvedProblem as Problem } from '@/types/ProblemTypes';
 import dummyResults from '@/mock/dummyResults.json';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  Chart,
+  RadarController,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import styles from './testResult.module.css';
+
+// Chart.js 모듈 등록
+Chart.register(
+  RadarController,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+);
 
 interface ApiResponse {
   totalCorrectCount: number;
@@ -14,7 +36,6 @@ interface ApiResponse {
 }
 
 export default function TestResult() {
-  // 상태 변수 타입 지정
   const [, setTotalCorrectCount] = useState<number | null>(null);
   const [totalSolvedTime, setTotalSolvedTime] = useState<number | null>(null);
   const [problemList, setProblemList] = useState<Problem[]>([]);
@@ -23,17 +44,17 @@ export default function TestResult() {
   const [, setIsStageUp] = useState<boolean>(false);
   const [, setStageUpUrl] = useState<string>('');
 
+  const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartInstanceRef = useRef<Chart | null>(null); // Chart 인스턴스를 저장하는 ref
+
   useEffect(() => {
-    // 서버에서 데이터를 가져온다고 가정 (예시로 setTimeout 사용)
     const fetchData = async () => {
-      // 가짜 API 응답
       const response: ApiResponse = await new Promise((resolve) => {
         setTimeout(() => {
-          return resolve(dummyResults);
+          resolve(dummyResults);
         }, 1000);
       });
 
-      // 응답 데이터를 상태에 저장
       setTotalCorrectCount(response.totalCorrectCount);
       setTotalSolvedTime(response.totalSolvedTime);
       setProblemList(response.problemList);
@@ -44,9 +65,57 @@ export default function TestResult() {
     };
 
     fetchData();
+
+    if (chartRef.current) {
+      const ctx = chartRef.current.getContext('2d');
+
+      // 기존 차트가 있으면 삭제
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+
+      if (ctx) {
+        const data = {
+          labels: ['독해', '어휘 및 문법', '추론'], // 레이다 차트의 각 축
+          datasets: [
+            {
+              label: '영역별 점수',
+              data: [70, 50, 30], // 예시 데이터
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1,
+            },
+          ],
+        };
+
+        chartInstanceRef.current = new Chart(ctx, {
+          type: 'radar',
+          data,
+          options: {
+            responsive: true, // 반응형 차트
+            maintainAspectRatio: false, // 차트의 비율을 유지하지 않음
+            scales: {
+              r: {
+                angleLines: {
+                  display: true,
+                },
+                suggestedMin: 0,
+                suggestedMax: 100,
+              },
+            },
+          },
+        });
+      }
+    }
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 차트를 삭제
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+    };
   }, []);
 
-  // 초를 분과 초로 변환하는 함수 (예외처리 포함)
   const formatTime = (totalSeconds: number | null) => {
     if (totalSeconds === null) {
       return '--분 --초'; // null일 경우 기본 메시지 반환
@@ -111,7 +180,10 @@ export default function TestResult() {
         <div className={styles['result-wrapper']}>
           <div className={styles['result-item']}>
             <h5 className={styles['item-title']}>영역별 점수</h5>
-            <div className={styles['item-content']}>그래프가 들어갈 영역</div>
+            <div className={styles.canvasWrapper}>
+              {/* Chart.js 캔버스 */}
+              <canvas ref={chartRef} className={styles.chartCanvas} />
+            </div>
           </div>
         </div>
       </div>

@@ -23,3 +23,14 @@ export interface Problem {
   problemLevel: ProblemLevel;
   problemType: ProblemType;
 }
+
+export interface SolvedProblem {
+  problemId: number;
+  title: string;
+  content: string;
+  problemOptions: ProblemOption[];
+  isCorrect: boolean;
+  userAnswer: number;
+  solution: string;
+  solveTime: number;
+}
