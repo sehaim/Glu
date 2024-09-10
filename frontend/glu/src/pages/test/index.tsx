@@ -203,27 +203,26 @@ export default function Test() {
                 />
               )}
             </div>
+            {/* 프로그레스바 */}
+            <div className={styles['progressbar-container']}>
+              <div className={styles.progressbar}>
+                <img
+                  src="/images/glu_character.png"
+                  alt="character"
+                  className={styles['progress-character']}
+                  style={{ left: `calc(${progressPercentage}%` }}
+                />
+              </div>
+              <img
+                src="/images/problem/house.png"
+                alt="house"
+                className={styles['progress-house']}
+              />
+            </div>
           </div>
         )}
 
         <div className={styles['right-navigation']} />
-      </div>
-
-      {/* 프로그레스바 */}
-      <div className={styles['progressbar-container']}>
-        <div className={styles.progressbar}>
-          <img
-            src="/images/glu_character.png"
-            alt="character"
-            className={styles['progress-character']}
-            style={{ left: `calc(${progressPercentage}%` }}
-          />
-        </div>
-        <img
-          src="/images/problem/house.png"
-          alt="house"
-          className={styles['progress-house']}
-        />
       </div>
     </div>
   );
