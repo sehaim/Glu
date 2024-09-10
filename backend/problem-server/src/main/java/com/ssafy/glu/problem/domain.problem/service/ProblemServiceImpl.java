@@ -95,8 +95,12 @@ public class ProblemServiceImpl implements ProblemService {
 	public void createUserProblemFavorite(Long userId, String problemId) {
 		log.info("===== 문제 찜 요청 - 유저 : {}, 문제: {} =====", userId, problemId);
 
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+			problemId).orElseThrow(UserProblemStatusNotFoundException::new);
 		log.info("===== 문제 찜 추가 - 유저 : {}, 문제: {} =====", userId, problemId);
 
+		userProblemStatus.createFavorite();
+		userProblemStatusRepository.save(userProblemStatus);
 	}
 
 	@Override
