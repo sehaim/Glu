@@ -9,4 +9,6 @@ public interface AuthService {
 	void login(LoginRequest loginRequest, HttpServletResponse httpResponse);
 
 	void logout(Long userId, HttpServletResponse httpResponse);
+
+	void reissue(Long userId, HttpServletResponse httpResponse);
 }

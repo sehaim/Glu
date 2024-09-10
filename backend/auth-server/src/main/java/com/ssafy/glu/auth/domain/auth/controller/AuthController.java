@@ -34,4 +34,10 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
+	@PostMapping("/reissue")
+	public ResponseEntity<?> reissue (@RequestHeader(USER_ID) Long userId, HttpServletResponse httpResponse) {
+		authService.reissue(userId, httpResponse);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
 }

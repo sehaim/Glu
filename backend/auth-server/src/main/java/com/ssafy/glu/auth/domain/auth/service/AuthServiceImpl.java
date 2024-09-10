@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.glu.auth.domain.auth.domain.Users;
 import com.ssafy.glu.auth.domain.auth.dto.request.LoginRequest;
 import com.ssafy.glu.auth.domain.auth.exception.LoginInValidException;
+import com.ssafy.glu.auth.domain.auth.exception.UserNotFoundException;
 import com.ssafy.glu.auth.domain.auth.repository.UserRepository;
 import com.ssafy.glu.auth.domain.auth.util.JWTUtil;
 
@@ -47,21 +48,9 @@ public class AuthServiceImpl implements AuthService {
 			throw new LoginInValidException();
 		}
 
-		//헤더에 id저장
-		httpResponse.addHeader(USER_ID, findUser.get().getId().toString());
-
-		//토큰 생성
-		String accessToken = jwtUtil.createToken("access", findUser.get().getId(), accessTime);
-		String refreshToken = jwtUtil.createToken("refresh", findUser.get().getId(), refreshTime);
-
-		//쿠키에 저장
-		httpResponse.addCookie(createCookie("access", accessToken, accessTime/1000));
-		httpResponse.addCookie(createCookie("refresh", refreshToken, refreshTime/1000));
-
-		//레디스에 저장
-		jwtTokenService.saveRefreshToken(findUser.get().getId(), refreshToken);
-
+		tokenSave(httpResponse, findUser.get().getId());
 	}
+
 
 	@Override
 	public void logout(Long userId, HttpServletResponse httpResponse) {
@@ -72,6 +61,31 @@ public class AuthServiceImpl implements AuthService {
 		//쿠키에서 토큰 삭제
 		httpResponse.addCookie(removeCookie("access"));
 		httpResponse.addCookie(removeCookie("refresh"));
+	}
+
+	@Override
+	public void reissue(Long userId, HttpServletResponse httpResponse) {
+
+		userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+		tokenSave(httpResponse, userId);
+
+	}
+
+	private void tokenSave(HttpServletResponse httpResponse, Long userId) {
+		//헤더에 id저장
+		httpResponse.addHeader(USER_ID, userId.toString());
+
+		//토큰 생성
+		String accessToken = jwtUtil.createToken("access", userId, accessTime);
+		String refreshToken = jwtUtil.createToken("refresh", userId, refreshTime);
+
+		//쿠키에 저장
+		httpResponse.addCookie(createCookie("access", accessToken, accessTime/1000));
+		httpResponse.addCookie(createCookie("refresh", refreshToken, refreshTime/1000));
+
+		//레디스에 저장
+		jwtTokenService.saveRefreshToken(userId, refreshToken);
 	}
 
 	private Cookie createCookie(String key, String value, Long time) {
