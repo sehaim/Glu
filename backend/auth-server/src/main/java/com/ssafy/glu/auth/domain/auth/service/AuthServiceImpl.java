@@ -31,9 +31,9 @@ public class AuthServiceImpl implements AuthService {
 	private final JwtTokenService jwtTokenService;
 	private final JWTUtil jwtUtil;
 
-	@Value("${jwt.access}")
+	@Value("${jwt.access.expiration}")
 	private Long accessTime;
-	@Value("${jwt.refresh}")
+	@Value("${jwt.refresh.expiration}")
 	private Long refreshTime;
 
 	/**
@@ -80,9 +80,6 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private void tokenSave(HttpServletResponse httpResponse, Long userId) {
-		//헤더에 id저장
-		httpResponse.addHeader(USER_ID, userId.toString());
-
 		//토큰 생성
 		String accessToken = jwtUtil.createToken("access", userId, accessTime);
 		String refreshToken = jwtUtil.createToken("refresh", userId, refreshTime);

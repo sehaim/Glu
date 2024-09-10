@@ -14,7 +14,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
 	private final RedisTemplate<String, String> redisTemplate;
 
-	@Value("${jwt.refresh}")
+	@Value("${jwt.refresh.expiration}")
 	private long REFRESH_TOKEN_EXPIRATION; // 1 week in seconds
 
 	public void saveRefreshToken(Long userId, String token) {

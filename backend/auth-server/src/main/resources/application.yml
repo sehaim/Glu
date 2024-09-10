@@ -36,5 +36,7 @@ spring:
 
 #1초 1000, 1시간 3600000 1달 2592000000
 jwt:
-  access: 3600000
-  refresh: 2592000000
+  access:
+    expiration: 3600000
+  refresh:
+    expiration: 2592000000
