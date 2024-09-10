@@ -98,4 +98,12 @@ public class UserProblemStatus extends BaseTimeDocument {
 			throw new FavoriteAlreadyRegisteredException();
 		this.isFavorite = true;
 	}
+
+	// 찜 취소
+	public void deleteFavorite() {
+		// 취소할 찜이 없는 상태
+		if (!isFavorite)
+			throw new FavoriteNotRegisteredException();
+		this.isFavorite = false;
+	}
 }
