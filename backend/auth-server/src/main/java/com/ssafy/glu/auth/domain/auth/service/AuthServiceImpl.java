@@ -17,7 +17,9 @@ import com.ssafy.glu.auth.domain.auth.util.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -39,25 +41,25 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void login(LoginRequest loginRequest, HttpServletResponse httpResponse) {
 
-		Users findUser = userRepository.findByLoginId(loginRequest.id()).orElseThrow(LoginInValidException::new);
+		Optional<Users> findUser = userRepository.findByLoginId(loginRequest.id());
 
-		if (!passwordEncoder.matches(loginRequest.password(), findUser.getPassword())) {
+		if (findUser.isEmpty() || !passwordEncoder.matches(loginRequest.password(), findUser.get().getPassword())) {
 			throw new LoginInValidException();
 		}
 
 		//헤더에 id저장
-		httpResponse.addHeader(USER_ID, findUser.getId().toString());
+		httpResponse.addHeader(USER_ID, findUser.get().getId().toString());
 
 		//토큰 생성
-		String accessToken = jwtUtil.createToken("access", findUser.getId(), accessTime);
-		String refreshToken = jwtUtil.createToken("refresh", findUser.getId(), refreshTime);
+		String accessToken = jwtUtil.createToken("access", findUser.get().getId(), accessTime);
+		String refreshToken = jwtUtil.createToken("refresh", findUser.get().getId(), refreshTime);
 
 		//쿠키에 저장
 		httpResponse.addCookie(createCookie("access", accessToken, accessTime/1000));
 		httpResponse.addCookie(createCookie("refresh", refreshToken, refreshTime/1000));
 
 		//레디스에 저장
-		jwtTokenService.saveRefreshToken(findUser.getId(), refreshToken);
+		jwtTokenService.saveRefreshToken(findUser.get().getId(), refreshToken);
 
 	}
 
