@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { ReactNode } from 'react';
-import MytestLayout from '@/pages/mytest/layout';
 import { useRouter } from 'next/router';
-import style from './global-layout.module.css';
+import MytestLayout from './mytest-layout';
+import styles from './layout.module.css';
 import Header from '../common/header';
 import Footer from '../common/footer';
 
@@ -12,9 +12,9 @@ export default function GlobalLayout({ children }: { children: ReactNode }) {
   const isMytestRoute = router.pathname.startsWith('/mytest');
 
   return (
-    <div className={style.container}>
+    <div className={styles.container}>
       <Header color="white" />
-      <main className={style.main}>
+      <main className={styles.main}>
         {isMytestRoute ? (
           <MytestLayout>{children}</MytestLayout>
         ) : (

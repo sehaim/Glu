@@ -1,6 +1,8 @@
+import styles from './mytest.module.css';
+
 export default function MytestStarred() {
   return (
-    <div>
+    <div className={styles.section}>
       <div>
         <div>찜한 문제</div>
       </div>

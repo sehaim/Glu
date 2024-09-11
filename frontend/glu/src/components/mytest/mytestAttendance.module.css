@@ -1,0 +1,26 @@
+.container {
+  width: 65%;
+  height: 100%;
+  background-color: var(--WHITE);
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 15px;
+  margin-left: 20px;
+}
+
+.container-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.container-name {
+  font-family: 'BMJUA';
+  font-size: 20px;
+  color: var(--TEXT_SECONDARY);
+}
+
+.attendance-calendar {
+  width: 100%;
+}

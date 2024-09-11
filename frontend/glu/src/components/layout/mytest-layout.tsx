@@ -1,5 +1,5 @@
 import MytestHeader from '@/components/mytest/mytestHeader';
-import styles from './mytest.module.css';
+import styles from './layout.module.css';
 
 export default function MytestLayout({
   children,
@@ -7,10 +7,10 @@ export default function MytestLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div id="page-container" className={styles.container}>
+    <div id="page-container">
       <div id="page-title">나의 학습</div>
       <MytestHeader />
-      <div className={styles.content}>{children}</div>
+      <div className={styles['mytest-content']}>{children}</div>
     </div>
   );
 }
