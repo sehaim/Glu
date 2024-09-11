@@ -21,20 +21,22 @@ spring:
 
   # MySQL
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/glu
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/glu
     username: root
     password: ssafy
 
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 
 #1초 1000, 1시간 3600000 1달 2592000000
 jwt:
-  access: 3600000
-  refresh: 2592000000
+  access:
+    expiration: 3600000
+  refresh:
+    expiration: 2592000000
