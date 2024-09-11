@@ -1,0 +1,14 @@
+{
+  "development": {
+    "BACKEND_URL": "https://j11a506.p.ssafy.io/api/",
+    "REDIRECT_URL": "https://j11a506.p.ssafy.io/"
+  },
+  "production": {
+    "BACKEND_URL": "https://j11a506.p.ssafy.io/api/",
+    "REDIRECT_URL": "https://j11a506.p.ssafy.io/"
+  },
+  "test": {
+    "BACKEND_URL": "http://localhost:4000",
+    "REDIRECT_URL": "http://localhost:4000"
+  }
+}
