@@ -103,13 +103,20 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 16px;
+  gap: 24px;
   width: 100%;
 }
 
 .solution-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
   width: 100%;
   padding: 24px;
+  background-color: var(--LIGHTGRAY);
+  border-radius: 20px;
 }
 
 .solution-title {
@@ -118,24 +125,10 @@
   font-size: 18px;
 }
 
-.solution-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 20px;
-  gap: 20px;
-}
-
-.solution-item {
-  background-color: var(--LIGHTGRAY);
-  border-bottom: 20px;
-}
-
 .problem-content {
   background-color: var(--WHITE);
   border-radius: 10px;
-  padding: 24px;
+  padding: 16px 24px;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   font-size: 16px;
@@ -160,9 +153,19 @@
   background-color: var(--WHITE);
   border: 2px dashed var(--SKYBLUE);
   margin-top: 20px;
-  padding: 24px;
+  padding: 16px 24px;
+  width: 100%;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
+}
+
+.user-answer {
+  color: var(--TEXT_PRIMARY);
+}
+
+.incorrect-message {
+  color: var(--RED);
+  margin-bottom: 12px;
 }
 
 @media (max-width: 1200px) {
@@ -224,10 +227,6 @@
 
   .solution-container {
     width: 440px;
-    flex-direction: column;
-  }
-
-  .solution-content {
     flex-direction: column;
   }
 }

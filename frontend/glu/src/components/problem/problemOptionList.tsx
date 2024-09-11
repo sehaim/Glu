@@ -4,9 +4,9 @@ import styles from './problemOptionList.module.css';
 
 interface ProblemOptionListProps {
   curSelectedIndex: number;
-  problemIndex?: number;
+  problemIndex: number;
   problemOptions: ProblemOption[];
-  onAnswer?: (problemIndex: number, problemAnswer: number) => void;
+  onAnswer: (problemIndex: number, problemAnswer: number) => void;
 }
 
 export default function ProblemOptionList({

@@ -23,6 +23,7 @@ export default function Test() {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [, setTotalSolvedTime] = useState<number>(0);
   const router = useRouter();
+  const currentProblem = problems[currentProblemIndex];
 
   useEffect(() => {
     const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
@@ -88,8 +89,6 @@ export default function Test() {
     problems.length > 1
       ? Math.floor((currentProblemIndex / problems.length) * 100)
       : 100; // 만약 문제가 1개라면 무조건 100%로 설정
-
-  const currentProblem = problems[currentProblemIndex];
 
   const handleNextProblem = () => {
     if (currentProblemIndex < problems.length - 1) {

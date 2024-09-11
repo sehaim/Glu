@@ -84,6 +84,7 @@ export default function TestResult() {
 
   return (
     <div className={styles.container}>
+      {/* 테스트 결과 해설 */}
       <h2 className={styles['page-title']}>테스트 결과</h2>
       <div className={styles['result-container']}>
         <div className={styles['result-wrapper']}>
@@ -128,6 +129,7 @@ export default function TestResult() {
           </div>
         </div>
       </div>
+      {/* 문제 해설 */}
       <div className={styles['solution-container']}>
         <h5 className={styles['item-title']}>문제 해설</h5>
         <div className={styles['solution-list']}>
@@ -136,28 +138,27 @@ export default function TestResult() {
               <p className={styles['solution-title']}>
                 {index + 1}. {problem.title}
               </p>
-              <div className={styles['solution-content']}>
-                <div className={styles['problem-content']}>
-                  {problem.content}
-                </div>
-                <div className={styles['problem-option-list']}>
-                  {problem?.problemOptions.map(
-                    (
-                      problemOption,
-                      optionIndex, // index 대신 optionIndex 사용
-                    ) => (
-                      <p
-                        key={problemOption.problemOptionId} // 고유 식별자로 problemOptionId 사용
-                        className={styles['problem-option-item']}
-                      >
-                        {optionIndex + 1}. {problemOption.option}{' '}
-                        {/* 옵션 번호는 optionIndex를 사용 */}
-                      </p>
-                    ),
-                  )}
-                </div>
+              <div className={styles['problem-content']}>{problem.content}</div>
+              <div className={styles['problem-option-list']}>
+                {problem?.problemOptions.map((problemOption, optionIndex) => (
+                  <p
+                    key={problemOption.problemOptionId}
+                    className={`${styles['problem-option-item']} ${
+                      problem.userAnswer === optionIndex + 1
+                        ? styles['user-answer'] // userAnswer와 같으면 붉은색으로 표시
+                        : ''
+                    }`}
+                  >
+                    {optionIndex + 1}. {problemOption.option}{' '}
+                  </p>
+                ))}
               </div>
               <div className={styles['problem-solution']}>
+                {!problem.isCorrect && (
+                  <p className={styles['incorrect-message']}>
+                    틀린 문제입니다. 해설을 확인하세요.
+                  </p>
+                )}
                 {problem.solution}
               </div>
             </div>
