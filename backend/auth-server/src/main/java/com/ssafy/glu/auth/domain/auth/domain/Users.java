@@ -33,7 +33,8 @@ public class Users extends BaseTimeEntity {
 	private String nickname;
 	private String password;
 	private LocalDate birth;
-	private Boolean isDeleted;
+	@Builder.Default
+	private Boolean isDeleted = false;
 	@Builder.Default
 	private Integer stage = 0;
 	@Builder.Default
