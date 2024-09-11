@@ -1,12 +1,11 @@
+/* eslint-disable prettier/prettier */
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import RadarChart from '@/components/problem/result/radarChart';
 import dummyPreviousTest from '@/mock/dummyPreviousTest.json'; // Import dummy data
-import {
-  PreviousSolvedProblemType,
-  SolvedProblemType,
-} from '@/types/ProblemTypes';
+import { PreviousSolvedProblemType } from '@/types/ProblemTypes';
+import { formatTime, transformProblemType } from '@/utils/problem/result';
 import styles from './test.module.css';
 
 interface ApiResponse {
@@ -43,39 +42,24 @@ export default function Test() {
     fetchData();
   }, []);
 
-  // Data transformation from PreviousSolvedProblemType[] to SolvedProblemType[]
-  const transformedProblemTypeList: SolvedProblemType[] = problemTypeList.map(
-    (item) => ({
-      correctCount: item.correctCount,
-      problemType: {
-        problemTypeCode: item.problemTypeCode,
-        name: item.name,
-      },
-    }),
+  // useMemo를 사용해 problemTypeList가 변경될 때만 변환된 리스트를 재계산
+  const transformedProblemTypeList = useMemo(
+    () => transformProblemType(problemTypeList),
+    [problemTypeList],
   );
 
   const handleButtonClick = () => {
     router.push('/test/problems'); // Navigate to /test/problems when clicked
   };
 
-  const formatTime = (totalSeconds: number | null) => {
-    if (totalSeconds === null) {
-      return '--분 --초'; // null일 경우 기본 메시지 반환
-    }
-
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}분 ${seconds}초`;
-  };
-
   return (
     <div className={styles.container}>
       {/* Test Recommendation Section */}
-      <div className={styles['recommendation-container']}>
+      <div className={styles['content-wrapper']}>
         <div>
           <h2 className={styles['page-title']}>종합 테스트 추천</h2>
           <p>
-            김씨피님을 위한 종합 테스트입니다.
+            김싸피님을 위한 종합 테스트입니다.
             <br />
             총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로
             평가합니다.
@@ -90,8 +74,7 @@ export default function Test() {
         />
       </div>
 
-      {/* Previous Test Results Section */}
-      <div className={styles['recommendation-container']}>
+      <div className={styles['content-wrapper']}>
         <div>
           <h3 className={styles['page-subTitle']}>나의 이전 테스트</h3>
           <div className={styles['last-test-info']}>
@@ -111,7 +94,7 @@ export default function Test() {
             </div>
             <div className={styles['test-info-item']}>
               <p className={styles['info-item-title']}>영역별 점수</p>
-              <div className={styles['info-item-chart']}>
+              <div className={styles['info-item-content']}>
                 <RadarChart problemTypeList={transformedProblemTypeList} />
               </div>
             </div>

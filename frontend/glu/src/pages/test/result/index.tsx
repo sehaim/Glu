@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { SolvedProblem, SolvedProblemType } from '@/types/ProblemTypes';
 import dummyResults from '@/mock/dummyResults.json';
 import RadarChart from '@/components/problem/result/radarChart';
+import { formatTime } from '@/utils/problem/result';
 import styles from './testResult.module.css';
 
 interface ApiResponse {
@@ -51,16 +52,6 @@ export default function TestResult() {
     fetchData();
   }, []);
 
-  const formatTime = (totalSeconds: number | null) => {
-    if (totalSeconds === null) {
-      return '--분 --초'; // null일 경우 기본 메시지 반환
-    }
-
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}분 ${seconds}초`;
-  };
-
   const renderProblemRows = (startIndex: number, endIndex: number) => (
     <>
       <tr>
@@ -79,8 +70,6 @@ export default function TestResult() {
   if (loading) {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
   }
-
-  console.log(problemList);
 
   return (
     <div className={styles.container}>
