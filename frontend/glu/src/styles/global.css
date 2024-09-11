@@ -59,7 +59,7 @@ select {
 #page-title {
   color: var(--TEXT_PRIMARY);
   font-family: 'HDBOLD';
-  font-size: 36px;
+  font-size: 35px;
 }
 
 /* 폰트 적용 */
