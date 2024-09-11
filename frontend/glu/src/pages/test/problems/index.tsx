@@ -7,6 +7,7 @@ import dummyProblems from '@/mock/dummyProblems.json';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
 import styles from './testProblems.module.css';
+import ProblemContentImage from '@/components/problem/problemContentImage';
 
 interface ProblemAnswer {
   problemId: number;
@@ -185,7 +186,17 @@ export default function Test() {
                 problemTitle={currentProblem?.title}
               />
               <div className={styles['problem-content']}>
-                <ProblemContentText problemContent={currentProblem?.content} />
+                {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                  <ProblemContentImage
+                    imageUrl={currentProblem?.content}
+                    altText={currentProblem?.title || '문제 이미지'}
+                  />
+                )}
+                {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+                  <ProblemContentText
+                    problemContent={currentProblem?.content}
+                  />
+                )}
                 <ProblemOptionList
                   curSelectedIndex={answers[currentProblemIndex]?.userAnswer}
                   problemIndex={currentProblemIndex}
