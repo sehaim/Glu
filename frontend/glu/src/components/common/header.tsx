@@ -48,14 +48,14 @@ const getHeaderStyle = (color: string, isScrolled: boolean) => {
 };
 
 export default function Header({ color }: { color: string }) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(true);
   const prevScrollYRef = useRef(0); // 이전 스크롤 값을 useRef로 관리
 
   useEffect(() => {
     const handleScroll = throttle(() => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY >= prevScrollYRef.current || currentScrollY >= 10) {
+      if (currentScrollY >= prevScrollYRef.current || currentScrollY < 10) {
         setIsScrolled(true); // 스크롤이 아래로 내려갔을 때 흰색으로 설정
       } else {
         setIsScrolled(false); // 스크롤이 위로 올라가면 투명으로 설정
@@ -66,9 +66,9 @@ export default function Header({ color }: { color: string }) {
 
     const handleScrollEnd = debounce(() => {
       if (window.scrollY < 10) {
-        setIsScrolled(false); // 스크롤이 멈췄을 때 상단이면 흰색 보장
+        setIsScrolled(true); // 스크롤이 멈췄을 때 상단이면 흰색 보장
       }
-    }, 100); // 스크롤이 멈춘 후 1000ms 후에 상태를 체크
+    }, 1000); // 스크롤이 멈춘 후 1000ms 후에 상태를 체크
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('scroll', handleScrollEnd); // 스크롤 멈춤 이벤트 추가
