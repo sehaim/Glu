@@ -1,228 +1,110 @@
-import { useEffect, useState } from 'react';
-import ProblemContentText from '@/components/problem/problemContentText';
-import ProblemHeader from '@/components/problem/problemHeader';
-import ProblemOptionList from '@/components/problem/problemOptionList';
+/* eslint-disable prettier/prettier */
+import { useRouter } from 'next/router';
+import { useEffect, useState, useMemo } from 'react';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
+import RadarChart from '@/components/problem/result/radarChart';
+import dummyPreviousTest from '@/mock/dummyPreviousTest.json'; // Import dummy data
+import { PreviousSolvedProblemType } from '@/types/ProblemTypes';
+import { formatTime, transformProblemType } from '@/utils/problem/result';
 import styles from './test.module.css';
-import dummyProblems from '../../mock/dummyProblems.json';
-import { Problem } from '../../types/ProblemTypes';
 
-interface ProblemAnswer {
-  problemId: number;
-  userAnswer: number; // 사용자의 선택
-  problemAnswer: number; // 문제의 정답
-  solvedTime?: number; // 풀이 시간 (선택적)
+interface ApiResponse {
+  testId: number;
+  correctCount: number;
+  totalSolveTime: number; // in seconds
+  problemType: PreviousSolvedProblemType[];
 }
 
 export default function Test() {
-  const PROBLEM_COUNT = 15; // 문제 개수 고정
-  const [problems, setProblems] = useState<Problem[]>([]);
-  const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
-  const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
-  const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
-  const [, setTotalSolvedTime] = useState<number>(0);
+  const router = useRouter();
+  const [correctCount, setCorrectCount] = useState<number | null>(null);
+  const [totalSolveTime, setTotalSolveTime] = useState<number | null>(null);
+  const [problemTypeList, setProblemTypeList] = useState<
+    PreviousSolvedProblemType[]
+  >([]);
+  const [, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
-    setProblems(fixedProblems);
+    const fetchData = async () => {
+      setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
+      const response: ApiResponse = await new Promise((resolve) => {
+        setTimeout(() => {
+          return resolve(dummyPreviousTest);
+        }, 1000);
+      });
 
-    const savedAnswers = sessionStorage.getItem('savedAnswers');
-    if (savedAnswers) {
-      setAnswers(JSON.parse(savedAnswers)); // 세션 스토리지에서 데이터를 불러옴
-    } else {
-      const initialAnswers = fixedProblems.map((problem) => ({
-        problemId: problem.problemId,
-        problemAnswer: Number(problem.solution),
-        userAnswer: 0, // 기본값은 0
-        solvedTime: 0, // 기본 풀이 시간은 0
-      }));
+      setCorrectCount(response.correctCount);
+      setTotalSolveTime(response.totalSolveTime);
+      setProblemTypeList(response.problemType);
+      setLoading(false); // 데이터가 다 로드되면 로딩 상태를 false로 설정
+    };
 
-      setAnswers(initialAnswers);
-    }
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    const start = Date.now();
-    setStartTime(start);
+  // useMemo를 사용해 problemTypeList가 변경될 때만 변환된 리스트를 재계산
+  const transformedProblemTypeList = useMemo(
+    () => transformProblemType(problemTypeList),
+    [problemTypeList],
+  );
 
-    return () => {
-      const end = Date.now();
-      const timeSpent = Math.floor((end - start) / 1000);
-
-      setTotalSolvedTime(
-        (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
-      );
-
-      setAnswers((prevAnswers) => {
-        const updatedAnswers = [...prevAnswers];
-        const currentAnswer = updatedAnswers[currentProblemIndex] || {};
-        const previousSolvedTime = currentAnswer.solvedTime || 0;
-
-        updatedAnswers[currentProblemIndex] = {
-          ...currentAnswer,
-          solvedTime: previousSolvedTime + timeSpent,
-        };
-
-        sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
-        return updatedAnswers;
-      });
-    };
-  }, [currentProblemIndex]);
-
-  const progressPercentage =
-    problems.length > 1
-      ? Math.floor((currentProblemIndex / problems.length) * 100)
-      : 100; // 만약 문제가 1개라면 무조건 100%로 설정
-
-  const currentProblem = problems[currentProblemIndex];
-
-  const handleNextProblem = () => {
-    if (currentProblemIndex < problems.length - 1) {
-      setCurrentProblemIndex((prevIndex) => prevIndex + 1);
-    }
-  };
-
-  const handlePrevProblem = () => {
-    if (currentProblemIndex > 0) {
-      setCurrentProblemIndex((prevIndex) => prevIndex - 1);
-    }
-  };
-
-  const handlProblemIndex = (index: number) => {
-    setCurrentProblemIndex(index);
-  };
-
-  const handleAnswer = (problemIndex: number, userAnswer: number) => {
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const updatedAnswer = {
-        ...updatedAnswers[problemIndex],
-        userAnswer,
-      };
-      updatedAnswers[problemIndex] = updatedAnswer;
-
-      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
-
-      return updatedAnswers;
-    });
-  };
-
-  const handleSubmit = () => {
-    const end = Date.now();
-    const timeSpent = Math.floor((end - startTime) / 1000);
-
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const currentAnswer = updatedAnswers[currentProblemIndex] || {};
-      const previousSolvedTime = currentAnswer.solvedTime || 0;
-
-      updatedAnswers[currentProblemIndex] = {
-        ...currentAnswer,
-        solvedTime: previousSolvedTime + timeSpent,
-      };
-
-      return updatedAnswers;
-    });
-
-    // TODO: 삭제
-    // console.log('Submitting answers', answers);
-
-    sessionStorage.removeItem('savedAnswers');
+  const handleButtonClick = () => {
+    router.push('/test/problems'); // Navigate to /test/problems when clicked
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles['problem-container']}>
-        <div className={styles['left-navigation']}>
-          <h5 className={styles['problem-solved-title']}>해결한 문제</h5>
-          <ul className={styles['problem-solved-list']}>
-            {answers.map((answer, index) => (
-              <button
-                key={answer.problemId} // 문제의 고유한 ID를 key로 사용
-                type="button"
-                className={`${styles['problem-solved-button']} ${answer.userAnswer !== 0 ? styles.answered : styles.unanswered} ${index === currentProblemIndex && styles['problem-solved-button-active']}`}
-                onClick={() => handlProblemIndex(index)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handlProblemIndex(index); // Enter나 Space 키로도 문제 이동 가능
-                  }
-                }}
-              >
-                <p className={styles['problem-solved-button-number']}>
-                  {index + 1}번
-                </p>
-                <p className={styles['problem-solved-button-status']}>
-                  {answer.userAnswer !== 0 ? '✅' : '❌'}
-                </p>
-              </button>
-            ))}
-          </ul>
+      {/* Test Recommendation Section */}
+      <div className={styles['content-wrapper']}>
+        <div>
+          <h2 className={styles['page-title']}>종합 테스트 추천</h2>
+          <p>
+            김싸피님을 위한 종합 테스트입니다.
+            <br />
+            총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로
+            평가합니다.
+            <br />
+            지금 바로 시작해보세요!
+          </p>
         </div>
+        <PrimaryButton
+          size="large"
+          label="종합테스트 시작"
+          onClick={handleButtonClick}
+        />
+      </div>
 
-        {currentProblem && (
-          <div className={styles['problem-wrapper']}>
-            <div className={styles.problem} key={currentProblem.problemId}>
-              <ProblemHeader
-                problemIndex={currentProblemIndex + 1}
-                problemLevel={currentProblem?.problemLevel?.name}
-                problemType={currentProblem?.problemType?.name}
-                problemTitle={currentProblem?.title}
-              />
-              <div className={styles['problem-content']}>
-                <ProblemContentText problemContent={currentProblem?.content} />
-                <ProblemOptionList
-                  curSelectedIndex={answers[currentProblemIndex]?.userAnswer}
-                  problemIndex={currentProblemIndex}
-                  problemOptions={currentProblem?.problemOptions}
-                  onAnswer={handleAnswer}
-                />
+      <div className={styles['content-wrapper']}>
+        <div>
+          <h3 className={styles['page-subTitle']}>나의 이전 테스트</h3>
+          <div className={styles['last-test-info']}>
+            <div className={styles['last-test-wrapper']}>
+              <div className={styles['test-info-item-row']}>
+                <p className={styles['info-item-title']}>내 점수</p>
+                <div className={styles['info-item-content']}>
+                  {correctCount} / 15
+                </div>
+              </div>
+              <div className={styles['test-info-item-row']}>
+                <p className={styles['info-item-title']}>걸린 시간</p>
+                <div className={styles['info-item-content']}>
+                  {formatTime(totalSolveTime)}
+                </div>
               </div>
             </div>
-            {/* 이전/다음 문제로 이동하는 버튼 */}
-            <div className={styles['problem-button-list']}>
-              {currentProblemIndex > 0 ? (
-                <PrimaryButton
-                  size="small"
-                  label="이전 문제"
-                  onClick={handlePrevProblem}
-                />
-              ) : (
-                <div />
-              )}
-              {currentProblemIndex === problems.length - 1 ? (
-                <PrimaryButton
-                  size="small"
-                  label="제출하기"
-                  onClick={handleSubmit}
-                />
-              ) : (
-                <PrimaryButton
-                  size="small"
-                  label="다음 문제"
-                  onClick={handleNextProblem}
-                />
-              )}
-            </div>
-            {/* 프로그레스바 */}
-            <div className={styles['progressbar-container']}>
-              <div className={styles.progressbar}>
-                <img
-                  src="/images/glu_character.png"
-                  alt="character"
-                  className={styles['progress-character']}
-                  style={{ left: `calc(${progressPercentage}%` }}
-                />
+            <div className={styles['test-info-item']}>
+              <p className={styles['info-item-title']}>영역별 점수</p>
+              <div className={styles['info-item-content']}>
+                <RadarChart problemTypeList={transformedProblemTypeList} />
               </div>
-              <img
-                src="/images/problem/house.png"
-                alt="house"
-                className={styles['progress-house']}
-              />
             </div>
           </div>
-        )}
-
-        <div className={styles['right-navigation']} />
+        </div>
+        <img
+          className={styles['main-character']}
+          src="/images/glu_character_shadow.png"
+          alt="Glu Character"
+        />
       </div>
     </div>
   );
