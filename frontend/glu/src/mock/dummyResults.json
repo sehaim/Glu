@@ -201,5 +201,28 @@
       "solution": "선택지 1",
       "solveTime": 40
     }
+  ],
+  "problemTypeList": [
+    {
+      "correctCount": 1,
+      "problemType": {
+        "problemTypeCode": "string",
+        "name": "단어와 문장규칙"
+      }
+    },
+    {
+      "correctCount": 2,
+      "problemType": {
+        "problemTypeCode": "string",
+        "name": "글 읽고 이해하기"
+      }
+    },
+    {
+      "correctCount": 3,
+      "problemType": {
+        "problemTypeCode": "string",
+        "name": "추측하기"
+      }
+    }
   ]
 }

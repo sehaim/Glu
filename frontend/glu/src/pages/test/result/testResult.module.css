@@ -86,6 +86,85 @@
   background-color: var(--WHITE);
 }
 
+.solution-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  background-color: var(--WHITE);
+  border-radius: 10px;
+  width: 1040px;
+  padding: 24px 40px;
+}
+
+.solution-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.solution-item {
+  width: 100%;
+  padding: 24px;
+}
+
+.solution-title {
+  color: var(--BLACK);
+  font-family: 'BMJUA';
+  font-size: 18px;
+}
+
+.solution-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.solution-item {
+  background-color: var(--LIGHTGRAY);
+  border-bottom: 20px;
+}
+
+.problem-content {
+  background-color: var(--WHITE);
+  border-radius: 10px;
+  padding: 24px;
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 16px;
+  line-height: 12px;
+  width: 100%;
+}
+
+.problem-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0px 24px;
+}
+
+.problem-option-item {
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 14px;
+}
+
+.problem-solution {
+  background-color: var(--WHITE);
+  border: 2px dashed var(--SKYBLUE);
+  margin-top: 20px;
+  padding: 24px;
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+}
+
 @media (max-width: 1200px) {
   .page-title {
     width: 960px;
@@ -97,6 +176,10 @@
 
   .result-table {
     width: 400px;
+  }
+
+  .solution-container {
+    width: 960px;
   }
 }
 
@@ -111,6 +194,10 @@
 
   .result-table {
     width: 320px;
+  }
+
+  .solution-container {
+    width: 720px;
   }
 }
 
@@ -134,6 +221,15 @@
     font-size: 14px;
     width: 320px;
   }
+
+  .solution-container {
+    width: 440px;
+    flex-direction: column;
+  }
+
+  .solution-content {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 480px) {
@@ -147,5 +243,9 @@
 
   .result-table {
     width: 240px;
+  }
+
+  .solution-container {
+    width: 320px;
   }
 }

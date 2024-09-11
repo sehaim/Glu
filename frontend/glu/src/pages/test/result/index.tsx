@@ -33,7 +33,7 @@ export default function TestResult() {
       setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
       const response: ApiResponse = await new Promise((resolve) => {
         setTimeout(() => {
-          resolve(dummyResults);
+          return resolve(dummyResults);
         }, 1000);
       });
 
@@ -80,6 +80,8 @@ export default function TestResult() {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
   }
 
+  console.log(problemList);
+
   return (
     <div className={styles.container}>
       <h2 className={styles['page-title']}>테스트 결과</h2>
@@ -124,6 +126,42 @@ export default function TestResult() {
               <RadarChart problemTypeList={problemTypeList} />
             </div>
           </div>
+        </div>
+      </div>
+      <div className={styles['solution-container']}>
+        <h5 className={styles['item-title']}>문제 해설</h5>
+        <div className={styles['solution-list']}>
+          {problemList.map((problem, index) => (
+            <div key={problem.problemId} className={styles['solution-item']}>
+              <p className={styles['solution-title']}>
+                {index + 1}. {problem.title}
+              </p>
+              <div className={styles['solution-content']}>
+                <div className={styles['problem-content']}>
+                  {problem.content}
+                </div>
+                <div className={styles['problem-option-list']}>
+                  {problem?.problemOptions.map(
+                    (
+                      problemOption,
+                      optionIndex, // index 대신 optionIndex 사용
+                    ) => (
+                      <p
+                        key={problemOption.problemOptionId} // 고유 식별자로 problemOptionId 사용
+                        className={styles['problem-option-item']}
+                      >
+                        {optionIndex + 1}. {problemOption.option}{' '}
+                        {/* 옵션 번호는 optionIndex를 사용 */}
+                      </p>
+                    ),
+                  )}
+                </div>
+              </div>
+              <div className={styles['problem-solution']}>
+                {problem.solution}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
