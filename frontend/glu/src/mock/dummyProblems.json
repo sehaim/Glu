@@ -1,8 +1,8 @@
 [
   {
     "problemId": 1,
-    "title": "Find the missing number in sequence",
-    "content": "Given a sequence of numbers, find the missing number.",
+    "title": "순서에서 빠진 숫자를 찾으세요",
+    "content": "/images/glu_character_shadow.png",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -24,18 +24,18 @@
     "solution": "7",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "SEQUENCE",
-      "name": "Mathematical Sequence"
+      "problemTypeDetailCode": "0",
+      "name": "수학 - 순열"
     }
   },
   {
     "problemId": 2,
-    "title": "Identify the prime number",
-    "content": "Which of the following numbers is a prime number?",
+    "title": "소수를 찾으세요",
+    "content": "다음 숫자 중 소수를 찾으세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -57,51 +57,51 @@
     "solution": "17",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "PRIME",
-      "name": "Prime Numbers"
+      "problemTypeDetailCode": "1",
+      "name": "수학 - 소수"
     }
   },
   {
     "problemId": 3,
-    "title": "What is the capital of France?",
-    "content": "Select the correct capital city of France.",
+    "title": "프랑스의 수도는?",
+    "content": "프랑스의 올바른 수도를 선택하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
-        "option": "Berlin"
+        "option": "베를린"
       },
       {
         "problemOptionId": 2,
-        "option": "Paris"
+        "option": "파리"
       },
       {
         "problemOptionId": 3,
-        "option": "Madrid"
+        "option": "마드리드"
       },
       {
         "problemOptionId": 4,
-        "option": "Rome"
+        "option": "로마"
       }
     ],
-    "solution": "Paris",
+    "solution": "파리",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "GEO",
-      "problemTypeDetailCode": "CAPITALS",
-      "name": "Geography - Capitals"
+      "problemTypeDetailCode": "2",
+      "name": "지리 - 수도"
     }
   },
   {
     "problemId": 4,
-    "title": "Basic addition problem",
-    "content": "Solve 8 + 6.",
+    "title": "기초 덧셈 문제",
+    "content": "8 + 6을 계산하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -123,18 +123,18 @@
     "solution": "14",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "ADDITION",
-      "name": "Mathematics - Addition"
+      "problemTypeDetailCode": "3",
+      "name": "수학 - 덧셈"
     }
   },
   {
     "problemId": 5,
-    "title": "Identify the chemical symbol for gold",
-    "content": "What is the chemical symbol for gold?",
+    "title": "금의 화학 기호는?",
+    "content": "금의 화학 기호를 선택하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -156,18 +156,18 @@
     "solution": "Au",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "SCIENCE",
-      "problemTypeDetailCode": "CHEMISTRY",
-      "name": "Chemistry - Elements"
+      "problemTypeDetailCode": "4",
+      "name": "화학 - 원소"
     }
   },
   {
     "problemId": 6,
-    "title": "What is 10 multiplied by 5?",
-    "content": "Solve 10 * 5.",
+    "title": "10 곱하기 5는?",
+    "content": "10 * 5를 계산하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -189,51 +189,51 @@
     "solution": "50",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "MULTIPLICATION",
-      "name": "Mathematics - Multiplication"
+      "problemTypeDetailCode": "3",
+      "name": "수학 - 곱셈"
     }
   },
   {
     "problemId": 7,
-    "title": "Who wrote 'Hamlet'?",
-    "content": "Select the author of the play 'Hamlet'.",
+    "title": "'햄릿'을 쓴 사람은?",
+    "content": "희곡 '햄릿'의 작가를 선택하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
-        "option": "William Shakespeare"
+        "option": "윌리엄 셰익스피어"
       },
       {
         "problemOptionId": 2,
-        "option": "Charles Dickens"
+        "option": "찰스 디킨스"
       },
       {
         "problemOptionId": 3,
-        "option": "Mark Twain"
+        "option": "마크 트웨인"
       },
       {
         "problemOptionId": 4,
-        "option": "Jane Austen"
+        "option": "제인 오스틴"
       }
     ],
-    "solution": "William Shakespeare",
+    "solution": "윌리엄 셰익스피어",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "LITERATURE",
-      "problemTypeDetailCode": "CLASSICS",
-      "name": "Literature - Classics"
+      "problemTypeDetailCode": "5",
+      "name": "문학 - 고전"
     }
   },
   {
     "problemId": 8,
-    "title": "Square root of 64",
-    "content": "What is the square root of 64?",
+    "title": "64의 제곱근은?",
+    "content": "64의 제곱근을 선택하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -255,84 +255,84 @@
     "solution": "8",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "SQUARE_ROOT",
-      "name": "Mathematics - Square Roots"
+      "problemTypeDetailCode": "6",
+      "name": "수학 - 제곱근"
     }
   },
   {
     "problemId": 9,
-    "title": "Which planet is closest to the sun?",
-    "content": "Select the planet that is closest to the sun.",
+    "title": "태양과 가장 가까운 행성은?",
+    "content": "태양과 가장 가까운 행성을 선택하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
-        "option": "Venus"
+        "option": "금성"
       },
       {
         "problemOptionId": 2,
-        "option": "Earth"
+        "option": "지구"
       },
       {
         "problemOptionId": 3,
-        "option": "Mercury"
+        "option": "수성"
       },
       {
         "problemOptionId": 4,
-        "option": "Mars"
+        "option": "화성"
       }
     ],
-    "solution": "Mercury",
+    "solution": "수성",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "SCIENCE",
-      "problemTypeDetailCode": "ASTRONOMY",
-      "name": "Astronomy - Planets"
+      "problemTypeDetailCode": "4",
+      "name": "과학 - 천문학"
     }
   },
   {
     "problemId": 10,
-    "title": "Which country has the largest population?",
-    "content": "Which of the following countries has the largest population?",
+    "title": "가장 인구가 많은 나라는?",
+    "content": "다음 나라 중 인구가 가장 많은 나라는 어디입니까?",
     "problemOptions": [
       {
         "problemOptionId": 1,
-        "option": "United States"
+        "option": "미국"
       },
       {
         "problemOptionId": 2,
-        "option": "India"
+        "option": "인도"
       },
       {
         "problemOptionId": 3,
-        "option": "China"
+        "option": "중국"
       },
       {
         "problemOptionId": 4,
-        "option": "Brazil"
+        "option": "브라질"
       }
     ],
-    "solution": "China",
+    "solution": "중국",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "GEO",
-      "problemTypeDetailCode": "POPULATION",
-      "name": "Geography - Population"
+      "problemTypeDetailCode": "2",
+      "name": "지리 - 인구"
     }
   },
   {
     "problemId": 11,
-    "title": "Calculate 25% of 200",
-    "content": "What is 25% of 200?",
+    "title": "200의 25%를 계산하세요",
+    "content": "200의 25%는 얼마입니까?",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -354,51 +354,51 @@
     "solution": "50",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "PERCENTAGE",
-      "name": "Mathematics - Percentages"
+      "problemTypeDetailCode": "6",
+      "name": "수학 - 백분율"
     }
   },
   {
     "problemId": 12,
-    "title": "Which is the largest ocean?",
-    "content": "Select the largest ocean on Earth.",
+    "title": "가장 큰 대양은?",
+    "content": "지구에서 가장 큰 대양을 선택하세요.",
     "problemOptions": [
       {
         "problemOptionId": 1,
-        "option": "Atlantic Ocean"
+        "option": "대서양"
       },
       {
         "problemOptionId": 2,
-        "option": "Indian Ocean"
+        "option": "인도양"
       },
       {
         "problemOptionId": 3,
-        "option": "Pacific Ocean"
+        "option": "태평양"
       },
       {
         "problemOptionId": 4,
-        "option": "Arctic Ocean"
+        "option": "북극해"
       }
     ],
-    "solution": "Pacific Ocean",
+    "solution": "태평양",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "GEO",
-      "problemTypeDetailCode": "OCEANS",
-      "name": "Geography - Oceans"
+      "problemTypeDetailCode": "2",
+      "name": "지리 - 대양"
     }
   },
   {
     "problemId": 13,
-    "title": "What is the freezing point of water?",
-    "content": "At what temperature does water freeze?",
+    "title": "물의 어는점은?",
+    "content": "물은 몇 도에서 얼기 시작합니까?",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -420,51 +420,51 @@
     "solution": "0°C",
     "problemLevel": {
       "problemLevelCode": "EASY",
-      "name": "Beginner"
+      "name": "초급"
     },
     "problemType": {
       "problemTypeCode": "SCIENCE",
-      "problemTypeDetailCode": "PHYSICS",
-      "name": "Physics - Temperature"
+      "problemTypeDetailCode": "4",
+      "name": "물리 - 온도"
     }
   },
   {
     "problemId": 14,
-    "title": "Who discovered gravity?",
-    "content": "Which scientist is credited with discovering the law of gravity?",
+    "title": "중력을 발견한 사람은?",
+    "content": "/images/glu_character_shadow.png",
     "problemOptions": [
       {
         "problemOptionId": 1,
-        "option": "Albert Einstein"
+        "option": "알버트 아인슈타인"
       },
       {
         "problemOptionId": 2,
-        "option": "Isaac Newton"
+        "option": "아이작 뉴턴"
       },
       {
         "problemOptionId": 3,
-        "option": "Galileo Galilei"
+        "option": "갈릴레오 갈릴레이"
       },
       {
         "problemOptionId": 4,
-        "option": "Nikola Tesla"
+        "option": "니콜라 테슬라"
       }
     ],
-    "solution": "Isaac Newton",
+    "solution": "아이작 뉴턴",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "SCIENCE",
-      "problemTypeDetailCode": "PHYSICS",
-      "name": "Physics - Gravity"
+      "problemTypeDetailCode": "4",
+      "name": "물리 - 중력"
     }
   },
   {
     "problemId": 15,
-    "title": "What is 2 raised to the power of 5?",
-    "content": "Solve 2^5.",
+    "title": "2의 5제곱은?",
+    "content": "/images/glu_character_shadow.png",
     "problemOptions": [
       {
         "problemOptionId": 1,
@@ -486,12 +486,12 @@
     "solution": "32",
     "problemLevel": {
       "problemLevelCode": "MEDIUM",
-      "name": "Intermediate"
+      "name": "중급"
     },
     "problemType": {
       "problemTypeCode": "MATH",
-      "problemTypeDetailCode": "EXPONENTS",
-      "name": "Mathematics - Exponents"
+      "problemTypeDetailCode": "0",
+      "name": "수학 - 지수"
     }
   }
 ]

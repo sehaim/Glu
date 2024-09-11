@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -6,6 +7,9 @@ import PrimaryButton from '@/components/common/buttons/primaryButton';
 import dummyProblems from '@/mock/dummyProblems.json';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
+import ProblemContentImage from '@/components/problem/problemContentImage';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Swal from 'sweetalert';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -25,28 +29,26 @@ export default function Test() {
   const router = useRouter();
   const currentProblem = problems[currentProblemIndex];
 
+  // 답안 업데이트 및 세션 스토리지 저장 함수
+  const updateAnswers = (
+    problemIndex: number,
+    updatedFields: Partial<ProblemAnswer>,
+  ) => {
+    setAnswers((prevAnswers) => {
+      const updatedAnswers = prevAnswers.map((answer, index) =>
+        index === problemIndex ? { ...answer, ...updatedFields } : answer,
+      );
+      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
+      return updatedAnswers;
+    });
+  };
+
   useEffect(() => {
     const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
     setProblems(fixedProblems);
 
-    const savedAnswers = sessionStorage.getItem('savedAnswers');
-    if (savedAnswers) {
-      const continueWithSaved =
-        window.confirm('이전에 저장된 답안을 불러올까요?');
-      if (continueWithSaved) {
-        setAnswers(JSON.parse(savedAnswers)); // 세션 스토리지에서 데이터를 불러옴
-      } else {
-        // 새로운 답안 목록을 초기화
-        const initialAnswers = fixedProblems.map((problem) => ({
-          problemId: problem.problemId,
-          problemAnswer: Number(problem.solution),
-          userAnswer: 0, // 기본값은 0
-          solvedTime: 0, // 기본 풀이 시간은 0
-        }));
-        setAnswers(initialAnswers);
-      }
-    } else {
-      // 새로운 답안 목록을 초기화
+    // 답안 초기화 함수
+    const initializeAnswers = () => {
       const initialAnswers = fixedProblems.map((problem) => ({
         problemId: problem.problemId,
         problemAnswer: Number(problem.solution),
@@ -54,6 +56,26 @@ export default function Test() {
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
+    };
+
+    const savedAnswers = sessionStorage.getItem('savedAnswers');
+    if (savedAnswers) {
+      Swal({
+        title: '이전에 저장된 답안을 불러올까요?',
+        text: '이전에 진행한 답안이 있습니다. 불러올까요?',
+        icon: 'info',
+        buttons: ['새로 시작', '불러오기'],
+        dangerMode: true,
+      }).then((willContinue: boolean | null) => {
+        if (willContinue) {
+          const parsedAnswers = JSON.parse(savedAnswers);
+          setAnswers(parsedAnswers);
+        } else {
+          initializeAnswers();
+        }
+      });
+    } else {
+      initializeAnswers();
     }
   }, []);
 
@@ -62,25 +84,14 @@ export default function Test() {
     setStartTime(start);
 
     return () => {
-      const end = Date.now();
-      const timeSpent = Math.floor((end - start) / 1000);
+      const timeSpent = Math.floor((Date.now() - start) / 1000);
 
       setTotalSolvedTime(
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
       );
 
-      setAnswers((prevAnswers) => {
-        const updatedAnswers = [...prevAnswers];
-        const currentAnswer = updatedAnswers[currentProblemIndex] || {};
-        const previousSolvedTime = currentAnswer.solvedTime || 0;
-
-        updatedAnswers[currentProblemIndex] = {
-          ...currentAnswer,
-          solvedTime: previousSolvedTime + timeSpent,
-        };
-
-        sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
-        return updatedAnswers;
+      updateAnswers(currentProblemIndex, {
+        solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
       });
     };
   }, [currentProblemIndex]);
@@ -107,42 +118,17 @@ export default function Test() {
   };
 
   const handleAnswer = (problemIndex: number, userAnswer: number) => {
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const updatedAnswer = {
-        ...updatedAnswers[problemIndex],
-        userAnswer,
-      };
-      updatedAnswers[problemIndex] = updatedAnswer;
-
-      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
-
-      return updatedAnswers;
-    });
+    updateAnswers(problemIndex, { userAnswer });
   };
 
   const handleSubmit = () => {
-    const end = Date.now();
-    const timeSpent = Math.floor((end - startTime) / 1000);
+    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const currentAnswer = updatedAnswers[currentProblemIndex] || {};
-      const previousSolvedTime = currentAnswer.solvedTime || 0;
-
-      updatedAnswers[currentProblemIndex] = {
-        ...currentAnswer,
-        solvedTime: previousSolvedTime + timeSpent,
-      };
-
-      return updatedAnswers;
+    updateAnswers(currentProblemIndex, {
+      solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
     });
 
-    // TODO: 삭제
-    // console.log('Submitting answers', answers);
-
     sessionStorage.removeItem('savedAnswers');
-
     router.push('/test/result');
   };
 
@@ -185,7 +171,17 @@ export default function Test() {
                 problemTitle={currentProblem?.title}
               />
               <div className={styles['problem-content']}>
-                <ProblemContentText problemContent={currentProblem?.content} />
+                {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                  <ProblemContentImage
+                    imageUrl={currentProblem?.content}
+                    altText={currentProblem?.title || '문제 이미지'}
+                  />
+                )}
+                {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+                  <ProblemContentText
+                    problemContent={currentProblem?.content}
+                  />
+                )}
                 <ProblemOptionList
                   curSelectedIndex={answers[currentProblemIndex]?.userAnswer}
                   problemIndex={currentProblemIndex}
