@@ -21,6 +21,13 @@ export interface SolvedProblemType {
     name: string;
   };
 }
+
+export interface PreviousSolvedProblemType {
+  problemTypeCode: string;
+  name: string;
+  correctCount: number;
+}
+
 export interface Problem {
   problemId: number;
   title: string;

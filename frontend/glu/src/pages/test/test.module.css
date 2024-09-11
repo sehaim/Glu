@@ -3,224 +3,105 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 40px;
 }
 
-.problem-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.left-navigation {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  margin-right: 40px;
-  padding: 60px 0px;
-}
-
-.problem-solved-title {
-  width: 120px;
-  color: var(--TEXT_SECONDARY);
-  font-size: 16px;
-  font-family: 'PTBOLD';
-  margin-bottom: 32px;
-}
-
-.problem-solved-button {
+.content-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 24px;
-  width: 120px;
-  background-color: var(--WHITE);
-  color: var(--TEXT_SECONDARY);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  padding: 40px;
+  width: 100%;
   font-family: 'PT';
+  line-height: 24px;
+  color: var(--TEXT_SECONDARY);
 }
 
-.problem-solved-button:hover {
+.page-title,
+.page-subTitle {
+  font-family: 'HDBOLD';
+  margin-bottom: 40px;
+  white-space: nowrap;
+}
+
+.page-title {
+  color: var(--TEXT_PRIMARY);
+  font-size: 32px;
+}
+
+.page-subTitle {
   color: var(--PINK);
+  font-size: 24px;
 }
 
-.problem-solved-button-active {
-  color: var(--PINK);
+.last-test-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: var(--WHITE);
+  padding: 24px;
+  border-radius: 20px;
+  font-family: 'BMJUA';
 }
 
-.problem-solved-list {
+.last-test-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.right-navigation {
-  display: none;
-}
-
-.problem-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.problem {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.problem-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 64px;
   gap: 20px;
 }
 
-.problem-button-list {
+.test-info-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 820px;
-
-  margin: 64px 0px;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 400px;
+  margin-left: 80px;
 }
 
-.problem-button-list button:first-child {
-  margin-right: auto;
+.test-info-item-row {
+  display: flex;
 }
 
-.problem-button-list button:last-child {
-  margin-left: auto;
+.info-item-title {
+  flex: 1;
+  color: var(--TEXT_SECONDARY);
+  font-size: 18px;
+  margin-right: 16px;
+  white-space: nowrap;
 }
 
-.problem-button {
-  background-color: var(--PINK);
-  border: none;
-  border-radius: 12px;
-  padding: 8px 16px;
-  color: var(--WHITE);
-  font-family: 'BMJUA';
-  cursor: pointer;
+.info-item-content {
+  flex: 4;
+  color: var(--PINK);
+  white-space: nowrap;
 }
 
-.progressbar-container {
-  position: relative;
-  padding-right: 0px 50px;
-  width: 820px;
-  background: linear-gradient(
-    to bottom,
-    var(--YELLOW) 70%,
-    var(--LIGHTGREEN) 50%
-  );
-}
-
-.progressbar {
-  position: relative;
-  width: 770px;
-  height: 160px;
-}
-
-.progress-character {
-  position: absolute;
-  bottom: 10px;
-  width: 100px;
-  height: 110px;
-  transition: left 0.5s ease-in-out;
-  z-index: 2;
-}
-
-.progress-house {
-  position: absolute;
-  right: 0;
-  bottom: 20px;
-  width: 120px;
-  height: 120px;
-}
-
-@media (min-width: 1200px) {
-  .left-navigation {
-    display: flex;
-    width: 160px;
-  }
-
-  .right-navigation {
-    display: flex;
-    width: 160px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .left-navigation {
-    display: flex;
-    width: 240px;
-    margin-right: 80px;
-  }
-
-  .right-navigation {
-    display: flex;
-    width: 240px;
-  }
+.main-character {
+  width: 340px;
+  height: auto;
 }
 
 @media (max-width: 1024px) {
-  .problem-button-list {
-    width: 720px;
-  }
-
-  .progressbar-container {
-    width: 720px;
-  }
-
-  .progressbar {
-    width: 670px;
-  }
-}
-
-@media (max-width: 768px) {
-  .problem-content {
+  .content-wrapper {
     flex-direction: column;
+    gap: 40px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
-  .problem-button-list {
-    width: 400px;
+  .last-test-info {
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 20px;
   }
 
-  .progressbar-container {
-    padding-right: 0px 60px;
-    width: 400px;
+  .test-info-item {
+    margin-left: 0px;
   }
 
-  .progressbar {
-    width: 340px;
-  }
-
-  .progress-character {
-    width: 70px;
-    height: 80px;
-  }
-
-  .progress-house {
-    width: 90px;
-    height: 90px;
-  }
-}
-
-@media (max-width: 480px) {
-  .problem-button-list {
-    width: 320px;
-  }
-
-  .progressbar-container {
-    width: 320px;
-  }
-
-  .progressbar {
-    width: 260px;
+  .main-character {
+    width: 280px;
+    height: auto;
   }
 }
