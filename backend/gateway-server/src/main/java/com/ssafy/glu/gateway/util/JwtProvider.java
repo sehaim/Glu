@@ -21,9 +21,8 @@ public class JwtProvider {
     private final SecretKey key; // secret Key
 	@Value("${jwt.claims-name.user-id}")
 	public String CLAIM_NAME_USER_ID;
-    public JwtProvider(@Value("${jwt.secret}") String secret) {
-        this.key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
-			Jwts.SIG.HS256.key().build().getAlgorithm());
+    public JwtProvider(@Value("${jwt.secret}") String secretKey) {
+		this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 	}
 
 	public Claims verifyToken(String token) {
