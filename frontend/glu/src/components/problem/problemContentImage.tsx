@@ -12,7 +12,7 @@ export default function ProblemContentImage({
 }: ProblemContentImageProps) {
   return (
     <div className={styles['problem-image']}>
-      <img src={imageUrl} alt={altText} className={styles['image']} />
+      <img src={imageUrl} alt={altText} className={styles.image} />
     </div>
   );
 }

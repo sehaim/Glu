@@ -1,6 +1,6 @@
-import styles from './mytest.module.css';
 import MytestGrade from '@/components/mytest/mytestGrade';
 import MytestAttendance from '@/components/mytest/mytestAttendance';
+import styles from './mytest.module.css';
 
 export default function MytestGrowth() {
   return (
