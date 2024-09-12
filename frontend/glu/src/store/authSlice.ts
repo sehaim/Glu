@@ -1,18 +1,35 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { User } from '@/types/UserTypes';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initUser: User = {
-  userId: '',
-  password: '',
-  nickname: '',
-  didLevelTest: false,
+interface AuthState {
+  isLoggedIn: boolean;
+  accessToken?: string;
+}
+
+const initialState: AuthState = {
+  isLoggedIn: false,
+  accessToken: undefined,
 };
 
 const authSlice = createSlice({
-  name: 'authSlice',
-  initialState: {
-    user: initUser,
+  name: 'auth',
+  initialState,
+  reducers: {
+    login: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        isLoggedIn: true,
+        accessToken: action.payload,
+      };
+    },
+    logout: (state) => {
+      return {
+        ...state,
+        isLoggedIn: false,
+        accessToken: undefined,
+      };
+    },
   },
-
-  reducers: {},
 });
+
+export const { login, logout } = authSlice.actions;
+export default authSlice.reducer;
