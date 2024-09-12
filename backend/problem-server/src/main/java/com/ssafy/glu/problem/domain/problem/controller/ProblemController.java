@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
 
@@ -83,5 +85,12 @@ public class ProblemController {
 		@PathVariable("problemId") String problemId) {
 		problemService.deleteUserProblemFavorite(userId, problemId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@PostMapping("/{problemId}/grading")
+	public ResponseEntity<ProblemGradingResponse> gradeProblem(@RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemId") String problemId,
+		@RequestBody ProblemSolveRequest request) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.gradeProblem(userId, problemId, request));
 	}
 }
