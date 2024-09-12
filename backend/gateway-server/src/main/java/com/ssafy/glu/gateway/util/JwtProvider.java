@@ -1,23 +1,30 @@
 package com.ssafy.glu.gateway.util;
 
+import java.nio.charset.StandardCharsets;
+
 import com.ssafy.glu.gateway.exception.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 @Component
+@Slf4j
 public class JwtProvider {
     private final SecretKey key; // secret Key
 	@Value("${jwt.claims-name.user-id}")
 	public String CLAIM_NAME_USER_ID;
-    public JwtProvider(@Value("${jwt.secret}") String secretKey) {
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
-    }
+    public JwtProvider(@Value("${jwt.secret}") String secret) {
+        this.key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+			Jwts.SIG.HS256.key().build().getAlgorithm());
+	}
 
 	public Claims verifyToken(String token) {
 		try {
