@@ -1,7 +1,5 @@
 package com.ssafy.glu.auth.domain.auth.service;
 
-import static com.ssafy.glu.auth.global.util.HeaderUtil.*;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.glu.auth.domain.auth.domain.Users;
 import com.ssafy.glu.auth.domain.auth.dto.request.LoginRequest;
 import com.ssafy.glu.auth.domain.auth.exception.LoginInValidException;
-import com.ssafy.glu.auth.domain.auth.exception.TokenExpiredException;
+import com.ssafy.glu.auth.domain.auth.exception.RefreshTokenExpiredException;
 import com.ssafy.glu.auth.domain.auth.exception.UserNotFoundException;
 import com.ssafy.glu.auth.domain.auth.repository.UserRepository;
 import com.ssafy.glu.auth.domain.auth.util.JWTUtil;
@@ -72,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
 		String refreshToken = jwtTokenService.getRefreshToken(userId);
 
 		if (refreshToken == null || jwtUtil.isExpired(refreshToken)) {
-			throw new TokenExpiredException();
+			throw new RefreshTokenExpiredException();
 		}
 
 		tokenSave(httpResponse, userId);
@@ -87,6 +85,9 @@ public class AuthServiceImpl implements AuthService {
 		//쿠키에 저장
 		httpResponse.addCookie(createCookie("access", accessToken, accessTime/1000));
 		httpResponse.addCookie(createCookie("refresh", refreshToken, refreshTime/1000));
+
+		//response 헤더에 access토큰 저장
+		httpResponse.setHeader("accessToken", accessToken);
 
 		//레디스에 저장
 		jwtTokenService.saveRefreshToken(userId, refreshToken);

@@ -5,8 +5,10 @@ import static com.ssafy.glu.auth.global.util.HeaderUtil.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.auth.domain.auth.dto.request.LoginRequest;
@@ -23,7 +25,7 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/login")
-	public ResponseEntity<Void> login (LoginRequest loginRequest, HttpServletResponse httpResponse) {
+	public ResponseEntity<Void> login (@RequestBody LoginRequest loginRequest, HttpServletResponse httpResponse) {
 		authService.login(loginRequest, httpResponse);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
