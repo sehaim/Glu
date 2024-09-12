@@ -17,4 +17,24 @@ export const authAxios: AxiosInstance = axios.create({
   },
 });
 
+// 토큰 재발급
+export const refreshAPI = async () => {
+  await authAxios
+    .post(`${BACKEND_URL}/auth/reissue`)
+    .then((res) => {
+      localStorage.setItem('accessToken', res.data.accessToken);
+    })
+    .catch(() => {
+      localStorage.removeItem('accessToken');
+    });
+};
+
+// access 토큰 만료시 axios interceptor
+authAxios.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response.status === 401) refreshAPI();
+  },
+);
+
 authAxios.defaults.withCredentials = true;

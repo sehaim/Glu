@@ -14,25 +14,3 @@ export const logout = () => {
   localStorage.removeItem('accessToken');
   window.location.href = '/login';
 };
-
-// 토큰 재발급
-export const refreshAPI = async () => {
-  await axios
-    .post(
-      `${BACKEND_URL}/auth/reissue`,
-      {},
-      {
-        headers: {
-          'refresh-token': localStorage.getItem('refresh_token') || '',
-        },
-      },
-    )
-    .then((res) => {
-      localStorage.setItem('access_token', res.data.access_token);
-      window.location.href = '/';
-      localStorage.setItem('isLogin', 'true');
-    })
-    .catch((err) => {
-      localStorage.removeItem('accessToken');
-    });
-};
