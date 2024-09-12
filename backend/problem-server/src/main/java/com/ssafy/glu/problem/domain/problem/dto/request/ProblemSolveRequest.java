@@ -4,10 +4,7 @@ import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 
 public record ProblemSolveRequest(
-	String problemAnswer,
-
 	String userAnswer,
-
 	Integer solvedTime
 ) {
 	public UserProblemLog toDocument(Long userId, Problem problem, boolean isCorrect) {
