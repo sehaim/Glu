@@ -1,14 +1,20 @@
 import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { useState } from 'react';
+import { LoginUser } from '@/types/UserTypes';
 import styles from '../userRegist.module.css';
+import { login } from '../../utils/user/auth';
 
 export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('로그인'); // 나중에 삭제
+  const handleLogin = async () => {
+    const data: LoginUser = {
+      id,
+      password,
+    };
+    await login(data);
   };
 
   return (

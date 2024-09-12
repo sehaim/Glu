@@ -18,22 +18,22 @@ export const authAxios: AxiosInstance = axios.create({
 });
 
 // 토큰 재발급
-export const refreshAPI = async () => {
-  await authAxios
-    .post(`auth/reissue`)
-    .then((res) => {
-      localStorage.setItem('accessToken', res.data.accessToken);
-    })
-    .catch(() => {
-      localStorage.removeItem('accessToken');
-    });
+export const refreshUser = async () => {
+  try {
+    const res = await authAxios.post(`auth/reissue`);
+    const newToken: string = res.data.accessToken;
+    localStorage.setItem('accessToken', newToken);
+  } catch {
+    localStorage.removeItem('accessToken');
+    alert('로그인 시간이 만료되었습니다. 다시 로그인해주세요.'); // 추후 수정 예정
+  }
 };
 
 // access 토큰 만료시 axios interceptor
 authAxios.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response.status === 401) refreshAPI();
+    if (err.response.status === 401) refreshUser();
   },
 );
 

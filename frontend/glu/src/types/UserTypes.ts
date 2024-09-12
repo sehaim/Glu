@@ -1,13 +1,13 @@
+export interface SignupUser {
+  id: string;
+  password: string;
+  nickname: string;
+  birth: string;
+}
+
 export interface LoginUser {
   id: string;
   password: string;
-}
-
-export interface User {
-  userId: string;
-  password: string;
-  nickname: string;
-  didLevelTest: boolean;
 }
 
 export interface MypageUser {
