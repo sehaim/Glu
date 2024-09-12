@@ -1,6 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@/store';
 import Link from 'next/link';
+import { HiOutlineLogout } from 'react-icons/hi';
+import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
 
 function throttle(
@@ -81,6 +85,14 @@ export default function Header({ color }: { color: string }) {
 
   const headerStyle = getHeaderStyle(color, isScrolled);
 
+  // 로그인 상태에 따른 헤더 변경 구현
+  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <div className={styles.container} style={headerStyle}>
       <div className={styles.content}>
@@ -119,14 +131,32 @@ export default function Header({ color }: { color: string }) {
           </ul>
         </nav>
         <nav className={styles['user-menu']}>
-          <ul>
-            <li>
-              <Link href="/login">로그인</Link>
-            </li>
-            <li>
-              <Link href="/signup">회원가입</Link>
-            </li>
-          </ul>
+          {isLoggedIn ? (
+            <ul>
+              <li>
+                <Link href="/login">로그인</Link>
+              </li>
+              <li>
+                <Link href="/signup">회원가입</Link>
+              </li>
+            </ul>
+          ) : (
+            <ul>
+              <li>
+                <Link href="/mytest/growth">나의 학습</Link>
+              </li>
+              <li>
+                <Link href="/mypage">나의 정보</Link>
+              </li>
+              <li>
+                <HiOutlineLogout
+                  size={20}
+                  onClick={handleLogout}
+                  className={styles['logout-button']}
+                />
+              </li>
+            </ul>
+          )}
         </nav>
       </div>
     </div>

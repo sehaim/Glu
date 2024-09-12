@@ -7,6 +7,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   isLoggedIn: false,
+  accessToken: undefined,
 };
 
 const authSlice = createSlice({

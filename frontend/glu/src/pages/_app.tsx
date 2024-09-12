@@ -7,6 +7,7 @@ import { NextPage } from 'next';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Provider } from 'react-redux';
 import { store } from '@/store';
+import { useEffect } from 'react';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactNode) => ReactNode;

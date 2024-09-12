@@ -9,7 +9,9 @@ export default function Mypage() {
 
   const handleNicknameChnage = () => {};
 
-  const handlePasswordChnage = () => {};
+  const handlePasswordChnage = () => {
+    console.log('변경 완료'); // 추후 삭제
+  };
 
   const handleBirthChnage = () => {};
 
@@ -23,12 +25,17 @@ export default function Mypage() {
       <div className={styles.section}>
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
-            <InputItem label="아이디" direction="row" canEdit={false} />
+            <InputItem
+              value="id"
+              label="아이디"
+              direction="row"
+              canEdit={false}
+            />
           </div>
         </div>
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
-            <InputItem label="닉네임" direction="row" />
+            <InputItem value="nickname" label="닉네임" direction="row" />
           </div>
           <div>
             <SecondaryButton
@@ -40,7 +47,12 @@ export default function Mypage() {
         </div>
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
-            <InputItem label="비밀번호" direction="row" canEdit={false} />
+            <InputItem
+              value="password"
+              label="비밀번호"
+              direction="row"
+              canEdit={false}
+            />
           </div>
           <div>
             <SecondaryButton
@@ -52,7 +64,7 @@ export default function Mypage() {
         </div>
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
-            <InputItem label="생년월일" direction="row" isBirth={true} />
+            <InputItem value="birth" label="생년월일" direction="row" isBirth />
           </div>
           <div>
             <SecondaryButton
@@ -63,17 +75,25 @@ export default function Mypage() {
           </div>
         </div>
       </div>
-      <Modal show={showModal} title="비밀번호 변경" onClose={handleShowModal}>
+      <Modal
+        onSubmit={handlePasswordChnage}
+        show={showModal}
+        title="비밀번호 변경"
+        onClose={handleShowModal}
+      >
         <div className={styles['modal-content']}>
           <InputItem
+            value="password"
             label="현재 비밀번호"
             placeholder="현재 비밀번호를 입력해주세요."
           />
           <InputItem
+            value="password"
             label="새로운 비밀번호"
             placeholder="8자 이상의 영문, 숫자, 특수기호"
           />
           <InputItem
+            value="password"
             label="비밀번호 확인"
             placeholder="비밀번호를 다시 입력해주세요."
           />
