@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
+import { logout as logoutAPI } from '@/utils/user/auth';
 import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
 
@@ -90,6 +91,7 @@ export default function Header({ color }: { color: string }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
+    logoutAPI();
     dispatch(logout());
   };
 
@@ -127,10 +129,14 @@ export default function Header({ color }: { color: string }) {
               </Link>
             </li>
             <li>
-              <Link href="/test">종합 테스트</Link>
+              <Link href="/test" className={styles['menu-name']}>
+                종합 테스트
+              </Link>
             </li>
             <li>
-              <Link href="/problem/1">유형 테스트</Link>
+              <Link href="/problem/1" className={styles['menu-name']}>
+                유형 테스트
+              </Link>
             </li>
           </ul>
         </nav>
@@ -138,25 +144,33 @@ export default function Header({ color }: { color: string }) {
           {!isLoggedIn ? (
             <ul>
               <li>
-                <Link href="/login">로그인</Link>
+                <Link href="/login" className={styles['menu-name']}>
+                  로그인
+                </Link>
               </li>
               <li>
-                <Link href="/signup">회원가입</Link>
+                <Link href="/signup" className={styles['menu-name']}>
+                  회원가입
+                </Link>
               </li>
             </ul>
           ) : (
             <ul>
               <li>
-                <Link href="/mytest/growth">나의 학습</Link>
+                <Link href="/mytest/growth" className={styles['menu-name']}>
+                  나의 학습
+                </Link>
               </li>
               <li>
-                <Link href="/mypage">나의 정보</Link>
+                <Link href="/mypage" className={styles['menu-name']}>
+                  나의 정보
+                </Link>
               </li>
-              <li>
+              <li className={styles['logout-btn-container']}>
                 <HiOutlineLogout
-                  size={20}
+                  size={24}
                   onClick={handleLogout}
-                  className={styles['logout-button']}
+                  className={`${styles['menu-name']} ${styles['logout-btn']}`}
                 />
               </li>
             </ul>

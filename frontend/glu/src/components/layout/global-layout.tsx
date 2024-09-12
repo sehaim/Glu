@@ -21,7 +21,7 @@ export default function GlobalLayout({ children }: { children: ReactNode }) {
     const token: string | null = localStorage.getItem('accessToken');
 
     if (token) {
-      dispatch(login(token));
+      dispatch(login());
       if (isTokenExpired(token)) {
         refreshUser();
       }

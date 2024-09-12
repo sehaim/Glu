@@ -2,19 +2,24 @@ import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { useState } from 'react';
 import { LoginUser } from '@/types/UserTypes';
+import { useDispatch } from 'react-redux';
+import { login } from '@/store/authSlice';
 import styles from '../userRegist.module.css';
-import { login } from '../../utils/user/auth';
+import { login as loginAPI } from '../../utils/user/auth';
 
 export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     const data: LoginUser = {
       id,
       password,
     };
-    await login(data);
+    await loginAPI(data);
+    dispatch(login());
   };
 
   return (

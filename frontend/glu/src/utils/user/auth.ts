@@ -25,6 +25,7 @@ export const login = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
     localStorage.setItem('accessToken', res.headers.accesstoken);
+    window.location.href = '/';
   } catch {
     // alert 추후 수정 예정
     alert('아이디/비밀번호를 확인해주세요');
