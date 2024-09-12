@@ -20,7 +20,7 @@ export const authAxios: AxiosInstance = axios.create({
 // 토큰 재발급
 export const refreshAPI = async () => {
   await authAxios
-    .post(`${BACKEND_URL}/auth/reissue`)
+    .post(`auth/reissue`)
     .then((res) => {
       localStorage.setItem('accessToken', res.data.accessToken);
     })
