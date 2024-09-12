@@ -52,7 +52,7 @@ const getHeaderStyle = (color: string, isScrolled: boolean) => {
 };
 
 export default function Header({ color }: { color: string }) {
-  const [isScrolled, setIsScrolled] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const prevScrollYRef = useRef(0); // 이전 스크롤 값을 useRef로 관리
 
   useEffect(() => {
@@ -70,9 +70,9 @@ export default function Header({ color }: { color: string }) {
 
     const handleScrollEnd = debounce(() => {
       if (window.scrollY < 10) {
-        setIsScrolled(true); // 스크롤이 멈췄을 때 상단이면 흰색 보장
+        setIsScrolled(false); // 스크롤이 멈췄을 때 상단이면 흰색 보장
       }
-    }, 1000); // 스크롤이 멈춘 후 1000ms 후에 상태를 체크
+    }, 100); // 스크롤이 멈춘 후 100ms 후에 상태를 체크
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('scroll', handleScrollEnd); // 스크롤 멈춤 이벤트 추가
@@ -135,7 +135,7 @@ export default function Header({ color }: { color: string }) {
           </ul>
         </nav>
         <nav className={styles['user-menu']}>
-          {isLoggedIn ? (
+          {!isLoggedIn ? (
             <ul>
               <li>
                 <Link href="/login">로그인</Link>
