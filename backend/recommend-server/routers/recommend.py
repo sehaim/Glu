@@ -1,7 +1,16 @@
 from fastapi import APIRouter
-from models.model import ProblemsResponse
+from models import ProblemsResponse
 
-router = APIRouter(prefix="/api/recommend")
+router = APIRouter(prefix="/api")
+
+@router.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+@router.get("/hello/{name}")
+async def say_hello(name: str):
+    return {"message": f"Hello {name}"}
 
 @router.get("/test/level", response_model=ProblemsResponse)
 async def get_level_test():
