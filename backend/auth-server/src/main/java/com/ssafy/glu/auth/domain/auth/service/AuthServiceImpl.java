@@ -49,7 +49,9 @@ public class AuthServiceImpl implements AuthService {
 			throw new LoginInValidException();
 		}
 
-		tokenSave(httpResponse, findUser.get().getId());
+		boolean isFirst = findUser.get().getStage() == 0;
+
+		tokenSave(httpResponse, findUser.get().getId(), findUser.get().getNickname(), isFirst);
 	}
 
 
@@ -67,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void reissue(Long userId, HttpServletResponse httpResponse) {
 
-		userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
 		String refreshToken = jwtTokenService.getRefreshToken(userId);
 
@@ -75,14 +77,16 @@ public class AuthServiceImpl implements AuthService {
 			throw new TokenExpiredException();
 		}
 
-		tokenSave(httpResponse, userId);
+		boolean isFirst = findUser.getStage() == 0;
+
+		tokenSave(httpResponse, userId, findUser.getNickname(), isFirst);
 
 	}
 
-	private void tokenSave(HttpServletResponse httpResponse, Long userId) {
+	private void tokenSave(HttpServletResponse httpResponse, Long userId, String nickname, boolean isFirst) {
 		//토큰 생성
-		String accessToken = jwtUtil.createToken("access", userId, accessTime);
-		String refreshToken = jwtUtil.createToken("refresh", userId, refreshTime);
+		String accessToken = jwtUtil.createToken("access", userId, nickname, isFirst, accessTime);
+		String refreshToken = jwtUtil.createToken("refresh", userId, nickname, isFirst, refreshTime);
 
 		//쿠키에 저장
 		httpResponse.addCookie(createCookie("access", accessToken, accessTime/1000));

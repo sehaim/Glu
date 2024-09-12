@@ -53,11 +53,13 @@ public class JWTUtil {
 		return expiration.before(new Date());      // 만료 여부 확인
 	}
 
-	public String createToken(String category, Long userId, Long expiredMs) {
+	public String createToken(String category, Long userId, String nickname, boolean isFirst, Long expiredMs) {
 
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("id", userId.toString())
+			.claim("nickname", nickname)
+			.claim("isFirst", isFirst)
 			.issuedAt(new Date(System.currentTimeMillis()))
 			.expiration(new Date(System.currentTimeMillis() + expiredMs))
 			.signWith(secretKey)
