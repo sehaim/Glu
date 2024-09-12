@@ -86,7 +86,7 @@ export default function Header({ color }: { color: string }) {
   const headerStyle = getHeaderStyle(color, isScrolled);
 
   // 로그인 상태에 따른 헤더 변경 구현
-  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
