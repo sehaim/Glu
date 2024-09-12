@@ -20,7 +20,7 @@ public enum ErrorCode {
     //로그인 불가능
     LOGIN_INVALID(400, "LOGIN_INVALID", "아이디 또는 비밀번호가 잘못되었습니다."),
     USER_NOT_FOUND(404, "USER_NOT_FOUND", "유저가 없습니다."),
-    TOKEN_EXPIRED(403, "TOKEN_EXPIRED", "토큰이 만료되었습니다.");
+    REFRESH_TOKEN_EXPIRED(401, "REFRESH_TOKEN_EXPIRED", "리프레시 토큰이 만료되었습니다.");
 
     private final int httpStatus;
     private final String code;
