@@ -15,6 +15,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Problem extends BaseTimeDocument {
+	public enum Status{
+		CORRECT,
+		WRONG
+	}
+
 	@Id
 	private String problemId;
 
@@ -23,6 +28,8 @@ public class Problem extends BaseTimeDocument {
 	private final String title;
 
 	private final String content;
+
+	private final String answer;
 
 	private final String solution;
 
@@ -35,10 +42,10 @@ public class Problem extends BaseTimeDocument {
 	private final Map<String, Object> metadata;
 
 	@Builder
-	public Problem(String title, String content, String solution, ProblemLevel problemLevel, ProblemType problemType,
-		ProblemTypeDetail problemTypeDetail, QuestionType questionType, Map<String, Object> metadata) {
+	public Problem(String title, String content, String answer, String solution, ProblemLevel problemLevel, ProblemType problemType, ProblemTypeDetail problemTypeDetail, QuestionType questionType, Map<String, Object> metadata) {
 		this.title = title;
 		this.content = content;
+		this.answer = answer;
 		this.solution = solution;
 		this.problemLevel = problemLevel;
 		this.problemType = problemType;
@@ -47,8 +54,12 @@ public class Problem extends BaseTimeDocument {
 		this.metadata = metadata;
 	}
 
-	public enum Status {
-		CORRECT,
-		WRONG
+	//=== 비즈니스 로직 ====//
+
+	// 맞았는지 틀렸는지 반환
+	public boolean isCorrect(String userAnswer) {
+		// TODO: 구체적인 정답 여부 판별 필요
+		return questionType.getQuestionTypeCode().getGradingStrategy().isCorrect(userAnswer, answer);
 	}
+
 }
