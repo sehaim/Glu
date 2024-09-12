@@ -7,7 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     // 서버 오류
-    INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "서버 오류가 발생했습니다.");
+    INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "서버 오류가 발생했습니다."),
+
+    // 공통 코드 조회 오류
+    COMMON_CODE_NOT_FOUND(404, "COMMON_CODE_NOT_FOUND", "공통 코드를 찾을 수 없습니다."),
+    COMMON_CODE_INVALID_REQUEST(400, "COMMON_CODE_INVALID_REQUEST", "잘못된 공통 코드 요청입니다.");
 
     private final int httpStatus;
     private final String code;
