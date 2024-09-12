@@ -30,7 +30,8 @@ export default function ProblemHeader({
           <div className={styles['problem-type-text']}>{problemType}</div>
         </div>
         <div className={styles['problem-title']}>
-          {problemIndex}. {problemTitle}
+          {problemIndex}
+          {problemIndex && '.'} {problemTitle}
         </div>
       </div>
     </div>

@@ -3,17 +3,19 @@ import { useEffect, useState } from 'react';
 import styles from './problemOptionList.module.css';
 
 interface ProblemOptionListProps {
-  curSelectedIndex: number;
-  problemIndex: number;
+  selectedOption: number; // 변경된 이름
+  problemIndex?: number;
   problemOptions: ProblemOption[];
-  onAnswer: (problemIndex: number, problemAnswer: number) => void;
+  onTestProblemAnswer?: (problemIndex: number, problemAnswer: number) => void; // 테스트 문제에 대한 콜백
+  onSingleProblemAnswer?: (problemAnswer: number) => void; // 단일 문제에 대한 콜백
 }
 
 export default function ProblemOptionList({
-  curSelectedIndex,
+  selectedOption, // 변경된 이름
   problemIndex,
   problemOptions,
-  onAnswer,
+  onTestProblemAnswer,
+  onSingleProblemAnswer,
 }: ProblemOptionListProps) {
   const [options, setOptions] = useState<ProblemOption[]>([]);
 
@@ -22,7 +24,15 @@ export default function ProblemOptionList({
   }, [problemOptions]);
 
   const handleOptionClick = (userAnswer: number) => {
-    onAnswer(problemIndex, userAnswer);
+    // Test 문제 풀이
+    if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
+      onTestProblemAnswer(problemIndex, userAnswer);
+    }
+
+    // 단일 문제 풀이
+    if (onSingleProblemAnswer) {
+      onSingleProblemAnswer(userAnswer);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent, optionId: number) => {
@@ -37,7 +47,7 @@ export default function ProblemOptionList({
         <div
           key={option.problemOptionId}
           className={`${styles['problem-option']} ${
-            curSelectedIndex === index + 1
+            selectedOption === index + 1 // 변경된 부분
               ? styles['problem-option-selected']
               : ''
           }`}
