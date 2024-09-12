@@ -47,7 +47,6 @@ export default function Test() {
     const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
     setProblems(fixedProblems);
 
-    // 답안 초기화 함수
     const initializeAnswers = () => {
       const initialAnswers = fixedProblems.map((problem) => ({
         problemId: problem.problemId,
@@ -56,9 +55,11 @@ export default function Test() {
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
+      sessionStorage.setItem('savedAnswers', JSON.stringify(initialAnswers));
     };
 
     const savedAnswers = sessionStorage.getItem('savedAnswers');
+
     if (savedAnswers) {
       Swal({
         title: '이전에 저장된 답안을 불러올까요?',
@@ -66,7 +67,7 @@ export default function Test() {
         icon: 'info',
         buttons: ['새로 시작', '불러오기'],
         dangerMode: true,
-      }).then((willContinue: boolean | null) => {
+      }).then((willContinue) => {
         if (willContinue) {
           const parsedAnswers = JSON.parse(savedAnswers);
           setAnswers(parsedAnswers);
@@ -74,9 +75,9 @@ export default function Test() {
           initializeAnswers();
         }
       });
-    } else {
-      initializeAnswers();
     }
+
+    initializeAnswers();
   }, []);
 
   useEffect(() => {
