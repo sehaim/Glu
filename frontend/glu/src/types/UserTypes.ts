@@ -1,3 +1,8 @@
+export interface LoginUser {
+  id: string;
+  password: string;
+}
+
 export interface User {
   userId: string;
   password: string;
