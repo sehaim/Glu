@@ -10,15 +10,15 @@ import lombok.Builder;
 public record CommonCodeResponse(
 	String typeCode,
 	String name,
-	List<CommonCodeResponse> typeDetailList
+	List<CommonCodeResponse> codeDetailList
 ) {
-	public static CommonCodeResponse of(CommonCode typeCode, List<CommonCodeResponse> typeDetailList) {
-		if (typeCode == null || typeDetailList == null)
+	public static CommonCodeResponse of(CommonCode typeCode, List<CommonCodeResponse> codeDetailList) {
+		if (typeCode == null || codeDetailList == null)
 			return null;
 		return CommonCodeResponse.builder()
 			.typeCode(typeCode.getTypeCode())
 			.name(typeCode.getName())
-			.typeDetailList(typeDetailList)
+			.codeDetailList(codeDetailList)
 			.build();
 	}
 
