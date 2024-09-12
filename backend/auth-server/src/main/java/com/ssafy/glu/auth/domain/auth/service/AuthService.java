@@ -10,5 +10,5 @@ public interface AuthService {
 
 	void logout(Long userId, HttpServletResponse httpResponse);
 
-	void reissue(Long userId, HttpServletResponse httpResponse);
+	void reissue(String token, HttpServletResponse httpResponse);
 }

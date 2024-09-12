@@ -14,6 +14,7 @@ import com.ssafy.glu.auth.domain.auth.exception.UserNotFoundException;
 import com.ssafy.glu.auth.domain.auth.repository.UserRepository;
 import com.ssafy.glu.auth.domain.auth.util.JWTUtil;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -65,20 +66,17 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public void reissue(Long userId, HttpServletResponse httpResponse) {
+	public void reissue(String refreshToken, HttpServletResponse httpResponse) {
+
+		Claims claims = jwtUtil.verifyToken(refreshToken);
+
+		Long userId = jwtUtil.getUserId(claims);
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
-		String refreshToken = jwtTokenService.getRefreshToken(userId);
-
-		if (refreshToken == null || jwtUtil.isExpired(refreshToken)) {
-			throw new RefreshTokenExpiredException();
-		}
 
 		boolean isFirst = findUser.getStage() == 0;
 
 		tokenSave(httpResponse, userId, findUser.getNickname(), isFirst);
-
 	}
 
 	private void tokenSave(HttpServletResponse httpResponse, Long userId, String nickname, boolean isFirst) {
