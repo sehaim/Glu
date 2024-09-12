@@ -3,13 +3,5 @@ spring:
     name: glu-common
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-
-  # ----- Config Server에서 처리 -----
-  # Cloud
-  cloud:
-    config:
-      enabled: false
-
-  data:
-    mongodb:
-      uri: mongodb+srv://S11P22A506:denr23bdoE@ssafy.ngivl.mongodb.net/S11P22A506?authSource=admin
+  config:
+    import: optional:configserver:http://admin:1234@j11a506.p.ssafy.io:${CONFIG_PORT:4000}
