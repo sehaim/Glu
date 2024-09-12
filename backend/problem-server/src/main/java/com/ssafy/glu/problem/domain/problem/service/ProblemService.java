@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 
 public interface ProblemService {
@@ -19,7 +21,7 @@ public interface ProblemService {
 	void deleteUserProblemFavorite(Long userId, String problemId);
 
 	// TestGradingDetailResponse gradeProblemList(Long userId, ProblemSolveListRequest request);
-	// ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request);
+	ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request);
 	// TestGradingBaseResponse getPreviousTest(Long userId);
 	// List<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable);
 }

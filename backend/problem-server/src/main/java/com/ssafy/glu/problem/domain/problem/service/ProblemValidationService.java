@@ -9,7 +9,9 @@ import com.mongodb.MongoException;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteCancelFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteRegistrationFailedException;
@@ -148,6 +150,15 @@ public class ProblemValidationService implements ProblemService {
 		} catch (MongoException exception) {
 			throw new FavoriteCancelFailedException(exception);
 		}
+	}
+
+	@Override
+	public ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request) {
+		// Null 값 검증
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
+
+		return problemService.gradeProblem(userId, problemId, request);
 	}
 
 	// ===== 찾기 로직 =====
