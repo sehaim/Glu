@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from models import ProblemsResponse
+from models.model import ProblemsResponse
 
 router = APIRouter(prefix="/api/recommend")
 
