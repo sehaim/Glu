@@ -10,10 +10,44 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 64px;
+  gap: 20px;
+}
+
+.problem-button-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 820px;
+
+  margin: 64px 0px;
+}
+
+.problem-button-list button:first-child {
+  margin-right: auto;
+}
+
+.problem-button-list button:last-child {
+  margin-left: auto;
+}
+
+@media (max-width: 1024px) {
+  .problem-button-list {
+    width: 720px;
+  }
 }
 
 @media (max-width: 768px) {
   .problem-content {
     flex-direction: column;
+  }
+
+  .problem-button-list {
+    width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .problem-button-list {
+    width: 320px;
   }
 }

@@ -1,0 +1,33 @@
+{
+  "problemId": 2,
+  "title": "소수를 찾으세요",
+  "content": "/images/glu_character_shadow.png",
+  "problemOptions": [
+    {
+      "problemOptionId": 1,
+      "option": "12"
+    },
+    {
+      "problemOptionId": 2,
+      "option": "17"
+    },
+    {
+      "problemOptionId": 3,
+      "option": "20"
+    },
+    {
+      "problemOptionId": 4,
+      "option": "25"
+    }
+  ],
+  "solution": "17",
+  "problemLevel": {
+    "problemLevelCode": "EASY",
+    "name": "초급"
+  },
+  "problemType": {
+    "problemTypeCode": "MATH",
+    "problemTypeDetailCode": "0",
+    "name": "수학 - 소수"
+  }
+}

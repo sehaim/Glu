@@ -99,9 +99,11 @@ export default function Header({ color }: { color: string }) {
               </Link>
             </li>
             <li>
-              유형
-              <br />
-              테스트
+              <Link href="/problem/1">
+                유형
+                <br />
+                테스트
+              </Link>
             </li>
           </ul>
         </nav>
@@ -115,7 +117,9 @@ export default function Header({ color }: { color: string }) {
             <li>
               <Link href="/test">종합 테스트</Link>
             </li>
-            <li>유형 테스트</li>
+            <li>
+              <Link href="/problem/1">유형 테스트</Link>
+            </li>
           </ul>
         </nav>
         <nav className={styles['user-menu']}>

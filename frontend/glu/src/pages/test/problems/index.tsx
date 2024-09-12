@@ -183,10 +183,10 @@ export default function Test() {
                   />
                 )}
                 <ProblemOptionList
-                  curSelectedIndex={answers[currentProblemIndex]?.userAnswer}
+                  selectedOption={answers[currentProblemIndex]?.userAnswer}
                   problemIndex={currentProblemIndex}
                   problemOptions={currentProblem?.problemOptions}
-                  onAnswer={handleAnswer}
+                  onTestProblemAnswer={handleAnswer}
                 />
               </div>
             </div>
