@@ -146,33 +146,29 @@ export default function Test() {
         />
 
         {currentProblem && (
-          <div className={styles['problem-wrapper']}>
-            <div className={styles.problem} key={currentProblem.problemId}>
-              <ProblemHeader
-                problemIndex={currentProblemIndex + 1}
-                problemLevel={currentProblem?.problemLevel?.name}
-                problemType={currentProblem?.problemType?.name}
-                problemTitle={currentProblem?.title}
-              />
-              <div className={styles['problem-content']}>
-                {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
-                  <ProblemContentImage
-                    imageUrl={currentProblem?.content}
-                    altText={currentProblem?.title || '문제 이미지'}
-                  />
-                )}
-                {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
-                  <ProblemContentText
-                    problemContent={currentProblem?.content}
-                  />
-                )}
-                <ProblemOptionList
-                  selectedOption={answers[currentProblemIndex]?.userAnswer}
-                  problemIndex={currentProblemIndex}
-                  problemOptions={currentProblem?.problemOptions}
-                  onTestProblemAnswer={handleAnswer}
+          <div className={styles.problem}>
+            <ProblemHeader
+              problemIndex={currentProblemIndex + 1}
+              problemLevel={currentProblem?.problemLevel?.name}
+              problemType={currentProblem?.problemType?.name}
+              problemTitle={currentProblem?.title}
+            />
+            <div className={styles['problem-content']}>
+              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                <ProblemContentImage
+                  imageUrl={currentProblem?.content}
+                  altText={currentProblem?.title || '문제 이미지'}
                 />
-              </div>
+              )}
+              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+                <ProblemContentText problemContent={currentProblem?.content} />
+              )}
+              <ProblemOptionList
+                selectedOption={answers[currentProblemIndex]?.userAnswer}
+                problemIndex={currentProblemIndex}
+                problemOptions={currentProblem?.problemOptions}
+                onTestProblemAnswer={handleAnswer}
+              />
             </div>
             <div className={styles['problem-button-list']}>
               {currentProblemIndex > 0 ? (

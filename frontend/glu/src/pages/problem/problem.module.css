@@ -5,6 +5,28 @@
   align-items: center;
 }
 
+.left-container {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 60px 0px;
+  margin-right: 40px;
+}
+
+.problem-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.problem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .problem-content {
   display: flex;
   justify-content: space-between;
@@ -28,6 +50,20 @@
 
 .problem-button-list button:last-child {
   margin-left: auto;
+}
+
+@media (min-width: 1200px) {
+  .left-container {
+    width: 160px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .left-container {
+    display: flex;
+    width: 240px;
+    margin-right: 80px;
+  }
 }
 
 @media (max-width: 1024px) {

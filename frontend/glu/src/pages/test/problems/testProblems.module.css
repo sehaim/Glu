@@ -11,13 +11,6 @@
   align-items: flex-start;
 }
 
-.problem-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .problem {
   display: flex;
   flex-direction: column;
@@ -58,21 +51,6 @@
   color: var(--WHITE);
   font-family: 'BMJUA';
   cursor: pointer;
-}
-
-@media (min-width: 1200px) {
-  .left-navigation {
-    display: flex;
-    width: 160px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .left-navigation {
-    display: flex;
-    width: 240px;
-    margin-right: 80px;
-  }
 }
 
 @media (max-width: 1024px) {

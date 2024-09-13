@@ -8,8 +8,8 @@ import ProblemContentImage from '@/components/problem/problemContentImage';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
-import styles from './problem.module.css';
 import { Memo } from '@/types/MemoTypes';
+import styles from './problem.module.css';
 
 interface ProblemResponse {
   problemId: number;
@@ -92,34 +92,42 @@ export default function Test() {
 
   return (
     <div className={styles.container}>
-      <ProblemHeader
-        problemLevel={problem.problemLevel.name}
-        problemType={problem.problemType.name}
-        problemTitle={problem.title}
-      />
-      <div className={styles['problem-content']}>
-        {problem.problemType?.problemTypeDetailCode === '0' && (
-          <ProblemContentImage
-            imageUrl={problem.content}
-            altText={problem.title || '문제 이미지'}
+      <div className={styles['problem-container']}>
+        <div className={styles['left-container']} />
+        <div className={styles.problem}>
+          <ProblemHeader
+            problemLevel={problem.problemLevel.name}
+            problemType={problem.problemType.name}
+            problemTitle={problem.title}
           />
-        )}
-        {problem.problemType?.problemTypeDetailCode !== '0' && (
-          <ProblemContentText problemContent={problem.content} />
-        )}
-        <ProblemOptionList
-          problemOptions={problem.problemOptions}
-          selectedOption={selectedOption}
-          onSingleProblemAnswer={handleOptionClick}
-        />
+          <div className={styles['problem-content']}>
+            {problem.problemType?.problemTypeDetailCode === '0' && (
+              <ProblemContentImage
+                imageUrl={problem.content}
+                altText={problem.title || '문제 이미지'}
+              />
+            )}
+            {problem.problemType?.problemTypeDetailCode !== '0' && (
+              <ProblemContentText problemContent={problem.content} />
+            )}
+            <ProblemOptionList
+              problemOptions={problem.problemOptions}
+              selectedOption={selectedOption}
+              onSingleProblemAnswer={handleOptionClick}
+            />
+          </div>
+          {/* 제출하기 버튼 */}
+          <div className={styles['problem-button-list']}>
+            <div />
+            <PrimaryButton
+              size="medium"
+              label="제출하기"
+              onClick={handleSubmit}
+            />
+          </div>
+        </div>
+        <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
       </div>
-      {/* 제출하기 버튼 */}
-      <div className={styles['problem-button-list']}>
-        <div />
-        <PrimaryButton size="medium" label="제출하기" onClick={handleSubmit} />
-      </div>
-
-      <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
     </div>
   );
 }
