@@ -16,5 +16,6 @@ wordcloud==1.9.3
 sqlalchemy
 pyyaml
 pymysql
+pymongo
 fastapi
 uvicorn
