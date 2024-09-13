@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gludata.iml" filepath="$PROJECT_DIR$/.idea/gludata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/glu.iml" filepath="$PROJECT_DIR$/.idea/glu.iml" />
     </modules>
   </component>
 </project>

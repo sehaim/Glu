@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from recommendRouter import router  # router.py에서 라우터 가져오기
+from routers import recommend_router
 
 app = FastAPI()
 
 # 라우터 등록
-app.include_router(router)
+app.include_router(recommend_router)
