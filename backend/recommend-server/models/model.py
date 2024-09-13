@@ -1,3 +1,5 @@
+from datetime import date
+
 from pydantic import BaseModel
 from typing import List
 
@@ -25,3 +27,17 @@ class Problem(BaseModel):
 
 class ProblemsResponse(BaseModel):
     problems: List[Problem]
+
+class UserResponse(BaseModel):
+    user_id: int
+    login_id: str
+    nickname: str
+    password: str
+    birth: date
+    is_deleted: bool
+    stage: int
+    exp: int
+    day_count: int
+
+    class Config:
+        from_attributes = True
