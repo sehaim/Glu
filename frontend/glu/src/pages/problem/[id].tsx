@@ -7,7 +7,9 @@ import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemContentImage from '@/components/problem/problemContentImage';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
+import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import styles from './problem.module.css';
+import { Memo } from '@/types/MemoTypes';
 
 interface ProblemResponse {
   problemId: number;
@@ -25,6 +27,13 @@ export default function Test() {
   const [selectedOption, setSelectedOption] = useState<number>(0); // State for selected option
   const [startTime, setStartTime] = useState<number>(0); // Start time state
   const [, setElapsedTime] = useState<number>(0); // Elapsed time state
+  // 기존에 있던 dummyMemo를 상태로 변경
+  const [memoList, setMemoList] = useState<Memo[]>([
+    { memoId: 1, content: 'This is the first memo content.' },
+    { memoId: 2, content: 'This is the second memo content.' },
+    { memoId: 3, content: 'This is the third memo content.' },
+    { memoId: 4, content: 'This is the fourth memo content.' },
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +61,23 @@ export default function Test() {
     const timeTaken = Math.floor((endTime - startTime) / 1000); // 경과 시간 계산 (초 단위)
     setElapsedTime(timeTaken); // 경과 시간 상태 업데이트
     setStartTime(Date.now());
+  };
+
+  const handleMemoSave = (newMemo: Memo) => {
+    setMemoList((prevMemoList) => {
+      // 만약 기존 메모를 수정하는 경우 memoId를 비교하여 업데이트
+      const memoIndex = prevMemoList.findIndex(
+        (memo) => memo.memoId === newMemo.memoId,
+      );
+      if (memoIndex > -1) {
+        // 기존 메모 수정
+        const updatedMemoList = [...prevMemoList];
+        updatedMemoList[memoIndex] = newMemo;
+        return updatedMemoList;
+      }
+      // 새로운 메모 추가
+      return [...prevMemoList, newMemo];
+    });
   };
 
   // 로딩 상태에서 undefined인 경우 처리
@@ -92,6 +118,8 @@ export default function Test() {
         <div />
         <PrimaryButton size="medium" label="제출하기" onClick={handleSubmit} />
       </div>
+
+      <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
     </div>
   );
 }

@@ -11,104 +11,6 @@
   align-items: flex-start;
 }
 
-.left-navigation {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  margin: 60px 0px;
-  margin-right: 40px;
-}
-
-.problem-solved-title {
-  width: 120px;
-  color: var(--TEXT_SECONDARY);
-  font-size: 16px;
-  font-family: 'PTBOLD';
-  margin-bottom: 32px;
-}
-
-.problem-solved-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 24px;
-  width: 120px;
-  background-color: var(--WHITE);
-  color: var(--TEXT_SECONDARY);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'PT';
-}
-
-.problem-solved-button:hover {
-  color: var(--PINK);
-}
-
-.problem-solved-button-active {
-  color: var(--PINK);
-}
-
-.problem-solved-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.right-navigation {
-  display: none;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin: 60px 0px;
-  margin-left: 40px;
-  min-height: 400px;
-}
-
-.memo-textarea {
-  width: 100%;
-  min-height: 150px;
-  padding: 12px;
-  background-color: #ffeff1; /* 메모 배경색 */
-  border: 2px solid #ffcccb; /* 메모 테두리 */
-  border-radius: 6px; /* 둥근 모서리 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
-  color: var(--TEXT_SECONDARY);
-  font-family: 'PT';
-  line-height: 1.5; /* 줄 간격 */
-  resize: none; /* 크기 조절 막기 */
-  outline: none; /* 클릭 시 외곽선 제거 */
-  margin-bottom: 16px;
-}
-
-.memo-textarea::placeholder {
-  color: #ff6b81; /* 핑크색 플레이스홀더 */
-}
-
-.memo-textarea:focus {
-  border-color: #ff6b81; /* 포커스 시 테두리 색 변경 */
-  box-shadow: 0 0 8px rgba(255, 107, 129, 0.5); /* 포커스 시 그림자 */
-}
-
-.memo-textarea-button-list {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-  width: 100%;
-}
-
-.memo-list {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 16px;
-}
-
 .problem-wrapper {
   display: flex;
   flex-direction: column;
@@ -158,47 +60,8 @@
   cursor: pointer;
 }
 
-.progressbar-container {
-  position: relative;
-  padding-right: 0px 50px;
-  width: 820px;
-  background: linear-gradient(
-    to bottom,
-    var(--YELLOW) 70%,
-    var(--LIGHTGREEN) 50%
-  );
-}
-
-.progressbar {
-  position: relative;
-  width: 770px;
-  height: 160px;
-}
-
-.progress-character {
-  position: absolute;
-  bottom: 10px;
-  width: 80px;
-  height: 110px;
-  transition: left 0.5s ease-in-out;
-  z-index: 2;
-}
-
-.progress-house {
-  position: absolute;
-  right: 0;
-  bottom: 20px;
-  width: 120px;
-  height: 120px;
-}
-
 @media (min-width: 1200px) {
   .left-navigation {
-    display: flex;
-    width: 160px;
-  }
-
-  .right-navigation {
     display: flex;
     width: 160px;
   }
@@ -210,24 +73,11 @@
     width: 240px;
     margin-right: 80px;
   }
-
-  .right-navigation {
-    display: flex;
-    width: 240px;
-  }
 }
 
 @media (max-width: 1024px) {
   .problem-button-list {
     width: 720px;
-  }
-
-  .progressbar-container {
-    width: 720px;
-  }
-
-  .progressbar {
-    width: 670px;
   }
 }
 
@@ -239,37 +89,10 @@
   .problem-button-list {
     width: 400px;
   }
-
-  .progressbar-container {
-    padding-right: 0px 60px;
-    width: 400px;
-  }
-
-  .progressbar {
-    width: 340px;
-  }
-
-  .progress-character {
-    width: 60px;
-    height: 80px;
-  }
-
-  .progress-house {
-    width: 90px;
-    height: 90px;
-  }
 }
 
 @media (max-width: 480px) {
   .problem-button-list {
     width: 320px;
-  }
-
-  .progressbar-container {
-    width: 320px;
-  }
-
-  .progressbar {
-    width: 260px;
   }
 }
