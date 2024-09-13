@@ -6,15 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoException;
-import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
-import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteAlreadyRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteCancelFailedException;
-import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteNotRegisteredException;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteRegistrationFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.NullMemoIndexException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoCreateFailedException;
@@ -22,7 +19,6 @@ import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoDeleteFail
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoUpdateFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.problem.NullProblemIdException;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
-import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.user.NullUserIdException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
@@ -54,9 +50,7 @@ public class ProblemValidationService implements ProblemService {
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 
-		// Status 존재 여부 검증
-		userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId, problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
+		validateProblemIsNotExists(problemId);
 
 		try {
 			ProblemMemoResponse response = problemService.createProblemMemo(userId, problemId, request);
@@ -107,7 +101,6 @@ public class ProblemValidationService implements ProblemService {
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 
-		Problem problem = getProblemOrThrow(problemId);
 		return problemService.getProblemMemoList(userId, problemId, pageable);
 	}
 
@@ -121,8 +114,10 @@ public class ProblemValidationService implements ProblemService {
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 
-		// 문제 존재 여부 확인
-		Problem problem = getProblemOrThrow(problemId);
+		validateProblemIsNotExists(problemId);
+
+		// 문제  여부 확인
+		validateProblemIsNotExists(problemId);
 
 		try {
 			problemService.createUserProblemFavorite(userId, problemId);
@@ -142,7 +137,7 @@ public class ProblemValidationService implements ProblemService {
 		validateProblemIdIsNull(problemId);
 
 		// 문제 존재 여부 확인
-		Problem problem = getProblemOrThrow(problemId);
+		validateProblemIsNotExists(problemId);
 
 		try {
 			problemService.deleteUserProblemFavorite(userId, problemId);
@@ -153,8 +148,10 @@ public class ProblemValidationService implements ProblemService {
 
 	// ===== 찾기 로직 =====
 	// 문제 존재 여부 판단
-	private Problem getProblemOrThrow(String problemId) {
-		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+	private void validateProblemIsNotExists(String problemId) {
+		if (problemRepository.existsById(problemId)) {
+			throw new ProblemNotFoundException();
+		}
 	}
 
 	// ===== 검증 로직 =====
