@@ -105,20 +105,24 @@ export default function Header({ color }: { color: string }) {
                 <h1 className={styles.logo}>Glu</h1>
               </Link>
             </li>
-            <li>
-              <Link href="/test">
-                종합
-                <br />
-                테스트
-              </Link>
-            </li>
-            <li>
-              <Link href="/problem/1">
-                유형
-                <br />
-                테스트
-              </Link>
-            </li>
+            {isLoggedIn && (
+              <>
+                <li>
+                  <Link href="/test">
+                    종합
+                    <br />
+                    테스트
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/problem/1">
+                    유형
+                    <br />
+                    테스트
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         <nav className={styles['info-menu']}>
@@ -128,16 +132,20 @@ export default function Header({ color }: { color: string }) {
                 <h1 className={styles.logo}>Glu</h1>
               </Link>
             </li>
-            <li>
-              <Link href="/test" className={styles['menu-name']}>
-                종합 테스트
-              </Link>
-            </li>
-            <li>
-              <Link href="/problem/1" className={styles['menu-name']}>
-                유형 테스트
-              </Link>
-            </li>
+            {isLoggedIn && (
+              <>
+                <li>
+                  <Link href="/test" className={styles['menu-name']}>
+                    종합 테스트
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/problem/1" className={styles['menu-name']}>
+                    유형 테스트
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         <nav className={styles['user-menu']}>
