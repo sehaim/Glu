@@ -18,4 +18,9 @@ import lombok.RequiredArgsConstructor;
 public class CommonCodeController {
 	private final CommonCodeService commonCodeService;
 
+	@GetMapping
+	public ResponseEntity<CommonCodeResponse> getCommonCodeList(@RequestParam("codeType") String codeType) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(commonCodeService.getCommonCodeListByTypeCodeWithDetails(codeType));
+	}
 }
