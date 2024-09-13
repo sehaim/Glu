@@ -21,21 +21,6 @@ function throttle(
   };
 }
 
-function debounce(
-  func: (event: Event) => void,
-  delay: number,
-): (event: Event) => void {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null; // 타임아웃 ID를 저장할 변수
-
-  return function callback(event: Event) {
-    if (timeoutId) clearTimeout(timeoutId); // 이전 타임아웃이 있다면 취소
-
-    timeoutId = setTimeout(() => {
-      func(event); // 지정된 시간 후에 함수 실행
-    }, delay);
-  };
-}
-
 const getHeaderStyle = (color: string, isScrolled: boolean) => {
   const style: { [key: string]: string } = {};
 
@@ -69,18 +54,10 @@ export default function Header({ color }: { color: string }) {
       prevScrollYRef.current = currentScrollY; // useRef로 이전 스크롤 위치 업데이트
     }, 100); // 100ms 간격으로 스크롤 이벤트 처리
 
-    const handleScrollEnd = debounce(() => {
-      if (window.scrollY < 10) {
-        setIsScrolled(false); // 스크롤이 멈췄을 때 상단이면 흰색 보장
-      }
-    }, 100); // 스크롤이 멈춘 후 100ms 후에 상태를 체크
-
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('scroll', handleScrollEnd); // 스크롤 멈춤 이벤트 추가
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('scroll', handleScrollEnd);
     };
   }, []);
 

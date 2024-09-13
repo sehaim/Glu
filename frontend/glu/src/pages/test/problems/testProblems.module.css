@@ -16,8 +16,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
+  margin: 60px 0px;
   margin-right: 40px;
-  padding: 60px 0px;
 }
 
 .problem-solved-title {
@@ -58,6 +58,55 @@
 
 .right-navigation {
   display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 60px 0px;
+  margin-left: 40px;
+  min-height: 400px;
+}
+
+.memo-textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 12px;
+  background-color: #ffeff1; /* 메모 배경색 */
+  border: 2px solid #ffcccb; /* 메모 테두리 */
+  border-radius: 6px; /* 둥근 모서리 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  line-height: 1.5; /* 줄 간격 */
+  resize: none; /* 크기 조절 막기 */
+  outline: none; /* 클릭 시 외곽선 제거 */
+  margin-bottom: 16px;
+}
+
+.memo-textarea::placeholder {
+  color: #ff6b81; /* 핑크색 플레이스홀더 */
+}
+
+.memo-textarea:focus {
+  border-color: #ff6b81; /* 포커스 시 테두리 색 변경 */
+  box-shadow: 0 0 8px rgba(255, 107, 129, 0.5); /* 포커스 시 그림자 */
+}
+
+.memo-textarea-button-list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.memo-list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 .problem-wrapper {

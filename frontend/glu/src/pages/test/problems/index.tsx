@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -8,8 +7,9 @@ import dummyProblems from '@/mock/dummyProblems.json';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
 import ProblemContentImage from '@/components/problem/problemContentImage';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import Swal from 'sweetalert';
+import ProblemMemoIcon from '@/components/problem/problemMemoIcon';
+import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -17,6 +17,11 @@ interface ProblemAnswer {
   userAnswer: number; // 사용자의 선택
   problemAnswer: number; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)
+}
+
+interface Memo {
+  memoId: number;
+  content: string;
 }
 
 export default function Test() {
@@ -28,8 +33,20 @@ export default function Test() {
   const [, setTotalSolvedTime] = useState<number>(0);
   const router = useRouter();
   const currentProblem = problems[currentProblemIndex];
+  const [isEditingMemo, setIsEditingMemo] = useState<boolean>(false); // 메모 작성 중 여부
+  const [newMemoContent, setNewMemoContent] = useState<string>(''); // 새 메모 또는 수정할 메모의 내용을 저장하는 상태
+  const [selectedMemoIndex, setSelectedMemoIndex] = useState<number | null>(
+    null,
+  ); // 선택된 메모의 인덱스
 
-  // 답안 업데이트 및 세션 스토리지 저장 함수
+  // 기존에 있던 dummyMemo를 상태로 변경
+  const [memoList, setMemoList] = useState<Memo[]>([
+    { memoId: 1, content: 'This is the first memo content.' },
+    { memoId: 2, content: 'This is the second memo content.' },
+    { memoId: 3, content: 'This is the third memo content.' },
+    { memoId: 4, content: 'This is the fourth memo content.' },
+  ]);
+
   const updateAnswers = (
     problemIndex: number,
     updatedFields: Partial<ProblemAnswer>,
@@ -38,7 +55,6 @@ export default function Test() {
       const updatedAnswers = prevAnswers.map((answer, index) =>
         index === problemIndex ? { ...answer, ...updatedFields } : answer,
       );
-      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
       return updatedAnswers;
     });
   };
@@ -55,7 +71,6 @@ export default function Test() {
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
-      sessionStorage.setItem('savedAnswers', JSON.stringify(initialAnswers));
     };
 
     const savedAnswers = sessionStorage.getItem('savedAnswers');
@@ -76,7 +91,6 @@ export default function Test() {
         }
       });
     }
-
     initializeAnswers();
   }, []);
 
@@ -86,7 +100,6 @@ export default function Test() {
 
     return () => {
       const timeSpent = Math.floor((Date.now() - start) / 1000);
-
       setTotalSolvedTime(
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
       );
@@ -133,6 +146,46 @@ export default function Test() {
     router.push('/test/result');
   };
 
+  const handleMemoClick = (index: number) => {
+    const selectedMemo = memoList[index];
+    setSelectedMemoIndex(index);
+    setNewMemoContent(selectedMemo.content); // 기존 메모 내용을 입력란에 표시
+    setIsEditingMemo(true); // 수정 모드로 전환
+  };
+
+  const handleMemoSave = () => {
+    // 메모 저장 로직 (수정 및 새 메모 추가)
+    if (selectedMemoIndex !== null) {
+      const updatedMemoList = [...memoList];
+      updatedMemoList[selectedMemoIndex] = {
+        ...updatedMemoList[selectedMemoIndex],
+        content: newMemoContent,
+      };
+      setMemoList(updatedMemoList); // 수정된 메모 업데이트
+    } else {
+      const newMemo = {
+        memoId: memoList.length + 1,
+        content: newMemoContent,
+      };
+      setMemoList([...memoList, newMemo]); // 새 메모 추가
+    }
+    setIsEditingMemo(false); // 메모 저장 후 작성 창 종료
+    setNewMemoContent(''); // 입력란 초기화
+    setSelectedMemoIndex(null); // 선택된 메모 초기화
+  };
+
+  const handleMemoCancel = () => {
+    setIsEditingMemo(false);
+    setNewMemoContent(''); // 취소 시 입력란 초기화
+    setSelectedMemoIndex(null); // 선택된 메모 초기화
+  };
+
+  const handleNewMemo = () => {
+    setIsEditingMemo(true);
+    setSelectedMemoIndex(null); // 새 메모 작성을 위해 선택된 메모 초기화
+    setNewMemoContent(''); // 새 메모 작성할 때는 내용 초기화
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles['problem-container']}>
@@ -143,7 +196,9 @@ export default function Test() {
               <button
                 key={answer.problemId} // 문제의 고유한 ID를 key로 사용
                 type="button"
-                className={`${styles['problem-solved-button']} ${answer.userAnswer !== 0 ? styles.answered : styles.unanswered} ${index === currentProblemIndex && styles['problem-solved-button-active']}`}
+                className={`${styles['problem-solved-button']} ${
+                  answer.userAnswer !== 0 ? styles.answered : styles.unanswered
+                } ${index === currentProblemIndex && styles['problem-solved-button-active']}`}
                 onClick={() => handlProblemIndex(index)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -191,7 +246,6 @@ export default function Test() {
                 />
               </div>
             </div>
-            {/* 이전/다음 문제로 이동하는 버튼 */}
             <div className={styles['problem-button-list']}>
               {currentProblemIndex > 0 ? (
                 <PrimaryButton
@@ -216,7 +270,6 @@ export default function Test() {
                 />
               )}
             </div>
-            {/* 프로그레스바 */}
             <div className={styles['progressbar-container']}>
               <div className={styles.progressbar}>
                 <img
@@ -235,7 +288,48 @@ export default function Test() {
           </div>
         )}
 
-        <div className={styles['right-navigation']} />
+        <div className={styles['right-navigation']}>
+          <h5 className={styles['problem-solved-title']}>나의 메모</h5>
+          {isEditingMemo ? (
+            <>
+              <textarea
+                className={styles['memo-textarea']}
+                value={newMemoContent}
+                onChange={(e) => setNewMemoContent(e.target.value)}
+              />
+              <div className={styles['memo-textarea-button-list']}>
+                <SecondaryButton
+                  label="저장"
+                  size="small"
+                  onClick={handleMemoSave}
+                />
+                <SecondaryButton
+                  label="취소"
+                  size="small"
+                  onClick={handleMemoCancel}
+                />
+              </div>
+            </>
+          ) : (
+            <div className={styles['memo-textarea-button-list']}>
+              <SecondaryButton
+                label="메모 작성"
+                size="small"
+                onClick={handleNewMemo}
+              />
+            </div>
+          )}
+          <div className={styles['memo-list']}>
+            {memoList.map((memo, index) => (
+              <ProblemMemoIcon
+                key={memo.memoId}
+                onClick={() => handleMemoClick(index)}
+                role="button"
+                tabIndex={0}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
