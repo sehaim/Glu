@@ -18,8 +18,12 @@ export default function LoginPage() {
       id,
       password,
     };
-    await loginAPI(data);
-    dispatch(login());
+    if (id === '') {
+      alert('아이디를 입력해주세요.');
+    } else {
+      await loginAPI(data);
+      dispatch(login());
+    }
   };
 
   return (

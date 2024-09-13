@@ -1,5 +1,5 @@
 import { LoginUser } from '@/types/UserTypes';
-// import { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { authAxios, defaultAxios } from '../common';
 
 // Base64URL을 Base64로 변환하는 함수
@@ -26,9 +26,13 @@ export const loginAPI = async (data: LoginUser) => {
     const res = await defaultAxios.post(`auth/login`, data);
     localStorage.setItem('accessToken', res.headers.accesstoken);
     window.location.href = '/home';
-  } catch {
-    // alert 추후 수정 예정
-    alert('아이디/비밀번호를 확인해주세요');
+  } catch (err) {
+    if (err instanceof AxiosError && err.response) {
+      const msg =
+        err.response.data?.message || '로그인 중 오류가 발생했습니다.';
+      // alert 추후 수정 예정
+      alert(msg);
+    }
   }
 };
 
