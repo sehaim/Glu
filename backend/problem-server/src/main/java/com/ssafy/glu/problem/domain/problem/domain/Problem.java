@@ -32,10 +32,11 @@ public class Problem extends BaseTimeDocument {
 
 	private final ProblemType problemType;
 
-	private final Map<String,Object> metadata;
+	private final Map<String, Object> metadata;
 
 	@Builder
-	public Problem(String title, String content, String solution, ProblemLevel problemLevel, ProblemType problemType, ProblemTypeDetail problemTypeDetail, QuestionType questionType, Map<String, Object> metadata) {
+	public Problem(String title, String content, String solution, ProblemLevel problemLevel, ProblemType problemType,
+		ProblemTypeDetail problemTypeDetail, QuestionType questionType, Map<String, Object> metadata) {
 		this.title = title;
 		this.content = content;
 		this.solution = solution;
@@ -46,7 +47,7 @@ public class Problem extends BaseTimeDocument {
 		this.metadata = metadata;
 	}
 
-	public enum Status{
+	public enum Status {
 		CORRECT,
 		WRONG
 	}

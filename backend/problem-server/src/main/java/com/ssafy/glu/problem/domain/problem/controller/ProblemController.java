@@ -38,44 +38,35 @@ public class ProblemController {
 	private final ProblemService problemService;
 
 	@GetMapping("/solve")
-	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(
-		@RequestHeader(USER_ID) Long userId,
-		@ModelAttribute ProblemSearchCondition condition,
-		Pageable pageable
-	) {
+	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(@RequestHeader(USER_ID) Long userId,
+		@ModelAttribute ProblemSearchCondition condition, Pageable pageable) {
 		log.info("condition : {}", condition);
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(problemService.getProblemList(userId, condition, pageable));
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblemList(userId, condition, pageable));
 	}
 
 	@PostMapping("/{problemId}/memo")
 	public ResponseEntity<ProblemMemoResponse> createUserProblemMemo(@RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId,
-		@RequestBody ProblemMemoCreateRequest request) {
+		@PathVariable("problemId") String problemId, @RequestBody ProblemMemoCreateRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(problemService.createProblemMemo(userId, problemId, request));
 	}
 
 	@PutMapping("/{problemId}/memo")
 	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(@RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId,
-		@RequestBody ProblemMemoUpdateRequest request) {
+		@PathVariable("problemId") String problemId, @RequestBody ProblemMemoUpdateRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.updateProblemMemo(userId, problemId, request));
 	}
 
 	@DeleteMapping("/{problemId}/memo")
 	public ResponseEntity<Void> deleteUserProblemMemo(@RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId,
-		@RequestParam("memoIndex") Long memoIndex) {
+		@PathVariable("problemId") String problemId, @RequestParam("memoIndex") Long memoIndex) {
 		problemService.deleteProblemMemo(userId, problemId, memoIndex);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@GetMapping("/{problemId}/memo")
 	public ResponseEntity<Page<ProblemMemoResponse>> getProblemMemoListInProblem(@RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId,
-		@PageableDefault(size = 4) Pageable pageable
-	) {
+		@PathVariable("problemId") String problemId, @PageableDefault(size = 4) Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.getProblemMemoList(userId, problemId, pageable));
 	}
