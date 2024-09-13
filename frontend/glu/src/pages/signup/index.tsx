@@ -2,11 +2,11 @@ import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import { useState, useEffect } from 'react';
-import { checkId, signup } from '@/utils/user/signup';
+import { checkIdAPI, signupAPI } from '@/utils/user/signup';
 import { SignupUser } from '@/types/UserTypes';
 import styles from '../userRegist.module.css';
 
-export default function Login() {
+export default function SignupPage() {
   const [id, setId] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +23,7 @@ export default function Login() {
   }, [password, passwordCheck]);
 
   const handleCheckId = async () => {
-    const isDuplicate = await checkId(id);
+    const isDuplicate = await checkIdAPI(id);
     if (!isDuplicate) {
       alert('사용 가능한 아이디입니다.'); // 추후 수정 예정
     } else {
@@ -38,7 +38,7 @@ export default function Login() {
       nickname,
       birth: '2009-01-01',
     };
-    await signup(data);
+    await signupAPI(data);
     console.log('회원가입'); // 나중에 삭제
   };
 

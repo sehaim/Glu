@@ -1,5 +1,5 @@
 import { LoginUser } from '@/types/UserTypes';
-import { AxiosError } from 'axios';
+// import { AxiosError } from 'axios';
 import { authAxios, defaultAxios } from '../common';
 
 // Base64URL을 Base64로 변환하는 함수
@@ -21,11 +21,11 @@ export const isTokenExpired = (token: string): boolean => {
 };
 
 // 로그인
-export const login = async (data: LoginUser) => {
+export const loginAPI = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
     localStorage.setItem('accessToken', res.headers.accesstoken);
-    window.location.href = '/';
+    window.location.href = '/home';
   } catch {
     // alert 추후 수정 예정
     alert('아이디/비밀번호를 확인해주세요');
@@ -33,7 +33,7 @@ export const login = async (data: LoginUser) => {
 };
 
 // 로그아웃
-export const logout = async () => {
+export const logoutAPI = async () => {
   await authAxios
     .post(`auth/logout`)
     .then(() => {

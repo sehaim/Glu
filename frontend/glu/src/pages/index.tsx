@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import styles from './home.module.css';
 
-export default function Home() {
+export default function MainPage() {
   const router = useRouter();
 
   const handleButton = () => {

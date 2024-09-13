@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { isTokenExpired } from '@/utils/user/auth';
 import { useDispatch } from 'react-redux';
 import { login, logout } from '@/store/authSlice';
-import { refreshUser } from '@/utils/common';
+import { refreshUserAPI } from '@/utils/common';
 import MytestLayout from './mytest-layout';
 import styles from './layout.module.css';
 import Header from '../common/header';
@@ -23,7 +23,9 @@ export default function GlobalLayout({ children }: { children: ReactNode }) {
     if (token) {
       dispatch(login());
       if (isTokenExpired(token)) {
-        refreshUser();
+        refreshUserAPI().catch(() => {
+          dispatch(logout());
+        });
       }
     } else {
       dispatch(logout());

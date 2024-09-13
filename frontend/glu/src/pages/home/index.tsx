@@ -8,7 +8,7 @@ export default function Home(): JSX.Element {
   const router = useRouter();
 
   const handleButton = () => {
-    router.push('/');
+    router.push('/test/problems');
   };
 
   const section1Ref = useRef<HTMLElement | null>(null);

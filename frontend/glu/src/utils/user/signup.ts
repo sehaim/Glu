@@ -2,7 +2,7 @@ import { SignupUser } from '@/types/UserTypes';
 import { defaultAxios } from '../common';
 
 // 아이디 중복 확인
-export const checkId = async (data: string): Promise<boolean> => {
+export const checkIdAPI = async (data: string): Promise<boolean> => {
   let isDuplicate: boolean = false;
   try {
     const res = await defaultAxios.get(`users/check?${data}=id`);
@@ -14,7 +14,7 @@ export const checkId = async (data: string): Promise<boolean> => {
 };
 
 // 회원 가입
-export const signup = async (data: SignupUser) => {
+export const signupAPI = async (data: SignupUser) => {
   try {
     await defaultAxios.post(`users/register`, data);
     alert('회원가입이 완료되었습니다.'); // 추후 수정

@@ -1,6 +1,6 @@
 import styles from './mytest.module.css';
 
-export default function MytestStarred() {
+export default function MytestStarredPage() {
   return (
     <div className={styles.section}>
       <div>

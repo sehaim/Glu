@@ -5,9 +5,9 @@ import { LoginUser } from '@/types/UserTypes';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/authSlice';
 import styles from '../userRegist.module.css';
-import { login as loginAPI } from '../../utils/user/auth';
+import { loginAPI } from '../../utils/user/auth';
 
-export default function Login() {
+export default function LoginPage() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
