@@ -84,4 +84,17 @@ class ProblemRepositoryTest {
 
 		assertThat(problemList.getTotalElements()).isEqualTo(numLevel2);
 	}
+
+	@Test
+	public void existsProblemTest(){
+	    //given
+		Problem problem = MockFactory.createProblem();
+		problemRepository.save(problem);
+
+	    //when
+		boolean isExist = problemRepository.existsById(problem.getProblemId());
+
+		//then
+		assertThat(isExist).isTrue();
+	}
 }

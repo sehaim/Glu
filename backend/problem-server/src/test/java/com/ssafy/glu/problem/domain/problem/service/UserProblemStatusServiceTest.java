@@ -1,4 +1,4 @@
-package com.ssafy.glu.problem.service;
+package com.ssafy.glu.problem.domain.problem.service;
 
 import static org.assertj.core.api.Assertions.*;
 

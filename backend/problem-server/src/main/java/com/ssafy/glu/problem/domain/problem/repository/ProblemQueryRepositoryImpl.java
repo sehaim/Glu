@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 
+@Repository
 public class ProblemQueryRepositoryImpl extends QuerydslRepositorySupport implements ProblemQueryRepository {
 
 	public ProblemQueryRepositoryImpl(MongoOperations operations) {
