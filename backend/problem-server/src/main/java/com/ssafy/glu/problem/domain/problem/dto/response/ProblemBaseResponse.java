@@ -10,6 +10,7 @@ public record ProblemBaseResponse(
 	String problemId,
 	String title,
 	String content,
+	String answer,
 	String solution,
 	Problem.Status status,
 	ProblemLevelResponse problemLevel,
@@ -21,12 +22,13 @@ public record ProblemBaseResponse(
 		return ProblemBaseResponse.builder()
 			.problemId(problem.getProblemId())
 			.title(problem.getTitle())
+			.answer(problem.getAnswer())
 			.content(problem.getContent())
 			.solution(problem.getSolution())
 			.status(status)
-			.problemLevel(ProblemLevelResponse.of(problem.getProblemLevel()))
-			.problemType(ProblemTypeResponse.of(problem.getProblemType()))
-			.problemTypeDetail(ProblemTypeDetailResponse.of(problem.getProblemTypeDetail()))
+			.problemLevel(ProblemLevelResponse.of(problem.getProblemLevelCode()))
+			.problemType(ProblemTypeResponse.of(problem.getProblemTypeCode()))
+			.problemTypeDetail(ProblemTypeDetailResponse.of(problem.getProblemTypeDetailCode()))
 			.build();
 	}
 

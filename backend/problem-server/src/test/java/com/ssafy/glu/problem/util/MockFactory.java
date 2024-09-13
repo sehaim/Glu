@@ -8,11 +8,11 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemLevel;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemLevelCode;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemType;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetail;
-import com.ssafy.glu.problem.domain.problem.domain.QuestionType;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetailCode;
+import com.ssafy.glu.problem.domain.problem.domain.QuestionTypeCode;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 
@@ -36,11 +36,11 @@ public class MockFactory {
 			.title(randomTitle)
 			.content(randomContent)
 			.solution(randomSolution)
-			.problemLevel(createProblemLevel())
-			.problemType(createProblemType())
-			.problemTypeDetail(createProblemTypeDetail())
-			.problemType(createProblemType())
-			.questionType(createQuestionType())
+			.problemLevelCode(createProblemLevel())
+			.problemTypeCode(createProblemType())
+			.problemTypeDetailCode(createProblemTypeDetail())
+			.problemTypeCode(createProblemType())
+			.questionTypeCode(createQuestionType())
 			.metadata(metadata)
 			.build();
 	}
@@ -60,66 +60,35 @@ public class MockFactory {
 			.title(randomTitle)
 			.content(randomContent)
 			.solution(randomSolution)
-			.problemLevel(createProblemLevel(problemLevelCode))
-			.problemType(createProblemType())
-			.problemTypeDetail(createProblemTypeDetail())
-			.questionType(createQuestionType())
+			.problemLevelCode(createProblemLevel(problemLevelCode))
+			.problemTypeCode(createProblemType())
+			.problemTypeDetailCode(createProblemTypeDetail())
+			.questionTypeCode(createQuestionType())
 			.metadata(metadata)
 			.build();
 	}
 
-	public static ProblemLevel createProblemLevel() {
+	public static ProblemLevelCode createProblemLevel() {
 		// 랜덤한 ProblemLevel 객체 생성
-		String level = "0" + RANDOM.nextInt(3);
-		String code = "PL" + level;
-		String name = "LV " + level;
-		return ProblemLevel.builder()
-			.problemLevelCode(code)
-			.name(name)
-			.build();
+		return ProblemLevelCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}
 
-	public static ProblemLevel createProblemLevel(String problemCodeLevelCode) {
+	public static ProblemLevelCode createProblemLevel(String problemCodeLevelCode) {
 		// 랜덤한 ProblemLevel 객체 생성
-		String level = "0" + RANDOM.nextInt(3);
-		String name = "LV " + level;
-		return ProblemLevel.builder()
-			.problemLevelCode(problemCodeLevelCode)
-			.name(name)
-			.build();
+		return ProblemLevelCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}
 
-	public static ProblemTypeDetail createProblemTypeDetail() {
-		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0" + RANDOM.nextInt(3);
-		String problemTypeDetailCode = "0" + RANDOM.nextInt(3);
-		String name = "유형 " + num;
-		return ProblemTypeDetail.builder()
-			.problemTypeDetailCode(problemTypeDetailCode)
-			.name(name)
-			.build();
+	public static ProblemTypeDetailCode createProblemTypeDetail() {
+		return ProblemTypeDetailCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}
 
-	public static ProblemType createProblemType() {
-		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0" + RANDOM.nextInt(3);
-		String problemTypeCode = "PB" + num;
-		String name = "유형 " + num;
-		return ProblemType.builder()
-			.problemTypeCode(problemTypeCode)
-			.name(name)
-			.build();
+	public static ProblemTypeCode createProblemType() {
+		return ProblemTypeCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}
 
-	public static QuestionType createQuestionType() {
+	public static QuestionTypeCode createQuestionType() {
 		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0" + RANDOM.nextInt(3);
-		String questionTypeCode = "Q" + num;
-		String name = "질문 유형 " + num;
-		return QuestionType.builder()
-			.questionTypeCode(questionTypeCode)
-			.name(name)
-			.build();
+		return QuestionTypeCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}
 
 	public static ProblemMemo createProblemMemo(Long memoIndex) {

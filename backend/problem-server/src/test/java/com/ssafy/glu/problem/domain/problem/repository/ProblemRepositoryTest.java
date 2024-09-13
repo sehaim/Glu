@@ -47,7 +47,7 @@ class ProblemRepositoryTest {
 		assertThat(savedProblem.getTitle()).isEqualTo(problem.getTitle());
 		assertThat(savedProblem.getContent()).isEqualTo(problem.getContent());
 		assertThat(savedProblem.getSolution()).isEqualTo(problem.getSolution());
-		assertThat(savedProblem.getProblemLevel().getProblemLevelCode()).isEqualTo(problem.getProblemLevel().getProblemLevelCode());
+		assertThat(savedProblem.getProblemLevelCode().getProblemLevelCode()).isEqualTo(problem.getProblemLevelCode().getProblemLevelCode());
 	}
 
 	@Test

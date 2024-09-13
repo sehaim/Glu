@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.repository.support.QuerydslRepositorySup
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemLevelCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetailCode;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 
@@ -46,22 +49,22 @@ public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupp
 		return status != null ? userProblemStatus.status.eq(status) : null;
 	}
 
-	public BooleanExpression levelEq(String problemLevelCode) {
+	public BooleanExpression levelEq(ProblemLevelCode problemLevelCode) {
 		log.info("problemLevelCode : {}",problemLevelCode);
-		return problemLevelCode != null ? userProblemStatus.problem.problemLevel.problemLevelCode.eq(problemLevelCode) :
+		return problemLevelCode != null ? userProblemStatus.problem.problemLevelCode.eq(problemLevelCode) :
 			null;
 	}
 
-	public BooleanExpression typeEq(String problemTypeCode) {
+	public BooleanExpression typeEq(ProblemTypeCode problemTypeCode) {
 		log.info("problemTypeCode : {}",problemTypeCode);
-		return problemTypeCode != null ? userProblemStatus.problem.problemType.problemTypeCode.eq(problemTypeCode) :
+		return problemTypeCode != null ? userProblemStatus.problem.problemTypeCode.eq(problemTypeCode) :
 			null;
 	}
 
-	public BooleanExpression detailTypeEq(String problemTypeDetailCode) {
+	public BooleanExpression detailTypeEq(ProblemTypeDetailCode problemTypeDetailCode) {
 		log.info("problemTypeDetailCode : {}",problemTypeDetailCode);
 		return problemTypeDetailCode != null ?
-			userProblemStatus.problem.problemTypeDetail.problemTypeDetailCode.eq(problemTypeDetailCode) : null;
+			userProblemStatus.problem.problemTypeDetailCode.eq(problemTypeDetailCode) : null;
 	}
 
 	public BooleanExpression memoListIsNotEmpty(Boolean hasMemo) {

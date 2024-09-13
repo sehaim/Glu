@@ -23,7 +23,7 @@ public class Problem extends BaseTimeDocument {
 	@Id
 	private String problemId;
 
-	private final QuestionType questionType;
+	private final QuestionTypeCode questionTypeCode;
 
 	private final String title;
 
@@ -33,24 +33,22 @@ public class Problem extends BaseTimeDocument {
 
 	private final String solution;
 
-	private final ProblemLevel problemLevel;
-
-	private final ProblemTypeDetail problemTypeDetail;
-
-	private final ProblemType problemType;
+	private final ProblemLevelCode problemLevelCode;
+	private final ProblemTypeDetailCode problemTypeDetailCode;
+	private final ProblemTypeCode problemTypeCode;
 
 	private final Map<String, Object> metadata;
 
 	@Builder
-	public Problem(String title, String content, String answer, String solution, ProblemLevel problemLevel, ProblemType problemType, ProblemTypeDetail problemTypeDetail, QuestionType questionType, Map<String, Object> metadata) {
+	public Problem(String title, String content, String answer, String solution, ProblemLevelCode problemLevelCode, ProblemTypeCode problemTypeCode, ProblemTypeDetailCode problemTypeDetailCode, QuestionTypeCode questionTypeCode, Map<String, Object> metadata) {
 		this.title = title;
 		this.content = content;
 		this.answer = answer;
 		this.solution = solution;
-		this.problemLevel = problemLevel;
-		this.problemType = problemType;
-		this.problemTypeDetail = problemTypeDetail;
-		this.questionType = questionType;
+		this.problemLevelCode = problemLevelCode;
+		this.problemTypeCode = problemTypeCode;
+		this.problemTypeDetailCode = problemTypeDetailCode;
+		this.questionTypeCode = questionTypeCode;
 		this.metadata = metadata;
 	}
 
@@ -59,7 +57,7 @@ public class Problem extends BaseTimeDocument {
 	// 맞았는지 틀렸는지 반환
 	public boolean isCorrect(String userAnswer) {
 		// TODO: 구체적인 정답 여부 판별 필요
-		return questionType.getQuestionTypeCode().getGradingStrategy().isCorrect(userAnswer, answer);
+		return questionTypeCode.getGradingStrategy().isCorrect(userAnswer, answer);
 	}
 
 }
