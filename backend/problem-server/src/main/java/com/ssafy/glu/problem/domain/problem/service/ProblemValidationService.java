@@ -70,6 +70,8 @@ public class ProblemValidationService implements ProblemService {
 		validateProblemIdIsNull(problemId);
 		validateMemoIndexIsNull(request.memoIndex());
 
+		validateProblemIsNotExists(problemId);
+
 		try {
 			return problemService.updateProblemMemo(userId, problemId, request);
 		} catch (MongoException exception) {
@@ -86,6 +88,8 @@ public class ProblemValidationService implements ProblemService {
 		validateProblemIdIsNull(problemId);
 		validateMemoIndexIsNull(memoIndex);
 
+		validateProblemIsNotExists(problemId);
+
 		try {
 			problemService.deleteProblemMemo(userId, problemId, memoIndex);
 		} catch (MongoException exception) {
@@ -101,6 +105,8 @@ public class ProblemValidationService implements ProblemService {
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
 
+		validateProblemIsNotExists(problemId);
+
 		return problemService.getProblemMemoList(userId, problemId, pageable);
 	}
 
@@ -113,8 +119,6 @@ public class ProblemValidationService implements ProblemService {
 		// Null 값 검증
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
-
-		validateProblemIsNotExists(problemId);
 
 		// 문제  여부 확인
 		validateProblemIsNotExists(problemId);
@@ -149,7 +153,7 @@ public class ProblemValidationService implements ProblemService {
 	// ===== 찾기 로직 =====
 	// 문제 존재 여부 판단
 	private void validateProblemIsNotExists(String problemId) {
-		if (problemRepository.existsById(problemId)) {
+		if (!problemRepository.existsById(problemId)) {
 			throw new ProblemNotFoundException();
 		}
 	}
