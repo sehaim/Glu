@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 
 # .env 파일 로드
-load_dotenv("config/glu-recommend.env")
+load_dotenv("glu-recommend.env")
 
 # 환경 변수에서 MongoDB 설정 불러오기
 mongo_url = os.getenv('MONGODB_URL')

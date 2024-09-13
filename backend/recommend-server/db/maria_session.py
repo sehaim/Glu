@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # .env 파일 로드
-load_dotenv("config/glu-recommend.env")
+load_dotenv("glu-recommend.env")
 
 # 환경 변수에서 설정 불러오기
 maria_url = os.getenv('MARIADB_URL')
