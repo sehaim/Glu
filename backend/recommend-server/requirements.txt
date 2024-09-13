@@ -17,5 +17,6 @@ sqlalchemy
 pyyaml
 pymysql
 pymongo
+python-dotenv
 fastapi
 uvicorn

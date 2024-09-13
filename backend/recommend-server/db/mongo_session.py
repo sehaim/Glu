@@ -1,19 +1,14 @@
+import os
+from dotenv import load_dotenv
 from pymongo import MongoClient
-import yaml
 
-# YAML 파일 경로
-CONFIG_FILE = "config/glu-recommend.yaml"
+# .env 파일 로드
+load_dotenv("config/glu-recommend.env")
 
-# YAML 파일 읽기
-def load_config():
-    with open(CONFIG_FILE, "r") as file:
-        config = yaml.safe_load(file)
-    return config
-
-# 설정 불러오기
-config = load_config()
-mongo_config = config['mongodb']
+# 환경 변수에서 MongoDB 설정 불러오기
+mongo_url = os.getenv('MONGODB_URL')
+mongo_database = os.getenv('MONGODB_DATABASE')
 
 # MongoDB 클라이언트 설정
-client = MongoClient(mongo_config['url'])
-mongo_db = client[mongo_config['database']]  # 데이터베이스 명시
+client = MongoClient(mongo_url)
+mongo_db = client[mongo_database]  # 데이터베이스 명시
