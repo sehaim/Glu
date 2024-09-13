@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 from models import ProblemsResponse, Problem, ProblemOption, ProblemLevel, ProblemType
-from repositories import save_problem
+from repositories import save_problem, get_user
+from sqlalchemy.orm import Session
+from db import get_maria_db
 
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
@@ -89,3 +91,12 @@ async def get_level_test():
 @router.post("/make")
 async def make_problem():
     save_problem(example_problem)
+
+@router.get("/users/{userId}")
+async def get_user_problem(user_id: int, db: Session = Depends(get_maria_db)):
+    print("user_id", user_id)
+    user = get_user(db, user_id)
+    print("user", user)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
