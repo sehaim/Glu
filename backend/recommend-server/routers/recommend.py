@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from models import ProblemsResponse
 
-router = APIRouter(prefix="/api/recommend")
+router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 
 dummy_data = {
         "problems": [
