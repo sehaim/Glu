@@ -1,0 +1,81 @@
+.left-container {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin: 60px 0px;
+    margin-right: 40px;
+}
+  
+.container-title {
+    width: 120px;
+    color: var(--TEXT_SECONDARY);
+    font-size: 16px;
+    font-family: 'PTBOLD';
+    margin-bottom: 32px;
+}
+  
+.solved-button-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 24px;
+    width: 120px;
+    color: var(--TEXT_SECONDARY);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'PT';
+}
+
+.solved-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    width: 120px;
+    background-color: var(--WHITE);
+    color: var(--TEXT_SECONDARY);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'PT';
+    background-color: var(--WHITE);
+}
+
+.solved-button:hover {
+    color: var(--PINK);
+}
+  
+.solved-button-active {
+    color: var(--PINK);
+}
+  
+.solved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+@media (min-width: 1200px) {
+    .left-container {
+      display: flex;
+      width: 160px;
+    }
+}
+  
+@media (min-width: 1400px) {
+    .left-container {
+      display: flex;
+      width: 240px;
+      margin-right: 80px;
+    }
+}
+  
+@media (max-width: 1024px) {
+    .problem-button-list {
+      width: 720px;
+    }
+}

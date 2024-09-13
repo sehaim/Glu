@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from 'react';
-import dummyImageProblem from '@/mock/dummyImageProblem.json'; // Import dummyProblem data
+import dummyImageProblem from '@/mock/dummyImageProblem.json';
 import { ProblemLevel, ProblemOption, ProblemType } from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemContentImage from '@/components/problem/problemContentImage';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
+import ProblemMemoManager from '@/components/problem/problemMemoManager';
+import { Memo } from '@/types/MemoTypes';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -22,9 +24,16 @@ interface ProblemResponse {
 export default function Test() {
   const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedOption, setSelectedOption] = useState<number>(0); // State for selected option
-  const [startTime, setStartTime] = useState<number>(0); // Start time state
-  const [, setElapsedTime] = useState<number>(0); // Elapsed time state
+  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [, setElapsedTime] = useState<number>(0);
+  // 기존에 있던 dummyMemo를 상태로 변경
+  const [memoList, setMemoList] = useState<Memo[]>([
+    { memoId: 1, content: 'This is the first memo content.' },
+    { memoId: 2, content: 'This is the second memo content.' },
+    { memoId: 3, content: 'This is the third memo content.' },
+    { memoId: 4, content: 'This is the fourth memo content.' },
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +63,23 @@ export default function Test() {
     setStartTime(Date.now());
   };
 
+  const handleMemoSave = (newMemo: Memo) => {
+    setMemoList((prevMemoList) => {
+      // 만약 기존 메모를 수정하는 경우 memoId를 비교하여 업데이트
+      const memoIndex = prevMemoList.findIndex(
+        (memo) => memo.memoId === newMemo.memoId,
+      );
+      if (memoIndex > -1) {
+        // 기존 메모 수정
+        const updatedMemoList = [...prevMemoList];
+        updatedMemoList[memoIndex] = newMemo;
+        return updatedMemoList;
+      }
+      // 새로운 메모 추가
+      return [...prevMemoList, newMemo];
+    });
+  };
+
   // 로딩 상태에서 undefined인 경우 처리
   if (loading) {
     return <div>로딩 중...</div>;
@@ -66,31 +92,41 @@ export default function Test() {
 
   return (
     <div className={styles.container}>
-      <ProblemHeader
-        problemLevel={problem.problemLevel.name}
-        problemType={problem.problemType.name}
-        problemTitle={problem.title}
-      />
-      <div className={styles['problem-content']}>
-        {problem.problemType?.problemTypeDetailCode === '0' && (
-          <ProblemContentImage
-            imageUrl={problem.content}
-            altText={problem.title || '문제 이미지'}
+      <div className={styles['problem-container']}>
+        <div className={styles['left-container']} />
+        <div className={styles.problem}>
+          <ProblemHeader
+            problemLevel={problem.problemLevel.name}
+            problemType={problem.problemType.name}
+            problemTitle={problem.title}
           />
-        )}
-        {problem.problemType?.problemTypeDetailCode !== '0' && (
-          <ProblemContentText problemContent={problem.content} />
-        )}
-        <ProblemOptionList
-          problemOptions={problem.problemOptions}
-          selectedOption={selectedOption}
-          onSingleProblemAnswer={handleOptionClick}
-        />
-      </div>
-      {/* 제출하기 버튼 */}
-      <div className={styles['problem-button-list']}>
-        <div />
-        <PrimaryButton size="medium" label="제출하기" onClick={handleSubmit} />
+          <div className={styles['problem-content']}>
+            {problem.problemType?.problemTypeDetailCode === '0' && (
+              <ProblemContentImage
+                imageUrl={problem.content}
+                altText={problem.title || '문제 이미지'}
+              />
+            )}
+            {problem.problemType?.problemTypeDetailCode !== '0' && (
+              <ProblemContentText problemContent={problem.content} />
+            )}
+            <ProblemOptionList
+              problemOptions={problem.problemOptions}
+              selectedOption={selectedOption}
+              onSingleProblemAnswer={handleOptionClick}
+            />
+          </div>
+          {/* 제출하기 버튼 */}
+          <div className={styles['problem-button-list']}>
+            <div />
+            <PrimaryButton
+              size="medium"
+              label="제출하기"
+              onClick={handleSubmit}
+            />
+          </div>
+        </div>
+        <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
       </div>
     </div>
   );

@@ -11,62 +11,6 @@
   align-items: flex-start;
 }
 
-.left-navigation {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  margin-right: 40px;
-  padding: 60px 0px;
-}
-
-.problem-solved-title {
-  width: 120px;
-  color: var(--TEXT_SECONDARY);
-  font-size: 16px;
-  font-family: 'PTBOLD';
-  margin-bottom: 32px;
-}
-
-.problem-solved-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 24px;
-  width: 120px;
-  background-color: var(--WHITE);
-  color: var(--TEXT_SECONDARY);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'PT';
-}
-
-.problem-solved-button:hover {
-  color: var(--PINK);
-}
-
-.problem-solved-button-active {
-  color: var(--PINK);
-}
-
-.problem-solved-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.right-navigation {
-  display: none;
-}
-
-.problem-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .problem {
   display: flex;
   flex-direction: column;
@@ -109,76 +53,9 @@
   cursor: pointer;
 }
 
-.progressbar-container {
-  position: relative;
-  padding-right: 0px 50px;
-  width: 820px;
-  background: linear-gradient(
-    to bottom,
-    var(--YELLOW) 70%,
-    var(--LIGHTGREEN) 50%
-  );
-}
-
-.progressbar {
-  position: relative;
-  width: 770px;
-  height: 160px;
-}
-
-.progress-character {
-  position: absolute;
-  bottom: 10px;
-  width: 80px;
-  height: 110px;
-  transition: left 0.5s ease-in-out;
-  z-index: 2;
-}
-
-.progress-house {
-  position: absolute;
-  right: 0;
-  bottom: 20px;
-  width: 120px;
-  height: 120px;
-}
-
-@media (min-width: 1200px) {
-  .left-navigation {
-    display: flex;
-    width: 160px;
-  }
-
-  .right-navigation {
-    display: flex;
-    width: 160px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .left-navigation {
-    display: flex;
-    width: 240px;
-    margin-right: 80px;
-  }
-
-  .right-navigation {
-    display: flex;
-    width: 240px;
-  }
-}
-
 @media (max-width: 1024px) {
   .problem-button-list {
     width: 720px;
-  }
-
-  .progressbar-container {
-    width: 720px;
-  }
-
-  .progressbar {
-    width: 670px;
   }
 }
 
@@ -190,37 +67,10 @@
   .problem-button-list {
     width: 400px;
   }
-
-  .progressbar-container {
-    padding-right: 0px 60px;
-    width: 400px;
-  }
-
-  .progressbar {
-    width: 340px;
-  }
-
-  .progress-character {
-    width: 60px;
-    height: 80px;
-  }
-
-  .progress-house {
-    width: 90px;
-    height: 90px;
-  }
 }
 
 @media (max-width: 480px) {
   .problem-button-list {
     width: 320px;
-  }
-
-  .progressbar-container {
-    width: 320px;
-  }
-
-  .progressbar {
-    width: 260px;
   }
 }
