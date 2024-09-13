@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useState } from 'react';
 import { BsStar } from 'react-icons/bs';
 import styles from './problemHeader.module.css';
 

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from 'react';
-import dummyImageProblem from '@/mock/dummyImageProblem.json'; // Import dummyProblem data
+import dummyImageProblem from '@/mock/dummyImageProblem.json';
 import { ProblemLevel, ProblemOption, ProblemType } from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemContentText from '@/components/problem/problemContentText';
@@ -24,9 +24,9 @@ interface ProblemResponse {
 export default function Test() {
   const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedOption, setSelectedOption] = useState<number>(0); // State for selected option
-  const [startTime, setStartTime] = useState<number>(0); // Start time state
-  const [, setElapsedTime] = useState<number>(0); // Elapsed time state
+  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [, setElapsedTime] = useState<number>(0);
   // 기존에 있던 dummyMemo를 상태로 변경
   const [memoList, setMemoList] = useState<Memo[]>([
     { memoId: 1, content: 'This is the first memo content.' },
