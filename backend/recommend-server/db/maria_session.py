@@ -14,7 +14,7 @@ def load_config():
 
 # 설정 불러오기
 config = load_config()
-db_config = config['database']
+db_config = config['mariadb']
 
 # 데이터베이스 URL 동적으로 생성
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{db_config['username']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['name']}"

@@ -1,6 +1,10 @@
-database:
+mariadb:
   username: "root"
   password: "ssafy"
   host: "localhost"
   port: "3307"
   name: "glu"
+
+mongodb:
+  url: 'mongodb://localhost:27017/local'
+  database: 'glu'
