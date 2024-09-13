@@ -1,21 +1,9 @@
 from fastapi import APIRouter
 from models import ProblemsResponse
 
-router = APIRouter(prefix="/api")
+router = APIRouter(prefix="/api/recommend")
 
-@router.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@router.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-@router.get("/test/level", response_model=ProblemsResponse)
-async def get_level_test():
-    # 더미 데이터 생성
-    dummy_data = {
+dummy_data = {
         "problems": [
             {
                 "problemId": 1,
@@ -56,4 +44,22 @@ async def get_level_test():
         ]
     }
 
+@router.get("/test/level", response_model=ProblemsResponse)
+async def get_level_test():
+    # 더미 데이터 생성
+    return dummy_data
+
+@router.get("/test/general", response_model=ProblemsResponse)
+async def get_level_test():
+    # 더미 데이터 생성
+    return dummy_data
+
+@router.get("/type", response_model=ProblemsResponse)
+async def get_level_test():
+    # 더미 데이터 생성
+    return dummy_data
+
+@router.get("/similar", response_model=ProblemsResponse)
+async def get_level_test():
+    # 더미 데이터 생성
     return dummy_data
