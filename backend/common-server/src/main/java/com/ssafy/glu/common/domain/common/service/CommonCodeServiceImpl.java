@@ -31,7 +31,7 @@ public class CommonCodeServiceImpl implements CommonCodeService {
 			List.of() :
 			childCodeList.stream()
 				.map(this::buildCommonCodeResponse)
-				.collect(Collectors.toList());
+				.toList();
 
 		return CommonCodeResponse.of(parentCode, childResponseList);
 	}
