@@ -17,6 +17,7 @@ import {
   putProblemMemo as putProblemMemoAPI,
 } from '@/utils/problem/memo';
 import styles from './testProblems.module.css';
+import ProblemInputField from '@/components/problem/problemInputField';
 
 interface ProblemAnswer {
   problemId: number;
@@ -72,7 +73,7 @@ export default function Test() {
       const initialAnswers = problems.map((problem) => ({
         problemId: problem.problemId,
         problemAnswer: problem.solution,
-        userAnswer: '0', // 기본값은 0
+        userAnswer: '', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
@@ -169,6 +170,8 @@ export default function Test() {
     }
   };
 
+  console.log(answers);
+
   if (loading) {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
   }
@@ -202,12 +205,21 @@ export default function Test() {
               {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
                 <ProblemContentText problemContent={currentProblem?.content} />
               )}
-              <ProblemOptionList
-                selectedOption={answers[currentProblemIndex]?.userAnswer}
-                problemIndex={currentProblemIndex}
-                problemOptions={currentProblem?.problemOptions}
-                onTestProblemAnswer={handleAnswer}
-              />
+              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                <ProblemInputField
+                  initialAnswer={answers[currentProblemIndex]?.userAnswer}
+                  problemIndex={currentProblemIndex}
+                  onTestProblemAnswer={handleAnswer}
+                />
+              )}
+              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+                <ProblemOptionList
+                  selectedOption={answers[currentProblemIndex]?.userAnswer}
+                  problemIndex={currentProblemIndex}
+                  problemOptions={currentProblem?.problemOptions}
+                  onTestProblemAnswer={handleAnswer}
+                />
+              )}
             </div>
             <div className={styles['problem-button-list']}>
               {currentProblemIndex > 0 ? (

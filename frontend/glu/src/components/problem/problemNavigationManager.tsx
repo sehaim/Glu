@@ -31,7 +31,7 @@ export default function ProblemSolvedNavigation({
             key={answer.problemId}
             type="button"
             className={`${styles['solved-button']} ${
-              answer.userAnswer !== '0' ? styles.answered : styles.unanswered
+              answer.userAnswer !== '' ? styles.answered : styles.unanswered
             } ${
               index === currentProblemIndex && styles['solved-button-active']
             }`}
@@ -44,7 +44,7 @@ export default function ProblemSolvedNavigation({
           >
             <p className={styles['solved-button-number']}>{index + 1}번</p>
             <p className={styles['solved-button-status']}>
-              {answer.userAnswer !== '0' ? '✅' : '❌'}
+              {answer.userAnswer !== '' ? '✅' : '❌'}
             </p>
           </button>
         ))}
