@@ -12,6 +12,10 @@ import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
+import {
+  postProblemMemo as postProblemMemoAPI,
+  putProblemMemo as putProblemMemoAPI,
+} from '@/utils/problem/memo';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -129,21 +133,39 @@ export default function Test() {
     router.push('/test/result');
   };
 
-  const handleMemoSave = (newMemo: Memo) => {
-    setMemoList((prevMemoList) => {
-      // 만약 기존 메모를 수정하는 경우 memoId를 비교하여 업데이트
-      const memoIndex = prevMemoList.findIndex(
-        (memo) => memo.memoId === newMemo.memoId,
-      );
-      if (memoIndex > -1) {
-        // 기존 메모 수정
-        const updatedMemoList = [...prevMemoList];
-        updatedMemoList[memoIndex] = newMemo;
-        return updatedMemoList;
+  const handleMemoSave = async (newMemo: Memo) => {
+    try {
+      if (newMemo.memoId && newMemo.memoId !== -1) {
+        // memoId가 존재하고 -1이 아닐 경우, 기존 메모 수정
+        await putProblemMemoAPI(
+          currentProblem.problemId,
+          newMemo.memoId,
+          newMemo.content,
+        );
+        setMemoList((prevMemoList) => {
+          const memoIndex = prevMemoList.findIndex(
+            (memo) => memo.memoId === newMemo.memoId,
+          );
+          if (memoIndex > -1) {
+            // 기존 메모 업데이트
+            const updatedMemoList = [...prevMemoList];
+            updatedMemoList[memoIndex] = newMemo;
+            return updatedMemoList;
+          }
+          return prevMemoList;
+        });
+      } else {
+        // 새로운 메모 등록
+        const createdMemo = await postProblemMemoAPI(
+          currentProblem.problemId,
+          newMemo.content,
+        );
+        // TODO: 이걸로는 안됨. 다시 메모를 받아와야함 -1로 보냈기 때문에
+        setMemoList((prevMemoList) => [...prevMemoList, createdMemo]);
       }
-      // 새로운 메모 추가
-      return [...prevMemoList, newMemo];
-    });
+    } catch (error) {
+      console.error('메모 저장 중 오류 발생:', error);
+    }
   };
 
   if (loading) {
