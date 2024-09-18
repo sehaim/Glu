@@ -47,7 +47,7 @@ export default function ProblemOptionList({
         <div
           key={option.problemOptionId}
           className={`${styles['problem-option']} ${
-            Number(selectedOption) === index + 1 // 변경된 부분
+            selectedOption === option.option
               ? styles['problem-option-selected']
               : ''
           }`}
