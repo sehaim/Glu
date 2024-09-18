@@ -90,11 +90,17 @@
   z-index: 1; /* problem-type보다 낮게 설정 */
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .container {
     width: 720px;
   }
 }
+
+/* @media (max-width: 1024px) {
+  .container {
+    width: 720px;
+  }
+} */
 
 @media (max-width: 768px) {
   .container {

@@ -45,7 +45,7 @@ export default function Header({ color }: { color: string }) {
     const handleScroll = throttle(() => {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY >= prevScrollYRef.current || currentScrollY < 10) {
+      if (currentScrollY >= prevScrollYRef.current) {
         setIsScrolled(true); // 스크롤이 아래로 내려갔을 때 흰색으로 설정
       } else {
         setIsScrolled(false); // 스크롤이 위로 올라가면 투명으로 설정

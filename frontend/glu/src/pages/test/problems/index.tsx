@@ -208,11 +208,12 @@ export default function Test() {
                 />
               )}
             </div>
-            <ProblemProgressBar progressPercentage={progressPercentage} />
           </div>
         )}
+
         <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
       </div>
+      <ProblemProgressBar progressPercentage={progressPercentage} />
     </div>
   );
 }

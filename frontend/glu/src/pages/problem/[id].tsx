@@ -93,7 +93,6 @@ export default function Test() {
   return (
     <div className={styles.container}>
       <div className={styles['problem-container']}>
-        <div className={styles['left-container']} />
         <div className={styles.problem}>
           <ProblemHeader
             problemLevel={problem.problemLevel.name}
@@ -120,7 +119,7 @@ export default function Test() {
           <div className={styles['problem-button-list']}>
             <div />
             <PrimaryButton
-              size="medium"
+              size="small"
               label="제출하기"
               onClick={handleSubmit}
             />

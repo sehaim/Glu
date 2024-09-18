@@ -23,7 +23,7 @@ export default function ProblemSolvedNavigation({
   };
 
   return (
-    <div className={styles['left-container']}>
+    <div className={styles.container}>
       <h5 className={styles['container-title']}>해결한 문제</h5>
       <ul className={styles['solved-button-list']}>
         {answers.map((answer, index) => (

@@ -53,7 +53,7 @@ export default function ProblemMemoManager({
   };
 
   return (
-    <div className={styles['right-container']}>
+    <div className={styles.container}>
       <h5 className={styles['container-title']}>나의 메모</h5>
       {isEditingMemo ? (
         <>
