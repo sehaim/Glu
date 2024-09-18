@@ -162,10 +162,12 @@ export default function Test() {
         {currentProblem && (
           <div className={styles.problem}>
             <ProblemHeader
+              problemId={currentProblem.problemId}
               problemIndex={currentProblemIndex + 1}
               problemLevel={currentProblem?.problemLevel?.name}
               problemType={currentProblem?.problemType?.name}
               problemTitle={currentProblem?.title}
+              problemLike={false}
             />
             <div className={styles['problem-content']}>
               {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
