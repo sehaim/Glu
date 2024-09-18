@@ -5,19 +5,12 @@
   align-items: center;
 }
 
-.left-container {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  margin: 60px 0px;
-  margin-right: 40px;
-}
-
 .problem-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
 }
 
 .problem {
@@ -52,23 +45,20 @@
   margin-left: auto;
 }
 
-@media (min-width: 1200px) {
-  .left-container {
-    width: 160px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .left-container {
-    display: flex;
-    width: 240px;
-    margin-right: 80px;
+@media (max-width: 1200px) {
+  .problem-button-list {
+    width: 720px;
   }
 }
 
 @media (max-width: 1024px) {
+  .problem-container {
+    flex-direction: column;
+  }
+
   .problem-button-list {
-    width: 720px;
+    margin: 40px 0px;
+    margin-bottom: 0px;
   }
 }
 

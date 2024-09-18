@@ -1,81 +1,91 @@
-.left-container {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-end;
-    margin: 60px 0px;
-    margin-right: 40px;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
 }
-  
+
 .container-title {
-    width: 120px;
-    color: var(--TEXT_SECONDARY);
-    font-size: 16px;
-    font-family: 'PTBOLD';
-    margin-bottom: 32px;
+  width: 120px;
+  color: var(--TEXT_SECONDARY);
+  font-size: 16px;
+  font-family: 'PTBOLD';
+  margin: 32px 0px;
 }
-  
+
 .solved-button-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 24px;
-    width: 120px;
-    color: var(--TEXT_SECONDARY);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: 'PT';
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 120px;
+  background-color: var(--WHITE);
+  color: var(--TEXT_SECONDARY);
+  border: none;
+  border-radius: 10px;
+  font-family: 'PT';
+  overflow: hidden;
 }
 
 .solved-button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 24px;
-    width: 120px;
-    background-color: var(--WHITE);
-    color: var(--TEXT_SECONDARY);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: 'PT';
-    background-color: var(--WHITE);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  width: 120px;
+  border: none;
+  background-color: var(--WHITE);
+  color: var(--TEXT_SECONDARY);
+  cursor: pointer;
+  font-family: 'PT';
 }
 
 .solved-button:hover {
-    color: var(--PINK);
-}
-  
-.solved-button-active {
-    color: var(--PINK);
-}
-  
-.solved-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  color: var(--PINK);
 }
 
-@media (min-width: 1200px) {
-    .left-container {
-      display: flex;
-      width: 160px;
-    }
+.solved-button-active {
+  color: var(--PINK);
 }
-  
-@media (min-width: 1400px) {
-    .left-container {
-      display: flex;
-      width: 240px;
-      margin-right: 80px;
-    }
+
+@media (max-width: 1200px) {
+  .container {
+    width: 120px;
+  }
+
+  .container-title {
+    width: 120px;
+  }
 }
-  
+
 @media (max-width: 1024px) {
-    .problem-button-list {
-      width: 720px;
-    }
+  .container {
+    width: 720px;
+  }
+
+  .container-title {
+    width: 100%;
+    margin: 16px 0px;
+  }
+
+  .solved-button-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 320px;
+  }
 }
