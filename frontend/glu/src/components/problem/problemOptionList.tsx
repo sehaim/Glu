@@ -6,8 +6,8 @@ interface ProblemOptionListProps {
   selectedOption: number; // 변경된 이름
   problemIndex?: number;
   problemOptions: ProblemOption[];
-  onTestProblemAnswer?: (problemIndex: number, problemAnswer: number) => void; // 테스트 문제에 대한 콜백
-  onSingleProblemAnswer?: (problemAnswer: number) => void; // 단일 문제에 대한 콜백
+  onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
+  onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
 
 export default function ProblemOptionList({
@@ -23,7 +23,7 @@ export default function ProblemOptionList({
     setOptions(problemOptions);
   }, [problemOptions]);
 
-  const handleOptionClick = (userAnswer: number) => {
+  const handleOptionClick = (userAnswer: string) => {
     // Test 문제 풀이
     if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
       onTestProblemAnswer(problemIndex, userAnswer);
@@ -37,7 +37,7 @@ export default function ProblemOptionList({
 
   const handleKeyDown = (event: React.KeyboardEvent, optionId: number) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      handleOptionClick(optionId); // Enter나 Space를 누르면 옵션 선택
+      handleOptionClick(optionId.toString()); // Enter나 Space를 누르면 옵션 선택
     }
   };
 

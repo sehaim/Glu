@@ -20,8 +20,8 @@ import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
   problemId: number;
-  userAnswer: number; // 사용자의 선택
-  problemAnswer: number; // 문제의 정답
+  userAnswer: string; // 사용자의 선택
+  problemAnswer: string; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
@@ -71,8 +71,8 @@ export default function Test() {
     const initializeAnswers = () => {
       const initialAnswers = problems.map((problem) => ({
         problemId: problem.problemId,
-        problemAnswer: Number(problem.solution),
-        userAnswer: 0, // 기본값은 0
+        problemAnswer: problem.solution,
+        userAnswer: '0', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
@@ -118,7 +118,7 @@ export default function Test() {
     setCurrentProblemIndex(index);
   };
 
-  const handleAnswer = (problemIndex: number, userAnswer: number) => {
+  const handleAnswer = (problemIndex: number, userAnswer: string) => {
     updateAnswers(problemIndex, { userAnswer });
   };
 
@@ -135,25 +135,26 @@ export default function Test() {
 
   const handleMemoSave = async (newMemo: Memo) => {
     try {
-      if (newMemo.memoId && newMemo.memoId !== -1) {
-        // memoId가 존재하고 -1이 아닐 경우, 기존 메모 수정
+      if (currentProblem && newMemo.memoId && newMemo.memoId !== -1) {
+        // currentProblem이 존재하고, memoId가 존재하고, -1이 아닐 경우 => 기존 메모 수정
         await putProblemMemoAPI(
           currentProblem.problemId,
           newMemo.memoId,
           newMemo.content,
         );
-        setMemoList((prevMemoList) => {
-          const memoIndex = prevMemoList.findIndex(
-            (memo) => memo.memoId === newMemo.memoId,
-          );
-          if (memoIndex > -1) {
-            // 기존 메모 업데이트
-            const updatedMemoList = [...prevMemoList];
-            updatedMemoList[memoIndex] = newMemo;
-            return updatedMemoList;
-          }
-          return prevMemoList;
-        });
+        // TODO: 새로운 메모 받아오기
+        // setMemoList((prevMemoList) => {
+        //   const memoIndex = prevMemoList.findIndex(
+        //     (memo) => memo.memoId === newMemo.memoId,
+        //   );
+        //   if (memoIndex > -1) {
+        //     // 기존 메모 업데이트
+        //     const updatedMemoList = [...prevMemoList];
+        //     updatedMemoList[memoIndex] = newMemo;
+        //     return updatedMemoList;
+        //   }
+        //   return prevMemoList;
+        // });
       } else {
         // 새로운 메모 등록
         const createdMemo = await postProblemMemoAPI(
@@ -167,6 +168,8 @@ export default function Test() {
       console.error('메모 저장 중 오류 발생:', error);
     }
   };
+
+  console.log(answers);
 
   if (loading) {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
