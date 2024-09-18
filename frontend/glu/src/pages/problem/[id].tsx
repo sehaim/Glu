@@ -24,7 +24,7 @@ interface ProblemResponse {
 export default function Test() {
   const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [userAnswer, setUserAnswer] = useState<string>('0');
   const [startTime, setStartTime] = useState<number>(0);
   const [, setElapsedTime] = useState<number>(0);
   // 기존에 있던 dummyMemo를 상태로 변경
@@ -52,8 +52,8 @@ export default function Test() {
     fetchData();
   }, []);
 
-  const handleOptionClick = (optionIndex: number) => {
-    setSelectedOption(optionIndex);
+  const handleOptionClick = (optionIndex: string) => {
+    setUserAnswer(optionIndex);
   };
 
   const handleSubmit = () => {
@@ -98,6 +98,8 @@ export default function Test() {
             problemLevel={problem.problemLevel.name}
             problemType={problem.problemType.name}
             problemTitle={problem.title}
+            problemId={problem.problemId}
+            problemLike={false}
           />
           <div className={styles['problem-content']}>
             {problem.problemType?.problemTypeDetailCode === '0' && (
@@ -111,7 +113,7 @@ export default function Test() {
             )}
             <ProblemOptionList
               problemOptions={problem.problemOptions}
-              selectedOption={selectedOption}
+              selectedOption={userAnswer}
               onSingleProblemAnswer={handleOptionClick}
             />
           </div>

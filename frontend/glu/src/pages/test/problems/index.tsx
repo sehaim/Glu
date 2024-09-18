@@ -169,8 +169,6 @@ export default function Test() {
     }
   };
 
-  console.log(answers);
-
   if (loading) {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
   }
