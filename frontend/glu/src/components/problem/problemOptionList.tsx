@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 import styles from './problemOptionList.module.css';
 
 interface ProblemOptionListProps {
-  selectedOption: number; // 변경된 이름
+  selectedOption: string;
   problemIndex?: number;
   problemOptions: ProblemOption[];
-  onTestProblemAnswer?: (problemIndex: number, problemAnswer: number) => void; // 테스트 문제에 대한 콜백
-  onSingleProblemAnswer?: (problemAnswer: number) => void; // 단일 문제에 대한 콜백
+  onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
+  onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
 
 export default function ProblemOptionList({
-  selectedOption, // 변경된 이름
+  selectedOption,
   problemIndex,
   problemOptions,
   onTestProblemAnswer,
@@ -23,7 +23,7 @@ export default function ProblemOptionList({
     setOptions(problemOptions);
   }, [problemOptions]);
 
-  const handleOptionClick = (userAnswer: number) => {
+  const handleOptionClick = (userAnswer: string) => {
     // Test 문제 풀이
     if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
       onTestProblemAnswer(problemIndex, userAnswer);
@@ -35,9 +35,9 @@ export default function ProblemOptionList({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent, optionId: number) => {
+  const handleKeyDown = (event: React.KeyboardEvent, userAnswer: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      handleOptionClick(optionId); // Enter나 Space를 누르면 옵션 선택
+      handleOptionClick(userAnswer); // Enter나 Space를 누르면 옵션 선택
     }
   };
 
@@ -47,12 +47,12 @@ export default function ProblemOptionList({
         <div
           key={option.problemOptionId}
           className={`${styles['problem-option']} ${
-            selectedOption === index + 1 // 변경된 부분
+            Number(selectedOption) === index + 1 // 변경된 부분
               ? styles['problem-option-selected']
               : ''
           }`}
-          onClick={() => handleOptionClick(option.problemOptionId)}
-          onKeyDown={(e) => handleKeyDown(e, option.problemOptionId)} // 키보드 이벤트
+          onClick={() => handleOptionClick(option.option)}
+          onKeyDown={(e) => handleKeyDown(e, option.option)} // 키보드 이벤트
           tabIndex={0} // 키보드 포커스 받을 수 있게 설정
           role="button" // ARIA 역할 설정
         >

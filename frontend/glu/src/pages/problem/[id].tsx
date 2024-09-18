@@ -10,6 +10,7 @@ import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
 import styles from './problem.module.css';
+import ProblemInputField from '@/components/problem/problemInputField';
 
 interface ProblemResponse {
   problemId: number;
@@ -24,7 +25,7 @@ interface ProblemResponse {
 export default function Test() {
   const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(0);
   const [, setElapsedTime] = useState<number>(0);
   // 기존에 있던 dummyMemo를 상태로 변경
@@ -52,8 +53,8 @@ export default function Test() {
     fetchData();
   }, []);
 
-  const handleOptionClick = (optionIndex: number) => {
-    setSelectedOption(optionIndex);
+  const handleAnswer = (userAnswer: string) => {
+    setAnswer(userAnswer);
   };
 
   const handleSubmit = () => {
@@ -98,6 +99,8 @@ export default function Test() {
             problemLevel={problem.problemLevel.name}
             problemType={problem.problemType.name}
             problemTitle={problem.title}
+            problemId={problem.problemId}
+            problemLike={false}
           />
           <div className={styles['problem-content']}>
             {problem.problemType?.problemTypeDetailCode === '0' && (
@@ -109,11 +112,19 @@ export default function Test() {
             {problem.problemType?.problemTypeDetailCode !== '0' && (
               <ProblemContentText problemContent={problem.content} />
             )}
-            <ProblemOptionList
-              problemOptions={problem.problemOptions}
-              selectedOption={selectedOption}
-              onSingleProblemAnswer={handleOptionClick}
-            />
+            {problem.problemType?.problemTypeDetailCode === '0' && (
+              <ProblemInputField
+                initialAnswer={answer}
+                onSingleProblemAnswer={handleAnswer}
+              />
+            )}
+            {problem.problemType?.problemTypeDetailCode !== '0' && (
+              <ProblemOptionList
+                problemOptions={problem.problemOptions}
+                selectedOption={answer}
+                onSingleProblemAnswer={handleAnswer}
+              />
+            )}
           </div>
           {/* 제출하기 버튼 */}
           <div className={styles['problem-button-list']}>

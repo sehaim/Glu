@@ -33,7 +33,7 @@ export default function ProblemMemoManager({
         content: newMemoContent,
       });
     } else {
-      onSaveMemo({ memoId: memoList.length + 1, content: newMemoContent });
+      onSaveMemo({ memoId: -1, content: newMemoContent });
     }
     setIsEditingMemo(false);
     setNewMemoContent('');

@@ -1,6 +1,6 @@
 .memo {
-  width: 40px; /* 메모의 너비 */
-  height: 50px; /* 메모의 높이 */
+  width: 30px; /* 메모의 너비 */
+  height: 40px; /* 메모의 높이 */
   background-color: #ffeff1; /* 메모 배경색 */
   border: 2px solid #ffcccb; /* 메모 테두리 */
   border-radius: 6px; /* 둥근 모서리 */
@@ -13,10 +13,10 @@
 .memo::before {
   content: ''; /* 메모 윗부분의 접힌 모양 */
   position: absolute;
-  top: -4px; /* 더 위로 이동 */
+  top: -3px; /* 더 위로 이동 */
   right: -2px; /* 더 오른쪽으로 이동 */
-  width: 10px;
-  height: 14px;
+  width: 8px;
+  height: 12px;
   background-color: var(--WHITE);
   border: 2px solid #ffcccb;
   border-top-right-radius: 4px;
@@ -27,12 +27,12 @@
 .memo::after {
   content: ''; /* 줄무늬 */
   position: absolute;
-  top: 14px;
-  left: 8px;
-  width: 20px;
+  top: 12px;
+  left: 6px;
+  width: 14px;
   height: 1px;
   background-color: #ff6b81; /* 핑크 줄무늬 */
   box-shadow:
-    0 6px 0 #ff6b81,
-    0 12px 0 #ff6b81; /* 여러 줄무늬 */
+    0 5px 0 #ff6b81,
+    0 10px 0 #ff6b81; /* 여러 줄무늬 */
 }

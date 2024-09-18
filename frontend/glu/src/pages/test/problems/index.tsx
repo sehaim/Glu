@@ -12,12 +12,17 @@ import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
+import {
+  postProblemMemo as postProblemMemoAPI,
+  putProblemMemo as putProblemMemoAPI,
+} from '@/utils/problem/memo';
 import styles from './testProblems.module.css';
+import ProblemInputField from '@/components/problem/problemInputField';
 
 interface ProblemAnswer {
   problemId: number;
-  userAnswer: number; // 사용자의 선택
-  problemAnswer: number; // 문제의 정답
+  userAnswer: string; // 사용자의 선택
+  problemAnswer: string; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
@@ -67,8 +72,8 @@ export default function Test() {
     const initializeAnswers = () => {
       const initialAnswers = problems.map((problem) => ({
         problemId: problem.problemId,
-        problemAnswer: Number(problem.solution),
-        userAnswer: 0, // 기본값은 0
+        problemAnswer: problem.solution,
+        userAnswer: '', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
@@ -114,7 +119,7 @@ export default function Test() {
     setCurrentProblemIndex(index);
   };
 
-  const handleAnswer = (problemIndex: number, userAnswer: number) => {
+  const handleAnswer = (problemIndex: number, userAnswer: string) => {
     updateAnswers(problemIndex, { userAnswer });
   };
 
@@ -129,22 +134,43 @@ export default function Test() {
     router.push('/test/result');
   };
 
-  const handleMemoSave = (newMemo: Memo) => {
-    setMemoList((prevMemoList) => {
-      // 만약 기존 메모를 수정하는 경우 memoId를 비교하여 업데이트
-      const memoIndex = prevMemoList.findIndex(
-        (memo) => memo.memoId === newMemo.memoId,
-      );
-      if (memoIndex > -1) {
-        // 기존 메모 수정
-        const updatedMemoList = [...prevMemoList];
-        updatedMemoList[memoIndex] = newMemo;
-        return updatedMemoList;
+  const handleMemoSave = async (newMemo: Memo) => {
+    try {
+      if (currentProblem && newMemo.memoId && newMemo.memoId !== -1) {
+        // currentProblem이 존재하고, memoId가 존재하고, -1이 아닐 경우 => 기존 메모 수정
+        await putProblemMemoAPI(
+          currentProblem.problemId,
+          newMemo.memoId,
+          newMemo.content,
+        );
+        // TODO: 새로운 메모 받아오기
+        // setMemoList((prevMemoList) => {
+        //   const memoIndex = prevMemoList.findIndex(
+        //     (memo) => memo.memoId === newMemo.memoId,
+        //   );
+        //   if (memoIndex > -1) {
+        //     // 기존 메모 업데이트
+        //     const updatedMemoList = [...prevMemoList];
+        //     updatedMemoList[memoIndex] = newMemo;
+        //     return updatedMemoList;
+        //   }
+        //   return prevMemoList;
+        // });
+      } else {
+        // 새로운 메모 등록
+        const createdMemo = await postProblemMemoAPI(
+          currentProblem.problemId,
+          newMemo.content,
+        );
+        // TODO: 이걸로는 안됨. 다시 메모를 받아와야함 -1로 보냈기 때문에
+        setMemoList((prevMemoList) => [...prevMemoList, createdMemo]);
       }
-      // 새로운 메모 추가
-      return [...prevMemoList, newMemo];
-    });
+    } catch (error) {
+      console.error('메모 저장 중 오류 발생:', error);
+    }
   };
+
+  console.log(answers);
 
   if (loading) {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
@@ -162,10 +188,12 @@ export default function Test() {
         {currentProblem && (
           <div className={styles.problem}>
             <ProblemHeader
+              problemId={currentProblem.problemId}
               problemIndex={currentProblemIndex + 1}
               problemLevel={currentProblem?.problemLevel?.name}
               problemType={currentProblem?.problemType?.name}
               problemTitle={currentProblem?.title}
+              problemLike={false}
             />
             <div className={styles['problem-content']}>
               {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
@@ -177,12 +205,21 @@ export default function Test() {
               {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
                 <ProblemContentText problemContent={currentProblem?.content} />
               )}
-              <ProblemOptionList
-                selectedOption={answers[currentProblemIndex]?.userAnswer}
-                problemIndex={currentProblemIndex}
-                problemOptions={currentProblem?.problemOptions}
-                onTestProblemAnswer={handleAnswer}
-              />
+              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                <ProblemInputField
+                  initialAnswer={answers[currentProblemIndex]?.userAnswer}
+                  problemIndex={currentProblemIndex}
+                  onTestProblemAnswer={handleAnswer}
+                />
+              )}
+              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+                <ProblemOptionList
+                  selectedOption={answers[currentProblemIndex]?.userAnswer}
+                  problemIndex={currentProblemIndex}
+                  problemOptions={currentProblem?.problemOptions}
+                  onTestProblemAnswer={handleAnswer}
+                />
+              )}
             </div>
             <div className={styles['problem-button-list']}>
               {currentProblemIndex > 0 ? (
