@@ -90,7 +90,7 @@ export default function Header({ color }: { color: string }) {
               </Link>
             </li>
             <li>
-              <Link href="/problem/1">
+              <Link href="/problem">
                 유형
                 <br />
                 테스트
@@ -111,7 +111,7 @@ export default function Header({ color }: { color: string }) {
               </Link>
             </li>
             <li>
-              <Link href="/problem/1" className={styles['menu-name']}>
+              <Link href="/problem" className={styles['menu-name']}>
                 유형 테스트
               </Link>
             </li>
