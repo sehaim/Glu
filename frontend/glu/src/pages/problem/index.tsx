@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import dummyProblemList from '@/mock/dummyProblemList.json';
 import { Problem } from '@/types/ProblemTypes';
+import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import styles from './problemList.module.css';
 
 export default function ProblemList() {
@@ -112,101 +113,97 @@ export default function ProblemList() {
       </div>
 
       {/* 단어와 문장규칙 */}
-      <div className={styles['test-category']}>
-        <h3 className={styles['page-subTitle']}>단어와 문장규칙</h3>
-        <div className={styles['test-cards']}>
-          {wordRulesTests
-            .slice(wordRulesIndex * LIMIT, (wordRulesIndex + 1) * LIMIT)
-            .map((test) => (
-              <div key={test.problemId} className={styles['test-card']}>
-                <span>{test.title}</span>
-                <span>{test.problemLevel.name}</span>
-              </div>
-            ))}
-        </div>
-        <div className={styles.pagination}>
-          <button
-            type="button"
-            onClick={() => handlePrevCard('wordRules')}
-            disabled={wordRulesIndex === 0}
-            aria-label="Previous Page"
-          >
-            이전
-          </button>
-          <button
-            type="button"
-            onClick={() => handleNextCard('wordRules')}
-            disabled={(wordRulesIndex + 1) * LIMIT >= wordRulesTests.length}
-            aria-label="Next Page"
-          >
-            다음
-          </button>
+      <div className={styles['content-wrapper']}>
+        <div>
+          <h3 className={styles['page-subTitle']}>단어와 문장규칙</h3>
+          <div className={styles['test-cards']}>
+            {wordRulesTests
+              .slice(wordRulesIndex * LIMIT, (wordRulesIndex + 1) * LIMIT)
+              .map((test) => (
+                <div key={test.problemId} className={styles['test-card']}>
+                  <span>{test.title}</span>
+                  <span>{test.problemLevel.name}</span>
+                </div>
+              ))}
+          </div>
+          <div className={styles.pagination}>
+            <SecondaryButton
+              label="이전"
+              size="small"
+              onClick={() => handlePrevCard('wordRules')}
+              disabled={wordRulesIndex === 0}
+            />
+            <SecondaryButton
+              label="다음"
+              size="small"
+              onClick={() => handleNextCard('wordRules')}
+              disabled={(wordRulesIndex + 1) * LIMIT >= wordRulesTests.length}
+            />
+          </div>
         </div>
       </div>
 
       {/* 글읽고이해하기 */}
-      <div className={styles['test-category']}>
-        <h3 className={styles['page-subTitle']}>글읽고 이해하기</h3>
-        <div className={styles['test-cards']}>
-          {readingTests
-            .slice(readingIndex * LIMIT, (readingIndex + 1) * LIMIT)
-            .map((test) => (
-              <div key={test.problemId} className={styles['test-card']}>
-                <span>{test.title}</span>
-                <span>{test.problemLevel.name}</span>
-              </div>
-            ))}
-        </div>
-        <div className={styles.pagination}>
-          <button
-            type="button"
-            onClick={() => handlePrevCard('reading')}
-            disabled={readingIndex === 0}
-            aria-label="Previous Page"
-          >
-            이전
-          </button>
-          <button
-            type="button"
-            onClick={() => handleNextCard('reading')}
-            disabled={(readingIndex + 1) * LIMIT >= readingTests.length}
-            aria-label="Next Page"
-          >
-            다음
-          </button>
+      <div className={styles['content-wrapper']}>
+        <div>
+          <h3 className={styles['page-subTitle']}>글읽고 이해하기</h3>
+          <div className={styles['test-cards']}>
+            {readingTests
+              .slice(readingIndex * LIMIT, (readingIndex + 1) * LIMIT)
+              .map((test) => (
+                <div key={test.problemId} className={styles['test-card']}>
+                  <span>{test.title}</span>
+                  <span>{test.problemLevel.name}</span>
+                </div>
+              ))}
+          </div>
+          <div className={styles.pagination}>
+            <SecondaryButton
+              label="이전"
+              size="small"
+              onClick={() => handlePrevCard('reading')}
+              disabled={readingIndex === 0}
+            />
+            <SecondaryButton
+              label="다음"
+              size="small"
+              onClick={() => handleNextCard('reading')}
+              disabled={(readingIndex + 1) * LIMIT >= readingTests.length}
+              aria-label="Next Page"
+            />
+          </div>
         </div>
       </div>
 
       {/* 추측하기 */}
-      <div className={styles['test-category']}>
-        <h3 className={styles['page-subTitle']}>추측하기</h3>
-        <div className={styles['test-cards']}>
-          {inferenceTests
-            .slice(inferenceIndex * LIMIT, (inferenceIndex + 1) * LIMIT)
-            .map((test) => (
-              <div key={test.problemId} className={styles['test-card']}>
-                <span>{test.title}</span>
-                <span>{test.problemLevel.name}</span>
-              </div>
-            ))}
-        </div>
-        <div className={styles.pagination}>
-          <button
-            type="button"
-            onClick={() => handlePrevCard('inference')}
-            disabled={inferenceIndex === 0}
-            aria-label="Previous Page"
-          >
-            이전
-          </button>
-          <button
-            type="button"
-            onClick={() => handleNextCard('inference')}
-            disabled={(inferenceIndex + 1) * LIMIT >= inferenceTests.length}
-            aria-label="Next Page"
-          >
-            다음
-          </button>
+      <div className={styles['content-wrapper']}>
+        <div>
+          <h3 className={styles['page-subTitle']}>추측하기</h3>
+          <div className={styles['test-cards']}>
+            {inferenceTests
+              .slice(inferenceIndex * LIMIT, (inferenceIndex + 1) * LIMIT)
+              .map((test) => (
+                <div key={test.problemId} className={styles['test-card']}>
+                  <span>{test.title}</span>
+                  <span>{test.problemLevel.name}</span>
+                </div>
+              ))}
+          </div>
+          <div className={styles.pagination}>
+            <SecondaryButton
+              label="이전"
+              size="small"
+              onClick={() => handlePrevCard('inference')}
+              disabled={inferenceIndex === 0}
+            />
+            <SecondaryButton
+              label="다음"
+              size="small"
+              onClick={() => handleNextCard('inference')}
+              disabled={(inferenceIndex + 1) * LIMIT >= inferenceTests.length}
+              aria-label="Next Page"
+            />
+          </div>
         </div>
       </div>
     </div>

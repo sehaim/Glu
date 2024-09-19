@@ -8,6 +8,7 @@
 
 .content-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 40px;
@@ -23,6 +24,7 @@
   font-family: 'HDBOLD';
   margin-bottom: 40px;
   white-space: nowrap;
+  width: 100%;
 }
 
 .page-title {
@@ -33,7 +35,6 @@
 .page-subTitle {
   color: var(--PINK);
   font-size: 24px;
-  width: 100%;
 }
 
 .test-category {
@@ -42,6 +43,8 @@
 
 .test-cards {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
   flex-wrap: wrap;
 }
@@ -103,7 +106,7 @@
   }
 
   .test-cards {
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
   }
 }
