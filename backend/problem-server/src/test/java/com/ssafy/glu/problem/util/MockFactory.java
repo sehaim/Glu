@@ -45,7 +45,7 @@ public class MockFactory {
 			.build();
 	}
 
-	public static Problem createProblem(String problemLevelCode) {
+	public static Problem createProblem(ProblemLevelCode problemLevelCode) {
 		// 랜덤한 문자열 생성
 		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
 		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
@@ -60,7 +60,7 @@ public class MockFactory {
 			.title(randomTitle)
 			.content(randomContent)
 			.solution(randomSolution)
-			.problemLevelCode(createProblemLevel(problemLevelCode))
+			.problemLevelCode(problemLevelCode)
 			.problemTypeCode(createProblemType())
 			.problemTypeDetailCode(createProblemTypeDetail())
 			.questionTypeCode(createQuestionType())
@@ -69,11 +69,6 @@ public class MockFactory {
 	}
 
 	public static ProblemLevelCode createProblemLevel() {
-		// 랜덤한 ProblemLevel 객체 생성
-		return ProblemLevelCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
-	}
-
-	public static ProblemLevelCode createProblemLevel(String problemCodeLevelCode) {
 		// 랜덤한 ProblemLevel 객체 생성
 		return ProblemLevelCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}

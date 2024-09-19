@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemLevelCode;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 import com.ssafy.glu.problem.util.MockFactory;
 
@@ -47,7 +48,7 @@ class ProblemRepositoryTest {
 		assertThat(savedProblem.getTitle()).isEqualTo(problem.getTitle());
 		assertThat(savedProblem.getContent()).isEqualTo(problem.getContent());
 		assertThat(savedProblem.getSolution()).isEqualTo(problem.getSolution());
-		assertThat(savedProblem.getProblemLevelCode().getProblemLevelCode()).isEqualTo(problem.getProblemLevelCode().getProblemLevelCode());
+		assertThat(savedProblem.getProblemLevelCode()).isEqualTo(problem.getProblemLevelCode());
 	}
 
 	@Test
@@ -64,9 +65,9 @@ class ProblemRepositoryTest {
 
 	@Test
 	void searchProblemTest() {
-		String problemLevelCode1 = "PL01";
-		String problemLevelCode2 = "PL02";
-		String problemLevelCode3 = "PL03";
+		ProblemLevelCode problemLevelCode1 = ProblemLevelCode.PL01;
+		ProblemLevelCode problemLevelCode2 = ProblemLevelCode.PL02;
+		ProblemLevelCode problemLevelCode3 = ProblemLevelCode.PL03;
 
 		int numLevel1 = 2;
 		int numLevel2 = 7;
