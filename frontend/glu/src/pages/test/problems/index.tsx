@@ -1,35 +1,61 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import dummyProblems from '@/mock/dummyProblems.json';
+import dummyMemo from '@/mock/dummyMemo.json';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
 import ProblemContentImage from '@/components/problem/problemContentImage';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Swal from 'sweetalert';
+import ProblemProgressBar from '@/components/problem/problemProgressBar';
+import ProblemMemoManager from '@/components/problem/problemMemoManager';
+import { Memo } from '@/types/MemoTypes';
+import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
+import {
+  postProblemMemo as postProblemMemoAPI,
+  putProblemMemo as putProblemMemoAPI,
+} from '@/utils/problem/memo';
 import styles from './testProblems.module.css';
+import ProblemInputField from '@/components/problem/problemInputField';
 
 interface ProblemAnswer {
   problemId: number;
-  userAnswer: number; // 사용자의 선택
-  problemAnswer: number; // 문제의 정답
+  userAnswer: string; // 사용자의 선택
+  problemAnswer: string; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
 export default function Test() {
+  const router = useRouter();
   const PROBLEM_COUNT = 15; // 문제 개수 고정
   const [problems, setProblems] = useState<Problem[]>([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [, setTotalSolvedTime] = useState<number>(0);
-  const router = useRouter();
   const currentProblem = problems[currentProblemIndex];
+  const [memoList, setMemoList] = useState<Memo[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // 답안 업데이트 및 세션 스토리지 저장 함수
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
+
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setProblems(dummyProblems.slice(0, PROBLEM_COUNT)); // 문제 데이터 설정
+          setMemoList(dummyMemo); // 메모 데이터 설정
+          resolve(true); // 타이머가 끝난 후 resolve
+        }, 1000); // Simulate a 1-second delay
+      });
+
+      setLoading(false); // 데이터 로드 완료 후 로딩 상태 false로 설정
+    };
+
+    fetchData();
+  }, []);
+
   const updateAnswers = (
     problemIndex: number,
     updatedFields: Partial<ProblemAnswer>,
@@ -38,47 +64,23 @@ export default function Test() {
       const updatedAnswers = prevAnswers.map((answer, index) =>
         index === problemIndex ? { ...answer, ...updatedFields } : answer,
       );
-      sessionStorage.setItem('savedAnswers', JSON.stringify(updatedAnswers)); // 세션 스토리지에 저장
       return updatedAnswers;
     });
   };
 
   useEffect(() => {
-    const fixedProblems = dummyProblems.slice(0, PROBLEM_COUNT);
-    setProblems(fixedProblems);
-
     const initializeAnswers = () => {
-      const initialAnswers = fixedProblems.map((problem) => ({
+      const initialAnswers = problems.map((problem) => ({
         problemId: problem.problemId,
-        problemAnswer: Number(problem.solution),
-        userAnswer: 0, // 기본값은 0
+        problemAnswer: problem.solution,
+        userAnswer: '', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
-      sessionStorage.setItem('savedAnswers', JSON.stringify(initialAnswers));
     };
 
-    const savedAnswers = sessionStorage.getItem('savedAnswers');
-
-    if (savedAnswers) {
-      Swal({
-        title: '이전에 저장된 답안을 불러올까요?',
-        text: '이전에 진행한 답안이 있습니다. 불러올까요?',
-        icon: 'info',
-        buttons: ['새로 시작', '불러오기'],
-        dangerMode: true,
-      }).then((willContinue) => {
-        if (willContinue) {
-          const parsedAnswers = JSON.parse(savedAnswers);
-          setAnswers(parsedAnswers);
-        } else {
-          initializeAnswers();
-        }
-      });
-    }
-
     initializeAnswers();
-  }, []);
+  }, [problems]);
 
   useEffect(() => {
     const start = Date.now();
@@ -86,7 +88,6 @@ export default function Test() {
 
     return () => {
       const timeSpent = Math.floor((Date.now() - start) / 1000);
-
       setTotalSolvedTime(
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
       );
@@ -118,7 +119,7 @@ export default function Test() {
     setCurrentProblemIndex(index);
   };
 
-  const handleAnswer = (problemIndex: number, userAnswer: number) => {
+  const handleAnswer = (problemIndex: number, userAnswer: string) => {
     updateAnswers(problemIndex, { userAnswer });
   };
 
@@ -133,65 +134,93 @@ export default function Test() {
     router.push('/test/result');
   };
 
+  const handleMemoSave = async (newMemo: Memo) => {
+    try {
+      if (currentProblem && newMemo.memoId && newMemo.memoId !== -1) {
+        // currentProblem이 존재하고, memoId가 존재하고, -1이 아닐 경우 => 기존 메모 수정
+        await putProblemMemoAPI(
+          currentProblem.problemId,
+          newMemo.memoId,
+          newMemo.content,
+        );
+        // TODO: 새로운 메모 받아오기
+        // setMemoList((prevMemoList) => {
+        //   const memoIndex = prevMemoList.findIndex(
+        //     (memo) => memo.memoId === newMemo.memoId,
+        //   );
+        //   if (memoIndex > -1) {
+        //     // 기존 메모 업데이트
+        //     const updatedMemoList = [...prevMemoList];
+        //     updatedMemoList[memoIndex] = newMemo;
+        //     return updatedMemoList;
+        //   }
+        //   return prevMemoList;
+        // });
+      } else {
+        // 새로운 메모 등록
+        const createdMemo = await postProblemMemoAPI(
+          currentProblem.problemId,
+          newMemo.content,
+        );
+        // TODO: 이걸로는 안됨. 다시 메모를 받아와야함 -1로 보냈기 때문에
+        setMemoList((prevMemoList) => [...prevMemoList, createdMemo]);
+      }
+    } catch (error) {
+      console.error('메모 저장 중 오류 발생:', error);
+    }
+  };
+
+  console.log(answers);
+
+  if (loading) {
+    return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles['problem-container']}>
-        <div className={styles['left-navigation']}>
-          <h5 className={styles['problem-solved-title']}>해결한 문제</h5>
-          <ul className={styles['problem-solved-list']}>
-            {answers.map((answer, index) => (
-              <button
-                key={answer.problemId} // 문제의 고유한 ID를 key로 사용
-                type="button"
-                className={`${styles['problem-solved-button']} ${answer.userAnswer !== 0 ? styles.answered : styles.unanswered} ${index === currentProblemIndex && styles['problem-solved-button-active']}`}
-                onClick={() => handlProblemIndex(index)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handlProblemIndex(index); // Enter나 Space 키로도 문제 이동 가능
-                  }
-                }}
-              >
-                <p className={styles['problem-solved-button-number']}>
-                  {index + 1}번
-                </p>
-                <p className={styles['problem-solved-button-status']}>
-                  {answer.userAnswer !== 0 ? '✅' : '❌'}
-                </p>
-              </button>
-            ))}
-          </ul>
-        </div>
+        <ProblemSolvedNavigation
+          answers={answers}
+          currentProblemIndex={currentProblemIndex}
+          onProblemIndexChange={handlProblemIndex}
+        />
 
         {currentProblem && (
-          <div className={styles['problem-wrapper']}>
-            <div className={styles.problem} key={currentProblem.problemId}>
-              <ProblemHeader
-                problemIndex={currentProblemIndex + 1}
-                problemLevel={currentProblem?.problemLevel?.name}
-                problemType={currentProblem?.problemType?.name}
-                problemTitle={currentProblem?.title}
-              />
-              <div className={styles['problem-content']}>
-                {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
-                  <ProblemContentImage
-                    imageUrl={currentProblem?.content}
-                    altText={currentProblem?.title || '문제 이미지'}
-                  />
-                )}
-                {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
-                  <ProblemContentText
-                    problemContent={currentProblem?.content}
-                  />
-                )}
+          <div className={styles.problem}>
+            <ProblemHeader
+              problemId={currentProblem.problemId}
+              problemIndex={currentProblemIndex + 1}
+              problemLevel={currentProblem?.problemLevel?.name}
+              problemType={currentProblem?.problemType?.name}
+              problemTitle={currentProblem?.title}
+              problemLike={false}
+            />
+            <div className={styles['problem-content']}>
+              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                <ProblemContentImage
+                  imageUrl={currentProblem?.content}
+                  altText={currentProblem?.title || '문제 이미지'}
+                />
+              )}
+              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+                <ProblemContentText problemContent={currentProblem?.content} />
+              )}
+              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
+                <ProblemInputField
+                  initialAnswer={answers[currentProblemIndex]?.userAnswer}
+                  problemIndex={currentProblemIndex}
+                  onTestProblemAnswer={handleAnswer}
+                />
+              )}
+              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
                 <ProblemOptionList
                   selectedOption={answers[currentProblemIndex]?.userAnswer}
                   problemIndex={currentProblemIndex}
                   problemOptions={currentProblem?.problemOptions}
                   onTestProblemAnswer={handleAnswer}
                 />
-              </div>
+              )}
             </div>
-            {/* 이전/다음 문제로 이동하는 버튼 */}
             <div className={styles['problem-button-list']}>
               {currentProblemIndex > 0 ? (
                 <PrimaryButton
@@ -216,27 +245,12 @@ export default function Test() {
                 />
               )}
             </div>
-            {/* 프로그레스바 */}
-            <div className={styles['progressbar-container']}>
-              <div className={styles.progressbar}>
-                <img
-                  src="/images/glu_character.png"
-                  alt="character"
-                  className={styles['progress-character']}
-                  style={{ left: `calc(${progressPercentage}%` }}
-                />
-              </div>
-              <img
-                src="/images/problem/house.png"
-                alt="house"
-                className={styles['progress-house']}
-              />
-            </div>
           </div>
         )}
 
-        <div className={styles['right-navigation']} />
+        <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
       </div>
+      <ProblemProgressBar progressPercentage={progressPercentage} />
     </div>
   );
 }

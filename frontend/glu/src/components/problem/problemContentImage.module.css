@@ -16,13 +16,22 @@
   object-fit: contain;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .problem-image {
     width: 100%;
     font-size: 16px;
     width: 380px;
   }
 }
+
+/* 
+@media (max-width: 1024px) {
+  .problem-image {
+    width: 100%;
+    font-size: 16px;
+    width: 380px;
+  }
+} */
 
 @media (max-width: 768px) {
   .problem-image {

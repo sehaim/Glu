@@ -5,6 +5,21 @@
   align-items: center;
 }
 
+.problem-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.problem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .problem-content {
   display: flex;
   justify-content: space-between;
@@ -30,9 +45,20 @@
   margin-left: auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .problem-button-list {
     width: 720px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .problem-container {
+    flex-direction: column;
+  }
+
+  .problem-button-list {
+    margin: 40px 0px;
+    margin-bottom: 0px;
   }
 }
 

@@ -68,7 +68,7 @@ export default function TestResult() {
   );
 
   if (loading) {
-    return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
+    return <div>문제 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
   }
 
   return (
