@@ -123,7 +123,12 @@ export default function ProblemList() {
               .map((test) => (
                 <Link href={`/problem/${test.problemId}`} key={test.problemId}>
                   <div className={styles['test-card']}>
-                    <span>{test.title}</span>
+                    <span>
+                      {test.title.length > 8
+                        ? `${test.title.slice(0, 8)}..`
+                        : test.title}
+                    </span>
+
                     <span className={styles['level-span']}>
                       {test.problemLevel.name}
                     </span>
@@ -158,7 +163,12 @@ export default function ProblemList() {
               .map((test) => (
                 <Link href={`/problem/${test.problemId}`} key={test.problemId}>
                   <div className={styles['test-card']}>
-                    <span>{test.title}</span>
+                    <span>
+                      {test.title.length > 8
+                        ? `${test.title.slice(0, 8)}..`
+                        : test.title}
+                    </span>
+
                     <span className={styles['level-span']}>
                       {test.problemLevel.name}
                     </span>
@@ -194,7 +204,12 @@ export default function ProblemList() {
               .map((test) => (
                 <Link href={`/problem/${test.problemId}`} key={test.problemId}>
                   <div className={styles['test-card']}>
-                    <span>{test.title}</span>
+                    <span>
+                      {test.title.length > 8
+                        ? `${test.title.slice(0, 8)}..`
+                        : test.title}
+                    </span>
+
                     <span className={styles['level-span']}>
                       {test.problemLevel.name}
                     </span>
