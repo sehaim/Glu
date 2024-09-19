@@ -1,8 +1,9 @@
 import { BACKEND_URL } from '@/config/config';
 import axios, { AxiosInstance } from 'axios';
 
+// sessionStorage -> localStorage로 변경
 const accessToken =
-  typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+  typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
 // 로그인이 필요없는 axios
 export const defaultAxios: AxiosInstance = axios.create({
