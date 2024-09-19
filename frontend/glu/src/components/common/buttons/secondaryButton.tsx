@@ -16,7 +16,7 @@ export default function SecondaryButton({
 }: SecondaryButtonProps) {
   return (
     <button
-      className={`${styles.button} ${styles[size]}${disabled ? styles.disabled : ''}`}
+      className={`${styles.button} ${styles[size]} ${disabled ? styles.disabled : ''}`}
       onClick={onClick}
       disabled={disabled}
     >

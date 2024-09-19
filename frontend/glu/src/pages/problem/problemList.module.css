@@ -16,7 +16,6 @@
   font-family: 'PT';
   line-height: 24px;
   color: var(--TEXT_SECONDARY);
-  background-color: #fffae8;
 }
 
 .page-title,
@@ -54,46 +53,40 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ffe2e2;
+  background-color: var(--LIGHTPINK);
+  border: 3px solid var(--WHITE);
   border-radius: 10px;
   padding: 20px;
   width: 150px;
   height: 80px;
+  font-family: 'BMJUA';
   font-size: 18px;
-  color: var(--TEXT_PRIMARY);
+  color: var(--TEXT_SECONDARY);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .test-card:hover {
-  background-color: #ffc1c1;
+  background-color: var(--PINK);
   transform: translateY(-5px);
+}
+
+.level-span {
+  font-size: 16px;
+  color: var(--GRAY);
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background-color: var(--PINK);
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 10px;
-}
-
-.pagination span {
-  font-size: 18px;
+  margin-top: 40px;
+  gap: 40px;
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background-color: var(--LIGHTGRAY);
   cursor: not-allowed;
 }
 

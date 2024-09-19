@@ -3,6 +3,7 @@ import dummyProblemList from '@/mock/dummyProblemList.json';
 import { Problem } from '@/types/ProblemTypes';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import styles from './problemList.module.css';
+import Link from 'next/link';
 
 export default function ProblemList() {
   const [wordRulesTests, setWordRulesTests] = useState<Problem[]>([]);
@@ -120,10 +121,14 @@ export default function ProblemList() {
             {wordRulesTests
               .slice(wordRulesIndex * LIMIT, (wordRulesIndex + 1) * LIMIT)
               .map((test) => (
-                <div key={test.problemId} className={styles['test-card']}>
-                  <span>{test.title}</span>
-                  <span>{test.problemLevel.name}</span>
-                </div>
+                <Link href={`/problem/${test.problemId}`} key={test.problemId}>
+                  <div className={styles['test-card']}>
+                    <span>{test.title}</span>
+                    <span className={styles['level-span']}>
+                      {test.problemLevel.name}
+                    </span>
+                  </div>
+                </Link>
               ))}
           </div>
           <div className={styles.pagination}>
@@ -151,10 +156,14 @@ export default function ProblemList() {
             {readingTests
               .slice(readingIndex * LIMIT, (readingIndex + 1) * LIMIT)
               .map((test) => (
-                <div key={test.problemId} className={styles['test-card']}>
-                  <span>{test.title}</span>
-                  <span>{test.problemLevel.name}</span>
-                </div>
+                <Link href={`/problem/${test.problemId}`} key={test.problemId}>
+                  <div className={styles['test-card']}>
+                    <span>{test.title}</span>
+                    <span className={styles['level-span']}>
+                      {test.problemLevel.name}
+                    </span>
+                  </div>
+                </Link>
               ))}
           </div>
           <div className={styles.pagination}>
@@ -183,10 +192,14 @@ export default function ProblemList() {
             {inferenceTests
               .slice(inferenceIndex * LIMIT, (inferenceIndex + 1) * LIMIT)
               .map((test) => (
-                <div key={test.problemId} className={styles['test-card']}>
-                  <span>{test.title}</span>
-                  <span>{test.problemLevel.name}</span>
-                </div>
+                <Link href={`/problem/${test.problemId}`} key={test.problemId}>
+                  <div className={styles['test-card']}>
+                    <span>{test.title}</span>
+                    <span className={styles['level-span']}>
+                      {test.problemLevel.name}
+                    </span>
+                  </div>
+                </Link>
               ))}
           </div>
           <div className={styles.pagination}>
