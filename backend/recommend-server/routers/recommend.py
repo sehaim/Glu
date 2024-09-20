@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from models import ProblemsResponse, Problem, ProblemOption, ProblemLevel, ProblemType
-from repositories import save_problem, get_user
+from repositories import save_problem, get_user, get_all_problems, get_user_problem_logs, get_user_problem_status
 from sqlalchemy.orm import Session
 from db import get_maria_db
-
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 
@@ -27,70 +26,49 @@ example_problem = Problem(
     )
 )
 
-dummy_data = {
-        "problems": [
-            {
-                "problemId": 1,
-                "title": "Sample Problem 1",
-                "content": "This is a sample problem content.",
-                "problemOptions": [
-                    {"problemOptionId": 1, "option": "Option A"},
-                    {"problemOptionId": 2, "option": "Option B"},
-                    {"problemOptionId": 3, "option": "Option C"},
-                    {"problemOptionId": 4, "option": "Option D"}
-                ],
-                "solution": "Sample Solution",
-                "problemLevel": {"problemLevelCode": "L1", "name": "Level 1"},
-                "problemType": {
-                    "problemTypeCode": "T1",
-                    "problemTypeDetailCode": "T1-D1",
-                    "name": "Type 1"
-                }
-            },
-            {
-                "problemId": 2,
-                "title": "Sample Problem 2",
-                "content": "This is another sample problem content.",
-                "problemOptions": [
-                    {"problemOptionId": 5, "option": "Option A"},
-                    {"problemOptionId": 6, "option": "Option B"},
-                    {"problemOptionId": 7, "option": "Option C"},
-                    {"problemOptionId": 8, "option": "Option D"}
-                ],
-                "solution": "Another Sample Solution",
-                "problemLevel": {"problemLevelCode": "L2", "name": "Level 2"},
-                "problemType": {
-                    "problemTypeCode": "T2",
-                    "problemTypeDetailCode": "T2-D1",
-                    "name": "Type 2"
-                }
-            }
-        ]
-    }
 
 @router.get("/test/level", response_model=ProblemsResponse)
 async def get_level_test():
     # 더미 데이터 생성
-    return dummy_data
+    return get_all_problems()
+
 
 @router.get("/test/general", response_model=ProblemsResponse)
 async def get_level_test():
     # 더미 데이터 생성
-    return dummy_data
+    return get_all_problems()
+
 
 @router.get("/type", response_model=ProblemsResponse)
 async def get_level_test():
     # 더미 데이터 생성
-    return dummy_data
+    return get_all_problems()
+
 
 @router.get("/similar", response_model=ProblemsResponse)
 async def get_level_test():
     # 더미 데이터 생성
-    return dummy_data
+    return get_all_problems()
+
 
 @router.post("/make")
 async def make_problem():
     save_problem(example_problem)
+
+
+@router.get("/logs")
+async def get_logs():
+    logs = get_user_problem_logs(1)
+    print(logs)
+    return "logs hello"
+
+
+@router.get("/status")
+async def get_status():
+    status = get_user_problem_status(1)
+    print(status)
+    return "status hello"
+
 
 @router.get("/users/{userId}")
 async def get_user_problem(user_id: int, db: Session = Depends(get_maria_db)):
