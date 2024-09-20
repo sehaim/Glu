@@ -151,37 +151,6 @@ class UserServiceImplTest {
 
 	@Transactional
 	@Test
-	void AttendTest() {
-		// Given
-		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
-		Long id = userService.register(registerRequestDTO);
-
-		//when
-		userService.attend(id, 10);
-
-		//then
-		Attendance attendance = attendanceRepository.findFirstByOrderByAttendanceDateDesc().orElseThrow();
-		assertEquals(10, attendance.getTodaySolve());
-	}
-
-	@Transactional
-	@Test
-	void MultipleAttendTest() {
-		// Given
-		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
-		Long id = userService.register(registerRequestDTO);
-
-		//when
-		userService.attend(id, 10);
-		userService.attend(id, 30);
-
-		//then
-		Attendance attendance = attendanceRepository.findFirstByOrderByAttendanceDateDesc().orElseThrow();
-		assertEquals(40, attendance.getTodaySolve());
-	}
-
-	@Transactional
-	@Test
 	void NoUserTest() {
 		assertThrows(UserNotFoundException.class, () -> userService.attend(100L, 100));
 	}

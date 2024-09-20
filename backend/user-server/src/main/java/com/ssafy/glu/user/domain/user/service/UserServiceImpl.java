@@ -2,6 +2,7 @@ package com.ssafy.glu.user.domain.user.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +17,11 @@ import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
+import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
+import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.DateInValidException;
@@ -189,6 +192,31 @@ public class UserServiceImpl implements UserService {
 
 	private boolean isSameDay(LocalDateTime date1, LocalDateTime date2) {
 		return date1.toLocalDate().isEqual(date2.toLocalDate());
+	}
+
+	@Override
+	public ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest) {
+
+		List<String> images = levelConfig.getImages();
+
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		Integer before = findUser.getStage();
+
+		// 점수 계산 로직
+		int upScore = expUpdateRequest.problemInfoList().stream()
+			.mapToInt(problemInfo -> calculateScore(expUpdateRequest.userProblemTypeLevels(), problemInfo))
+			.sum();
+
+		Integer after = findUser.updateScore(upScore);
+
+		return new ExpUpdateResponse(before == after, before == after ? images.get(before) : images.get(after));
+	}
+
+	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
+		int userLevel = userLevels.getOrDefault(problemInfo.code(), 0);
+		if (userLevel < problemInfo.level()) return 3;
+		else if (userLevel == problemInfo.level()) return 2;
+		else return 1;
 	}
 
 }
