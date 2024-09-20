@@ -62,4 +62,8 @@ public class Problem extends BaseTimeDocument {
 		return questionTypeCode.getGradingStrategy().isCorrect(userAnswer, answer);
 	}
 
+	public int score() {
+		return problemLevelCode.score();
+	}
+
 }
