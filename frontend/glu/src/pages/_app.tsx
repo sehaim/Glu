@@ -7,6 +7,7 @@ import { NextPage } from 'next';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Provider } from 'react-redux';
 import { store } from '@/store';
+import Head from 'next/head';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -21,8 +22,16 @@ export default function App({
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
 
   return (
-    <Provider store={store}>
-      <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>
-    </Provider>
+    <>
+      <Head>
+        <meta
+          name="google-site-verification"
+          content="V5ZYJCNdt_HzDPX05cwk1u-mp_gc1Oe1jmoD2mFXPko"
+        />
+      </Head>
+      <Provider store={store}>
+        <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>
+      </Provider>
+    </>
   );
 }
