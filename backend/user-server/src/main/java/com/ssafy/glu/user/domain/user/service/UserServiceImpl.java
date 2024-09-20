@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserService {
 		return UserResponse.builder()
 			.id(userId)
 			.dayCount(findUser.getDayCount())
-			.score(findUser.getStage())
-			.level(findUser.getExp())
+			.stage(findUser.getStage())
+			.exp(findUser.getExp())
 			.imageUrl(userImage)
 			.nickname(findUser.getNickname())
 			.problemTypeList(getProblemTypeLists(userProblemTypes))
@@ -164,13 +164,12 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 문제 풀면 출석하기
 	 */
-	@Override
-	public void attend(Long userId, Integer solveNum) {
+	public int attend(Long userId, Integer solveNum) {
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
 		// 가장 최근 출석 기록을 가져옴
-		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByOrderByAttendanceDateDesc();
+		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByUsersIdOrderByAttendanceDateDesc(userId);
 
 		// 오늘 날짜
 		LocalDateTime today = LocalDateTime.now();
@@ -187,7 +186,10 @@ public class UserServiceImpl implements UserService {
 			// 출석 기록이 오늘 날짜와 같으면 오늘 문제 푼 수를 업데이트
 			Attendance lastAttend = lastAttendOpt.get();
 			lastAttend.updateTodaySolve(solveNum);
+			return 0;
 		}
+
+		return Math.min(10, 2 * findUser.getDayCount());
 	}
 
 	private boolean isSameDay(LocalDateTime date1, LocalDateTime date2) {
@@ -207,7 +209,11 @@ public class UserServiceImpl implements UserService {
 			.mapToInt(problemInfo -> calculateScore(expUpdateRequest.userProblemTypeLevels(), problemInfo))
 			.sum();
 
-		Integer after = findUser.updateScore(upScore);
+
+		//출석 점수
+		int attendScore = attend(userId, expUpdateRequest.problemInfoList().size());
+
+		Integer after = findUser.updateScore(upScore + attendScore);
 
 		return new ExpUpdateResponse(before == after, before == after ? images.get(before) : images.get(after));
 	}
