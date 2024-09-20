@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
-import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
+import com.ssafy.glu.problem.domain.problem.dto.grading.GradeResult;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
@@ -17,11 +17,14 @@ import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
+import com.ssafy.glu.problem.domain.problem.event.ProblemSolvedEventPublisher;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
-import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
+import com.ssafy.glu.problem.domain.user.service.UserService;
+import com.ssafy.glu.problem.global.feign.dto.UserResponse;
+import com.ssafy.glu.problem.global.util.EloRatingUtil;
 import com.ssafy.glu.problem.global.util.PageUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +35,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
 	private final ProblemRepository problemRepository;
-	private final UserProblemLogRepository userProblemLogRepository;
 	private final UserProblemStatusRepository userProblemStatusRepository;
+	private final ProblemSolvedEventPublisher problemSolvedEventPublisher;
+	private final ProblemGradingService problemGradingService;
+	private final UserService userService;
 
 	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
@@ -127,40 +132,18 @@ public class ProblemServiceImpl implements ProblemService {
 		// 문제 정보 가져오기
 		Problem problem = getProblemOrThrow(problemId);
 
-		// 문제 유형별 채점
-		boolean isCorrect = problem.grade(request.userAnswer());
+		// 유저 정보 조회
+		UserResponse user = userService.getUser(userId);
 
-		// 문제 풀이 이력 추가
-		UserProblemLog userProblemLog = userProblemLogRepository.save(request.toDocument(userId, problem, isCorrect));
+		// 채점 및 유저 점수 업데이트
+		GradeResult gradeResult = problemGradingService.gradeProblem(user, problem, request);
 
-		// 문제 풀이 상태 변경
-		updateUserProblemStatus(userProblemLog);
+		// 문제 풀이 이벤트 발행
+		problemSolvedEventPublisher.publish(userId, problemId, gradeResult, request);
 
-		// TODO:유저 점수 획득 및 유저 풀이 수 추가
-		Integer acquiredScore = isCorrect ? 1 : 0;
-		Integer totalScore = 10 + acquiredScore;
-		Boolean isLevelUp = false;
-		String levelUpUrl = null;
+		// TODO : 캐릭터 성장 여부 요청
 
-		return ProblemGradingResponse.builder()
-			.isCorrect(isCorrect)
-			.acquiredScore(acquiredScore)
-			.totalScore(totalScore)
-			.isLevelUp(isLevelUp)
-			.levelUpUrl(levelUpUrl)
-			.build();
-	}
-
-	// 문제 풀이 상태 변경
-	private void updateUserProblemStatus(UserProblemLog userProblemLog) {
-		Long userId = userProblemLog.getUserId();
-		Problem problem = userProblemLog.getProblem();
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem(userId, problem)
-			.orElse(
-				UserProblemStatus.builder().userId(userId).problem(problem).build()
-			);
-		userProblemStatus.updateStatus(userProblemLog.isCorrect());
-		userProblemStatusRepository.save(userProblemStatus);
+		return ProblemGradingResponse.of(gradeResult);
 	}
 
 	// 문제 ID로 문제 가져오기
