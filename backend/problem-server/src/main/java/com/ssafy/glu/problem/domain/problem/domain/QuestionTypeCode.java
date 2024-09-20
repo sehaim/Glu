@@ -1,5 +1,7 @@
 package com.ssafy.glu.problem.domain.problem.domain;
 
+import com.ssafy.glu.problem.global.util.GradingStrategy;
+
 import lombok.Getter;
 
 @Getter
@@ -15,11 +17,5 @@ public enum QuestionTypeCode {
 	QuestionTypeCode(String description, GradingStrategy gradingStrategy) {
 		this.description = description;
 		this.gradingStrategy = gradingStrategy;
-	}
-
-	// 채점 로직을 람다식으로 표현하기 위한 함수형 인터페이스
-	@FunctionalInterface
-	interface GradingStrategy {
-		boolean isCorrect(String answer, String correctAnswer);
 	}
 }

@@ -23,8 +23,6 @@ public class Problem extends BaseTimeDocument {
 	@Id
 	private String problemId;
 
-	private final QuestionTypeCode questionTypeCode;
-
 	private final String title;
 
 	private final String content;
@@ -33,8 +31,12 @@ public class Problem extends BaseTimeDocument {
 
 	private final String solution;
 
+	private final QuestionTypeCode questionTypeCode;
+
 	private final ProblemLevelCode problemLevelCode;
+
 	private final ProblemTypeDetailCode problemTypeDetailCode;
+
 	private final ProblemTypeCode problemTypeCode;
 
 	private final Map<String, Object> metadata;
