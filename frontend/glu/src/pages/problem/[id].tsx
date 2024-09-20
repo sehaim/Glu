@@ -9,8 +9,8 @@ import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
-import styles from './problem.module.css';
 import ProblemInputField from '@/components/problem/problemInputField';
+import styles from './problem.module.css';
 
 interface ProblemResponse {
   problemId: number;
@@ -28,6 +28,7 @@ export default function Test() {
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(0);
   const [, setElapsedTime] = useState<number>(0);
+
   // 기존에 있던 dummyMemo를 상태로 변경
   const [memoList, setMemoList] = useState<Memo[]>([
     { memoId: 1, content: 'This is the first memo content.' },
