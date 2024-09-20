@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,8 +95,8 @@ public class UserServiceImpl implements UserService {
 		return UserResponse.builder()
 			.id(userId)
 			.dayCount(findUser.getDayCount())
-			.score(findUser.getStage())
-			.level(findUser.getExp())
+			.stage(findUser.getStage())
+			.exp(findUser.getExp())
 			.imageUrl(userImage)
 			.nickname(findUser.getNickname())
 			.problemTypeList(getProblemTypeLists(userProblemTypes))
@@ -161,35 +160,6 @@ public class UserServiceImpl implements UserService {
 		return attendanceRepository.countAttendanceByYearAndMonth(userId, request);
 	}
 
-	/**
-	 * 문제 풀면 출석하기
-	 */
-	@Override
-	public void attend(Long userId, Integer solveNum) {
-
-		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
-		// 가장 최근 출석 기록을 가져옴
-		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByOrderByAttendanceDateDesc();
-
-		// 오늘 날짜
-		LocalDateTime today = LocalDateTime.now();
-
-		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
-		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
-			Attendance newAttendance = Attendance.builder()
-				.users(findUser)
-				.todaySolve(solveNum)
-				.attendanceDate(today)
-				.build();
-			attendanceRepository.save(newAttendance);
-		} else {
-			// 출석 기록이 오늘 날짜와 같으면 오늘 문제 푼 수를 업데이트
-			Attendance lastAttend = lastAttendOpt.get();
-			lastAttend.updateTodaySolve(solveNum);
-		}
-	}
-
 	private boolean isSameDay(LocalDateTime date1, LocalDateTime date2) {
 		return date1.toLocalDate().isEqual(date2.toLocalDate());
 	}
@@ -207,16 +177,57 @@ public class UserServiceImpl implements UserService {
 			.mapToInt(problemInfo -> calculateScore(expUpdateRequest.userProblemTypeLevels(), problemInfo))
 			.sum();
 
-		Integer after = findUser.updateScore(upScore);
+		//출석 여부 체크하기
+		int attendScore = attend(userId, expUpdateRequest.problemInfoList().size());
+
+		Integer after = findUser.updateScore(upScore + attendScore);
 
 		return new ExpUpdateResponse(before != after, before != after ? images.get(before) : images.get(after));
 	}
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
 		int userLevel = userLevels.getOrDefault(problemInfo.code(), 0);
-		if (userLevel < problemInfo.level()) return 3;
-		else if (userLevel == problemInfo.level()) return 2;
-		else return 1;
+		if (userLevel < problemInfo.level())
+			return 3;
+		else if (userLevel == problemInfo.level())
+			return 2;
+		else
+			return 1;
+	}
+
+	/**
+	 * 문제 풀면 출석하기
+	 */
+	public int attend(Long userId, Integer solveNum) {
+
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+		// 가장 최근 출석 기록을 가져옴
+		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByUsersIdOrderByAttendanceDateDesc(
+			findUser.getId());
+
+		// 오늘 날짜
+		LocalDateTime today = LocalDateTime.now();
+
+		findUser.updateDayCount();
+
+		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
+		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
+			Attendance newAttendance = Attendance.builder()
+				.users(findUser)
+				.todaySolve(solveNum)
+				.attendanceDate(today)
+				.build();
+			attendanceRepository.save(newAttendance);
+		} else {
+			// 출석 기록이 오늘 날짜와 같으면 오늘 문제 푼 수를 업데이트
+			Attendance lastAttend = lastAttendOpt.get();
+			lastAttend.updateTodaySolve(solveNum);
+			return 0;
+		}
+
+
+		return Math.min(2 * findUser.getDayCount(), 10);
 	}
 
 }

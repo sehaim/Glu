@@ -60,8 +60,16 @@ public class Users extends BaseTimeEntity {
 		}
 
 		if (exp < 0) exp = 0;
-		
+
 		return this.stage;
+	}
+
+	public void updateDayCount() {
+		this.dayCount++;
+	}
+
+	public void resetDayCount() {
+		this.dayCount = 0;
 	}
 
 }

@@ -69,11 +69,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
-	@PostMapping("/attendance")
-	public ResponseEntity<Void> attend(@RequestHeader(USER_ID) Long userId, @RequestBody Integer solveNum) {
-		userService.attend(userId, solveNum);
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
 
 	@PutMapping("/exp")
 	public ResponseEntity<ExpUpdateResponse> updateExp(@RequestHeader(USER_ID) Long userId, @RequestBody ExpUpdateRequest expUpdateRequest) {

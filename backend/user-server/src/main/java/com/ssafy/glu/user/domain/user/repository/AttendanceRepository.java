@@ -9,5 +9,6 @@ import com.ssafy.glu.user.domain.user.domain.Attendance;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>, AttendanceQueryRepository {
 
-	Optional<Attendance> findFirstByOrderByAttendanceDateDesc();
+	// 특정 userId에 대한 최신 Attendance 한 개 가져오기
+	Optional<Attendance> findFirstByUsersIdOrderByAttendanceDateDesc(Long userId);
 }

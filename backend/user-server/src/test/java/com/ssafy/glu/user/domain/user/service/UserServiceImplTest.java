@@ -154,12 +154,6 @@ class UserServiceImplTest {
 		assertEquals(10, attendanceData.get(1).totalSolvedProblemCnt());
 	}
 
-	@Transactional
-	@Test
-	void NoUserTest() {
-		assertThrows(UserNotFoundException.class, () -> userService.attend(100L, 100));
-	}
-
 
 	@Transactional
 	@Test

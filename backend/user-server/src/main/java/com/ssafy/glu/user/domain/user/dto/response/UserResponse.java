@@ -8,8 +8,8 @@ import lombok.Builder;
 public record UserResponse (
 	Long id,
 	String nickname,
-	Integer level,
-	Integer score,
+	Integer stage,
+	Integer exp,
 	String imageUrl,
 	Integer dayCount,
 	List<UserProblemTypeResponse> problemTypeList
