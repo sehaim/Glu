@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import dummyProblemList from '@/mock/dummyProblemList.json';
 import { Problem } from '@/types/ProblemTypes';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
-import styles from './problemList.module.css';
 import Link from 'next/link';
+import styles from './problemList.module.css';
 
 export default function ProblemList() {
   const [wordRulesTests, setWordRulesTests] = useState<Problem[]>([]);
