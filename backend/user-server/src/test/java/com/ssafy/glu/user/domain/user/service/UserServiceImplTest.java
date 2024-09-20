@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +19,11 @@ import com.ssafy.glu.user.domain.user.domain.Attendance;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
+import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
+import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
@@ -173,4 +178,71 @@ class UserServiceImplTest {
 		assertFalse(result2);
 	}
 
+	@Transactional
+	@Test
+	void 레벨업X() {
+
+		// given: 사용자 등록 및 초기 설정
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		// given: ExpUpdateRequest 생성
+		Map<String, Integer> userProblemTypeLevels = Map.of(
+			"PT01", 1,
+			"PT02", 2,
+			"PT03", 3
+		);
+
+		List<ExpUpdateRequest.ProblemInfo> problemInfos = List.of(
+			new ExpUpdateRequest.ProblemInfo(2, "PT01"),
+			new ExpUpdateRequest.ProblemInfo(3, "PT02"),
+			new ExpUpdateRequest.ProblemInfo(1, "PT03")
+		);
+
+		ExpUpdateRequest expUpdateRequest = new ExpUpdateRequest(userProblemTypeLevels, problemInfos);
+
+		// when: 경험치 업데이트 로직 실행
+		ExpUpdateResponse response = userService.updateExp(id, expUpdateRequest);
+
+		// then: 결과 검증
+		Users updatedUser = userRepository.findById(id).orElseThrow();
+
+		assertNotNull(updatedUser);
+		assertFalse(response.isStageUp()); // 스테이지가 업데이트되었는지 확인
+		assertNotNull(response.stageUpUrl()); // 적절한 이미지가 반환되었는지 확인
+	}
+
+	@Transactional
+	@Test
+	void 레벨업O() {
+
+		// given: 사용자 등록 및 초기 설정
+		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+		Long id = userService.register(registerRequestDTO);
+
+		// given: ExpUpdateRequest 생성
+		Map<String, Integer> userProblemTypeLevels = Map.of(
+			"PT01", 1,
+			"PT02", 2,
+			"PT03", 3
+		);
+
+		List<ExpUpdateRequest.ProblemInfo> problemInfos = new ArrayList<>();
+
+		for(int i=0; i<40; i++) {
+			problemInfos.add(new ExpUpdateRequest.ProblemInfo(3, "PT01"));
+		}
+
+		ExpUpdateRequest expUpdateRequest = new ExpUpdateRequest(userProblemTypeLevels, problemInfos);
+
+		// when: 경험치 업데이트 로직 실행
+		ExpUpdateResponse response = userService.updateExp(id, expUpdateRequest);
+
+		// then: 결과 검증
+		Users updatedUser = userRepository.findById(id).orElseThrow();
+
+		assertNotNull(updatedUser);
+		assertTrue(response.isStageUp()); // 스테이지가 업데이트되었는지 확인
+		assertNotNull(response.stageUpUrl()); // 적절한 이미지가 반환되었는지 확인
+	}
 }
