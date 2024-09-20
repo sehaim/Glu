@@ -31,7 +31,9 @@ import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -174,6 +176,8 @@ public class UserServiceImpl implements UserService {
 		// 오늘 날짜
 		LocalDateTime today = LocalDateTime.now();
 
+		findUser.updateDayCount();
+
 		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
 		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
 			Attendance newAttendance = Attendance.builder()
@@ -209,13 +213,12 @@ public class UserServiceImpl implements UserService {
 			.mapToInt(problemInfo -> calculateScore(expUpdateRequest.userProblemTypeLevels(), problemInfo))
 			.sum();
 
-
 		//출석 점수
 		int attendScore = attend(userId, expUpdateRequest.problemInfoList().size());
 
 		Integer after = findUser.updateScore(upScore + attendScore);
 
-		return new ExpUpdateResponse(before == after, before == after ? images.get(before) : images.get(after));
+		return new ExpUpdateResponse(before != after, before != after ? images.get(before) : images.get(after));
 	}
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {

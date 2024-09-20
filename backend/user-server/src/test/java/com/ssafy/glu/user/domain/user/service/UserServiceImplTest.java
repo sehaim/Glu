@@ -180,6 +180,8 @@ class UserServiceImplTest {
 		UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
 		Long id = userService.register(registerRequestDTO);
 
+		UserResponse user = userService.getUser(id);
+
 		// given: ExpUpdateRequest 생성
 		Map<String, Integer> userProblemTypeLevels = Map.of(
 			"PT01", 1,
