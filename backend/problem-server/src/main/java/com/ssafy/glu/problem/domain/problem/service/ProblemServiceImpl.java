@@ -128,7 +128,7 @@ public class ProblemServiceImpl implements ProblemService {
 		Problem problem = getProblemOrThrow(problemId);
 
 		// 문제 유형별 채점
-		boolean isCorrect = problem.isCorrect(request.userAnswer());
+		boolean isCorrect = problem.grade(request.userAnswer());
 
 		// 문제 풀이 이력 추가
 		UserProblemLog userProblemLog = userProblemLogRepository.save(request.toDocument(userId, problem, isCorrect));

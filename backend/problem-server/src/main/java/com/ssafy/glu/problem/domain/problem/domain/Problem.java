@@ -57,7 +57,7 @@ public class Problem extends BaseTimeDocument {
 	//=== 비즈니스 로직 ====//
 
 	// 맞았는지 틀렸는지 반환
-	public boolean isCorrect(String userAnswer) {
+	public boolean grade(String userAnswer) {
 		// TODO: 구체적인 정답 여부 판별 필요
 		return questionTypeCode.getGradingStrategy().isCorrect(userAnswer, answer);
 	}
