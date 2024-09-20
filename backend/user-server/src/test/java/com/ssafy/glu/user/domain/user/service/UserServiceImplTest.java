@@ -71,6 +71,7 @@ class UserServiceImplTest {
 		UserResponse user = userService.getUser(id);
 
 		// Then
+		assertEquals("levelImg1.png", user.imageUrl(), "Image url should match");
 		assertEquals(id, user.id(), "User id should match");
 		assertEquals("ssafy", user.nickname(), "Nickname should match");
 		assertNotNull(user.problemTypeList(), "ProblemTypeList should not be null");

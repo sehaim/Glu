@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.ssafy.glu.user.domain.user.config.LevelConfig;
 import com.ssafy.glu.user.domain.user.domain.Attendance;
 import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
@@ -36,6 +38,8 @@ public class UserServiceImpl implements UserService {
 	private final UserProblemTypeRepository userProblemTypeRepository;
 	private final AttendanceRepository attendanceRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
+
+	private final LevelConfig levelConfig;
 
 	/**
 	 * 유저 저장
@@ -83,12 +87,15 @@ public class UserServiceImpl implements UserService {
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(userId);
 
+		List<String> levelImages = levelConfig.getImages();
+		String userImage = levelImages.get(findUser.getStage());
+
 		return UserResponse.builder()
 			.id(userId)
 			.dayCount(findUser.getDayCount())
 			.score(findUser.getStage())
 			.level(findUser.getExp())
-			.imageUrl("tempImageURL")
+			.imageUrl(userImage)
 			.nickname(findUser.getNickname())
 			.problemTypeList(getProblemTypeLists(userProblemTypes))
 			.build();
