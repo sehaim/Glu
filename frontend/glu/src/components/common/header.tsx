@@ -109,6 +109,7 @@ export default function Header({ color }: { color: string }) {
                 <h1 className={styles.logo}>Glu</h1>
               </Link>
             </li>
+
             {isLoggedIn && (
               <>
                 <li>
