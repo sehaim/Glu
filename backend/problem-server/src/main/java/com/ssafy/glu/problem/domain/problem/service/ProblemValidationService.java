@@ -35,7 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ProblemValidationService implements ProblemService {
 	private final ProblemService problemService;
 	private final ProblemRepository problemRepository;
-	private final UserProblemStatusRepository userProblemStatusRepository;
+
+	@Override
+	public ProblemBaseResponse getProblem(String problemId) {
+		return problemService.getProblem(problemId);
+	}
 
 	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,

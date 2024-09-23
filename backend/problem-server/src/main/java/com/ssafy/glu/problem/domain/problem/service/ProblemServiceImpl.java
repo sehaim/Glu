@@ -41,6 +41,11 @@ public class ProblemServiceImpl implements ProblemService {
 	private final UserService userService;
 
 	@Override
+	public ProblemBaseResponse getProblem(String problemId) {
+		return ProblemBaseResponse.of(getProblemOrThrow(problemId));
+	}
+
+	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
 		return userProblemStatusRepository.findAllProblemByCondition(userId, condition, pageable)
@@ -134,11 +139,14 @@ public class ProblemServiceImpl implements ProblemService {
 
 		// 유저 정보 조회
 		UserResponse user = userService.getUser(userId);
+		log.info("[유저 정보 조회] : {}", user.toString());
 
 		// 채점 및 유저 점수 업데이트
+		log.info("[채점 및 유저 점수 업데이트]");
 		GradeResult gradeResult = problemGradingService.gradeProblem(user, problem, request);
 
 		// 문제 풀이 이벤트 발행
+		log.info("[문제 풀이 이벤트 발행]");
 		problemSolvedEventPublisher.publish(userId, problemId, gradeResult, request);
 
 		// TODO : 캐릭터 성장 여부 요청

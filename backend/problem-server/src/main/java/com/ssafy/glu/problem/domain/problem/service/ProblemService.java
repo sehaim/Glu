@@ -12,6 +12,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 
 public interface ProblemService {
+	ProblemBaseResponse getProblem(String problemId);
 	Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition, Pageable pageable);
 	ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
 	ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request);
