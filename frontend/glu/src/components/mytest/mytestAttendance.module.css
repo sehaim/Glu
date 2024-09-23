@@ -1,13 +1,15 @@
 .container {
-  width: 68%;
+  width: 70%;
   min-width: 500px;
-  min-height: 600px;
+  height: 100%;
+  min-height: 700px;
   background-color: var(--WHITE);
   display: flex;
   flex-direction: column;
   padding: 30px;
   border-radius: 15px;
   margin-left: 20px;
+  flex: 1;
 }
 
 .container-header {
@@ -23,7 +25,7 @@
 }
 
 .calendar-container {
-  width: 100%;
+  width: 95%;
   margin: 0 auto;
   text-align: center;
 }
@@ -59,6 +61,7 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  gap: 15px;
 }
 
 .calendar-day-header {
@@ -70,12 +73,17 @@
 }
 
 .day-container {
-  border: 1px solid #ddd;
-  height: 80px;
-  padding: 5px;
+  background-color: var(--LIGHTYELLOW);
+  height: 90px;
+  padding: 10px;
+  border-radius: 15px;
 }
 
 .calendar-day {
   font-family: 'HD';
   text-align: left;
+}
+
+.other-month-day {
+  color: var(--BORDER_LIGHT);
 }
