@@ -1,5 +1,8 @@
 package com.ssafy.glu.problem.domain.problem.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum ProblemLevelCode {
 	PL01(0, "유아"),
 	PL02(1, "초등 1학년"),
