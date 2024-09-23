@@ -26,6 +26,11 @@
   font-family: 'BMJUA';
 }
 
+.logo:hover {
+  font-size: 36px;
+  color: var(--DARKPINK);
+}
+
 .info-menu ul {
   display: flex;
   justify-content: center;

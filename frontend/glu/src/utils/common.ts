@@ -1,7 +1,6 @@
 import { BACKEND_URL } from '@/config/config';
 import axios, { AxiosInstance } from 'axios';
 
-// sessionStorage -> localStorage로 변경
 const accessToken =
   typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
