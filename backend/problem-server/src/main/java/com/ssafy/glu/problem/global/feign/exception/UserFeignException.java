@@ -4,11 +4,13 @@ import com.ssafy.glu.problem.global.error.ErrorCode;
 import com.ssafy.glu.problem.global.error.ServiceException;
 
 public class UserFeignException extends ServiceException {
+	static ErrorCode errorCode = ErrorCode.USER_FEIGN_ERROR;
+
 	public UserFeignException() {
-		super(ErrorCode.USER_FEIGN_ERROR);
+		super(errorCode);
 	}
 
 	public UserFeignException(Exception exception) {
-		super(ErrorCode.USER_FEIGN_ERROR, exception);
+		super(errorCode, exception);
 	}
 }

@@ -16,10 +16,13 @@ public enum ErrorCode {
 	NOT_FOUND(404, "NOT_FOUND", "리소스를 찾을 수 없습니다."),
 	CONFLICT(409, "CONFLICT", "리소스 충돌이 발생했습니다."),
 
-	// 필수 값이 누락된 경우
+	// 필수 값이 누락된
+	NULL_USER_ANSWER(400, "NULL_USER_ANSWER", "userAnswer가 null입니다."),
 	NULL_USER_ID(400, "NULL_USER_ID", "userId가 null입니다."),
 	NULL_PROBLEM_ID(400, "NULL_PROBLEM_ID", "problemId가 null입니다."),
 	NULL_MEMO_INDEX(400, "NULL_MEMO_INDEX", "memoIndex가 null입니다."),
+
+	EMPTY_PROBLEM_ID(400, "EMPTY_PROBLEM_ID", "problemId가 비어있습니다."),
 
 	// 문제 풀이 이력 조회
 	SOLVE_HISTORY_NOT_FOUND(404, "SOLVE_HISTORY_NOT_FOUND", "문제 풀이 이력을 찾을 수 없습니다."),

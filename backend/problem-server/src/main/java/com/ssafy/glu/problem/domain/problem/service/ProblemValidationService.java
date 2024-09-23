@@ -19,11 +19,11 @@ import com.ssafy.glu.problem.domain.problem.exception.memo.NullMemoIndexExceptio
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoCreateFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoDeleteFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoUpdateFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.problem.EmptyProblemIdException;
 import com.ssafy.glu.problem.domain.problem.exception.problem.NullProblemIdException;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.user.NullUserIdException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
-import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +38,7 @@ public class ProblemValidationService implements ProblemService {
 
 	@Override
 	public ProblemBaseResponse getProblem(String problemId) {
+		validateProblemIdIsNullOrEmpty(problemId);
 		return problemService.getProblem(problemId);
 	}
 
@@ -161,6 +162,7 @@ public class ProblemValidationService implements ProblemService {
 		// Null 값 검증
 		validateUserIdIsNull(userId);
 		validateProblemIdIsNull(problemId);
+		validateUserAnswerIsNull(request.userAnswer());
 
 		return problemService.gradeProblem(userId, problemId, request);
 	}
@@ -186,8 +188,21 @@ public class ProblemValidationService implements ProblemService {
 		}
 	}
 
+	private void validateProblemIdIsNullOrEmpty(String problemId) {
+		validateProblemIdIsNull(problemId);
+		if (problemId.isEmpty()) {
+			throw new EmptyProblemIdException();
+		}
+	}
+
 	private void validateMemoIndexIsNull(Long memoIndex) {
 		if (memoIndex == null) {
+			throw new NullMemoIndexException();
+		}
+	}
+
+	private void validateUserAnswerIsNull(String userAnswer) {
+		if (userAnswer == null) {
 			throw new NullMemoIndexException();
 		}
 	}
