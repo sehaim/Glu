@@ -20,19 +20,23 @@ export const isTokenExpired = (token: string): boolean => {
 };
 
 // 로그인
-export const login = async (data: LoginUser) => {
+export const loginAPI = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
     localStorage.setItem('accessToken', res.headers.accesstoken);
-    window.location.href = '/';
-  } catch {
-    // alert 추후 수정 예정
-    alert('아이디/비밀번호를 확인해주세요');
+    window.location.href = '/home';
+  } catch (err) {
+    if (err instanceof AxiosError && err.response) {
+      const msg =
+        err.response.data?.message || '로그인 중 오류가 발생했습니다.';
+      // alert 추후 수정 예정
+      alert(msg);
+    }
   }
 };
 
 // 로그아웃
-export const logout = async () => {
+export const logoutAPI = async () => {
   await authAxios
     .post(`auth/logout`)
     .then(() => {

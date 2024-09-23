@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
-import { logout as logoutAPI } from '@/utils/user/auth';
+import { logoutAPI } from '@/utils/user/auth';
 import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
 
@@ -82,20 +82,24 @@ export default function Header({ color }: { color: string }) {
                 <h1 className={styles.logo}>Glu</h1>
               </Link>
             </li>
-            <li>
-              <Link href="/test">
-                종합
-                <br />
-                테스트
-              </Link>
-            </li>
-            <li>
-              <Link href="/problem">
-                유형
-                <br />
-                테스트
-              </Link>
-            </li>
+            {isLoggedIn && (
+              <>
+                <li>
+                  <Link href="/test">
+                    종합
+                    <br />
+                    테스트
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/problem/1">
+                    유형
+                    <br />
+                    테스트
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         <nav className={styles['info-menu']}>
@@ -105,16 +109,21 @@ export default function Header({ color }: { color: string }) {
                 <h1 className={styles.logo}>Glu</h1>
               </Link>
             </li>
-            <li>
-              <Link href="/test" className={styles['menu-name']}>
-                종합 테스트
-              </Link>
-            </li>
-            <li>
-              <Link href="/problem" className={styles['menu-name']}>
-                유형 테스트
-              </Link>
-            </li>
+
+            {isLoggedIn && (
+              <>
+                <li>
+                  <Link href="/test" className={styles['menu-name']}>
+                    종합 테스트
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/problem" className={styles['menu-name']}>
+                    유형 테스트
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         <nav className={styles['user-menu']}>

@@ -19,11 +19,16 @@
 }
 
 .logo {
-  font-size: 28px;
+  font-size: 35px;
   font-weight: bold;
   margin-right: 32px;
   color: var(--PINK);
   font-family: 'BMJUA';
+}
+
+.logo:hover {
+  font-size: 36px;
+  color: var(--DARKPINK);
 }
 
 .info-menu ul {
