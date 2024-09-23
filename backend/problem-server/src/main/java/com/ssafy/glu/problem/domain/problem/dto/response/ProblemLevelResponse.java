@@ -13,7 +13,7 @@ public record ProblemLevelResponse (
 		if (problemLevelCode == null) return null;
 		return ProblemLevelResponse.builder()
 			.problemLevelCode(problemLevelCode.toString())
-			.name(problemLevelCode.toString())
+			.name(problemLevelCode.getDescription())
 			.build();
 	}
 }
