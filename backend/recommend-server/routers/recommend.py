@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from models import ProblemsResponse, Problem, ProblemOption, ProblemLevel, ProblemType
-from repositories import save_problem, get_user, get_all_problems, get_user_problem_logs, get_user_problem_status
+from repositories import save_problem, get_user, get_all_problems, get_user_problem_logs, get_user_problem_status, get_problems_not_solve
 from sqlalchemy.orm import Session
 from db import get_maria_db
 
@@ -70,11 +70,16 @@ async def get_status():
     return "status hello"
 
 
-@router.get("/users/{userId}")
+@router.get("/users")
 async def get_user_problem(user_id: int, db: Session = Depends(get_maria_db)):
     print("user_id", user_id)
-    user = get_user(db, user_id)
+    user = get_user(db, 1)
     print("user", user)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+@router.get("/not_solve")
+async def not_solve_problems():
+    not_solve_problems = get_problems_not_solve(1)
+    return "not_solve_problems"
