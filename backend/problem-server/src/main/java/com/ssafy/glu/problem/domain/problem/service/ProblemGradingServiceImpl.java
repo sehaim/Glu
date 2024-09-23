@@ -11,19 +11,23 @@ import com.ssafy.glu.problem.global.feign.dto.UserResponse;
 import com.ssafy.glu.problem.global.util.ScoreUtil;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@AllArgsConstructor
+@Slf4j
 public class ProblemGradingServiceImpl implements ProblemGradingService {
 	@Override
 	public GradeResult gradeProblem(UserResponse user, Problem problem, ProblemSolveRequest request) {
 		// 문제 유형별 채점
+		log.info("[문제 유형별 채점]");
 		boolean isCorrect = problem.grade(request.userAnswer());
 
 		// 문제 유형에 맞는 유저 점수 조회
+		log.info("[문제 유형에 맞는 유저 점수 조회]");
 		UserProblemTypeResponse userProblemType = getUserProblemType(user, problem);
 
 		// 유저 점수 업데이트
+		log.info("[유저 점수 업데이트]");
 		int userScore = ScoreUtil.calculateTotalScore(userProblemType);
 		int updatedUserScore = ScoreUtil.calculateNewScore(userScore, problem.score(), isCorrect);
 		int acquiredScore = updatedUserScore - userScore;
@@ -38,7 +42,7 @@ public class ProblemGradingServiceImpl implements ProblemGradingService {
 
 	private UserProblemTypeResponse getUserProblemType(UserResponse user, Problem problem) {
 		return user.problemTypeList().stream()
-			.filter(problemType -> problem.getProblemTypeCode().name().equals(problemType.type().getCode()))
+			.filter(problemType -> problem.getProblemTypeCode().name().equals(problemType.type().code()))
 			.findFirst()
 			.orElseThrow(ProblemTypeCodeMismatchException::new);
 	}
