@@ -12,7 +12,7 @@ import com.ssafy.glu.problem.global.feign.dto.StageResponse;
 import com.ssafy.glu.problem.global.feign.dto.UpdateStateRequest;
 import com.ssafy.glu.problem.global.feign.dto.UserResponse;
 
-@FeignClient(name = "glu-user", url = "${user.service.url}")
+@FeignClient(name = "glu-user", url = "${user.service.domain.user.url}")
 public interface UserClient {
 	@GetMapping
 	ResponseEntity<UserResponse> getUser(@RequestHeader(USER_ID) Long userId);
