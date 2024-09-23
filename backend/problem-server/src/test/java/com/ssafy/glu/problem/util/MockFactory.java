@@ -22,33 +22,14 @@ public class MockFactory {
 
 	//===== Problem =====//
 	public static Problem createProblem() {
-		// 랜덤한 문자열 생성
-		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
-		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
-		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
-
-		Map<String, Object> metadata = new HashMap<>();
-
-		metadata.put("options", List.of("option1", "option2", "option3"));
-		metadata.put("imageUrl", "url");
-
-		return Problem.builder()
-			.title(randomTitle)
-			.content(randomContent)
-			.solution(randomSolution)
-			.problemLevelCode(createProblemLevel())
-			.problemTypeCode(createProblemType())
-			.problemTypeDetailCode(createProblemTypeDetail())
-			.problemTypeCode(createProblemType())
-			.questionTypeCode(createQuestionType())
-			.metadata(metadata)
-			.build();
+		return createProblem(createProblemLevel());
 	}
 
 	public static Problem createProblem(ProblemLevelCode problemLevelCode) {
 		// 랜덤한 문자열 생성
 		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
 		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
+		String randomAnswer = "Answer " + UUID.randomUUID().toString().substring(0, 8);
 		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
 
 		Map<String, Object> metadata = new HashMap<>();
@@ -56,13 +37,16 @@ public class MockFactory {
 		metadata.put("options", List.of("option1", "option2", "option3"));
 		metadata.put("imageUrl", "url");
 
+		ProblemTypeCode problemTypeCode = createProblemType();
+
 		return Problem.builder()
 			.title(randomTitle)
 			.content(randomContent)
+			.answer(randomAnswer)
 			.solution(randomSolution)
 			.problemLevelCode(problemLevelCode)
-			.problemTypeCode(createProblemType())
-			.problemTypeDetailCode(createProblemTypeDetail())
+			.problemTypeCode(problemTypeCode)
+			.problemTypeDetailCode(createProblemTypeDetail(problemTypeCode))
 			.questionTypeCode(createQuestionType())
 			.metadata(metadata)
 			.build();
@@ -70,15 +54,20 @@ public class MockFactory {
 
 	public static ProblemLevelCode createProblemLevel() {
 		// 랜덤한 ProblemLevel 객체 생성
-		return ProblemLevelCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
+		return ProblemLevelCode.values()[RANDOM.nextInt(ProblemLevelCode.values().length)];
 	}
 
 	public static ProblemTypeDetailCode createProblemTypeDetail() {
-		return ProblemTypeDetailCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
+		return ProblemTypeDetailCode.values()[RANDOM.nextInt(ProblemTypeDetailCode.values().length)];
+	}
+
+	public static ProblemTypeDetailCode createProblemTypeDetail(ProblemTypeCode problemTypeCode) {
+		List<ProblemTypeDetailCode> problemTypeDetailCodeList = problemTypeCode.getProblemTypeDetailCodeList();
+		return problemTypeDetailCodeList.isEmpty() ? null : problemTypeDetailCodeList.get(RANDOM.nextInt(problemTypeDetailCodeList.size()));
 	}
 
 	public static ProblemTypeCode createProblemType() {
-		return ProblemTypeCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
+		return ProblemTypeCode.values()[RANDOM.nextInt(ProblemTypeCode.values().length)];
 	}
 
 	public static QuestionTypeCode createQuestionType() {
