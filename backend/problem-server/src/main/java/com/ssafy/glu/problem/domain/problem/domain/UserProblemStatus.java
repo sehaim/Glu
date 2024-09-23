@@ -24,15 +24,15 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	private Problem.Status status;
 
-	private Integer attemptCount = 0;
+	private Integer attemptCount;
 
-	private Integer wrongCount = 0;
+	private Integer wrongCount;
 
 	private Long userId;
 
-	private List<ProblemMemo> memoList = new ArrayList<ProblemMemo>();
+	private List<ProblemMemo> memoList;
 
-	private Boolean isFavorite = false;
+	private Boolean isFavorite;
 
 	//== querydsl 조회를 위한 embedding 처리, 성능 개선 ==//
 	// @Field("problemId")
@@ -43,17 +43,40 @@ public class UserProblemStatus extends BaseTimeDocument {
 	public UserProblemStatus(Problem.Status status, Integer attemptCount, Integer wrongCount, Long userId,
 		List<ProblemMemo> memoList, Boolean isFavorite, Problem problem) {
 		this.status = status;
-		this.attemptCount = attemptCount;
-		this.wrongCount = wrongCount;
+		this.attemptCount = attemptCount != null ? attemptCount : 0;
+		this.wrongCount = wrongCount != null ? wrongCount : 0;
 		this.userId = userId;
-		this.memoList = memoList;
-		this.isFavorite = isFavorite;
+		this.memoList = memoList != null ? memoList : new ArrayList<>();
+		this.isFavorite = isFavorite != null ? isFavorite : false;
 		this.problem = problem;
 	}
 
 	//=== 비즈니스 로직 ===//
-	public void updateStatus(boolean isCorrect) {
-		this.status = isCorrect ? Problem.Status.CORRECT : Problem.Status.WRONG;
+	// 문제 풀이시 데이터 업데이트
+	public void updateWhenSolve(boolean isCorrect) {
+		increaseAttemptCount();
+		if (isCorrect) {
+			updateStatus(Problem.Status.CORRECT);
+		} else {
+			updateStatus(Problem.Status.WRONG);
+			increaseWrongCount();
+		}
+	}
+
+	// 풀이 상태 업데이트
+	public void updateStatus(Problem.Status status) {
+		if (status != null)
+			this.status = status;
+	}
+
+	// 시도 횟수 증가
+	public void increaseAttemptCount() {
+		this.attemptCount++;
+	}
+
+	// 틀린 횟수 증가
+	public void increaseWrongCount() {
+		this.wrongCount++;
 	}
 
 	// 메모 추가
