@@ -38,6 +38,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ProblemController {
 	private final ProblemService problemService;
 
+	@GetMapping("/{problemId}")
+	public ResponseEntity<ProblemBaseResponse> getProblem(@PathVariable("problemId") String problemId) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblem(problemId));
+	}
+
 	@GetMapping("/solve")
 	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(@RequestHeader(USER_ID) Long userId,
 		@ModelAttribute ProblemSearchCondition condition, Pageable pageable) {
