@@ -16,8 +16,8 @@ import {
   postProblemMemo as postProblemMemoAPI,
   putProblemMemo as putProblemMemoAPI,
 } from '@/utils/problem/memo';
-import styles from './testProblems.module.css';
 import ProblemInputField from '@/components/problem/problemInputField';
+import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
   problemId: number;

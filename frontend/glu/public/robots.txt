@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://j11a506.p.ssafy.io
+
+# Sitemaps
+Sitemap: https://j11a506.p.ssafy.io/sitemap.xml

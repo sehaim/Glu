@@ -1,7 +1,7 @@
+/* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
+import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
 import styles from './mytestAttendance.module.css';
-import { BsCaretLeftFill } from 'react-icons/bs';
-import { BsCaretRightFill } from 'react-icons/bs';
 
 export default function MytestAttendance() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -12,7 +12,7 @@ export default function MytestAttendance() {
     const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     const daysInMonth = [];
-    for (let i = startOfMonth.getDate(); i <= endOfMonth.getDate(); i++) {
+    for (let i = startOfMonth.getDate(); i <= endOfMonth.getDate(); i += 1) {
       daysInMonth.push(new Date(date.getFullYear(), date.getMonth(), i));
     }
     return daysInMonth;
