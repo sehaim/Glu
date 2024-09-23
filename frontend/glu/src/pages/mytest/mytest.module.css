@@ -5,8 +5,8 @@
   display: flex;
 }
 
-#row {
+.row {
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: stretch;
 }

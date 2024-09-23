@@ -4,7 +4,7 @@ import styles from './mytest.module.css';
 
 export default function MytestGrowthPage() {
   return (
-    <div className={styles.section} id={styles.row}>
+    <div className={`${styles.section} ${styles.row}`}>
       <MytestGrade />
       <MytestAttendance />
     </div>

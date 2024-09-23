@@ -23,8 +23,9 @@ export const refreshUserAPI = async () => {
     const res = await authAxios.post(`auth/reissue`);
     const newToken: string = res.data.accessToken;
     localStorage.setItem('accessToken', newToken);
-  } catch {
+  } catch (err) {
     localStorage.removeItem('accessToken');
+    console.log(err);
     alert('로그인 시간이 만료되었습니다. 다시 로그인해주세요.'); // 추후 수정 예정
     window.location.href = '/';
   }

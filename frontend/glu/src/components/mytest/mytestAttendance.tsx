@@ -1,6 +1,18 @@
 /* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
 import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
+import {
+  addMonths,
+  format,
+  subMonths,
+  endOfMonth,
+  endOfWeek,
+  isSameMonth,
+  isSameDay,
+  startOfMonth,
+  startOfWeek,
+  addDays,
+} from 'date-fns';
 import styles from './mytestAttendance.module.css';
 
 export default function MytestAttendance() {
@@ -8,14 +20,20 @@ export default function MytestAttendance() {
 
   // 해당 월의 날짜들 생성
   const generateCalendar = (date: Date) => {
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const monthStart = startOfMonth(date);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
 
-    const daysInMonth = [];
-    for (let i = startOfMonth.getDate(); i <= endOfMonth.getDate(); i += 1) {
-      daysInMonth.push(new Date(date.getFullYear(), date.getMonth(), i));
+    const days: Date[] = [];
+    let day = startDate;
+
+    while (day <= endDate) {
+      days.push(day);
+      day = addDays(day, 1);
     }
-    return daysInMonth;
+
+    return days;
   };
 
   // 이전 달로 이동
@@ -63,7 +81,13 @@ export default function MytestAttendance() {
           ))}
           {generateCalendar(currentDate).map((day, index) => (
             <div key={index} className={styles['day-container']}>
-              <div className={styles['calendar-day']}>{day.getDate()}</div>
+              <div
+                className={`${styles['calendar-day']} ${
+                  !isSameMonth(day, currentDate) && styles['other-month-day']
+                }`}
+              >
+                {format(day, 'd')}
+              </div>
             </div>
           ))}
         </div>
