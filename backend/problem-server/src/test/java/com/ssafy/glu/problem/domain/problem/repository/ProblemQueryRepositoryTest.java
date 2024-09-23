@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemLevelCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetailCode;
+
 import lombok.extern.slf4j.Slf4j;
 
 @DataMongoTest
@@ -18,9 +23,9 @@ class ProblemQueryRepositoryTest {
 
 	@Test
 	void conditionTest() {
-		String problemLevelCode = null;
-		String problemTypeCode = "PT01";
-		String problemTypeDetailCode = "PT0111";
+		ProblemLevelCode problemLevelCode = null;
+		ProblemTypeCode problemTypeCode = ProblemTypeCode.PT01;
+		ProblemTypeDetailCode problemTypeDetailCode = ProblemTypeDetailCode.PT0111;
 
 		assertThat(problemRepository.levelEq(problemLevelCode)).isNull();
 		assertThat(problemRepository.typeEq(problemTypeCode)).isNotNull();
