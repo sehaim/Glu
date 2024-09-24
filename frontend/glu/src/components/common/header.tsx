@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
-import { logoutAPI } from '@/utils/user/auth';
+// import { logoutAPI } from '@/utils/user/auth';
 import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
 
@@ -68,7 +68,7 @@ export default function Header({ color }: { color: string }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    logoutAPI();
+    // logoutAPI();
     dispatch(logout());
   };
 

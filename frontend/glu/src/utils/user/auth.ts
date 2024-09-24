@@ -1,5 +1,6 @@
 import { LoginUser } from '@/types/UserTypes';
-import { authAxios, defaultAxios } from '../common';
+import { AxiosError } from 'axios';
+import { defaultAxios } from '../common';
 
 // Base64URL을 Base64로 변환하는 함수
 const base64UrlToBase64 = (base64Url: string): string => {
@@ -23,7 +24,8 @@ export const isTokenExpired = (token: string): boolean => {
 export const loginAPI = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
-    localStorage.setItem('accessToken', res.headers.accesstoken);
+
+    document.cookie = `accessToken=${res.headers.accesstoken}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT; SameSite=Strict;`;
     window.location.href = '/home';
   } catch (err) {
     if (err instanceof AxiosError && err.response) {
@@ -35,15 +37,16 @@ export const loginAPI = async (data: LoginUser) => {
   }
 };
 
-// 로그아웃
-export const logoutAPI = async () => {
-  await authAxios
-    .post(`auth/logout`)
-    .then(() => {
-      localStorage.removeItem('accessToken');
-      window.location.href = '/';
-    })
-    .catch(() => {
-      console.log('로그아웃 실패'); // 추후 삭제 예정
-    });
-};
+// // 로그아웃
+// export const logoutAPI = async () => {
+//   await clientAuthAxios
+//     .post(`auth/logout`)
+//     .then(() => {
+//       document.cookie =
+//         'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+//       window.location.href = '/';
+//     })
+//     .catch(() => {
+//       console.log('로그아웃 실패'); // 추후 삭제 예정
+//     });
+// };

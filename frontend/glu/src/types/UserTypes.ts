@@ -13,6 +13,18 @@ export interface LoginUser {
 export interface MypageUser {
   id: string;
   nickname: string;
-  level: 0;
   birth: string;
+  stage: number;
+  exp: number;
+  imageUrl: string;
+  attendanceRate: number;
+  dayCount: number;
+  problemTypeList: {
+    level: number;
+    score: number;
+    type: {
+      code: string;
+      name: string;
+    };
+  }[];
 }

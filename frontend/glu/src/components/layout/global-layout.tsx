@@ -1,36 +1,57 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { isTokenExpired } from '@/utils/user/auth';
 import { useDispatch } from 'react-redux';
 import { login, logout } from '@/store/authSlice';
 import { refreshUserAPI } from '@/utils/common';
+import { parseCookies } from 'nookies';
 import MytestLayout from './mytest-layout';
 import styles from './layout.module.css';
 import Header from '../common/header';
 import Footer from '../common/footer';
 
-export default function GlobalLayout({ children }: { children: ReactNode }) {
+export async function getServerSideProps(context: any) {
+  // 서버에서 쿠키 파싱
+  const cookies = parseCookies(context);
+  const accessToken = cookies.accessToken || null;
+
+  let isLoggedIn = false;
+
+  if (accessToken) {
+    if (!isTokenExpired(accessToken)) {
+      isLoggedIn = true;
+    } else {
+      await refreshUserAPI();
+      isLoggedIn = true;
+    }
+  }
+
+  return {
+    props: {
+      isLoggedIn,
+    },
+  };
+}
+
+interface GlobalLayoutProps {
+  children: ReactNode;
+  isLoggedIn: boolean;
+}
+
+export default function GlobalLayout({
+  children,
+  isLoggedIn,
+}: GlobalLayoutProps) {
   const router = useRouter();
-
   const isMytestRoute = router.pathname.startsWith('/mytest');
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const token: string | null = localStorage.getItem('accessToken');
-
-    if (token) {
-      dispatch(login());
-      if (isTokenExpired(token)) {
-        refreshUserAPI().catch(() => {
-          dispatch(logout());
-        });
-      }
-    } else {
-      dispatch(logout());
-    }
-  }, [dispatch]);
+  if (isLoggedIn) {
+    dispatch(login());
+  } else {
+    dispatch(logout());
+  }
 
   return (
     <div className={styles.container}>

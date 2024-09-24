@@ -5,7 +5,7 @@ import { defaultAxios } from '../common';
 export const checkIdAPI = async (data: string): Promise<boolean> => {
   let isDuplicate: boolean = false;
   try {
-    const res = await defaultAxios.get(`users/check?${data}=id`);
+    const res = await defaultAxios.get(`users/check?id=${data}`);
     isDuplicate = res.data;
   } catch {
     alert('잘못된 접근입니다.'); // 추후 수정 예정 (에러페이지)
