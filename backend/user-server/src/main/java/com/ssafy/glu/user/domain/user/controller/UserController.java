@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
+import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
+import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.service.UserService;
 
@@ -67,10 +69,11 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
-	@PostMapping("/attendance")
-	public ResponseEntity<Void> attend(@RequestHeader(USER_ID) Long userId, @RequestBody Integer solveNum) {
-		userService.attend(userId, solveNum);
-		return ResponseEntity.status(HttpStatus.OK).build();
+
+	@PutMapping("/exp")
+	public ResponseEntity<ExpUpdateResponse> updateExp(@RequestHeader(USER_ID) Long userId, @RequestBody ExpUpdateRequest expUpdateRequest) {
+		ExpUpdateResponse result = userService.updateExp(userId, expUpdateRequest);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 }

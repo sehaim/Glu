@@ -59,6 +59,9 @@ dependencies {
 
     // maria DB 추가
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client'
+
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 dependencyManagement {

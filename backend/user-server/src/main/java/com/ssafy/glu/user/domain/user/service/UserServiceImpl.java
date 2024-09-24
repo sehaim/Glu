@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,9 +19,11 @@ import com.ssafy.glu.user.domain.user.domain.ProblemType;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
+import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
+import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.DateInValidException;
@@ -31,7 +34,9 @@ import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
 import com.ssafy.glu.user.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -183,16 +188,17 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 문제 풀면 출석하기
 	 */
-	@Override
-	public void attend(Long userId, Integer solveNum) {
+	public int attend(Long userId, Integer solveNum) {
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
 		// 가장 최근 출석 기록을 가져옴
-		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByOrderByAttendanceDateDesc();
+		Optional<Attendance> lastAttendOpt = attendanceRepository.findFirstByUsersIdOrderByAttendanceDateDesc(userId);
 
 		// 오늘 날짜
 		LocalDateTime today = LocalDateTime.now();
+
+		findUser.updateDayCount();
 
 		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
 		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
@@ -206,11 +212,42 @@ public class UserServiceImpl implements UserService {
 			// 출석 기록이 오늘 날짜와 같으면 오늘 문제 푼 수를 업데이트
 			Attendance lastAttend = lastAttendOpt.get();
 			lastAttend.updateTodaySolve(solveNum);
+			return 0;
 		}
+
+		return Math.min(10, 2 * findUser.getDayCount());
 	}
 
 	private boolean isSameDay(LocalDateTime date1, LocalDateTime date2) {
 		return date1.toLocalDate().isEqual(date2.toLocalDate());
+	}
+
+	@Override
+	public ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest) {
+
+		List<String> images = levelConfig.getImages();
+
+		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		Integer before = findUser.getStage();
+
+		// 점수 계산 로직
+		int upScore = expUpdateRequest.problemInfoList().stream()
+			.mapToInt(problemInfo -> calculateScore(expUpdateRequest.userProblemTypeLevels(), problemInfo))
+			.sum();
+
+		//출석 점수
+		int attendScore = attend(userId, expUpdateRequest.problemInfoList().size());
+
+		Integer after = findUser.updateScore(upScore + attendScore);
+
+		return new ExpUpdateResponse(before != after, before != after ? images.get(before) : images.get(after));
+	}
+
+	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
+		int userLevel = userLevels.getOrDefault(problemInfo.code(), 0);
+		if (userLevel < problemInfo.level()) return 3;
+		else if (userLevel == problemInfo.level()) return 2;
+		else return 1;
 	}
 
 }

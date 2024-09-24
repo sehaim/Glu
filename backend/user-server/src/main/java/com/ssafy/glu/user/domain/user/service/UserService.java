@@ -3,9 +3,11 @@ package com.ssafy.glu.user.domain.user.service;
 import java.util.List;
 
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
+import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
+import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 
 public interface UserService {
@@ -22,7 +24,6 @@ public interface UserService {
 
 	List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request);
 
-	void attend(Long userId, Integer solveNum);
-
+	ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest);
 
 }

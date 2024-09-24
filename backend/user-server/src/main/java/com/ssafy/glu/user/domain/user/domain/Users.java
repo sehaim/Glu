@@ -51,4 +51,26 @@ public class Users extends BaseTimeEntity {
 	public void deleteUser() {
 		this.isDeleted = true;
 	}
+
+	public Integer updateScore(Integer score) {
+		this.exp += score;
+
+		if (stage <= 5 && exp >= 100) {
+			stage += 1;
+			exp -= 100;
+		}
+
+		if (exp < 0) exp = 0;
+
+		return this.stage;
+	}
+
+	public void updateDayCount() {
+		this.dayCount++;
+	}
+
+	public void resetDayCount() {
+		this.dayCount = 0;
+	}
+
 }
