@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
@@ -23,9 +24,9 @@ import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNo
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
+import com.ssafy.glu.problem.global.feign.dto.ExpUpdateRequest;
+import com.ssafy.glu.problem.global.feign.dto.ExpUpdateResponse;
 import com.ssafy.glu.problem.global.feign.dto.UserResponse;
-import com.ssafy.glu.problem.global.feign.dto.UserStageUpdateRequest;
-import com.ssafy.glu.problem.global.util.EloRatingUtil;
 import com.ssafy.glu.problem.global.util.PageUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProblemServiceImpl implements ProblemService {
 	private final ProblemRepository problemRepository;
 	private final UserProblemStatusRepository userProblemStatusRepository;
@@ -150,12 +152,13 @@ public class ProblemServiceImpl implements ProblemService {
 		log.info("[문제 풀이 이벤트 발행]");
 		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
-		// TODO : 캐릭터 성장 여부 요청
-		UserStageUpdateRequest userStageUpdateRequest = UserStageUpdateRequest.of(user.problemTypeList(),
+		// 캐릭터 성장 API 요청
+		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.of(user.problemTypeList(),
 			List.of(problem));
-		log.info("[캐릭터 성장 요청 DTO] : {}", userStageUpdateRequest);
+		log.info("[캐릭터 성장 요청 DTO] : {}", expUpdateRequest);
+		ExpUpdateResponse expUpdateResponse = userService.updateUser(userId, expUpdateRequest);
 
-		return ProblemGradingResponse.of(gradeResult);
+		return ProblemGradingResponse.of(gradeResult, expUpdateResponse);
 	}
 
 	// 문제 ID로 문제 가져오기

@@ -10,12 +10,12 @@ import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
 import lombok.Builder;
 
 @Builder
-public record UserStageUpdateRequest (
+public record ExpUpdateRequest(
 	Map<ProblemTypeCode, Integer> userProblemTypeLevels,
 	List<ProblemInfo> problemInfoList
 ){
-	public static UserStageUpdateRequest of(List<UserProblemTypeResponse> userProblemTypeList, List<Problem> problemList){
-		return UserStageUpdateRequest.builder()
+	public static ExpUpdateRequest of(List<UserProblemTypeResponse> userProblemTypeList, List<Problem> problemList){
+		return ExpUpdateRequest.builder()
 			.userProblemTypeLevels(userProblemTypeListToMap(userProblemTypeList))
 			.problemInfoList(problemList.stream().map(ProblemInfo::from).toList())
 			.build();
