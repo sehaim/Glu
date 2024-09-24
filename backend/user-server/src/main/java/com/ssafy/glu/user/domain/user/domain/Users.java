@@ -57,7 +57,7 @@ public class Users extends BaseTimeEntity {
 
 		if (stage <= 5 && exp >= 100) {
 			stage += 1;
-			exp = 0;
+			exp -= 100;
 		}
 
 		if (exp < 0) exp = 0;
