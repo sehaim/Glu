@@ -55,10 +55,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Long register(UserRegisterRequest userRegisterRequest) {
 
-		if (userRepository.existsByLoginId(userRegisterRequest.id())) {
-			throw new ExistUserException();
-		}
-
 		String encodedPassword = passwordEncoder.encode(userRegisterRequest.password());
 
 		Users user = Users.builder()
