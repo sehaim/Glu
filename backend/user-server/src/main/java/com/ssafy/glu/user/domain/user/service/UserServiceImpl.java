@@ -232,6 +232,7 @@ public class UserServiceImpl implements UserService {
 		return date1.toLocalDate().isEqual(date2.toLocalDate());
 	}
 
+	@Transactional
 	@Override
 	public ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest) {
 
@@ -252,45 +253,6 @@ public class UserServiceImpl implements UserService {
 
 		return new ExpUpdateResponse(beforeStage != after,
 			beforeStage != after ? images.get(beforeStage) : images.get(after));
-	}
-
-	@Override
-	public List<UserResponse> getAll() {
-		List<UserResponse> results = new ArrayList<>();
-
-		// 모든 Users를 가져옴
-		List<Users> users = userRepository.findAll();
-
-		// 각 사용자에 대해 UserResponse 생성
-		for (Users findUser : users) {
-			// 사용자 관련 정보 가져오기
-			List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(findUser.getId());
-
-			// 레벨 이미지 가져오기
-			List<String> levelImages = levelConfig.getImages();
-			String userImage = levelImages.get(findUser.getStage());
-
-			// 출석일 수 및 출석률 계산
-			long attendanceDay = attendanceRepository.countByUsersId(findUser.getId());
-			Integer rate = calculateAttendanceRate(findUser.getCreatedDate(), attendanceDay);
-
-			// UserResponse 생성 및 리스트에 추가
-			UserResponse userResponse = UserResponse.builder()
-				.id(findUser.getLoginId())
-				.dayCount(findUser.getDayCount())
-				.stage(findUser.getStage())
-				.exp(findUser.getExp())
-				.imageUrl(userImage)
-				.birth(findUser.getBirth())
-				.attendanceRate(rate)
-				.nickname(findUser.getNickname())
-				.problemTypeList(getProblemTypeLists(userProblemTypes))
-				.build();
-
-			results.add(userResponse);
-		}
-
-		return results; // 변환된 UserResponse 리스트 반환
 	}
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
