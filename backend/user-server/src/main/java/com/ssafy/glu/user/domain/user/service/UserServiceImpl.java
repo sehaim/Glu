@@ -27,6 +27,7 @@ import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.DateInValidException;
+import com.ssafy.glu.user.domain.user.exception.LoginIdDuplicateException;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
@@ -58,6 +59,11 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public Long register(UserRegisterRequest userRegisterRequest) {
+
+		//같은 아이디 있으면
+		if (userRepository.existsByLoginId(userRegisterRequest.id())) {
+			throw  new LoginIdDuplicateException();
+		}
 
 		String encodedPassword = passwordEncoder.encode(userRegisterRequest.password());
 
