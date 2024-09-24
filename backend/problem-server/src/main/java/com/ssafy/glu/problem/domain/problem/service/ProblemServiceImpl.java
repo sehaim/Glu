@@ -24,6 +24,7 @@ import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
 import com.ssafy.glu.problem.global.feign.dto.UserResponse;
+import com.ssafy.glu.problem.global.feign.dto.UserStageUpdateRequest;
 import com.ssafy.glu.problem.global.util.EloRatingUtil;
 import com.ssafy.glu.problem.global.util.PageUtil;
 
@@ -150,6 +151,9 @@ public class ProblemServiceImpl implements ProblemService {
 		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
 		// TODO : 캐릭터 성장 여부 요청
+		UserStageUpdateRequest userStageUpdateRequest = UserStageUpdateRequest.of(user.problemTypeList(),
+			List.of(problem));
+		log.info("[캐릭터 성장 요청 DTO] : {}", userStageUpdateRequest);
 
 		return ProblemGradingResponse.of(gradeResult);
 	}

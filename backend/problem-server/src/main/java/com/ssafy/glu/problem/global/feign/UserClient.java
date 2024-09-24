@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.ssafy.glu.problem.global.feign.dto.StageResponse;
-import com.ssafy.glu.problem.global.feign.dto.UpdateStateRequest;
+import com.ssafy.glu.problem.global.feign.dto.UserStageUpdateRequest;
 import com.ssafy.glu.problem.global.feign.dto.UserResponse;
 
 @FeignClient(name = "glu-user", url = "${user.service.domain.user.url}")
@@ -18,5 +18,5 @@ public interface UserClient {
 	ResponseEntity<UserResponse> getUser(@RequestHeader(USER_ID) Long userId);
 
 	@PutMapping("/exp")
-	ResponseEntity<StageResponse> updateExp(@RequestHeader(USER_ID) Long userId, UpdateStateRequest request);
+	ResponseEntity<StageResponse> updateExp(@RequestHeader(USER_ID) Long userId, UserStageUpdateRequest request);
 }

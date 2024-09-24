@@ -65,5 +65,8 @@ public class Problem extends BaseTimeDocument {
 	public int score() {
 		return problemLevelCode.score();
 	}
+	public int level() {
+		return problemLevelCode.getLevel();
+	}
 
 }
