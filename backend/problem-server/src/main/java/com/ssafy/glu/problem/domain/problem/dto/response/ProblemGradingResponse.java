@@ -17,7 +17,7 @@ public record ProblemGradingResponse(
 		return ProblemGradingResponse.builder()
 			.isCorrect(gradeResult.isCorrect())
 			.acquiredScore(gradeResult.acquiredScore())
-			.totalScore(gradeResult.updatedUserScore())
+			.totalScore(gradeResult.totalUserScore())
 			.build();
 	}
 
@@ -25,7 +25,7 @@ public record ProblemGradingResponse(
 		return ProblemGradingResponse.builder()
 			.isCorrect(gradeResult.isCorrect())
 			.acquiredScore(gradeResult.acquiredScore())
-			.totalScore(gradeResult.updatedUserScore())
+			.totalScore(gradeResult.totalUserScore())
 			.isStageUp(expUpdateResponse.isStageUp())
 			.stageUpUrl(expUpdateResponse.stageUpUrl())
 			.build();
