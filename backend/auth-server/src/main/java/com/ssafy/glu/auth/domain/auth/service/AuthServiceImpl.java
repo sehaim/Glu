@@ -98,9 +98,9 @@ public class AuthServiceImpl implements AuthService {
 	private Cookie createCookie(String key, String value, Long time) {
 		Cookie cookie = new Cookie(key, value);
 		cookie.setMaxAge(Math.toIntExact(time));
-		cookie.setSecure(true);
+		// cookie.setSecure(true);
 		cookie.setPath("/");
-		cookie.setHttpOnly(true);
+		// cookie.setHttpOnly(true);
 		return cookie;
 	}
 
