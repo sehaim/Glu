@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
 		Optional<Users> findUser = userRepository.findByLoginId(loginRequest.id());
 
-		if (findUser.isEmpty() || passwordEncoder.matches(loginRequest.password(), findUser.get().getPassword())) {
+		if (findUser.isEmpty() || !passwordEncoder.matches(loginRequest.password(), findUser.get().getPassword())) {
 			throw new LoginInValidException();
 		}
 
