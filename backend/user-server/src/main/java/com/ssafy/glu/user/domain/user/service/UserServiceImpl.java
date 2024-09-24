@@ -3,7 +3,6 @@ package com.ssafy.glu.user.domain.user.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 import com.ssafy.glu.user.domain.user.config.LevelConfig;
 import com.ssafy.glu.user.domain.user.domain.Attendance;
-import com.ssafy.glu.user.domain.user.domain.ProblemType;
+import com.ssafy.glu.user.domain.user.domain.ProblemTypeCode;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
@@ -78,10 +77,10 @@ public class UserServiceImpl implements UserService {
 		Users saveUser = userRepository.save(user);
 
 		// 유저 문제타입 저장
-		for (ProblemType problemType : ProblemType.values()) {
+		for (ProblemTypeCode problemTypeCode : ProblemTypeCode.values()) {
 
 			UserProblemType userProblemType = UserProblemType.builder()
-				.problemTypeCode(problemType)
+				.problemTypeCode(problemTypeCode)
 				.user(saveUser)
 				.build();
 

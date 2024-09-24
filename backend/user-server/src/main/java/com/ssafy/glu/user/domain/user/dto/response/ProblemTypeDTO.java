@@ -1,14 +1,14 @@
 package com.ssafy.glu.user.domain.user.dto.response;
 
-import com.ssafy.glu.user.domain.user.domain.ProblemType;
+import com.ssafy.glu.user.domain.user.domain.ProblemTypeCode;
 
 public class ProblemTypeDTO {
     private final String code;
     private final String name;
 
-    public ProblemTypeDTO(ProblemType problemType) {
-        this.code = problemType.getCode();
-        this.name = problemType.getDescription();
+    public ProblemTypeDTO(ProblemTypeCode problemTypeCode) {
+        this.code = problemTypeCode.getCode();
+        this.name = problemTypeCode.getDescription();
     }
 
     // Getters
