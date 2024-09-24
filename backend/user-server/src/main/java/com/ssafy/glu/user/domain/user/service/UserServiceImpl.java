@@ -55,6 +55,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Long register(UserRegisterRequest userRegisterRequest) {
 
+		if (userRepository.existsByLoginId(userRegisterRequest.id())) {
+			throw new ExistUserException();
+		}
+
 		String encodedPassword = passwordEncoder.encode(userRegisterRequest.password());
 
 		Users user = Users.builder()
@@ -63,10 +67,6 @@ public class UserServiceImpl implements UserService {
 			.password(encodedPassword)
 			.birth(userRegisterRequest.birth())
 			.build();
-
-		if (userRepository.existsByLoginIdAndPassword(userRegisterRequest.id(), encodedPassword)) {
-			throw new ExistUserException();
-		}
 
 		//유저 저장
 		Users saveUser = userRepository.save(user);
