@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
 
 		//연속날짜 업데이트 해주기
 		LocalDateTime beforeDay = today.minusDays(1);
-		if (!isSameDay(lastAttendOpt.get().getAttendanceDate(), beforeDay)) {
+		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), beforeDay)) {
 			findUser.resetDayCount();
 		}
 		findUser.updateDayCount();
