@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemLevelCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetailCode;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
 
 @Repository
@@ -30,16 +33,16 @@ public class ProblemQueryRepositoryImpl extends QuerydslRepositorySupport implem
 			.fetchPage(pageable);
 	}
 
-	public BooleanExpression levelEq(String problemLevelCode) {
-		return problemLevelCode != null ? problem.problemLevel.problemLevelCode.eq(problemLevelCode) : null;
+	public BooleanExpression levelEq(ProblemLevelCode problemLevelCode) {
+		return problemLevelCode != null ? problem.problemLevelCode.eq(problemLevelCode) : null;
 	}
 
-	public BooleanExpression typeEq(String problemTypeCode) {
-		return problemTypeCode != null ? problem.problemType.problemTypeCode.eq(problemTypeCode) : null;
+	public BooleanExpression typeEq(ProblemTypeCode problemTypeCode) {
+		return problemTypeCode != null ? problem.problemTypeCode.eq(problemTypeCode) : null;
 	}
 
-	public BooleanExpression detailTypeEq(String problemDetailTypeCode) {
-		return problemDetailTypeCode != null ?
-			problem.problemTypeDetail.problemTypeDetailCode.eq(problemDetailTypeCode) : null;
+	public BooleanExpression detailTypeEq(ProblemTypeDetailCode problemTypeDetailCode) {
+		return problemTypeDetailCode != null ?
+			problem.problemTypeDetailCode.eq(problemTypeDetailCode) : null;
 	}
 }

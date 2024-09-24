@@ -1,6 +1,5 @@
 package com.ssafy.glu.problem.global.error;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
@@ -13,11 +12,7 @@ public class ServiceException extends RuntimeException {
     }
 
     public ServiceException(ErrorCode errorCode, Throwable cause) {
-        super(errorCode.getMessage(), cause);
+        super(cause);
         this.errorCode = errorCode;
-    }
-
-    public ErrorCode getErrorCode() {
-        return errorCode;
     }
 }

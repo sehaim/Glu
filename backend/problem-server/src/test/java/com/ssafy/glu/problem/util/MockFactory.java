@@ -8,11 +8,11 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemLevel;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemLevelCode;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemMemo;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemType;
-import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetail;
-import com.ssafy.glu.problem.domain.problem.domain.QuestionType;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetailCode;
+import com.ssafy.glu.problem.domain.problem.domain.QuestionTypeCode;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 
@@ -22,9 +22,14 @@ public class MockFactory {
 
 	//===== Problem =====//
 	public static Problem createProblem() {
+		return createProblem(createProblemLevel());
+	}
+
+	public static Problem createProblem(ProblemLevelCode problemLevelCode) {
 		// 랜덤한 문자열 생성
 		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
 		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
+		String randomAnswer = "Answer " + UUID.randomUUID().toString().substring(0, 8);
 		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
 
 		Map<String, Object> metadata = new HashMap<>();
@@ -32,94 +37,42 @@ public class MockFactory {
 		metadata.put("options", List.of("option1", "option2", "option3"));
 		metadata.put("imageUrl", "url");
 
-		return Problem.builder()
-			.title(randomTitle)
-			.content(randomContent)
-			.solution(randomSolution)
-			.problemLevel(createProblemLevel())
-			.problemType(createProblemType())
-			.problemTypeDetail(createProblemTypeDetail())
-			.problemType(createProblemType())
-			.questionType(createQuestionType())
-			.metadata(metadata)
-			.build();
-	}
-
-	public static Problem createProblem(String problemLevelCode) {
-		// 랜덤한 문자열 생성
-		String randomTitle = "Title " + UUID.randomUUID().toString().substring(0, 8);
-		String randomContent = "Content " + UUID.randomUUID().toString().substring(0, 8);
-		String randomSolution = "Solution " + UUID.randomUUID().toString().substring(0, 8);
-
-		Map<String, Object> metadata = new HashMap<>();
-
-		metadata.put("options", List.of("option1", "option2", "option3"));
-		metadata.put("imageUrl", "url");
+		ProblemTypeCode problemTypeCode = createProblemType();
 
 		return Problem.builder()
 			.title(randomTitle)
 			.content(randomContent)
+			.answer(randomAnswer)
 			.solution(randomSolution)
-			.problemLevel(createProblemLevel(problemLevelCode))
-			.problemType(createProblemType())
-			.problemTypeDetail(createProblemTypeDetail())
-			.questionType(createQuestionType())
-			.metadata(metadata)
-			.build();
-	}
-
-	public static ProblemLevel createProblemLevel() {
-		// 랜덤한 ProblemLevel 객체 생성
-		String level = "0" + RANDOM.nextInt(3);
-		String code = "PL" + level;
-		String name = "LV " + level;
-		return ProblemLevel.builder()
-			.problemLevelCode(code)
-			.name(name)
-			.build();
-	}
-
-	public static ProblemLevel createProblemLevel(String problemCodeLevelCode) {
-		// 랜덤한 ProblemLevel 객체 생성
-		String level = "0" + RANDOM.nextInt(3);
-		String name = "LV " + level;
-		return ProblemLevel.builder()
-			.problemLevelCode(problemCodeLevelCode)
-			.name(name)
-			.build();
-	}
-
-	public static ProblemTypeDetail createProblemTypeDetail() {
-		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0" + RANDOM.nextInt(3);
-		String problemTypeDetailCode = "0" + RANDOM.nextInt(3);
-		String name = "유형 " + num;
-		return ProblemTypeDetail.builder()
-			.problemTypeDetailCode(problemTypeDetailCode)
-			.name(name)
-			.build();
-	}
-
-	public static ProblemType createProblemType() {
-		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0" + RANDOM.nextInt(3);
-		String problemTypeCode = "PB" + num;
-		String name = "유형 " + num;
-		return ProblemType.builder()
+			.problemLevelCode(problemLevelCode)
 			.problemTypeCode(problemTypeCode)
-			.name(name)
+			.problemTypeDetailCode(createProblemTypeDetail(problemTypeCode))
+			.questionTypeCode(createQuestionType())
+			.metadata(metadata)
 			.build();
 	}
 
-	public static QuestionType createQuestionType() {
+	public static ProblemLevelCode createProblemLevel() {
+		// 랜덤한 ProblemLevel 객체 생성
+		return ProblemLevelCode.values()[RANDOM.nextInt(ProblemLevelCode.values().length)];
+	}
+
+	public static ProblemTypeDetailCode createProblemTypeDetail() {
+		return ProblemTypeDetailCode.values()[RANDOM.nextInt(ProblemTypeDetailCode.values().length)];
+	}
+
+	public static ProblemTypeDetailCode createProblemTypeDetail(ProblemTypeCode problemTypeCode) {
+		List<ProblemTypeDetailCode> problemTypeDetailCodeList = problemTypeCode.getProblemTypeDetailCodeList();
+		return problemTypeDetailCodeList.isEmpty() ? null : problemTypeDetailCodeList.get(RANDOM.nextInt(problemTypeDetailCodeList.size()));
+	}
+
+	public static ProblemTypeCode createProblemType() {
+		return ProblemTypeCode.values()[RANDOM.nextInt(ProblemTypeCode.values().length)];
+	}
+
+	public static QuestionTypeCode createQuestionType() {
 		// 랜덤한 ProblemTypeDetail 객체 생성
-		String num = "0" + RANDOM.nextInt(3);
-		String questionTypeCode = "Q" + num;
-		String name = "질문 유형 " + num;
-		return QuestionType.builder()
-			.questionTypeCode(questionTypeCode)
-			.name(name)
-			.build();
+		return QuestionTypeCode.values()[RANDOM.nextInt(QuestionTypeCode.values().length)];
 	}
 
 	public static ProblemMemo createProblemMemo(Long memoIndex) {

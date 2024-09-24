@@ -16,10 +16,13 @@ public enum ErrorCode {
 	NOT_FOUND(404, "NOT_FOUND", "리소스를 찾을 수 없습니다."),
 	CONFLICT(409, "CONFLICT", "리소스 충돌이 발생했습니다."),
 
-	// 필수 값이 누락된 경우
+	// 필수 값이 누락된
+	NULL_USER_ANSWER(400, "NULL_USER_ANSWER", "userAnswer가 null입니다."),
 	NULL_USER_ID(400, "NULL_USER_ID", "userId가 null입니다."),
 	NULL_PROBLEM_ID(400, "NULL_PROBLEM_ID", "problemId가 null입니다."),
 	NULL_MEMO_INDEX(400, "NULL_MEMO_INDEX", "memoIndex가 null입니다."),
+
+	EMPTY_PROBLEM_ID(400, "EMPTY_PROBLEM_ID", "problemId가 비어있습니다."),
 
 	// 문제 풀이 이력 조회
 	SOLVE_HISTORY_NOT_FOUND(404, "SOLVE_HISTORY_NOT_FOUND", "문제 풀이 이력을 찾을 수 없습니다."),
@@ -65,7 +68,13 @@ public enum ErrorCode {
 	// 테스트 결과 리스트 조회
 	TEST_RESULT_LIST_NOT_FOUND(404, "TEST_RESULT_LIST_NOT_FOUND", "테스트 결과 리스트를 찾을 수 없습니다."),
 
+	USER_FEIGN_ERROR(500, "USER_FEIGN_ERROR", "user server API요청이 실패하였습니다."),
+	PROBLEM_TYPE_CODE_MISMATCH(400, "PROBLEM_TYPE_CODE_MISMATCH", "일치하는 문제 유형이 존재하지 않습니다."),
+
+	EVENT_DATE_CREATION_FAILED(500, "EVENT_DATE_CREATION_FAILED", "이벤트 객체 생성에 실패하였습니다."),
+
 	USER_PROBLEM_STATUS_NOT_FOUND(404, "USER_PROBLEM_STATUS_NOT_FOUND", "문제 풀이 상태를 찾을 수 없습니다.");
+
 
 	private final int httpStatus;
 	private final String code;

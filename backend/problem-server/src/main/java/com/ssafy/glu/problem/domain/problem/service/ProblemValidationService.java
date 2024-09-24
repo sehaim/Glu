@@ -9,7 +9,9 @@ import com.mongodb.MongoException;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteCancelFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.favorite.FavoriteRegistrationFailedException;
@@ -17,11 +19,11 @@ import com.ssafy.glu.problem.domain.problem.exception.memo.NullMemoIndexExceptio
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoCreateFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoDeleteFailedException;
 import com.ssafy.glu.problem.domain.problem.exception.memo.ProblemMemoUpdateFailedException;
+import com.ssafy.glu.problem.domain.problem.exception.problem.EmptyProblemIdException;
 import com.ssafy.glu.problem.domain.problem.exception.problem.NullProblemIdException;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.user.NullUserIdException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
-import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ProblemValidationService implements ProblemService {
 	private final ProblemService problemService;
 	private final ProblemRepository problemRepository;
-	private final UserProblemStatusRepository userProblemStatusRepository;
+
+	@Override
+	public ProblemBaseResponse getProblem(String problemId) {
+		validateProblemIdIsNullOrEmpty(problemId);
+		return problemService.getProblem(problemId);
+	}
 
 	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
@@ -150,6 +157,16 @@ public class ProblemValidationService implements ProblemService {
 		}
 	}
 
+	@Override
+	public ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request) {
+		// Null 값 검증
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNull(problemId);
+		validateUserAnswerIsNull(request.userAnswer());
+
+		return problemService.gradeProblem(userId, problemId, request);
+	}
+
 	// ===== 찾기 로직 =====
 	// 문제 존재 여부 판단
 	private void validateProblemIsNotExists(String problemId) {
@@ -171,8 +188,21 @@ public class ProblemValidationService implements ProblemService {
 		}
 	}
 
+	private void validateProblemIdIsNullOrEmpty(String problemId) {
+		validateProblemIdIsNull(problemId);
+		if (problemId.isEmpty()) {
+			throw new EmptyProblemIdException();
+		}
+	}
+
 	private void validateMemoIndexIsNull(Long memoIndex) {
 		if (memoIndex == null) {
+			throw new NullMemoIndexException();
+		}
+	}
+
+	private void validateUserAnswerIsNull(String userAnswer) {
+		if (userAnswer == null) {
 			throw new NullMemoIndexException();
 		}
 	}

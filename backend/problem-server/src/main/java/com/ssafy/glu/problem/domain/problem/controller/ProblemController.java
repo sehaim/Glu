@@ -2,8 +2,6 @@ package com.ssafy.glu.problem.domain.problem.controller;
 
 import static com.ssafy.glu.problem.global.util.HeaderUtil.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,18 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoCreateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemMemoUpdateRequest;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSearchCondition;
+import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
+import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/problems")
+@Slf4j
 public class ProblemController {
-	private static final Logger log = LoggerFactory.getLogger(ProblemController.class);
 	private final ProblemService problemService;
+
+	@GetMapping("/{problemId}")
+	public ResponseEntity<ProblemBaseResponse> getProblem(@PathVariable("problemId") String problemId) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblem(problemId));
+	}
 
 	@GetMapping("/solve")
 	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(@RequestHeader(USER_ID) Long userId,
@@ -83,5 +90,12 @@ public class ProblemController {
 		@PathVariable("problemId") String problemId) {
 		problemService.deleteUserProblemFavorite(userId, problemId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@PostMapping("/{problemId}/grading")
+	public ResponseEntity<ProblemGradingResponse> gradeProblem(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemId") String problemId,
+		@RequestBody ProblemSolveRequest request) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.gradeProblem(userId, problemId, request));
 	}
 }
