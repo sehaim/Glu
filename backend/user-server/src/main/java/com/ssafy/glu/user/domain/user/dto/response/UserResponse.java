@@ -1,16 +1,19 @@
 package com.ssafy.glu.user.domain.user.dto.response;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Builder;
 
 @Builder
 public record UserResponse (
-	Long id,
+	String id,
 	String nickname,
-	Integer level,
-	Integer score,
+	Integer stage,
+	Integer exp,
 	String imageUrl,
 	Integer dayCount,
+	LocalDate birth,
+	Integer attendanceRate,
 	List<UserProblemTypeResponse> problemTypeList
 ){}
