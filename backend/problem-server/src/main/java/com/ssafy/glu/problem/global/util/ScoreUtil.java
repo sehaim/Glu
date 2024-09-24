@@ -17,4 +17,7 @@ public class ScoreUtil {
 	public static int calculateNewScore(int currentScore, int problemScore, boolean isCorrect) {
 		return EloRatingUtil.calculateNewScore(currentScore, problemScore, isCorrect);
 	}
+	public static int calculateAcquiredScore(int currentScore, int problemScore, boolean isCorrect) {
+		return EloRatingUtil.calculateAcquiredScore(currentScore, problemScore, isCorrect);
+	}
 }

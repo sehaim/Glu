@@ -6,8 +6,9 @@ import lombok.Builder;
 public record GradeResult (
 	boolean isCorrect,
 	int userScore,
-	int updatedUserScore,
 	int acquiredScore
 ){
-
+	public int updatedUserScore() {
+		return userScore + acquiredScore;
+	}
 }
