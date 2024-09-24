@@ -62,6 +62,18 @@
   cursor: pointer;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.user-name {
+  color: var(--PINK);
+  margin-right: 5px;
+  cursor: default;
+}
+
 .info-menu-mobile {
   display: none;
 }

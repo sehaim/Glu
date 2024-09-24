@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
-// import { logoutAPI } from '@/utils/user/auth';
+import { logoutAPI } from '@/utils/user/auth';
 import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
 
@@ -65,10 +65,11 @@ export default function Header({ color }: { color: string }) {
 
   // 로그인 상태에 따른 헤더 변경 구현
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
+  const { nickname } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // logoutAPI();
+    logoutAPI();
     dispatch(logout());
   };
 
@@ -151,6 +152,9 @@ export default function Header({ color }: { color: string }) {
                 <Link href="/mypage" className={styles['menu-name']}>
                   나의 정보
                 </Link>
+              </li>
+              <li className={styles['user-info']}>
+                <div className={styles['user-name']}>{nickname}</div> 님
               </li>
               <li className={styles['logout-btn-container']}>
                 <HiOutlineLogout
