@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 				StringUtils.hasText(request.newPassword()) ? passwordEncoder.encode(request.newPassword()) : null;
 
 			//유저 정보 업데이트
-			findUser.updateUser(encodedPassword, request.nickname());
+			findUser.updateUser(encodedPassword, request.nickname(), request.birth());
 		}
 	}
 
