@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
 		//같은 아이디 있으면
 		if (userRepository.existsByLoginId(userRegisterRequest.id())) {
-			throw  new LoginIdDuplicateException();
+			throw new LoginIdDuplicateException();
 		}
 
 		String encodedPassword = passwordEncoder.encode(userRegisterRequest.password());
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 		long totalDays = ChronoUnit.DAYS.between(createdDate, today) + 1;
 
 		// 출석률 계산 후 소수점 제거
-		return (int) Math.floor((double) attendanceDays * 100 / totalDays);
+		return (int)Math.floor((double)attendanceDays * 100 / totalDays);
 	}
 
 	/**
@@ -203,8 +203,6 @@ public class UserServiceImpl implements UserService {
 		// 오늘 날짜
 		LocalDateTime today = LocalDateTime.now();
 
-		findUser.updateDayCount();
-
 		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
 		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
 			Attendance newAttendance = Attendance.builder()
@@ -220,6 +218,13 @@ public class UserServiceImpl implements UserService {
 			return 0;
 		}
 
+		//연속날짜 업데이트 해주기
+		LocalDateTime beforeDay = today.minusDays(1);
+		if (!isSameDay(lastAttendOpt.get().getAttendanceDate(), beforeDay)) {
+			findUser.resetDayCount();
+		}
+		findUser.updateDayCount();
+
 		return Math.min(10, 2 * findUser.getDayCount());
 	}
 
@@ -233,7 +238,7 @@ public class UserServiceImpl implements UserService {
 		List<String> images = levelConfig.getImages();
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-		Integer before = findUser.getStage();
+		Integer beforeStage = findUser.getStage();
 
 		// 점수 계산 로직
 		int upScore = expUpdateRequest.problemInfoList().stream()
@@ -243,9 +248,10 @@ public class UserServiceImpl implements UserService {
 		//출석 점수
 		int attendScore = attend(userId, expUpdateRequest.problemInfoList().size());
 
-		Integer after = findUser.updateScore(upScore + attendScore);
+		Integer after = findUser.updateStage(upScore + attendScore);
 
-		return new ExpUpdateResponse(before != after, before != after ? images.get(before) : images.get(after));
+		return new ExpUpdateResponse(beforeStage != after,
+			beforeStage != after ? images.get(beforeStage) : images.get(after));
 	}
 
 	@Override
@@ -289,9 +295,12 @@ public class UserServiceImpl implements UserService {
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
 		int userLevel = userLevels.getOrDefault(problemInfo.code(), 0);
-		if (userLevel < problemInfo.level()) return 3;
-		else if (userLevel == problemInfo.level()) return 2;
-		else return 1;
+		if (userLevel < problemInfo.level())
+			return 3;
+		else if (userLevel == problemInfo.level())
+			return 2;
+		else
+			return 1;
 	}
 
 }
