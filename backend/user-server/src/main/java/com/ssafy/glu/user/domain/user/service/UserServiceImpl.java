@@ -24,6 +24,7 @@ import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.DateInValidException;
+import com.ssafy.glu.user.domain.user.exception.ExistUserException;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
@@ -62,6 +63,10 @@ public class UserServiceImpl implements UserService {
 			.password(encodedPassword)
 			.birth(userRegisterRequest.birth())
 			.build();
+
+		if (userRepository.existsByLoginIdAndPassword(userRegisterRequest.id(), encodedPassword)) {
+			throw new ExistUserException();
+		}
 
 		//유저 저장
 		Users saveUser = userRepository.save(user);
