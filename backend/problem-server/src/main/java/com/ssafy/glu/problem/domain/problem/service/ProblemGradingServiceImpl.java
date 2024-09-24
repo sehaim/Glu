@@ -28,12 +28,13 @@ public class ProblemGradingServiceImpl implements ProblemGradingService {
 
 		// 유저 점수 업데이트
 		log.info("[유저 점수 업데이트]");
-		int userScore = ScoreUtil.calculateTotalScore(userProblemType);
-		int acquiredScore = ScoreUtil.calculateAcquiredScore(userScore, problem.score(), isCorrect);
+		int userTotalScore = ScoreUtil.calculateTotalScore(userProblemType);
+		int acquiredScore = ScoreUtil.calculateAcquiredScore(userTotalScore, problem.score(), isCorrect);
 
 		return GradeResult.builder()
 			.isCorrect(isCorrect)
-			.userScore(userScore)
+			.userLevel(userProblemType.level())
+			.userScore(userProblemType.score())
 			.acquiredScore(acquiredScore)
 			.build();
 	}

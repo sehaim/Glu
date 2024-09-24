@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record GradeResult (
 	boolean isCorrect,
+	int userLevel,
 	int userScore,
 	int acquiredScore
 ){

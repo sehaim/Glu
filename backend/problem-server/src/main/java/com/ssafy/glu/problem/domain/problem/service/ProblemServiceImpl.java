@@ -147,7 +147,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 		// 문제 풀이 이벤트 발행
 		log.info("[문제 풀이 이벤트 발행]");
-		problemSolvedEventPublisher.publish(userId, problemId, gradeResult, request);
+		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
 		// TODO : 캐릭터 성장 여부 요청
 
