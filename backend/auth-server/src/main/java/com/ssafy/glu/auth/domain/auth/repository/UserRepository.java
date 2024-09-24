@@ -10,6 +10,6 @@ import com.ssafy.glu.auth.domain.auth.domain.Users;
 @Repository
 public interface UserRepository extends JpaRepository<Users, Long> {
 
-	Optional<Users> findByLoginIdAndPassword(String loginId, String password);
+	Optional<Users> findByLoginId(String loginId);
 
 }

@@ -42,11 +42,9 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void login(LoginRequest loginRequest, HttpServletResponse httpResponse) {
 
-		String encodePass = passwordEncoder.encode(loginRequest.password());
+		Optional<Users> findUser = userRepository.findByLoginId(loginRequest.id());
 
-		Optional<Users> findUser = userRepository.findByLoginIdAndPassword(loginRequest.id(), encodePass);
-
-		if (findUser.isEmpty()) {
+		if (findUser.isEmpty() || passwordEncoder.matches(loginRequest.password(), findUser.get().getPassword())) {
 			throw new LoginInValidException();
 		}
 
