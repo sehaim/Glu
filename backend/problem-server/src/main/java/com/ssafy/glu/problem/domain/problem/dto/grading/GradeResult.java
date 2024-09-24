@@ -9,6 +9,7 @@ import lombok.Builder;
 public record GradeResult (
 	boolean isCorrect,
 	ProblemTypeCode problemTypeCode,
+	int problemLevel,
 	int userLevel,
 	int userScore,
 	int acquiredScore

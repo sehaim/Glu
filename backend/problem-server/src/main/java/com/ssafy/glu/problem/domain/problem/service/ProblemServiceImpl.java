@@ -150,7 +150,7 @@ public class ProblemServiceImpl implements ProblemService {
 		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
 		// 캐릭터 성장 API 요청
-		ExpUpdateResponse expUpdateResponse = updateUserExp(user, userId, problem);
+		ExpUpdateResponse expUpdateResponse = updateUserExp(user, userId, gradeResult);
 
 		return ProblemGradingResponse.of(gradeResult, expUpdateResponse);
 	}
@@ -162,6 +162,12 @@ public class ProblemServiceImpl implements ProblemService {
 
 	private ExpUpdateResponse updateUserExp(UserResponse user, Long userId, Problem problem) {
 		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.of(user.problemTypeList(), List.of(problem));
+		return userService.updateUser(userId, expUpdateRequest);
+	}
+
+	private ExpUpdateResponse updateUserExp(UserResponse user, Long userId, GradeResult gradeResult) {
+		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.ofGradeResultList(user.problemTypeList(), List.of(gradeResult));
+		log.info("[캐릭터 성장 요청] : {}", expUpdateRequest);
 		return userService.updateUser(userId, expUpdateRequest);
 	}
 }

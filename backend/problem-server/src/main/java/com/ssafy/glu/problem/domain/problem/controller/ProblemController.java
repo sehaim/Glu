@@ -28,6 +28,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,7 +93,7 @@ public class ProblemController {
 	}
 
 	@PostMapping("/{problemId}/grading")
-	public ResponseEntity<ProblemGradingResponse> gradeProblem(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<ProblemGradingResponse> gradeProblem(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId,
 		@RequestBody ProblemSolveRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.gradeProblem(userId, problemId, request));

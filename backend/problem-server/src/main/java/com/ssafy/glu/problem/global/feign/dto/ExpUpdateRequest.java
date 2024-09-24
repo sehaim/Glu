@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.problem.dto.grading.GradeResult;
 
 import lombok.Builder;
 
@@ -14,6 +15,13 @@ public record ExpUpdateRequest(
 	Map<ProblemTypeCode, Integer> userProblemTypeLevels,
 	List<ProblemInfo> problemInfoList
 ){
+	public static ExpUpdateRequest ofGradeResultList(List<UserProblemTypeResponse> userProblemTypeList, List<GradeResult> gradeResultList){
+		return ExpUpdateRequest.builder()
+			.userProblemTypeLevels(userProblemTypeListToMap(userProblemTypeList))
+			.problemInfoList(gradeResultList.stream().filter((GradeResult::isCorrect)).map(ProblemInfo::from).toList())
+			.build();
+	}
+
 	public static ExpUpdateRequest of(List<UserProblemTypeResponse> userProblemTypeList, List<Problem> problemList){
 		return ExpUpdateRequest.builder()
 			.userProblemTypeLevels(userProblemTypeListToMap(userProblemTypeList))
