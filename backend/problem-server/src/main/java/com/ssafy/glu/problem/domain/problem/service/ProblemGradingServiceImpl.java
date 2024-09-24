@@ -36,6 +36,7 @@ public class ProblemGradingServiceImpl implements ProblemGradingService {
 			.userLevel(userProblemType.level())
 			.userScore(userProblemType.score())
 			.acquiredScore(acquiredScore)
+			.problemTypeCode(problem.getProblemTypeCode())
 			.build();
 	}
 
