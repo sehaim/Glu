@@ -142,21 +142,15 @@ public class ProblemServiceImpl implements ProblemService {
 
 		// 유저 정보 조회
 		UserResponse user = userService.getUser(userId);
-		log.info("[유저 정보 조회] : {}", user.toString());
 
 		// 채점 및 유저 점수 업데이트
-		log.info("[채점 및 유저 점수 업데이트]");
 		GradeResult gradeResult = problemGradingService.gradeProblem(user, problem, request);
 
 		// 문제 풀이 이벤트 발행
-		log.info("[문제 풀이 이벤트 발행]");
 		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
 		// 캐릭터 성장 API 요청
-		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.of(user.problemTypeList(),
-			List.of(problem));
-		log.info("[캐릭터 성장 요청 DTO] : {}", expUpdateRequest);
-		ExpUpdateResponse expUpdateResponse = userService.updateUser(userId, expUpdateRequest);
+		ExpUpdateResponse expUpdateResponse = updateUserExp(user, userId, problem);
 
 		return ProblemGradingResponse.of(gradeResult, expUpdateResponse);
 	}
@@ -164,5 +158,10 @@ public class ProblemServiceImpl implements ProblemService {
 	// 문제 ID로 문제 가져오기
 	private Problem getProblemOrThrow(String problemId) {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+	}
+
+	private ExpUpdateResponse updateUserExp(UserResponse user, Long userId, Problem problem) {
+		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.of(user.problemTypeList(), List.of(problem));
+		return userService.updateUser(userId, expUpdateRequest);
 	}
 }
