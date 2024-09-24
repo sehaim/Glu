@@ -1,6 +1,8 @@
 package com.ssafy.glu.user.domain.user.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -95,15 +97,34 @@ public class UserServiceImpl implements UserService {
 		List<String> levelImages = levelConfig.getImages();
 		String userImage = levelImages.get(findUser.getStage());
 
+		long attendanceDay = attendanceRepository.countByUsersId(userId);
+		Integer rate = calculateAttendanceRate(findUser.getCreatedDate(), attendanceDay);
+
 		return UserResponse.builder()
-			.id(userId)
+			.id(findUser.getLoginId())
 			.dayCount(findUser.getDayCount())
 			.stage(findUser.getStage())
 			.exp(findUser.getExp())
 			.imageUrl(userImage)
+			.birth(findUser.getBirth())
+			.attendanceRate(rate)
 			.nickname(findUser.getNickname())
 			.problemTypeList(getProblemTypeLists(userProblemTypes))
 			.build();
+	}
+
+	/**
+	 * 오늘날짜까지 계산하여 출석률을 반환
+	 */
+	public Integer calculateAttendanceRate(LocalDateTime createdDateTime, long attendanceDays) {
+		LocalDate createdDate = createdDateTime.toLocalDate();
+		LocalDate today = LocalDate.now();
+
+		// 총 경과일 계산 (+1은 오늘도 포함하기 위해)
+		long totalDays = ChronoUnit.DAYS.between(createdDate, today) + 1;
+
+		// 출석률 계산 후 소수점 제거
+		return (int) Math.floor((double) attendanceDays * 100 / totalDays);
 	}
 
 	/**
@@ -129,7 +150,7 @@ public class UserServiceImpl implements UserService {
 				StringUtils.hasText(request.newPassword()) ? passwordEncoder.encode(request.newPassword()) : null;
 
 			//유저 정보 업데이트
-			findUser.updateUser(encodedPassword, request.nickname());
+			findUser.updateUser(encodedPassword, request.nickname(), request.birth());
 		}
 	}
 

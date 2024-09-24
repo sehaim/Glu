@@ -42,9 +42,10 @@ public class Users extends BaseTimeEntity {
 	@Builder.Default
 	private Integer dayCount = 0;
 
-	public void updateUser(String password, String nickname) {
+	public void updateUser(String password, String nickname, LocalDate birth) {
 		if(StringUtils.hasText(password)) this.password = password;
 		if(StringUtils.hasText(nickname)) this.nickname = nickname;
+		if (birth != null) this.birth = birth;
 	}
 
 	public void deleteUser() {
