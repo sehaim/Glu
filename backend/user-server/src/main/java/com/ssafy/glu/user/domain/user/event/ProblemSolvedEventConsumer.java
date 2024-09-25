@@ -24,12 +24,13 @@ public class ProblemSolvedEventConsumer {
 	@Transactional
 	public void consumeProblemSolvedEventForScoreUpdate(ProblemSolvedEvent event) {
 		log.info("[Kafka] 유저 점수 업데이트, event : {}", event);
-		List<UserProblemType> allByUserId = userProblemTypeRepository.findAllByUserId(event.userId());
+		List<UserProblemType> userProblemTypeList  = userProblemTypeRepository.findAllByUserId(event.userId());
 
-		for (UserProblemType userProblemType : allByUserId) {
+		for (UserProblemType userProblemType : userProblemTypeList ) {
 			// Enum 비교는 == 사용
 			if (userProblemType.getProblemTypeCode() == event.problem().problemTypeCode()) {
 				userProblemType.updateScore(event.result().acquiredScore());
+				break;
 			}
 		}
 	}
