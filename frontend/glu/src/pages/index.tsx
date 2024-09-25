@@ -1,7 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
+import { getCookie } from 'cookies-next';
 import styles from './home.module.css';
+
+// 서버 사이드에서 로그인 상태를 확인하는 getServerSideProps 함수
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
+  const accessToken = getCookie('accessToken', { req, res });
+
+  if (accessToken) {
+    return {
+      redirect: {
+        destination: '/home', // accessToken이 존재하면 /home으로 리다이렉트
+        permanent: false, // 영구적인 리다이렉트는 아님(로그인 상태가 계속 변할 수 있기 때문에)
+      },
+    };
+  }
+
+  return {
+    props: {}, // 로그인되지 않은 경우 페이지 렌더링
+  };
+};
 
 export default function MainPage() {
   const router = useRouter();
@@ -31,10 +53,13 @@ export default function MainPage() {
             />
           </div>
         </div>
-        <img
+        <Image
           className={styles['main-character']}
           src="/images/glu_character_shadow.png"
           alt="Glu Character"
+          width={300}
+          height={356}
+          priority
         />
       </div>
     </div>

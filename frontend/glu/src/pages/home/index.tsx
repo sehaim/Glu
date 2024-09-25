@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import styles from './home.module.css';
 
@@ -106,11 +107,13 @@ export default function Home(): JSX.Element {
           ref={section1ImageRef}
           className={styles.hidden}
         >
-          <img
+          <Image
             id={styles['main-character']}
             src="/images/glu_character_shadow.png"
             alt="Glu Character"
-            loading="lazy"
+            width={300}
+            height={356}
+            priority
           />
         </div>
       </section>
@@ -170,10 +173,12 @@ export default function Home(): JSX.Element {
         >
           <h3 className={styles['section-title']}>성장에 맞춘 학습</h3>
           <div id={styles['section3-graph-wrapper']}>
-            <img
+            <Image
               id={styles['graph-image']}
               src="/images/home/home_graph.png"
               alt="Graph"
+              width={200}
+              height={200}
             />
             <p
               className={styles['section-describe']}
