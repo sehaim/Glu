@@ -1,9 +1,10 @@
 package com.ssafy.glu.problem.domain.user.service;
 
-import java.util.function.Supplier;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.glu.problem.domain.problem.dto.grading.GradeResult;
 import com.ssafy.glu.problem.global.feign.UserClient;
 import com.ssafy.glu.problem.global.feign.dto.ExpUpdateRequest;
 import com.ssafy.glu.problem.global.feign.dto.ExpUpdateResponse;
@@ -36,5 +37,15 @@ public class UserService {
 			log.info(e.toString());
 			throw new UserFeignException(e);
 		}
+	}
+
+	public ExpUpdateResponse updateUserExp(UserResponse user, Long userId, GradeResult gradeResult) {
+		return updateUserExp(user, userId, List.of(gradeResult));
+	}
+
+	public ExpUpdateResponse updateUserExp(UserResponse user, Long userId, List<GradeResult> gradeResult) {
+		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.ofGradeResultList(user.problemTypeList(), gradeResult);
+		log.info("[캐릭터 성장 요청] : {}", expUpdateRequest);
+		return updateUser(userId, expUpdateRequest);
 	}
 }
