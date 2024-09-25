@@ -1,4 +1,5 @@
 import { LoginUser } from '@/types/UserTypes';
+import { AxiosError } from 'axios';
 import { authAxios, defaultAxios } from '../common';
 
 // Base64URL을 Base64로 변환하는 함수
