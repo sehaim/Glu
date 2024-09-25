@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
@@ -65,6 +64,7 @@ export default function Header({ color }: { color: string }) {
 
   // 로그인 상태에 따른 헤더 변경 구현
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
+  const { nickname } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -85,14 +85,14 @@ export default function Header({ color }: { color: string }) {
             {isLoggedIn && (
               <>
                 <li>
-                  <Link href="/test">
+                  <Link href="/test" className={styles['menu-name']}>
                     종합
                     <br />
                     테스트
                   </Link>
                 </li>
                 <li>
-                  <Link href="/problem/1">
+                  <Link href="/problem/1" className={styles['menu-name']}>
                     유형
                     <br />
                     테스트
@@ -151,6 +151,10 @@ export default function Header({ color }: { color: string }) {
                 <Link href="/mypage" className={styles['menu-name']}>
                   나의 정보
                 </Link>
+              </li>
+              <li className={styles['user-info']}>
+                <div className={styles['user-nickname']}>{nickname}</div>
+                <div>님</div>
               </li>
               <li className={styles['logout-btn-container']}>
                 <HiOutlineLogout

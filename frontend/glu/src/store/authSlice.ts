@@ -1,27 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { UserState } from '@/types/UserTypes';
 
-interface AuthState {
-  isLoggedIn: boolean;
-}
-
-const initialState: AuthState = {
+const initialState: UserState = {
   isLoggedIn: false,
+  userId: null,
+  isFirst: false,
+  nickname: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state) => {
+    login: (state, action) => {
       return {
         ...state,
         isLoggedIn: true,
+        userId: action.payload.userId,
+        isFirst: action.payload.isFirst,
+        nickname: action.payload.nickname,
       };
     },
     logout: (state) => {
       return {
         ...state,
         isLoggedIn: false,
+        userId: null,
+        isFirst: false,
+        nickname: null,
       };
     },
   },

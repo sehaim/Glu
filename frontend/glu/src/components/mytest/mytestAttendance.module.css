@@ -1,5 +1,5 @@
 .container {
-  width: 70%;
+  width: 72%;
   min-width: 500px;
   height: 100%;
   min-height: 700px;
@@ -9,23 +9,24 @@
   padding: 30px;
   border-radius: 15px;
   margin-left: 20px;
-  flex: 1;
 }
 
 .container-header {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 30px;
 }
 
 .container-name {
   font-family: 'BMJUA';
   font-size: 20px;
   color: var(--TEXT_SECONDARY);
+  margin-right: 30px;
 }
 
 .calendar-container {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
 }
@@ -34,7 +35,7 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--DARKYELLOW);
-  height: 60px;
+  height: 50px;
   width: 100%;
   border-radius: 30px;
   padding: 0 30px;
@@ -81,9 +82,14 @@
 
 .calendar-day {
   font-family: 'HD';
+  color: var(--TEXT_PRIMARY);
   text-align: left;
 }
 
 .other-month-day {
   color: var(--BORDER_LIGHT);
+}
+
+.today {
+  background-color: var(--YELLOW);
 }

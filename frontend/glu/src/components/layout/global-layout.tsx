@@ -1,36 +1,37 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { isTokenExpired } from '@/utils/user/auth';
+import { jwtDecode } from 'jwt-decode';
+import { getCookie } from 'cookies-next';
+import { login } from '@/store/authSlice';
 import { useDispatch } from 'react-redux';
-import { login, logout } from '@/store/authSlice';
-import { refreshUserAPI } from '@/utils/common';
 import MytestLayout from './mytest-layout';
 import styles from './layout.module.css';
 import Header from '../common/header';
 import Footer from '../common/footer';
 
-export default function GlobalLayout({ children }: { children: ReactNode }) {
-  const router = useRouter();
+interface GlobalLayoutProps {
+  children: ReactNode;
+}
 
-  const isMytestRoute = router.pathname.startsWith('/mytest');
-
+export default function GlobalLayout({ children }: GlobalLayoutProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token: string | null = localStorage.getItem('accessToken');
+    const accessToken = getCookie('accessToken');
 
-    if (token) {
-      dispatch(login());
-      if (isTokenExpired(token)) {
-        refreshUserAPI().catch(() => {
-          dispatch(logout());
-        });
+    if (accessToken) {
+      const decodedToken: never = jwtDecode(accessToken);
+      const { userId, nickname, isFirst } = decodedToken;
+
+      if (userId && nickname && isFirst !== undefined) {
+        dispatch(login({ userId, nickname, isFirst }));
       }
-    } else {
-      dispatch(logout());
     }
   }, [dispatch]);
+
+  const router = useRouter();
+  const isMytestRoute = router.pathname.startsWith('/mytest');
 
   return (
     <div className={styles.container}>

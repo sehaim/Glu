@@ -1,0 +1,28 @@
+.bar {
+  width: 100%;
+  max-width: 500px;
+  height: 35px;
+  background-color: var(--WHITEPINK);
+  border-style: solid;
+  border-radius: 15px;
+  border-color: var(--LIGHTPINK);
+  border-width: 2px;
+  overflow: hidden;
+  position: relative;
+  padding: 3px;
+}
+
+.fill {
+  height: 100%;
+  background-color: var(--PINK);
+  border-radius: 15px 5px 5px 15px;
+  transition: width 0.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  color: white;
+  font-family: 'BMJUA';
+}

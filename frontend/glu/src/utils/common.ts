@@ -1,42 +1,93 @@
 import { BACKEND_URL } from '@/config/config';
 import axios, { AxiosInstance } from 'axios';
-
-const accessToken =
-  typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { IncomingMessage, ServerResponse } from 'http';
 
 // 로그인이 필요없는 axios
 export const defaultAxios: AxiosInstance = axios.create({
   baseURL: `${BACKEND_URL}`,
 });
 
-// 로그인 후 사용할 axios (-> 토큰이 필요한 경우)
-export const authAxios: AxiosInstance = axios.create({
-  baseURL: `${BACKEND_URL}`,
-  headers: {
-    Authorization: `Bearer ${accessToken}` || '',
-  },
-});
-
 // 토큰 재발급
-export const refreshUserAPI = async () => {
+export const refreshUserAPI = async (context?: {
+  req: IncomingMessage;
+  res: ServerResponse;
+}): Promise<string | null> => {
   try {
-    const res = await authAxios.post(`auth/reissue`);
+    const res = await defaultAxios.post(`auth/reissue`);
     const newToken: string = res.data.accessToken;
-    localStorage.setItem('accessToken', newToken);
+    return newToken;
   } catch (err) {
-    localStorage.removeItem('accessToken');
-    console.log(err);
-    alert('로그인 시간이 만료되었습니다. 다시 로그인해주세요.'); // 추후 수정 예정
-    window.location.href = '/';
+    deleteCookie(
+      'accessToken',
+      context ? { req: context.req, res: context.res } : {},
+    );
+    // 추후 다른 alert로 수정
+    if (typeof window !== 'undefined') {
+      alert('로그인 시간이 만료되었습니다. 다시 로그인해주세요.');
+      window.location.href = '/';
+    }
+    return null;
   }
 };
 
-// access 토큰 만료시 axios interceptor
-authAxios.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err.response.status === 401) refreshUserAPI();
-  },
-);
+// 로그인 후 사용 가능한 axios 인스턴스 생성
+export const createAuthAxios = (context?: {
+  req: IncomingMessage;
+  res: ServerResponse;
+}): AxiosInstance => {
+  const accessToken = getCookie(
+    'accessToken',
+    context
+      ? {
+          req: context.req,
+          res: context.res,
+        }
+      : {},
+  );
 
-authAxios.defaults.withCredentials = true;
+  const instance = axios.create({
+    baseURL: `${BACKEND_URL}`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    withCredentials: true, // 쿠키 전송 허용
+  });
+
+  // Axios 인터셉터 설정
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      if (error.response.status === 401) {
+        const newToken = await refreshUserAPI(context);
+        if (newToken) {
+          // 새로운 토큰으로 헤더 업데이트
+          const updatedConfig = {
+            ...error.config,
+            headers: {
+              ...error.config.headers,
+              Authorization: `Bearer ${newToken}`, // 새로운 토큰 설정
+            },
+          };
+
+          setCookie(
+            'accessToken',
+            newToken,
+            context
+              ? {
+                  req: context.req,
+                  res: context.res,
+                  maxAge: 60 * 60 * 24 * 14,
+                }
+              : { maxAge: 60 * 60 * 24 * 14 },
+          );
+
+          return axios(updatedConfig); // 요청 재시도
+        }
+      }
+      return Promise.reject(error);
+    },
+  );
+
+  return instance;
+};

@@ -62,6 +62,17 @@
   cursor: pointer;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: default !important;
+}
+
+.user-nickname {
+  color: var(--PINK);
+  margin-right: 5px;
+}
+
 .info-menu-mobile {
   display: none;
 }
@@ -93,7 +104,7 @@
 }
 
 .menu-name:hover {
-  font-size: 17px;
+  font-size: 105%;
   transform: scale(1.1);
   color: var(--PINK);
 }
