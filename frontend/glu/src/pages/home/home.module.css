@@ -32,6 +32,7 @@
 
 .section1 {
   justify-content: space-between;
+  padding: 20px;
 }
 
 #section1-text-wrapper {
@@ -48,8 +49,6 @@
 }
 
 #main-character {
-  width: 100%;
-  max-width: 340px;
   animation: slideUpBounce 3.5s ease-in-out 1;
 }
 
@@ -67,6 +66,7 @@
   flex-direction: column;
   margin-top: 48px;
   animation: slideInFromRightBounce 3.5s ease-in-out 1;
+  padding: 20px;
 }
 
 .section2-title {
@@ -98,6 +98,7 @@
   justify-content: center;
   align-items: flex-start;
   animation: popIn 2s ease-in-out 1;
+  padding: 20px;
 }
 
 #section3-graph-wrapper {
@@ -109,9 +110,6 @@
 }
 
 #graph-image {
-  max-width: 200px;
-  width: 40%;
-  aspect-ratio: 1 / 1;
   margin-right: 60px;
 }
 
@@ -206,6 +204,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
   }
 
   #section1-text-wrapper {
@@ -229,8 +228,6 @@
   }
 
   #graph-image {
-    width: 80%;
-    max-width: 160px;
     margin-right: 0px;
   }
 }
