@@ -2,10 +2,10 @@ import MytestGrade from '@/components/mytest/mytestGrade';
 import MytestAttendance from '@/components/mytest/mytestAttendance';
 import { getUserInfoAPI, getAttendanceAPI } from '@/utils/user/mypage';
 import { MypageUser } from '@/types/UserTypes';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps } from 'next';
 import styles from './mytest.module.css';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   // 서버에서 회원정보 API 호출
   const userInfo = await getUserInfoAPI(context);
   const attendance = await getAttendanceAPI(context);
@@ -15,7 +15,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       userInfo,
     },
   };
-}
+};
 
 interface MytestGrowthPageProps {
   userInfo: MypageUser;
