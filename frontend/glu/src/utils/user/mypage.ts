@@ -1,23 +1,22 @@
-import { authAxios } from '../common';
+import { GetServerSidePropsContext } from 'next';
+import { createAuthAxios } from '../common';
 
-export const getUserInfoAPI = async () => {
+export const getUserInfoAPI = async (context: GetServerSidePropsContext) => {
   try {
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`users`);
-    console.log('응답 끝');
-    console.log(`res: ${res?.data}`);
     return res.data;
   } catch (err) {
-    console.log(err);
     return null;
   }
 };
 
-export const getAttendanceAPI = async () => {
+export const getAttendanceAPI = async (context: GetServerSidePropsContext) => {
   try {
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`users/attendance`);
     return res.data;
   } catch (err) {
-    console.log(err);
     return null;
   }
 };

@@ -22,8 +22,8 @@ export const loginAPI = async (data: LoginUser) => {
 // 로그아웃
 export const logoutAPI = async () => {
   try {
-    const logoutAxios = createAuthAxios();
-    await logoutAxios.post(`auth/logout`);
+    const authAxios = createAuthAxios();
+    await authAxios.post(`auth/logout`);
     deleteCookie('accessToken');
     window.location.href = '/';
   } catch {
