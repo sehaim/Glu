@@ -70,8 +70,10 @@ export default function MytestAttendance() {
           </span>
           <BsCaretRightFill
             size={35}
-            onClick={handleNextMonth}
-            className={styles['calendar-button']}
+            onClick={
+              !isSameMonth(currentDate, today) ? handleNextMonth : undefined
+            }
+            className={`${styles['calendar-button']} ${isSameMonth(currentDate, today) ? styles['button-enabled'] : ''}`}
           />
         </div>
         <div className={styles['calendar-grid']}>
@@ -81,7 +83,6 @@ export default function MytestAttendance() {
             </div>
           ))}
           {generateCalendar(currentDate).map((day, index) => {
-            if (!isSameMonth(day, today) && isAfter(day, today)) return null;
             return (
               <div
                 key={index}
