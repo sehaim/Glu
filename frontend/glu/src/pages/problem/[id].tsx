@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dummyImageProblem from '@/mock/dummyImageProblem.json';
 import { ProblemLevel, ProblemOption, ProblemType } from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -10,6 +10,7 @@ import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
 import ProblemInputField from '@/components/problem/problemInputField';
+import { postSingleProblemGrading } from '@/utils/problem/problem';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -22,14 +23,33 @@ interface ProblemResponse {
   problemType: ProblemType;
 }
 
-export default function Test() {
-  const [problem, setProblem] = useState<ProblemResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+// getServerSideProps를 이용하여 SSR로 데이터 가져오기
+export async function getServerSideProps() {
+  // 서버에서 데이터를 가져오는 로직
+  const problemData: ProblemResponse = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(dummyImageProblem);
+    }, 1000);
+  });
+
+  // 가져온 데이터를 props로 넘겨서 SSR로 렌더링
+  return {
+    props: {
+      problemData,
+    },
+  };
+}
+
+interface TestProps {
+  problemData: ProblemResponse;
+}
+
+export default function Test({ problemData }: TestProps) {
+  const [problem] = useState<ProblemResponse>(problemData);
   const [answer, setAnswer] = useState<string>('');
-  const [startTime, setStartTime] = useState<number>(0);
+  const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
 
-  // 기존에 있던 dummyMemo를 상태로 변경
   const [memoList, setMemoList] = useState<Memo[]>([
     { memoId: 1, content: 'This is the first memo content.' },
     { memoId: 2, content: 'This is the second memo content.' },
@@ -37,32 +57,29 @@ export default function Test() {
     { memoId: 4, content: 'This is the fourth memo content.' },
   ]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const response: ProblemResponse = await new Promise((resolve) => {
-        setTimeout(() => {
-          return resolve(dummyImageProblem);
-        }, 1000);
-      });
-
-      setProblem(response);
-      setLoading(false);
-      setStartTime(Date.now()); // 타이머 시작 (현재 시간 기록)
-    };
-
-    fetchData();
-  }, []);
-
   const handleAnswer = (userAnswer: string) => {
     setAnswer(userAnswer);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const endTime = Date.now(); // 제출 시점의 시간
     const timeTaken = Math.floor((endTime - startTime) / 1000); // 경과 시간 계산 (초 단위)
     setElapsedTime(timeTaken); // 경과 시간 상태 업데이트
     setStartTime(Date.now());
+
+    if (problem) {
+      try {
+        // Call the postSingleProblemGrading function to submit the answer and time
+        const response = await postSingleProblemGrading(
+          problem.problemId,
+          answer,
+          timeTaken,
+        );
+        console.log('Submission response:', response);
+      } catch (error) {
+        console.error('Error submitting answer:', error);
+      }
+    }
   };
 
   const handleMemoSave = (newMemo: Memo) => {
@@ -81,16 +98,6 @@ export default function Test() {
       return [...prevMemoList, newMemo];
     });
   };
-
-  // 로딩 상태에서 undefined인 경우 처리
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
-
-  // problem이 null이 아닌지 확인
-  if (!problem) {
-    return <div>문제를 불러오는 중 오류가 발생했습니다.</div>;
-  }
 
   return (
     <div className={styles.container}>
@@ -127,7 +134,6 @@ export default function Test() {
               />
             )}
           </div>
-          {/* 제출하기 버튼 */}
           <div className={styles['problem-button-list']}>
             <div />
             <PrimaryButton
