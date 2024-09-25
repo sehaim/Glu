@@ -2,11 +2,11 @@ package com.ssafy.glu.user.domain.user.dto.response;
 
 import com.ssafy.glu.user.domain.user.domain.ProblemTypeCode;
 
-public class ProblemTypeDTO {
+public class ProblemTypeResponse {
     private final String code;
     private final String name;
 
-    public ProblemTypeDTO(ProblemTypeCode problemTypeCode) {
+    public ProblemTypeResponse(ProblemTypeCode problemTypeCode) {
         this.code = problemTypeCode.getCode();
         this.name = problemTypeCode.getDescription();
     }
