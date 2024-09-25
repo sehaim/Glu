@@ -1,14 +1,13 @@
 import { LoginUser } from '@/types/UserTypes';
 import { AxiosError } from 'axios';
-import { deleteCookie } from 'cookies-next';
-import { clientAuthAxios, defaultAxios } from '../common';
+import { setCookie, deleteCookie } from 'cookies-next';
+import { createAuthAxios, defaultAxios } from '../common';
 
 // 로그인
 export const loginAPI = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
-
-    document.cookie = `accessToken=${res.headers.accesstoken}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT; SameSite=Strict;`;
+    setCookie('accessToken', res.headers.accesstoken);
     window.location.href = '/home';
   } catch (err) {
     if (err instanceof AxiosError && err.response) {
@@ -23,7 +22,8 @@ export const loginAPI = async (data: LoginUser) => {
 // 로그아웃
 export const logoutAPI = async () => {
   try {
-    await clientAuthAxios.post(`auth/logout`);
+    const logoutAxios = createAuthAxios();
+    await logoutAxios.post(`auth/logout`);
     deleteCookie('accessToken');
     window.location.href = '/';
   } catch {

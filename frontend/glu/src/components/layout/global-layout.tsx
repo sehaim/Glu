@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { jwtDecode } from 'jwt-decode';
 import { getCookie } from 'cookies-next';
@@ -16,22 +16,13 @@ interface GlobalLayoutProps {
 
 export default function GlobalLayout({ children }: GlobalLayoutProps) {
   const dispatch = useDispatch();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState<{
-    userId: number;
-    nickname: string;
-    isFirst: boolean;
-  } | null>(null);
 
   useEffect(() => {
     const accessToken = getCookie('accessToken');
 
     if (accessToken) {
-      const decodedToken: any = jwtDecode(accessToken);
+      const decodedToken: never = jwtDecode(accessToken);
       const { userId, nickname, isFirst } = decodedToken;
-
-      setIsLoggedIn(true);
-      setUserInfo({ userId, nickname, isFirst });
 
       if (userId && nickname && isFirst !== undefined) {
         dispatch(login({ userId, nickname, isFirst }));
