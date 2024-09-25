@@ -52,7 +52,7 @@ public class Users extends BaseTimeEntity {
 		this.isDeleted = true;
 	}
 
-	public Integer updateScore(Integer score) {
+	public Integer updateStage(Integer score) {
 		this.exp += score;
 
 		if (stage <= 5 && exp >= 100) {

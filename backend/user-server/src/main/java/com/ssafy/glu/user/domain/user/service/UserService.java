@@ -26,6 +26,4 @@ public interface UserService {
 
 	ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest);
 
-	List<UserResponse> getAll();
-
 }

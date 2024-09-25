@@ -40,6 +40,18 @@ public class UserProblemType extends BaseTimeEntity {
 	private Users user;
 
 	@Enumerated(EnumType.STRING)
-	private ProblemType problemTypeCode;
+	private ProblemTypeCode problemTypeCode;
 
+	public void updateScore(Integer score) {
+		this.score = Math.max(0, score + this.score);
+	}
+
+	public Integer getLevel() {
+		return Math.max((score / 100), 6);
+	}
+
+	public Integer getScore() {
+		if (score >= 700) return 100;
+		return score % 100;
+	}
 }

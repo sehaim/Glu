@@ -3,7 +3,6 @@ package com.ssafy.glu.user.domain.user.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 import com.ssafy.glu.user.domain.user.config.LevelConfig;
 import com.ssafy.glu.user.domain.user.domain.Attendance;
-import com.ssafy.glu.user.domain.user.domain.ProblemType;
+import com.ssafy.glu.user.domain.user.domain.ProblemTypeCode;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
 import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
 		//같은 아이디 있으면
 		if (userRepository.existsByLoginId(userRegisterRequest.id())) {
-			throw  new LoginIdDuplicateException();
+			throw new LoginIdDuplicateException();
 		}
 
 		String encodedPassword = passwordEncoder.encode(userRegisterRequest.password());
@@ -78,10 +77,10 @@ public class UserServiceImpl implements UserService {
 		Users saveUser = userRepository.save(user);
 
 		// 유저 문제타입 저장
-		for (ProblemType problemType : ProblemType.values()) {
+		for (ProblemTypeCode problemTypeCode : ProblemTypeCode.values()) {
 
 			UserProblemType userProblemType = UserProblemType.builder()
-				.problemTypeCode(problemType)
+				.problemTypeCode(problemTypeCode)
 				.user(saveUser)
 				.build();
 
@@ -130,7 +129,7 @@ public class UserServiceImpl implements UserService {
 		long totalDays = ChronoUnit.DAYS.between(createdDate, today) + 1;
 
 		// 출석률 계산 후 소수점 제거
-		return (int) Math.floor((double) attendanceDays * 100 / totalDays);
+		return (int)Math.floor((double)attendanceDays * 100 / totalDays);
 	}
 
 	/**
@@ -203,8 +202,6 @@ public class UserServiceImpl implements UserService {
 		// 오늘 날짜
 		LocalDateTime today = LocalDateTime.now();
 
-		findUser.updateDayCount();
-
 		// 출석이 없거나, 출석 기록이 오늘 날짜와 다르면 새로운 출석 기록을 생성
 		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), today)) {
 			Attendance newAttendance = Attendance.builder()
@@ -220,6 +217,13 @@ public class UserServiceImpl implements UserService {
 			return 0;
 		}
 
+		//연속날짜 업데이트 해주기
+		LocalDateTime beforeDay = today.minusDays(1);
+		if (lastAttendOpt.isEmpty() || !isSameDay(lastAttendOpt.get().getAttendanceDate(), beforeDay)) {
+			findUser.resetDayCount();
+		}
+		findUser.updateDayCount();
+
 		return Math.min(10, 2 * findUser.getDayCount());
 	}
 
@@ -227,13 +231,14 @@ public class UserServiceImpl implements UserService {
 		return date1.toLocalDate().isEqual(date2.toLocalDate());
 	}
 
+	@Transactional
 	@Override
 	public ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest) {
 
 		List<String> images = levelConfig.getImages();
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-		Integer before = findUser.getStage();
+		Integer beforeStage = findUser.getStage();
 
 		// 점수 계산 로직
 		int upScore = expUpdateRequest.problemInfoList().stream()
@@ -243,55 +248,20 @@ public class UserServiceImpl implements UserService {
 		//출석 점수
 		int attendScore = attend(userId, expUpdateRequest.problemInfoList().size());
 
-		Integer after = findUser.updateScore(upScore + attendScore);
+		Integer after = findUser.updateStage(upScore + attendScore);
 
-		return new ExpUpdateResponse(before != after, before != after ? images.get(before) : images.get(after));
-	}
-
-	@Override
-	public List<UserResponse> getAll() {
-		List<UserResponse> results = new ArrayList<>();
-
-		// 모든 Users를 가져옴
-		List<Users> users = userRepository.findAll();
-
-		// 각 사용자에 대해 UserResponse 생성
-		for (Users findUser : users) {
-			// 사용자 관련 정보 가져오기
-			List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(findUser.getId());
-
-			// 레벨 이미지 가져오기
-			List<String> levelImages = levelConfig.getImages();
-			String userImage = levelImages.get(findUser.getStage());
-
-			// 출석일 수 및 출석률 계산
-			long attendanceDay = attendanceRepository.countByUsersId(findUser.getId());
-			Integer rate = calculateAttendanceRate(findUser.getCreatedDate(), attendanceDay);
-
-			// UserResponse 생성 및 리스트에 추가
-			UserResponse userResponse = UserResponse.builder()
-				.id(findUser.getLoginId())
-				.dayCount(findUser.getDayCount())
-				.stage(findUser.getStage())
-				.exp(findUser.getExp())
-				.imageUrl(userImage)
-				.birth(findUser.getBirth())
-				.attendanceRate(rate)
-				.nickname(findUser.getNickname())
-				.problemTypeList(getProblemTypeLists(userProblemTypes))
-				.build();
-
-			results.add(userResponse);
-		}
-
-		return results; // 변환된 UserResponse 리스트 반환
+		return new ExpUpdateResponse(beforeStage != after,
+			beforeStage != after ? images.get(beforeStage) : images.get(after));
 	}
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
 		int userLevel = userLevels.getOrDefault(problemInfo.code(), 0);
-		if (userLevel < problemInfo.level()) return 3;
-		else if (userLevel == problemInfo.level()) return 2;
-		else return 1;
+		if (userLevel < problemInfo.level())
+			return 3;
+		else if (userLevel == problemInfo.level())
+			return 2;
+		else
+			return 1;
 	}
 
 }
