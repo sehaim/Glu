@@ -27,7 +27,7 @@ const getHeaderStyle = (color: string, isScrolled: boolean) => {
     style.backgroundColor = 'transparent'; // 카멜케이스로 수정
   } else {
     style.backgroundColor = isScrolled
-      ? 'rgba(255, 255, 255, 1)' // 스크롤 시 흰색
+      ? 'VAR(--WHITE)' // 스크롤 시 흰색
       : 'transparent'; // 스크롤되지 않았을 때 투명
   }
 
