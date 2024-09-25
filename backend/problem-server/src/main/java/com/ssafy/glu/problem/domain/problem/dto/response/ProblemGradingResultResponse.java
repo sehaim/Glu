@@ -22,21 +22,6 @@ public record ProblemGradingResultResponse(
 	String userAnswer,
 	Integer solveTime
 ) {
-	public static ProblemGradingResultResponse of(String problemId, String title, String content,
-		Map<String, Object> metadata,
-		Boolean isCorrect, String userAnswer, String solution, Integer solveTime) {
-		return ProblemGradingResultResponse.builder()
-			.problemId(problemId)
-			.title(title)
-			.content(content)
-			.metadata(metadata)
-			.isCorrect(isCorrect)
-			.userAnswer(userAnswer)
-			.solution(solution)
-			.solveTime(solveTime)
-			.build();
-	}
-
 	public static ProblemGradingResultResponse of(Problem problem, Boolean isCorrect,
 		ProblemSolveRequest problemSolveRequest) {
 		return ProblemGradingResultResponse.builder()
