@@ -1,9 +1,11 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
-import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
+import com.ssafy.glu.problem.domain.common.dto.CommonCodeResponse;
 
 public record TypeGradingResultResponse(
 	Integer correctCount,
-	ProblemTypeCode problemTypeCode
+	CommonCodeResponse problemTypeCode,
+	Integer acquiredScore,
+	Integer totalScore
 ) {
 }
