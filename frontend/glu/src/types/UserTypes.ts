@@ -36,6 +36,9 @@ export interface MypageUser {
   }[];
 }
 
-export interface Attendances {
-  Attendance: { date: string; totalSolvedProblemCnt: number }[];
+export interface Attendance {
+  date: string;
+  totalSolvedProblemCnt: number;
 }
+
+export type Attendances = Attendance[];
