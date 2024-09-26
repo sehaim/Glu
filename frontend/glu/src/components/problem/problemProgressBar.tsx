@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styles from './problemProgressBar.module.css';
 
 interface ProblemProgressBarProps {
@@ -10,17 +11,21 @@ export default function ProblemProgressBar({
   return (
     <div className={styles['progressbar-container']}>
       <div className={styles.progressbar}>
-        <img
+        <Image
           src="/images/glu_character.png"
           alt="character"
           className={styles['progress-character']}
           style={{ left: `calc(${progressPercentage}%` }}
+          width={80}
+          height={110}
         />
       </div>
-      <img
+      <Image
         src="/images/problem/house.png"
         alt="house"
         className={styles['progress-house']}
+        width={120}
+        height={120}
       />
     </div>
   );
