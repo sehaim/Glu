@@ -6,8 +6,8 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styles from './problemHeader.module.css';
 import {
-  postProblemLike as postProblemLikeAPI,
-  deleteProblemLike as deleteProblemLikeAPI,
+  postProblemLikeAPI,
+  deleteProblemLikeAPI,
 } from '../../utils/problem/like';
 
 interface ProblemHeaderProps {

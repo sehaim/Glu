@@ -1,8 +1,13 @@
-import { authAxios } from '../common';
+import { GetServerSidePropsContext } from 'next';
+import { createAuthAxios } from '../common';
 
 // 단일 문제 가져오기
-export const getSingleProblem = async (problemId: number) => {
+export const getSingleProblemAPI = async (
+  context: GetServerSidePropsContext,
+  problemId: number,
+) => {
   try {
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`/problems/${problemId}`);
 
     // 커스텀 응답에서 httpStatus 확인
@@ -17,12 +22,13 @@ export const getSingleProblem = async (problemId: number) => {
 };
 
 // 단일 문제 채점
-export const postSingleProblemGrading = async (
+export const postSingleProblemGradingAPI = async (
   problemId: number,
   userAnswer: string,
   solvedTime: number,
 ) => {
   try {
+    const authAxios = createAuthAxios();
     const res = await authAxios.post(`/problems/${problemId}/grading`, {
       userAnswer,
       solvedTime,

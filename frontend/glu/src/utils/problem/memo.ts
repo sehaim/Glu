@@ -1,13 +1,14 @@
-import { authAxios } from '../common';
+import { createAuthAxios } from '../common';
 
 // 메모 가져오기
-export const getProblemMemo = async (
+export const getProblemMemoAPI = async (
   problemId: number,
   page: number,
   size: number,
   sort: string,
 ) => {
   try {
+    const authAxios = createAuthAxios();
     const res = await authAxios.get(`/problems/${problemId}/memo`, {
       params: {
         page,
@@ -28,8 +29,12 @@ export const getProblemMemo = async (
 };
 
 // 메모 등록
-export const postProblemMemo = async (problemId: number, content: string) => {
+export const postProblemMemoAPI = async (
+  problemId: number,
+  content: string,
+) => {
   try {
+    const authAxios = createAuthAxios();
     const res = await authAxios.post(`/problems/${problemId}/memo`, {
       content,
     });
@@ -46,12 +51,13 @@ export const postProblemMemo = async (problemId: number, content: string) => {
 };
 
 // 메모 수정
-export const putProblemMemo = async (
+export const putProblemMemoAPI = async (
   problemId: number,
   memoIndex: number,
   content: string,
 ) => {
   try {
+    const authAxios = createAuthAxios();
     const res = await authAxios.put(`/problems/${problemId}/memo`, {
       memoIndex,
       content,
@@ -69,11 +75,12 @@ export const putProblemMemo = async (
 };
 
 // 메모 삭제
-export const deleteProblemMemo = async (
+export const deleteProblemMemoAPI = async (
   problemId: number,
   memoIndex: number,
 ) => {
   try {
+    const authAxios = createAuthAxios();
     const res = await authAxios.delete(`/problems/${problemId}/memo`, {
       params: {
         memoIndex,

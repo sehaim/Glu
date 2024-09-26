@@ -1,7 +1,6 @@
 export interface ProblemOption {
-  imageUrl?: string;
   problemOptionId: number;
-  option?: string;
+  option: string;
 }
 
 export interface ProblemLevel {
