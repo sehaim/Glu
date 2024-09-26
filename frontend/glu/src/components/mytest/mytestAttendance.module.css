@@ -83,6 +83,7 @@
   height: 100px;
   padding: 10px;
   border-radius: 15px;
+  position: relative;
 }
 
 .calendar-day {
@@ -110,7 +111,13 @@
 }
 
 .attendance-icon {
-  width: 60%;
+  height: 80%;
+  width: auto;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .test-list {
