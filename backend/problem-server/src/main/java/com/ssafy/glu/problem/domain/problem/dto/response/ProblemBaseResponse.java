@@ -17,7 +17,7 @@ public record ProblemBaseResponse(
 	String solution,
 	Problem.Status status,
 
-	CommonCodeResponse questionTypeCode,
+	CommonCodeResponse questionType,
 	CommonCodeResponse problemLevel,
 	CommonCodeResponse problemType,
 	CommonCodeResponse problemTypeDetail,
@@ -34,7 +34,7 @@ public record ProblemBaseResponse(
 			.content(problem.getContent())
 			.solution(problem.getSolution())
 			.status(status)
-			.questionTypeCode(CommonCodeResponse.of(problem.getQuestionTypeCode()))
+			.questionType(CommonCodeResponse.of(problem.getQuestionTypeCode()))
 			.problemLevel(CommonCodeResponse.of(problem.getProblemLevelCode()))
 			.problemType(CommonCodeResponse.of(problem.getProblemTypeCode()))
 			.problemTypeDetail(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
