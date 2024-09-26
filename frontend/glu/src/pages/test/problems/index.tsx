@@ -34,6 +34,10 @@ export default function Test() {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
+  // 푼 문제 개수 계산
+  const solvedCount = answers.filter(
+    (answer) => answer.userAnswer !== '',
+  ).length;
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
@@ -118,10 +122,11 @@ export default function Test() {
     };
   }, [currentProblemIndex]);
 
+  // 퍼센티지 계산
   const progressPercentage =
-    problems.length > 1
-      ? Math.floor((currentProblemIndex / problems.length) * 100)
-      : 100; // 만약 문제가 1개라면 무조건 100%로 설정
+    problems.length > 0
+      ? Math.floor((solvedCount / problems.length) * 100)
+      : 100; // 문제 개수에 따라 퍼센티지 계산
 
   const handleNextProblem = () => {
     if (currentProblemIndex < problems.length - 1) {
