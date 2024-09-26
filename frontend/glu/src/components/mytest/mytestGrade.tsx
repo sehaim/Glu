@@ -10,8 +10,14 @@ interface MytestGradeProps {
 }
 
 export default function MytestGrade({ userInfo }: MytestGradeProps) {
-  const data = userInfo.problemTypeList.map((item) => ({
-    axis: item.type.name,
+  const problemTypeList = userInfo.problemTypeList.map((item) => ({
+    name: item.type.name,
+    level: item.level,
+    score: item.score,
+  }));
+
+  const data = problemTypeList.map((item) => ({
+    axis: item.name,
     value: item.level,
   }));
 
@@ -38,7 +44,24 @@ export default function MytestGrade({ userInfo }: MytestGradeProps) {
         <div className={styles['triangle-graph-container']}>
           <RadarGraph data={data} maxScore={6} />
         </div>
-        <div>성적별 그래프</div>
+        <div>
+          {problemTypeList.map((item) => {
+            return (
+              <div className={styles['bar-graph-item']} key={item.name}>
+                <div className={styles['problem-name']}>{item.name}</div>
+                <div
+                  className={styles['flex-line']}
+                  id={styles['bar-graph-line']}
+                >
+                  <span className={styles.level}>LV.{item.level}</span>
+                  <div className={styles['exp-container']}>
+                    <BarGraph maxScore={100} currentScore={item.score} />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
