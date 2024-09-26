@@ -3,6 +3,7 @@ package com.ssafy.glu.user.domain.user.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -177,16 +178,34 @@ public class UserServiceImpl implements UserService {
 		return userRepository.existsByLoginId(loginId);
 	}
 
+	// /**
+	//  * 출석정보 가져오기
+	//  */
+	// @Override
+	// public List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request) {
+	// 	//날짜 체크
+	// 	if (request.year() < 1900 || request.year() > 2100 || request.month() < 1 || request.month() > 12) {
+	// 		throw new DateInValidException();
+	// 	}
+	// 	return attendanceRepository.countAttendanceByYearAndMonth(userId, request);
+	// }
+
+
 	/**
 	 * 출석정보 가져오기
 	 */
 	@Override
-	public List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request) {
-		//날짜 체크
-		if (request.year() < 1900 || request.year() > 2100 || request.month() < 1 || request.month() > 12) {
-			throw new DateInValidException();
+	public List<AttendanceResponse> getAttendance(Long userId) {
+
+		List<Attendance> attendances = attendanceRepository.findAllByUsersId(userId);
+
+		List<AttendanceResponse> result = new ArrayList<>();
+
+		for (Attendance attendance : attendances) {
+			result.add(AttendanceResponse.of(attendance));
 		}
-		return attendanceRepository.countAttendanceByYearAndMonth(userId, request);
+
+		return result;
 	}
 
 	/**

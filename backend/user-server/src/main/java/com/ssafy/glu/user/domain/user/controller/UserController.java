@@ -63,9 +63,15 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
+	// @GetMapping("/attendance")
+	// public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId, AttendanceRequest request) {
+	// 	List<AttendanceResponse> result = userService.getAttendance(userId, request);
+	// 	return ResponseEntity.status(HttpStatus.OK).body(result);
+	// }
+
 	@GetMapping("/attendance")
-	public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId, AttendanceRequest request) {
-		List<AttendanceResponse> result = userService.getAttendance(userId, request);
+	public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId) {
+		List<AttendanceResponse> result = userService.getAttendance(userId);
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 

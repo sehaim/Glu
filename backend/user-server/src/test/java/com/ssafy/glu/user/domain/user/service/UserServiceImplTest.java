@@ -90,7 +90,7 @@ class UserServiceImplTest {
 		Long id = userService.register(registerRequestDTO);
 
 		// When
-		UserUpdateRequest updateRequest = new UserUpdateRequest("newNickname", "1234", "12345");
+		UserUpdateRequest updateRequest = new UserUpdateRequest("newNickname", "1234", "12345", LocalDate.parse("2009-05-12"));
 		userService.updateUser(id, updateRequest);
 
 		Users findUser = userRepository.findById(id).orElseThrow();
@@ -113,6 +113,46 @@ class UserServiceImplTest {
 		Users deletedUser = userRepository.findById(id).orElseThrow();
 		assertTrue(deletedUser.getIsDeleted(), "User should be marked as deleted");
 	}
+
+	// @Transactional
+	// @Test
+	// void getAttendance() {
+	// 	// Given
+	// 	UserRegisterRequest registerRequestDTO = new UserRegisterRequest("id1234", "1234", "ssafy", LocalDate.of(2000, 1, 1));
+	// 	Long id = userService.register(registerRequestDTO);
+	//
+	// 	Users findUser = userRepository.findById(id).orElseThrow();
+	//
+	// 	Attendance attendance1 = Attendance.builder()
+	// 		.users(findUser)
+	// 		.attendanceDate(LocalDateTime.now())
+	// 		.todaySolve(10)
+	// 		.build();
+	//
+	// 	Attendance attendance2 = Attendance.builder()
+	// 		.users(findUser)
+	// 		.attendanceDate(LocalDate.now().atStartOfDay())
+	// 		.todaySolve(30)
+	// 		.build();
+	//
+	// 	Attendance attendance3 = Attendance.builder()
+	// 		.users(findUser)
+	// 		.attendanceDate(LocalDateTime.now().minusMonths(1))
+	// 		.todaySolve(100)
+	// 		.build();
+	//
+	// 	attendanceRepository.save(attendance1);
+	// 	attendanceRepository.save(attendance2);
+	// 	attendanceRepository.save(attendance3);
+	//
+	// 	// When
+	// 	List<AttendanceResponse> attendanceData = userService.getAttendance(id, new AttendanceRequest(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+	//
+	// 	// Then
+	// 	assertFalse(attendanceData.isEmpty(), "Attendance data should not be empty");
+	// 	assertEquals(30, attendanceData.get(0).totalSolvedProblemCnt());
+	// 	assertEquals(10, attendanceData.get(1).totalSolvedProblemCnt());
+	// }
 
 	@Transactional
 	@Test
@@ -146,12 +186,12 @@ class UserServiceImplTest {
 		attendanceRepository.save(attendance3);
 
 		// When
-		List<AttendanceResponse> attendanceData = userService.getAttendance(id, new AttendanceRequest(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+		List<AttendanceResponse> attendanceData = userService.getAttendance(id);
 
 		// Then
 		assertFalse(attendanceData.isEmpty(), "Attendance data should not be empty");
-		assertEquals(30, attendanceData.get(0).totalSolvedProblemCnt());
-		assertEquals(10, attendanceData.get(1).totalSolvedProblemCnt());
+		assertEquals(10, attendanceData.get(0).totalSolvedProblemCnt());
+		assertEquals(30, attendanceData.get(1).totalSolvedProblemCnt());
 	}
 
 

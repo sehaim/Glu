@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.querydsl.core.Tuple;
+import com.ssafy.glu.user.domain.user.domain.Attendance;
 
 public record AttendanceResponse(
 	LocalDate date,
@@ -14,5 +15,9 @@ public record AttendanceResponse(
 		Integer solve = tuple.get(1, Integer.class);
 
 		return new AttendanceResponse(date, solve);
+	}
+
+	public static AttendanceResponse of(Attendance attendance) {
+		return new AttendanceResponse(attendance.getAttendanceDate().toLocalDate(), attendance.getTodaySolve());
 	}
 }
