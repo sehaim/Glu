@@ -35,8 +35,8 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 			.select(attendance.attendanceDate, attendance.todaySolve)
 			.from(attendance)
 			.where(
-				userIdEq(userId),
-				attendanceDateBetween(startDateTime, endDateTime)
+				userIdEq(userId)
+				// attendanceDateBetween(startDateTime, endDateTime)
 			)
 			.orderBy(attendance.attendanceDate.asc()) // 날짜 순으로 정렬
 			.fetch()
