@@ -79,8 +79,10 @@ export const createAuthAxios = (context?: {
                   req: context.req,
                   res: context.res,
                   maxAge: 60 * 60 * 24 * 14,
+                  sameSite: 'none',
+                  path: '/',
                 }
-              : { maxAge: 60 * 60 * 24 * 14 },
+              : { maxAge: 60 * 60 * 24 * 14, sameSite: 'none', path: '/' },
           );
 
           return axios(updatedConfig); // 요청 재시도
