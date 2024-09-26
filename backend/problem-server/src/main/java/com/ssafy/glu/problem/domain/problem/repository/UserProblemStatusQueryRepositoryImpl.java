@@ -50,25 +50,26 @@ public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupp
 	}
 
 	public BooleanExpression levelEq(ProblemLevelCode problemLevelCode) {
-		log.info("problemLevelCode : {}",problemLevelCode);
+		log.info("problemLevelCode : {}", problemLevelCode);
 		return problemLevelCode != null ? userProblemStatus.problem.problemLevelCode.eq(problemLevelCode) :
 			null;
 	}
 
 	public BooleanExpression typeEq(ProblemTypeCode problemTypeCode) {
-		log.info("problemTypeCode : {}",problemTypeCode);
+		log.info("problemType : {}", problemTypeCode);
 		return problemTypeCode != null ? userProblemStatus.problem.problemTypeCode.eq(problemTypeCode) :
 			null;
 	}
 
 	public BooleanExpression detailTypeEq(ProblemTypeDetailCode problemTypeDetailCode) {
-		log.info("problemTypeDetailCode : {}",problemTypeDetailCode);
+		log.info("problemTypeDetailCode : {}", problemTypeDetailCode);
 		return problemTypeDetailCode != null ?
 			userProblemStatus.problem.problemTypeDetailCode.eq(problemTypeDetailCode) : null;
 	}
 
 	public BooleanExpression memoListIsNotEmpty(Boolean hasMemo) {
-		return hasMemo != null ? (hasMemo ? userProblemStatus.memoList.isNotEmpty() : userProblemStatus.memoList.isEmpty()) : null;
+		return hasMemo != null ?
+			(hasMemo ? userProblemStatus.memoList.isNotEmpty() : userProblemStatus.memoList.isEmpty()) : null;
 	}
 
 	private BooleanExpression isFavoriteEq(Boolean isFavorite) {
