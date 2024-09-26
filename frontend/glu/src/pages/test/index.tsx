@@ -1,14 +1,15 @@
 /* eslint-disable prettier/prettier */
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useMemo } from 'react';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import RadarChart from '@/components/problem/result/radarChart';
-import dummyPreviousTest from '@/mock/dummyPreviousTest.json';
 import { PreviousSolvedProblemType } from '@/types/ProblemTypes';
 import { formatTime, transformProblemType } from '@/utils/problem/result';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import dummyPreviousTest from '@/mock/dummyPreviousTest.json';
+import { useMemo } from 'react';
 import styles from './test.module.css';
 
 interface ApiResponse {
@@ -18,35 +19,37 @@ interface ApiResponse {
   problemType: PreviousSolvedProblemType[];
 }
 
-export default function Test() {
+interface TestProps {
+  correctCount: number;
+  totalSolveTime: number;
+  problemTypeList: PreviousSolvedProblemType[];
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  // TODO: axios로 변경 -> 실제 data fetch
+  const response: ApiResponse = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(dummyPreviousTest);
+    }, 1000);
+  });
+
+  return {
+    props: {
+      correctCount: response.correctCount,
+      totalSolveTime: response.totalSolveTime,
+      problemTypeList: response.problemType,
+    },
+  };
+};
+
+export default function Test({
+  correctCount,
+  totalSolveTime,
+  problemTypeList,
+}: TestProps) {
   const router = useRouter();
-  const [correctCount, setCorrectCount] = useState<number | null>(null);
-  const [totalSolveTime, setTotalSolveTime] = useState<number | null>(null);
-  const [problemTypeList, setProblemTypeList] = useState<
-    PreviousSolvedProblemType[]
-  >([]);
-  const [, setLoading] = useState<boolean>(true);
   const username = useSelector((state: RootState) => state.auth.nickname);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
-      const response: ApiResponse = await new Promise((resolve) => {
-        setTimeout(() => {
-          return resolve(dummyPreviousTest);
-        }, 1000);
-      });
-
-      setCorrectCount(response.correctCount);
-      setTotalSolveTime(response.totalSolveTime);
-      setProblemTypeList(response.problemType);
-      setLoading(false); // 데이터가 다 로드되면 로딩 상태를 false로 설정
-    };
-
-    fetchData();
-  }, []);
-
-  // useMemo를 사용해 problemTypeList가 변경될 때만 변환된 리스트를 재계산
   const transformedProblemTypeList = useMemo(
     () => transformProblemType(problemTypeList),
     [problemTypeList],
