@@ -7,7 +7,11 @@ import { createAuthAxios, defaultAxios } from '../common';
 export const loginAPI = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
-    setCookie('accessToken', res.headers.accesstoken);
+    setCookie('accessToken', res.headers.accesstoken, {
+      maxAge: 60 * 60 * 24 * 14,
+      sameSite: 'none',
+      path: '/',
+    });
     window.location.href = '/home';
   } catch (err) {
     if (err instanceof AxiosError && err.response) {
