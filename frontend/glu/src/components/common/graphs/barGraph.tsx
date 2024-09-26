@@ -4,11 +4,13 @@ import styles from './barGraph.module.css';
 interface BarGraphProps {
   maxScore: number;
   currentScore: number;
+  isPercentage?: boolean;
 }
 
 export default function ExperienceBar({
   maxScore,
   currentScore,
+  isPercentage = false,
 }: BarGraphProps) {
   const [score, setScore] = useState(0);
 
@@ -24,7 +26,6 @@ export default function ExperienceBar({
       }
       setScore(start);
     }, 10); // 10ms마다 업데이트
-
     return () => clearInterval(interval);
   }, [currentScore]);
 
@@ -32,9 +33,10 @@ export default function ExperienceBar({
 
   return (
     <div className={styles.bar}>
-      <div className={styles.fill} style={{ width: `${progress}%` }}>
-        <span className={styles.label}>{Math.round(progress)}%</span>
-      </div>
+      <div className={styles.fill} style={{ width: `${progress}%` }} />
+      <span className={styles.label}>
+        {isPercentage ? `${currentScore}%` : `${currentScore}/${maxScore}`}
+      </span>
     </div>
   );
 }

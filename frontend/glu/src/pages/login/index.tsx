@@ -2,16 +2,12 @@ import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { useState } from 'react';
 import { LoginUser } from '@/types/UserTypes';
-import { useDispatch } from 'react-redux';
-import { login } from '@/store/authSlice';
 import styles from '../userRegist.module.css';
 import { loginAPI } from '../../utils/user/auth';
 
 export default function LoginPage() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-
-  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     const data: LoginUser = {
@@ -22,7 +18,6 @@ export default function LoginPage() {
       alert('아이디를 입력해주세요.');
     } else {
       await loginAPI(data);
-      dispatch(login());
     }
   };
 
