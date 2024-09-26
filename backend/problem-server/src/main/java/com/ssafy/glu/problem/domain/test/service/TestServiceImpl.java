@@ -27,6 +27,7 @@ import com.ssafy.glu.problem.domain.problem.service.ProblemGradingServiceImpl;
 import com.ssafy.glu.problem.domain.test.domain.Test;
 import com.ssafy.glu.problem.domain.test.dto.request.TestSolveRequest;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingDetailResponse;
+import com.ssafy.glu.problem.domain.test.dto.response.TestGradingBaseResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
 import com.ssafy.glu.problem.domain.test.repository.TestRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
@@ -78,7 +79,8 @@ public class TestServiceImpl implements TestService {
 	@Override
 	public Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable) {
 		Page<Test> testList = testRepository.findByUserId(userId, pageable);
-		return testList.map((test)-> TestGradingDetailResponse.of(test,userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
+		return testList.map((test) -> TestGradingDetailResponse.of(test,
+			userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
 	}
 
 	private List<ProblemGradingResultResponse> gradeProblems(Long userId, String testId, UserResponse user,
