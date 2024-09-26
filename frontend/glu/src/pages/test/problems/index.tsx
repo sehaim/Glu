@@ -9,10 +9,7 @@ import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
-import {
-  postProblemMemo as postProblemMemoAPI,
-  putProblemMemo as putProblemMemoAPI,
-} from '@/utils/problem/memo';
+import { postProblemMemoAPI, putProblemMemoAPI } from '@/utils/problem/memo';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';

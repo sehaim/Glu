@@ -1,8 +1,10 @@
-import { authAxios } from '../common';
+import { createAuthAxios } from '../common';
 
 // 좋아요
-export const postProblemLike = async (problemId: number) => {
+export const postProblemLikeAPI = async (problemId: number) => {
   try {
+    const authAxios = createAuthAxios();
+
     const res = await authAxios.post(`/problems/${problemId}/favorite`);
 
     // 커스텀 응답에서 httpStatus 확인
@@ -17,8 +19,10 @@ export const postProblemLike = async (problemId: number) => {
 };
 
 // 좋아요 취소
-export const deleteProblemLike = async (problemId: number) => {
+export const deleteProblemLikeAPI = async (problemId: number) => {
   try {
+    const authAxios = createAuthAxios();
+
     const res = await authAxios.delete(`/problems/${problemId}/favorite`);
 
     // 커스텀 응답에서 httpStatus 확인

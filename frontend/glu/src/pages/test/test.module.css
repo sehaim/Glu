@@ -15,6 +15,7 @@
   font-family: 'PT';
   line-height: 24px;
   color: var(--TEXT_SECONDARY);
+  max-width: 1200px;
 }
 
 .content-wrapper-column {
@@ -26,6 +27,7 @@
   font-family: 'PT';
   line-height: 24px;
   color: var(--TEXT_SECONDARY);
+  max-width: 1200px;
 }
 
 .page-title,
