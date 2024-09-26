@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { BsStar, BsStarFill } from 'react-icons/bs';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styles from './problemHeader.module.css';
 import {
@@ -60,6 +61,14 @@ export default function ProblemHeader({
       </div>
       <div className={styles['info-container']}>
         <div className={styles['problem-type']}>
+          <Image
+            src="/images/problem/cloud.png"
+            alt="Problem Type"
+            width={160}
+            height={110}
+            priority // 중요한 이미지일 경우 빠르게 로드
+            className={styles['problem-type-image']}
+          />
           <div className={styles['problem-type-text']}>{problemType}</div>
         </div>
         <div className={styles['problem-title']}>

@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
-import dummyProblems from '@/mock/dummyProblems.json';
-import dummyMemo from '@/mock/dummyMemo.json';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
 import ProblemContentImage from '@/components/problem/problemContentImage';
@@ -21,6 +19,22 @@ import ProblemInputField from '@/components/problem/problemInputField';
 import throttle from 'lodash/throttle';
 import styles from './testProblems.module.css';
 
+export async function getServerSideProps() {
+  const dummyProblems = await import('@/mock/dummyProblems.json');
+  const dummyMemo = await import('@/mock/dummyMemo.json');
+
+  return {
+    props: {
+      initialProblems: dummyProblems.default,
+      initialMemoList: dummyMemo.default,
+    },
+  };
+}
+
+interface TestProps {
+  initialProblems: Problem[];
+  initialMemoList: Memo[];
+}
 interface ProblemAnswer {
   problemId: number;
   userAnswer: string; // 사용자의 선택
@@ -28,22 +42,26 @@ interface ProblemAnswer {
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
-export default function Test() {
+export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const router = useRouter();
   const PROBLEM_COUNT = 15; // 문제 개수 고정
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problems] = useState<Problem[]>(
+    initialProblems?.slice(0, PROBLEM_COUNT) || [], // Provide a fallback to an empty array if initialProblems is null/undefined
+  );
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   // 푼 문제 개수 계산
-  const solvedCount = answers.filter(
-    (answer) => answer.userAnswer !== '',
-  ).length;
+  const solvedCount = useMemo(() => {
+    return answers.filter((answer) => answer.userAnswer !== '').length;
+  }, [answers]);
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [memoList, setMemoList] = useState<Memo[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [memoList, setMemoList] = useState<Memo[]>(
+    initialMemoList || [], // Fallback to an empty array if initialMemoList is null/undefined
+  );
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
+  const [loading] = useState(false);
 
   useEffect(() => {
     const handleResize = throttle(() => {
@@ -60,24 +78,6 @@ export default function Test() {
     }
 
     return () => {};
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
-
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          setProblems(dummyProblems.slice(0, PROBLEM_COUNT)); // 문제 데이터 설정
-          setMemoList(dummyMemo); // 메모 데이터 설정
-          resolve(true); // 타이머가 끝난 후 resolve
-        }, 1000); // Simulate a 1-second delay
-      });
-
-      setLoading(false); // 데이터 로드 완료 후 로딩 상태 false로 설정
-    };
-
-    fetchData();
   }, []);
 
   const updateAnswers = (
@@ -123,10 +123,11 @@ export default function Test() {
   }, [currentProblemIndex]);
 
   // 퍼센티지 계산
-  const progressPercentage =
-    problems.length > 0
+  const progressPercentage = useMemo(() => {
+    return problems.length > 0
       ? Math.floor((solvedCount / problems.length) * 100)
-      : 100; // 문제 개수에 따라 퍼센티지 계산
+      : 100;
+  }, [solvedCount, problems.length]);
 
   const handleNextProblem = () => {
     if (currentProblemIndex < problems.length - 1) {
