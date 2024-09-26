@@ -42,7 +42,7 @@ export default function MytestGrade({ userInfo }: MytestGradeProps) {
       <div className={styles.section}>
         <div className={styles['section-title']}>영역별 점수</div>
         <div className={styles['triangle-graph-container']}>
-          <RadarGraph data={data} maxScore={6} />
+          <RadarGraph data={data} maxScore={7} />
         </div>
         <div>
           {problemTypeList.map((item) => {
