@@ -93,3 +93,13 @@
 .today {
   background-color: var(--YELLOW);
 }
+
+.button-enabled {
+  color: var(--DARKYELLOW);
+  cursor: default;
+}
+
+.button-enabled:hover {
+  transform: none;
+  color: var(--DARKYELLOW);
+}

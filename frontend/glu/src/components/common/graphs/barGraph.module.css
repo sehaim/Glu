@@ -23,6 +23,10 @@
 }
 
 .label {
-  color: white;
+  color: var(--TEXT_SECONDARY);
   font-family: 'BMJUA';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
