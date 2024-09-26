@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
 import { Attendances } from '@/types/UserTypes';
 import {
@@ -46,6 +46,10 @@ export default function MytestAttendance({
 
     return days;
   };
+
+  useEffect(() => {
+    console.log(attendances);
+  }, [attendances]);
 
   // 이전 달로 이동
   const handlePreviousMonth = () => {
@@ -122,6 +126,8 @@ export default function MytestAttendance({
                       src="/images/glu_character_shadow.png"
                       alt="attendance mark"
                       className={styles['attendance-icon']}
+                      width={70}
+                      height={60}
                     />
                   )}
                 </div>
