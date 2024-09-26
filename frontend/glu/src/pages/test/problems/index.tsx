@@ -16,6 +16,8 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import { useDispatch } from 'react-redux';
+import { levelUp } from '@/store/levelupSlice';
 import styles from './testProblems.module.css';
 
 export async function getServerSideProps() {
@@ -43,6 +45,7 @@ interface ProblemAnswer {
 
 export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const PROBLEM_COUNT = 15; // 문제 개수 고정
   const [problems] = useState<Problem[]>(
     initialProblems?.slice(0, PROBLEM_COUNT) || [],
@@ -153,7 +156,10 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
       solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
     });
 
-    sessionStorage.removeItem('savedAnswers');
+    dispatch(
+      levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
+    ); // 임시로 levelup상태로 만듦
+
     router.push('/test/result');
   };
 
