@@ -1,7 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
 import java.util.Map;
-
 import com.ssafy.glu.problem.domain.common.dto.CommonCodeResponse;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
@@ -22,7 +21,9 @@ public record ProblemBaseResponse(
 	CommonCodeResponse problemType,
 	CommonCodeResponse problemTypeDetail,
 
-	Map<String, Object> metadata
+	Map<String, Object> metadata,
+	
+	Boolean isFavorite
 ) {
 	public static ProblemBaseResponse of(Problem problem, Problem.Status status) {
 		if (problem == null)
@@ -39,14 +40,15 @@ public record ProblemBaseResponse(
 			.problemType(CommonCodeResponse.of(problem.getProblemTypeCode()))
 			.problemTypeDetail(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
 			.metadata(problem.getMetadata())
+			.isFavorite(isFavorite)
 			.build();
 	}
-
+	
 	public static ProblemBaseResponse of(Problem problem) {
 		return of(problem, null);
 	}
 
 	public static ProblemBaseResponse of(UserProblemStatus userProblemStatus) {
-		return of(userProblemStatus.getProblem(), userProblemStatus.getStatus());
+		return of(userProblemStatus.getProblem(), userProblemStatus.getStatus(), userProblemStatus.getIsFavorite());
 	}
 }
