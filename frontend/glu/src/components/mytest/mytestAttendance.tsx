@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
 import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
+import { Attendances } from '@/types/UserTypes';
 import {
   format,
   endOfMonth,
@@ -17,11 +16,13 @@ import styles from './mytestAttendance.module.css';
 import BarGraph from '../common/graphs/barGraph';
 
 interface MytestAttendanceProps {
-  attendance: any | null;
+  attendanceRate: number;
+  attendances: Attendances | null;
 }
 
 export default function MytestAttendance({
-  attendance,
+  attendanceRate,
+  attendances,
 }: MytestAttendanceProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
@@ -63,7 +64,7 @@ export default function MytestAttendance({
     <div className={styles.container}>
       <div className={styles['container-header']}>
         <div className={styles['container-name']}>출석율</div>
-        <BarGraph maxScore={100} currentScore={50} isPercentage />
+        <BarGraph maxScore={100} currentScore={attendanceRate} isPercentage />
       </div>
       <div className={styles['calendar-container']}>
         <div className={styles['calendar-header']}>

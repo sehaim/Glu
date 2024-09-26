@@ -31,7 +31,7 @@
   justify-content: center;
   align-self: center;
   padding: 18%;
-  background-color: var(--LIGHTPINK);
+  background-color: var(--LIGHTYELLOW);
   border-radius: 100%;
   margin: 20px 0;
 }
@@ -52,9 +52,13 @@
 .exp-title {
   color: var(--PINK);
   font-family: 'BMJUA';
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .exp-container {
   width: 70%;
+}
+
+.triangle-graph-container {
+  width: 100%;
 }

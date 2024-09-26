@@ -9,7 +9,7 @@
   border-width: 2px;
   overflow: hidden;
   position: relative;
-  padding: 3px;
+  padding: 3px 3px 3px 5px;
 }
 
 .fill {
@@ -20,6 +20,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 8px;
 }
 
 .label {
