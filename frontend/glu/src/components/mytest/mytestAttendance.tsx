@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
 import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
@@ -9,13 +11,18 @@ import {
   startOfMonth,
   startOfWeek,
   addDays,
-  isAfter,
   isSameDay,
 } from 'date-fns';
 import styles from './mytestAttendance.module.css';
 import BarGraph from '../common/graphs/barGraph';
 
-export default function MytestAttendance() {
+interface MytestAttendanceProps {
+  attendance: any | null;
+}
+
+export default function MytestAttendance({
+  attendance,
+}: MytestAttendanceProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
 
@@ -56,7 +63,7 @@ export default function MytestAttendance() {
     <div className={styles.container}>
       <div className={styles['container-header']}>
         <div className={styles['container-name']}>출석율</div>
-        <BarGraph maxScore={100} currentScore={50} />
+        <BarGraph maxScore={100} currentScore={50} isPercentage />
       </div>
       <div className={styles['calendar-container']}>
         <div className={styles['calendar-header']}>
@@ -70,8 +77,10 @@ export default function MytestAttendance() {
           </span>
           <BsCaretRightFill
             size={35}
-            onClick={handleNextMonth}
-            className={styles['calendar-button']}
+            onClick={
+              !isSameMonth(currentDate, today) ? handleNextMonth : undefined
+            }
+            className={`${styles['calendar-button']} ${isSameMonth(currentDate, today) ? styles['button-enabled'] : ''}`}
           />
         </div>
         <div className={styles['calendar-grid']}>
@@ -81,7 +90,6 @@ export default function MytestAttendance() {
             </div>
           ))}
           {generateCalendar(currentDate).map((day, index) => {
-            if (!isSameMonth(day, today) && isAfter(day, today)) return null;
             return (
               <div
                 key={index}
