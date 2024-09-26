@@ -24,7 +24,6 @@ import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNo
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
-import com.ssafy.glu.problem.global.feign.dto.ExpUpdateRequest;
 import com.ssafy.glu.problem.global.feign.dto.ExpUpdateResponse;
 import com.ssafy.glu.problem.global.feign.dto.UserResponse;
 import com.ssafy.glu.problem.global.util.PageUtil;
@@ -137,11 +136,11 @@ public class ProblemServiceImpl implements ProblemService {
 	@Override
 	public ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request) {
 		//=== 채점 로직 ===//
-		// 문제 정보 가져오기
-		Problem problem = getProblemOrThrow(problemId);
-
 		// 유저 정보 조회
 		UserResponse user = userService.getUser(userId);
+
+		// 문제 정보 가져오기
+		Problem problem = getProblemOrThrow(problemId);
 
 		// 채점 및 유저 점수 업데이트
 		GradeResult gradeResult = problemGradingService.gradeProblem(user, problem, request);
@@ -150,7 +149,7 @@ public class ProblemServiceImpl implements ProblemService {
 		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
 		// 캐릭터 성장 API 요청
-		ExpUpdateResponse expUpdateResponse = updateUserExp(user, userId, gradeResult);
+		ExpUpdateResponse expUpdateResponse = userService.updateUserExp(user, userId, gradeResult);
 
 		return ProblemGradingResponse.of(gradeResult, expUpdateResponse);
 	}
@@ -160,14 +159,4 @@ public class ProblemServiceImpl implements ProblemService {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
-	private ExpUpdateResponse updateUserExp(UserResponse user, Long userId, Problem problem) {
-		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.of(user.problemTypeList(), List.of(problem));
-		return userService.updateUser(userId, expUpdateRequest);
-	}
-
-	private ExpUpdateResponse updateUserExp(UserResponse user, Long userId, GradeResult gradeResult) {
-		ExpUpdateRequest expUpdateRequest = ExpUpdateRequest.ofGradeResultList(user.problemTypeList(), List.of(gradeResult));
-		log.info("[캐릭터 성장 요청] : {}", expUpdateRequest);
-		return userService.updateUser(userId, expUpdateRequest);
-	}
 }

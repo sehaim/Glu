@@ -45,55 +45,60 @@ public class ProblemController {
 	}
 
 	@GetMapping("/solve")
-	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@ModelAttribute ProblemSearchCondition condition, Pageable pageable) {
 		log.info("condition : {}", condition);
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblemList(userId, condition, pageable));
 	}
 
 	@PostMapping("/{problemId}/memo")
-	public ResponseEntity<ProblemMemoResponse> createUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<ProblemMemoResponse> createUserProblemMemo(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId, @RequestBody ProblemMemoCreateRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(problemService.createProblemMemo(userId, problemId, request));
 	}
 
 	@PutMapping("/{problemId}/memo")
-	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId, @RequestBody ProblemMemoUpdateRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.updateProblemMemo(userId, problemId, request));
 	}
 
 	@DeleteMapping("/{problemId}/memo")
-	public ResponseEntity<Void> deleteUserProblemMemo(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<Void> deleteUserProblemMemo(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId, @RequestParam("memoIndex") Long memoIndex) {
 		problemService.deleteProblemMemo(userId, problemId, memoIndex);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@GetMapping("/{problemId}/memo")
-	public ResponseEntity<Page<ProblemMemoResponse>> getProblemMemoListInProblem(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<Page<ProblemMemoResponse>> getProblemMemoListInProblem(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId, @PageableDefault(size = 4) Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.getProblemMemoList(userId, problemId, pageable));
 	}
 
 	@PostMapping("/{problemId}/favorite")
-	public ResponseEntity<Void> createUserProblemFavorite(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<Void> createUserProblemFavorite(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId) {
 		problemService.createUserProblemFavorite(userId, problemId);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@DeleteMapping("/{problemId}/favorite")
-	public ResponseEntity<Void> deleteUserProblemFavorite(@RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<Void> deleteUserProblemFavorite(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId) {
 		problemService.deleteUserProblemFavorite(userId, problemId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@PostMapping("/{problemId}/grading")
-	public ResponseEntity<ProblemGradingResponse> gradeProblem(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
+	public ResponseEntity<ProblemGradingResponse> gradeProblem(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId,
 		@RequestBody ProblemSolveRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.gradeProblem(userId, problemId, request));

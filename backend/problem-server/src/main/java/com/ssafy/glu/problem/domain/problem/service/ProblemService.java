@@ -21,8 +21,5 @@ public interface ProblemService {
 	void createUserProblemFavorite(Long userId, String problemId);
 	void deleteUserProblemFavorite(Long userId, String problemId);
 
-	// TestGradingDetailResponse gradeProblemList(Long userId, ProblemSolveListRequest request);
 	ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request);
-	// TestGradingBaseResponse getPreviousTest(Long userId);
-	// List<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable);
-}
+	}

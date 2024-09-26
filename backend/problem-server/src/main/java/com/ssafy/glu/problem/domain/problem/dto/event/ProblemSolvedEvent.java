@@ -11,6 +11,7 @@ import lombok.Builder;
 @Builder
 public record ProblemSolvedEvent(
 	Long userId,
+	String testId,
 	ProblemCodeResponse problem,
 	GradeResult result,
 	String userAnswer,
@@ -18,9 +19,24 @@ public record ProblemSolvedEvent(
 ) {
 	public static ProblemSolvedEvent of(Long userId, Problem problem, GradeResult gradeResult,
 		ProblemSolveRequest request) {
-		if (problem == null || gradeResult == null) throw new EventDataCreationException();
+		if (problem == null || gradeResult == null)
+			throw new EventDataCreationException();
 		return ProblemSolvedEvent.builder()
 			.userId(userId)
+			.problem(ProblemCodeResponse.from(problem))
+			.result(gradeResult)
+			.userAnswer(request.userAnswer())
+			.solvedTime(request.solvedTime())
+			.build();
+	}
+
+	public static ProblemSolvedEvent of(Long userId, String testId, Problem problem, GradeResult gradeResult,
+		ProblemSolveRequest request) {
+		if (problem == null || gradeResult == null)
+			throw new EventDataCreationException();
+		return ProblemSolvedEvent.builder()
+			.userId(userId)
+			.testId(testId)
 			.problem(ProblemCodeResponse.from(problem))
 			.result(gradeResult)
 			.userAnswer(request.userAnswer())
