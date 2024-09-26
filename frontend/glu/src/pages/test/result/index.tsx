@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Image from 'next/image';
 import { SolvedProblem, SolvedProblemType } from '@/types/ProblemTypes';
 import dummyResults from '@/mock/dummyResults.json';
 import RadarChart from '@/components/problem/result/radarChart';
 import { formatTime } from '@/utils/problem/result';
+import { RootState } from '@/store';
+import LevelUpModal from '@/components/problem/result/levelUpModal';
 import styles from './testResult.module.css';
+import { resetLevel } from '@/store/levelupSlice';
 
 interface ApiResponse {
   totalCorrectCount: number;
@@ -17,6 +22,7 @@ interface ApiResponse {
 }
 
 export default function TestResult() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 추가
   const [, setTotalCorrectCount] = useState<number | null>(null);
   const [totalSolvedTime, setTotalSolvedTime] = useState<number | null>(null);
@@ -26,16 +32,28 @@ export default function TestResult() {
   const [problemList, setProblemList] = useState<SolvedProblem[]>([]);
   const [acquiredScore, setAcquiredScore] = useState<number | null>(null);
   const [totalScore, setTotalScore] = useState<number | null>(null);
-  const [, setIsStageUp] = useState<boolean>(false);
-  const [, setStageUpUrl] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { level, levelImage, isLeveledUp } = useSelector(
+    (state: RootState) => state.levelup,
+  );
+  useEffect(() => {
+    // 레벨업이 되었을 때 모달을 열기
+    if (isLeveledUp) {
+      setIsModalOpen(true);
+    }
+  }, [isLeveledUp]);
 
+  const handleLevelUpModalClose = () => {
+    setIsModalOpen(false);
+    dispatch(resetLevel());
+  };
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
       const response: ApiResponse = await new Promise((resolve) => {
         setTimeout(() => {
           return resolve(dummyResults);
-        }, 1000);
+        }, 0);
       });
 
       setTotalCorrectCount(response.totalCorrectCount);
@@ -44,8 +62,8 @@ export default function TestResult() {
       setProblemList(response.problemList);
       setAcquiredScore(response.acquiredScore);
       setTotalScore(response.totalScore);
-      setIsStageUp(response.isStageUp);
-      setStageUpUrl(response.stageUpUrl);
+      // setIsStageUp(response.isStageUp);
+      // setStageUpUrl(response.stageUpUrl);
       setLoading(false); // 데이터가 다 로드되면 로딩 상태를 false로 설정
     };
 
@@ -73,6 +91,20 @@ export default function TestResult() {
 
   return (
     <div className={styles.container}>
+      {/* 레벨업 모달 */}
+      <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
+        <div className={styles.levelUp}>
+          <h2 className={styles['levelUp-title']}>LV. {level}</h2>
+          <Image
+            className={styles['levelUp-image']}
+            src={levelImage}
+            alt="레벨업 이미지"
+            width={300}
+            height={356}
+          />
+        </div>
+      </LevelUpModal>
+
       {/* 테스트 결과 해설 */}
       <h2 className={styles['page-title']}>테스트 결과</h2>
       <div className={styles['result-container']}>

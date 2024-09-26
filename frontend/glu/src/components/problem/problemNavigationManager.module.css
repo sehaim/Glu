@@ -50,6 +50,16 @@
   color: var(--PINK);
 }
 
+.solve {
+  color: var(--GREEN);
+  font-size: 18px;
+}
+
+.solve-not {
+  color: var(--GRAY);
+  font-size: 18px;
+}
+
 @media (max-width: 1200px) {
   .container {
     width: 120px;

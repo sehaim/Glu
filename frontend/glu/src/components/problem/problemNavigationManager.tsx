@@ -1,3 +1,5 @@
+import { FaCheck } from 'react-icons/fa';
+import { LuDot } from 'react-icons/lu';
 import styles from './problemNavigationManager.module.css'; // 새로운 CSS 파일로 스타일을 분리
 
 interface ProblemAnswer {
@@ -44,7 +46,11 @@ export default function ProblemSolvedNavigation({
           >
             <p className={styles['solved-button-number']}>{index + 1}번</p>
             <p className={styles['solved-button-status']}>
-              {answer.userAnswer !== '' ? '✅' : '❌'}
+              {answer.userAnswer !== '' ? (
+                <FaCheck className={styles.solve} />
+              ) : (
+                <LuDot className={styles['solve-not']} />
+              )}
             </p>
           </button>
         ))}

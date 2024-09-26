@@ -169,6 +169,20 @@
   margin-bottom: 12px;
 }
 
+.levelUp {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.levelUp-title {
+  font-family: 'BMJUA';
+  font-size: 28px;
+  color: var(--PINK);
+}
+
 @media (max-width: 1200px) {
   .page-title {
     width: 960px;

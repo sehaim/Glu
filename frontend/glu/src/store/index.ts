@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
+import levelupReducer from './levelupSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    levelup: levelupReducer,
   },
 });
 
