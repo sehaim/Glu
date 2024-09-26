@@ -17,6 +17,8 @@ import {
   putProblemMemo as putProblemMemoAPI,
 } from '@/utils/problem/memo';
 import ProblemInputField from '@/components/problem/problemInputField';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import throttle from 'lodash/throttle';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -37,6 +39,24 @@ export default function Test() {
   const currentProblem = problems[currentProblemIndex];
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
+
+  useEffect(() => {
+    const handleResize = throttle(() => {
+      setIsMobile(window.innerWidth < 1024);
+    }, 300); // 0.3초 간격으로 이벤트 처리
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      handleResize(); // 초기 사이즈 체크
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+
+    return () => {};
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -177,11 +197,20 @@ export default function Test() {
   return (
     <div className={styles.container}>
       <div className={styles['problem-container']}>
-        <ProblemSolvedNavigation
-          answers={answers}
-          currentProblemIndex={currentProblemIndex}
-          onProblemIndexChange={handlProblemIndex}
-        />
+        <div
+          className={styles['problem-navigation']}
+          style={{
+            position: isMobile ? 'static' : 'sticky',
+            top: '60px',
+            zIndex: 10,
+          }}
+        >
+          <ProblemSolvedNavigation
+            answers={answers}
+            currentProblemIndex={currentProblemIndex}
+            onProblemIndexChange={handlProblemIndex}
+          />
+        </div>
 
         {currentProblem && (
           <div className={styles.problem}>
@@ -243,12 +272,21 @@ export default function Test() {
                 />
               )}
             </div>
+            <ProblemProgressBar progressPercentage={progressPercentage} />
           </div>
         )}
 
-        <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
+        <div
+          className={styles['problem-memo']}
+          style={{
+            position: isMobile ? 'static' : 'sticky',
+            top: '60px',
+            zIndex: 10,
+          }}
+        >
+          <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
+        </div>
       </div>
-      <ProblemProgressBar progressPercentage={progressPercentage} />
     </div>
   );
 }
