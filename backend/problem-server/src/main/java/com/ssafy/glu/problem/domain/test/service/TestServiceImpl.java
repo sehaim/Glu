@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.exception.log.UserProblemLogNotFoundException;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TestServiceImpl implements TestService {
 	private final TestRepository testRepository;
 	private final ProblemRepository problemRepository;
+	private final UserProblemLogRepository userProblemLogRepository;
 	private final UserService userService;
 	private final ProblemGradingServiceImpl problemGradingServiceImpl;
 	private final ProblemSolvedEventPublisher problemSolvedEventPublisher;
@@ -73,7 +77,8 @@ public class TestServiceImpl implements TestService {
 
 	@Override
 	public Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable) {
-		return null;
+		Page<Test> testList = testRepository.findByUserId(userId, pageable);
+		return testList.map((test)-> TestGradingDetailResponse.of(test,userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
 	}
 
 	private List<ProblemGradingResultResponse> gradeProblems(Long userId, String testId, UserResponse user,
@@ -110,7 +115,7 @@ public class TestServiceImpl implements TestService {
 
 				return TypeGradingResultResponse.builder()
 					.correctCount(correctCount)
-					.problemTypeCode(CommonCodeResponse.of(problemTypeCode))
+					.problemType(CommonCodeResponse.of(problemTypeCode))
 					.acquiredScore(totalAcquiredScore)
 					.totalScore(totalScore)
 					.build();

@@ -73,8 +73,8 @@ public enum ErrorCode {
 
 	EVENT_DATE_CREATION_FAILED(500, "EVENT_DATE_CREATION_FAILED", "이벤트 객체 생성에 실패하였습니다."),
 
-	USER_PROBLEM_STATUS_NOT_FOUND(404, "USER_PROBLEM_STATUS_NOT_FOUND", "문제 풀이 상태를 찾을 수 없습니다.");
-
+	USER_PROBLEM_STATUS_NOT_FOUND(404, "USER_PROBLEM_STATUS_NOT_FOUND", "문제 풀이 상태를 찾을 수 없습니다."),
+	USER_PROBLEM_LOG_NOT_FOUND(404, "USER_PROBLEM_LOG_NOT_FOUND", "문제 풀이 기록을 찾을 수 없습니다.");
 
 	private final int httpStatus;
 	private final String code;
