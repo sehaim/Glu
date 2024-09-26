@@ -42,6 +42,15 @@ export default function ProblemOptionList({
     }
   };
 
+  // 이미지 소스 검증 후 에러 처리
+  const getImageSrc = (option: string) => {
+    if (option.startsWith('/images/')) {
+      return option;
+    }
+
+    return '/images/glu_character_shadow.png';
+  };
+
   return (
     <div className={styles['problem-option-list']}>
       {options?.map((option, index) => (
@@ -59,7 +68,7 @@ export default function ProblemOptionList({
         >
           <div className={styles['problem-option-number']}>{index + 1}</div>
           <Image
-            src={option.imageUrl || '/images/glu_character_shadow.png'}
+            src={getImageSrc(option.option)}
             alt={`Option ${index + 1}`}
             width={100} // 적절한 width 설정
             height={100} // 적절한 height 설정

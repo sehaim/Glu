@@ -7,8 +7,8 @@ import RadarChart from '@/components/problem/result/radarChart';
 import { formatTime } from '@/utils/problem/result';
 import { RootState } from '@/store';
 import LevelUpModal from '@/components/problem/result/levelUpModal';
-import styles from './testResult.module.css';
 import { resetLevel } from '@/store/levelupSlice';
+import styles from './testResult.module.css';
 
 interface ApiResponse {
   totalCorrectCount: number;

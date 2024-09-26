@@ -8,9 +8,14 @@ import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
-import { postSingleProblemGrading } from '@/utils/problem/problem';
+import {
+  getSingleProblemAPI,
+  postSingleProblemGradingAPI,
+} from '@/utils/problem/problem';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
+import { GetServerSideProps } from 'next';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -23,22 +28,34 @@ interface ProblemResponse {
   problemType: ProblemType;
 }
 
-// getServerSideProps를 이용하여 SSR로 데이터 가져오기
-export async function getServerSideProps() {
-  // 서버에서 데이터를 가져오는 로직
-  const problemData: ProblemResponse = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(dummyImageProblem);
-    }, 1000);
-  });
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { Id } = context.query; // URL에서 problemId 가져오기
 
-  // 가져온 데이터를 props로 넘겨서 SSR로 렌더링
-  return {
-    props: {
-      problemData,
-    },
-  };
-}
+  try {
+    // 단일 문제 API 호출
+    const problemData = await getSingleProblemAPI(context, Number(Id));
+
+    // problemData가 없으면 404 처리
+    if (!problemData) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        problemData,
+      },
+    };
+  } catch (error) {
+    // 에러가 발생하면 더미 데이터를 반환
+    return {
+      props: {
+        problemData: dummyImageProblem,
+      },
+    };
+  }
+};
 
 interface TestProps {
   problemData: ProblemResponse;
@@ -88,7 +105,7 @@ export default function Test({ problemData }: TestProps) {
     if (problem) {
       try {
         // Call the postSingleProblemGrading function to submit the answer and time
-        const response = await postSingleProblemGrading(
+        const response = await postSingleProblemGradingAPI(
           problem.problemId,
           answer,
           timeTaken,
