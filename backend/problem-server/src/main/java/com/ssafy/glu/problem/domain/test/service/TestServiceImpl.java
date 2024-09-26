@@ -45,9 +45,17 @@ public class TestServiceImpl implements TestService {
 	public TestGradingResponse gradeTest(Long userId, TestSolveRequest request) {
 		UserResponse user = userService.getUser(userId);
 
+		// 테스트 만들기
+		Test test = Test.builder()
+			.userId(userId)
+			.totalSolveTime(request.totalSolvedTime())
+			.build();
+		testRepository.save(test);
+
 		// 문제별 채점 수행 및 결과 리스트 생성
 		List<GradeResult> gradeResultList = new ArrayList<>();
-		List<ProblemGradingResultResponse> gradingResultByProblemList = gradeProblems(userId, user, request,
+		List<ProblemGradingResultResponse> gradingResultByProblemList = gradeProblems(userId, test.getTestId(), user,
+			request,
 			gradeResultList);
 
 		// 경험치 업데이트 및 응답 처리
@@ -56,14 +64,12 @@ public class TestServiceImpl implements TestService {
 		// 유형별 채점 결과 생성
 		List<TypeGradingResultResponse> gradingResultByTypeList = createTypeGradingResultList(gradeResultList);
 
-		// Test 객체 생성 및 저장
-		Test test = createAndSaveTest(userId, request, gradeResultList);
-
 		// 최종 응답 생성
 		return createTestGradingResponse(test, gradingResultByTypeList, gradingResultByProblemList, expUpdateResponse);
 	}
 
-	private List<ProblemGradingResultResponse> gradeProblems(Long userId, UserResponse user, TestSolveRequest request,
+	private List<ProblemGradingResultResponse> gradeProblems(Long userId, String testId, UserResponse user,
+		TestSolveRequest request,
 		List<GradeResult> gradeResultList) {
 		List<ProblemGradingResultResponse> gradingResultByProblemList = new ArrayList<>();
 		for (ProblemSolveRequest problemSolveRequest : request.problemSolveRequestList()) {
@@ -76,7 +82,7 @@ public class TestServiceImpl implements TestService {
 				ProblemGradingResultResponse.of(problem, gradeResult.isCorrect(), problemSolveRequest)
 			);
 
-			problemSolvedEventPublisher.publish(userId, problem, gradeResult, problemSolveRequest);
+			problemSolvedEventPublisher.publish(userId, testId, problem, gradeResult, problemSolveRequest);
 		}
 		return gradingResultByProblemList;
 	}
@@ -103,20 +109,6 @@ public class TestServiceImpl implements TestService {
 			}).collect(Collectors.toList());
 	}
 
-	private Test createAndSaveTest(Long userId, TestSolveRequest request, List<GradeResult> gradeResultList) {
-		Test test = Test.builder()
-			.correctCount((int)gradeResultList.stream().filter(GradeResult::isCorrect).count())
-			.totalSolveTime(request.totalSolvedTime())
-			.userId(userId)
-			.userProblemLogIdList(gradeResultList.stream()
-				.map(GradeResult::problemTypeCode)
-				.map(ProblemTypeCode::name)
-				.collect(Collectors.toList()))
-			.build();
-
-		return testRepository.save(test);
-	}
-
 	private TestGradingResponse createTestGradingResponse(
 		Test test,
 		List<TypeGradingResultResponse> gradingResultByTypeList,
@@ -125,7 +117,8 @@ public class TestServiceImpl implements TestService {
 
 		return TestGradingResponse.builder()
 			.testId(test.getTestId())
-			.totalCorrectCount(test.getCorrectCount())
+			.totalCorrectCount(
+				(int)gradingResultByProblemList.stream().filter(ProblemGradingResultResponse::isCorrect).count())
 			.totalSolvedTime(test.getTotalSolveTime())
 			.gradingResultByTypeList(gradingResultByTypeList)
 			.gradingResultByProblemList(gradingResultByProblemList)

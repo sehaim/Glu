@@ -15,13 +15,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProblemSolvedEventPublisher {
 
-    private final KafkaTemplate<String, ProblemSolvedEvent> kafkaTemplate;
+	private final KafkaTemplate<String, ProblemSolvedEvent> kafkaTemplate;
 
-    @Value("${kafka.topic.problem-solved}")
-    private String problemSolvedTopic;
+	@Value("${kafka.topic.problem-solved}")
+	private String problemSolvedTopic;
 
-    public void publish(Long userId, Problem problem, GradeResult gradeResult, ProblemSolveRequest request) {
-        ProblemSolvedEvent event = ProblemSolvedEvent.of(userId,problem,gradeResult,request);
-        kafkaTemplate.send(problemSolvedTopic, event);
-    }
+	public void publish(Long userId, Problem problem, GradeResult gradeResult, ProblemSolveRequest request) {
+		ProblemSolvedEvent event = ProblemSolvedEvent.of(userId, problem, gradeResult, request);
+		kafkaTemplate.send(problemSolvedTopic, event);
+	}
+
+	public void publish(Long userId, String testId, Problem problem, GradeResult gradeResult,
+		ProblemSolveRequest request) {
+		ProblemSolvedEvent event = ProblemSolvedEvent.of(userId, testId, problem, gradeResult, request);
+		kafkaTemplate.send(problemSolvedTopic, event);
+	}
 }

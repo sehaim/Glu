@@ -4,12 +4,15 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
 import com.ssafy.glu.problem.domain.problem.dto.event.ProblemSolvedEvent;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
+import com.ssafy.glu.problem.domain.test.domain.Test;
+import com.ssafy.glu.problem.domain.test.repository.TestRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +25,24 @@ public class ProblemSolvedEventConsumer {
 	private final UserProblemLogRepository userProblemLogRepository;
 	private final UserProblemStatusRepository userProblemStatusRepository;
 	private final ProblemRepository problemRepository;
+	private final TestRepository testRepository;
 
 	@KafkaListener(topics = "${kafka.topic.problem-solved}", groupId = "${kafka.consumer.group-id.user-problem-log}")
 	public void consumeProblemSolvedEventForLog(ProblemSolvedEvent event) {
 		log.info("[Kafka] 문제 풀이 기록 저장, event : {}", event);
 		Problem problem = getProblemOrThrow(event.problemId());
-		saveUserProblemLog(event, problem);
+
+		UserProblemLog userProblemLog = saveUserProblemLog(event, problem);
+
+		if (event.testId() != null) {
+			// 테스트 찾기
+			Test test = testRepository.findById(event.testId()).orElseThrow();
+
+			// 테스트에 log 저장
+			test.updateUserProblemLogIdList(userProblemLog);
+
+			testRepository.save(test);
+		}
 	}
 
 	@KafkaListener(topics = "${kafka.topic.problem-solved}", groupId = "${kafka.consumer.group-id.user-problem-status}")
@@ -41,8 +56,8 @@ public class ProblemSolvedEventConsumer {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
-	private void saveUserProblemLog(ProblemSolvedEvent event, Problem problem) {
-		userProblemLogRepository.save(event.toProblemLog(problem));
+	private UserProblemLog saveUserProblemLog(ProblemSolvedEvent event, Problem problem) {
+		return userProblemLogRepository.save(event.toProblemLog(problem));
 	}
 
 	private void updateUserProblemStatus(ProblemSolvedEvent event, Problem problem) {
