@@ -5,7 +5,6 @@ import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
-import ProblemContentImage from '@/components/problem/problemContentImage';
 import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
@@ -14,9 +13,9 @@ import {
   postProblemMemo as postProblemMemoAPI,
   putProblemMemo as putProblemMemoAPI,
 } from '@/utils/problem/memo';
-import ProblemInputField from '@/components/problem/problemInputField';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
+import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import styles from './testProblems.module.css';
 
 export async function getServerSideProps() {
@@ -46,7 +45,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const router = useRouter();
   const PROBLEM_COUNT = 15; // 문제 개수 고정
   const [problems] = useState<Problem[]>(
-    initialProblems?.slice(0, PROBLEM_COUNT) || [], // Provide a fallback to an empty array if initialProblems is null/undefined
+    initialProblems?.slice(0, PROBLEM_COUNT) || [],
   );
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
@@ -57,9 +56,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [memoList, setMemoList] = useState<Memo[]>(
-    initialMemoList || [], // Fallback to an empty array if initialMemoList is null/undefined
-  );
+  const [memoList, setMemoList] = useState<Memo[]>(initialMemoList || []);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [loading] = useState(false);
 
@@ -229,19 +226,12 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
               problemLike={false}
             />
             <div className={styles['problem-content']}>
+              <ProblemContentText problemContent={currentProblem?.content} />
               {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
-                <ProblemContentImage
-                  imageUrl={currentProblem?.content}
-                  altText={currentProblem?.title || '문제 이미지'}
-                />
-              )}
-              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
-                <ProblemContentText problemContent={currentProblem?.content} />
-              )}
-              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
-                <ProblemInputField
-                  initialAnswer={answers[currentProblemIndex]?.userAnswer}
+                <ProblemImageOptionList
+                  selectedOption={answers[currentProblemIndex]?.userAnswer}
                   problemIndex={currentProblemIndex}
+                  problemOptions={currentProblem?.problemOptions}
                   onTestProblemAnswer={handleAnswer}
                 />
               )}

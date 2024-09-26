@@ -1,4 +1,5 @@
 export interface ProblemOption {
+  imageUrl: string;
   problemOptionId: number;
   option: string;
 }
