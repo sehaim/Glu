@@ -5,19 +5,19 @@
   "problemOptions": [
     {
       "problemOptionId": 1,
-      "option": "12"
+      "option": "/images/glu_character_shadow.png"
     },
     {
       "problemOptionId": 2,
-      "option": "17"
+      "option": "/images/glu_character_shadow.png"
     },
     {
       "problemOptionId": 3,
-      "option": "20"
+      "option": "/images/glu_character_shadow.png"
     },
     {
       "problemOptionId": 4,
-      "option": "25"
+      "option": "/images/glu_character_shadow.png"
     }
   ],
   "solution": "17",
