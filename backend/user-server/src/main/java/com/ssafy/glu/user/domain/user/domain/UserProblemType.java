@@ -47,7 +47,7 @@ public class UserProblemType extends BaseTimeEntity {
 	}
 
 	public Integer getLevel() {
-		return Math.max((score / 100), 6);
+		return Math.min(Math.max((score / 100), 0), 6) + 1;
 	}
 
 	public Integer getScore() {

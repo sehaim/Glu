@@ -65,6 +65,10 @@ public class Users extends BaseTimeEntity {
 		return this.stage;
 	}
 
+	public Integer getStage() {
+		return stage + 1;
+	}
+
 	public void updateDayCount() {
 		this.dayCount++;
 	}
