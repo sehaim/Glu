@@ -35,3 +35,10 @@ export interface MypageUser {
     };
   }[];
 }
+
+export interface Attendance {
+  date: string;
+  totalSolvedProblemCnt: number;
+}
+
+export type Attendances = Attendance[];

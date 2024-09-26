@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
 import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
+import { Attendances } from '@/types/UserTypes';
 import {
   format,
   endOfMonth,
@@ -12,16 +11,20 @@ import {
   startOfWeek,
   addDays,
   isSameDay,
+  parseISO,
 } from 'date-fns';
+import Image from 'next/image';
 import styles from './mytestAttendance.module.css';
 import BarGraph from '../common/graphs/barGraph';
 
 interface MytestAttendanceProps {
-  attendance: any | null;
+  attendanceRate: number;
+  attendances: Attendances | null;
 }
 
 export default function MytestAttendance({
-  attendance,
+  attendanceRate,
+  attendances,
 }: MytestAttendanceProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
@@ -58,54 +61,78 @@ export default function MytestAttendance({
     );
   };
 
+  // attendances 배열에 날짜가 존재하는지 확인하는 함수
+  const hasAttendance = (day: Date) => {
+    if (attendances) {
+      return attendances.some((attendance) =>
+        isSameDay(parseISO(attendance.date), day),
+      );
+    }
+    return false;
+  };
+
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
   return (
     <div className={styles.container}>
-      <div className={styles['container-header']}>
-        <div className={styles['container-name']}>출석율</div>
-        <BarGraph maxScore={100} currentScore={50} isPercentage />
-      </div>
-      <div className={styles['calendar-container']}>
-        <div className={styles['calendar-header']}>
-          <BsCaretLeftFill
-            size={35}
-            onClick={handlePreviousMonth}
-            className={styles['calendar-button']}
-          />
-          <span>
-            {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
-          </span>
-          <BsCaretRightFill
-            size={35}
-            onClick={
-              !isSameMonth(currentDate, today) ? handleNextMonth : undefined
-            }
-            className={`${styles['calendar-button']} ${isSameMonth(currentDate, today) ? styles['button-enabled'] : ''}`}
-          />
+      <div className={styles.section}>
+        <div className={styles['container-header']}>
+          <div className={styles['section-name']}>출석율</div>
+          <BarGraph maxScore={100} currentScore={attendanceRate} isPercentage />
         </div>
-        <div className={styles['calendar-grid']}>
-          {daysOfWeek.map((day) => (
-            <div key={day} className={styles['calendar-day-header']}>
-              {day}
-            </div>
-          ))}
-          {generateCalendar(currentDate).map((day, index) => {
-            return (
-              <div
-                key={index}
-                className={`${styles['day-container']} ${isSameDay(day, today) && styles.today}`}
-              >
-                <div
-                  className={`${styles['calendar-day']} ${
-                    !isSameMonth(day, currentDate) && styles['other-month-day']
-                  } `}
-                >
-                  {format(day, 'd')}
-                </div>
+        <div className={styles['calendar-container']}>
+          <div className={styles['calendar-header']}>
+            <BsCaretLeftFill
+              size={35}
+              onClick={handlePreviousMonth}
+              className={styles['calendar-button']}
+            />
+            <span>
+              {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
+            </span>
+            <BsCaretRightFill
+              size={35}
+              onClick={
+                !isSameMonth(currentDate, today) ? handleNextMonth : undefined
+              }
+              className={`${styles['calendar-button']} ${isSameMonth(currentDate, today) ? styles['button-enabled'] : ''}`}
+            />
+          </div>
+          <div className={styles['calendar-grid']}>
+            {daysOfWeek.map((day) => (
+              <div key={day} className={styles['calendar-day-header']}>
+                {day}
               </div>
-            );
-          })}
+            ))}
+            {generateCalendar(currentDate).map((day, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`${styles['day-container']} ${isSameDay(day, today) && styles.today}`}
+                >
+                  <div
+                    className={`${styles['calendar-day']} ${
+                      !isSameMonth(day, currentDate) &&
+                      styles['other-month-day']
+                    } `}
+                  >
+                    {format(day, 'd')}
+                  </div>
+                  {hasAttendance(day) && (
+                    <Image
+                      src="/images/glu_character_shadow.png"
+                      alt="attendance mark"
+                      className={styles['attendance-icon']}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
+      </div>
+      <div className={styles.section}>
+        <div className={styles['section-name']}>나의 테스트 기록</div>
+        <div className={styles['test-list']}>테스트 기록</div>
       </div>
     </div>
   );

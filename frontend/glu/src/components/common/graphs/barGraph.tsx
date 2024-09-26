@@ -29,7 +29,7 @@ export default function ExperienceBar({
     return () => clearInterval(interval);
   }, [currentScore]);
 
-  const progress = (score / maxScore) * 100;
+  const progress = (score / maxScore) * 100; // 최소 1% 너비 유지
 
   return (
     <div className={styles.bar}>

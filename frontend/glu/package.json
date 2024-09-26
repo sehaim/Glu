@@ -16,6 +16,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.4",
     "cookies-next": "^4.2.1",
+    "d3": "^7.9.0",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",
+    "@types/d3": "^7.4.3",
     "@types/lodash": "^4.17.9",
     "@types/node": "^20",
     "@types/react": "^18",

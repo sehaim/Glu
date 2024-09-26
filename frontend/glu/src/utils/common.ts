@@ -14,6 +14,7 @@ export const refreshUserAPI = async (context?: {
   res: ServerResponse;
 }): Promise<string | null> => {
   try {
+    console.log('리이슈 에러'); // 추후 수정
     const res = await defaultAxios.post(`auth/reissue`);
     const newToken: string = res.data.accessToken;
     return newToken;
