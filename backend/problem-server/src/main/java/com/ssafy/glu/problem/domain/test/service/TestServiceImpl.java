@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.service.ProblemGradingServiceImpl;
 import com.ssafy.glu.problem.domain.test.domain.Test;
 import com.ssafy.glu.problem.domain.test.dto.request.TestSolveRequest;
+import com.ssafy.glu.problem.domain.test.dto.response.TestGradingDetailResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
 import com.ssafy.glu.problem.domain.test.repository.TestRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
@@ -66,6 +69,11 @@ public class TestServiceImpl implements TestService {
 
 		// 최종 응답 생성
 		return createTestGradingResponse(test, gradingResultByTypeList, gradingResultByProblemList, expUpdateResponse);
+	}
+
+	@Override
+	public Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable) {
+		return null;
 	}
 
 	private List<ProblemGradingResultResponse> gradeProblems(Long userId, String testId, UserResponse user,
