@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 820px;
+  width: 780px;
 }
 
 .status-container {
@@ -47,10 +47,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('/images/problem/cloud.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left center;
   width: 160px;
   height: 120px;
   padding: 4px;
@@ -62,7 +58,13 @@
   z-index: 2;
 }
 
+.problem-type-image {
+  position: absolute;
+  z-index: 1;
+}
+
 .problem-type-text {
+  z-index: 2; /* 텍스트가 이미지 위에 위치하도록 설정 */
   background: radial-gradient(
     circle,
     var(--SKYBLUE) 30%,
@@ -118,7 +120,7 @@
   .problem-type {
     width: 140px;
     height: 108px;
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .problem-title {

@@ -37,12 +37,13 @@
   font-size: 14px;
 }
 
-.problem-option-text {
+.problem-option-image {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   color: var(--TEXT_SECONDARY);
   width: calc(100% - 42px);
+  height: auto;
   font-family: 'PT';
   font-size: 16px;
 }

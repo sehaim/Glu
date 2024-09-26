@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 160px;
+  width: 180px;
 }
 
 .container-title {
@@ -17,9 +17,10 @@
 .solved-button-list {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  width: 120px;
+  width: 132px;
+  padding: 10px 0px;
   background-color: var(--WHITE);
   color: var(--TEXT_SECONDARY);
   border: none;

@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dummyImageProblem from '@/mock/dummyImageProblem.json';
 import { ProblemLevel, ProblemOption, ProblemType } from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemContentText from '@/components/problem/problemContentText';
-import ProblemContentImage from '@/components/problem/problemContentImage';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
-import ProblemInputField from '@/components/problem/problemInputField';
 import { postSingleProblemGrading } from '@/utils/problem/problem';
+import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import throttle from 'lodash/throttle';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -49,6 +49,7 @@ export default function Test({ problemData }: TestProps) {
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
 
   const [memoList, setMemoList] = useState<Memo[]>([
     { memoId: 1, content: 'This is the first memo content.' },
@@ -56,6 +57,23 @@ export default function Test({ problemData }: TestProps) {
     { memoId: 3, content: 'This is the third memo content.' },
     { memoId: 4, content: 'This is the fourth memo content.' },
   ]);
+
+  useEffect(() => {
+    const handleResize = throttle(() => {
+      setIsMobile(window.innerWidth < 1024);
+    }, 300); // 0.3초 간격으로 이벤트 처리
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      handleResize(); // 초기 사이즈 체크
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+
+    return () => {};
+  }, []);
 
   const handleAnswer = (userAnswer: string) => {
     setAnswer(userAnswer);
@@ -111,18 +129,11 @@ export default function Test({ problemData }: TestProps) {
             problemLike={false}
           />
           <div className={styles['problem-content']}>
+            <ProblemContentText problemContent={problem.content} />
             {problem.problemType?.problemTypeDetailCode === '0' && (
-              <ProblemContentImage
-                imageUrl={problem.content}
-                altText={problem.title || '문제 이미지'}
-              />
-            )}
-            {problem.problemType?.problemTypeDetailCode !== '0' && (
-              <ProblemContentText problemContent={problem.content} />
-            )}
-            {problem.problemType?.problemTypeDetailCode === '0' && (
-              <ProblemInputField
-                initialAnswer={answer}
+              <ProblemImageOptionList
+                problemOptions={problem.problemOptions}
+                selectedOption={answer}
                 onSingleProblemAnswer={handleAnswer}
               />
             )}
@@ -143,7 +154,16 @@ export default function Test({ problemData }: TestProps) {
             />
           </div>
         </div>
-        <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
+        <div
+          className={styles['problem-memo']}
+          style={{
+            position: isMobile ? 'static' : 'sticky',
+            top: '60px',
+            zIndex: 10,
+          }}
+        >
+          <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
+        </div>
       </div>
     </div>
   );

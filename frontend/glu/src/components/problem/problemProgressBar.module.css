@@ -1,7 +1,7 @@
 .progressbar-container {
   position: relative;
   padding-right: 0px 50px;
-  width: 820px;
+  width: 780px;
   background: linear-gradient(
     to bottom,
     var(--YELLOW) 70%,
