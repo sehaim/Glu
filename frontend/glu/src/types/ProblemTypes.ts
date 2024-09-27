@@ -44,7 +44,7 @@ export interface SolvedProblem {
   content: string;
   problemOptions: ProblemOption[];
   isCorrect: boolean;
-  userAnswer: number;
+  userAnswer: string;
   solution: string;
   solveTime: number;
 }

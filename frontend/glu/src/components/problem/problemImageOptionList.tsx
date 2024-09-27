@@ -24,7 +24,9 @@ export default function ProblemOptionList({
     setOptions(problemOptions);
   }, [problemOptions]);
 
-  const handleOptionClick = (userAnswer: string) => {
+  const handleOptionClick = (userAnswer: string | null | undefined) => {
+    if (!userAnswer) return; // Null 또는 undefined 체크
+
     // Test 문제 풀이
     if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
       onTestProblemAnswer(problemIndex, userAnswer);
@@ -36,15 +38,19 @@ export default function ProblemOptionList({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent, userAnswer: string) => {
+  const handleKeyDown = (
+    event: React.KeyboardEvent,
+    userAnswer: string | null | undefined,
+  ) => {
+    if (!userAnswer) return; // Null 또는 undefined 체크
     if (event.key === 'Enter' || event.key === ' ') {
       handleOptionClick(userAnswer); // Enter나 Space를 누르면 옵션 선택
     }
   };
 
   // 이미지 소스 검증 후 에러 처리
-  const getImageSrc = (option: string) => {
-    if (option.startsWith('/images/')) {
+  const getImageSrc = (option: string | null | undefined) => {
+    if (option?.startsWith('/images/')) {
       return option;
     }
 
