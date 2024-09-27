@@ -1,43 +1,45 @@
-from datetime import date
+from pydantic import BaseModel, Field, validator
+from typing import List, Optional
+from datetime import datetime
+from bson import ObjectId
 
-from pydantic import BaseModel
-from typing import List
+class PydanticObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
 
-class ProblemOption(BaseModel):
-    problemOptionId: int
-    option: str
+    @classmethod
+    def validate(cls, v, values, field):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid ObjectId")
+        return ObjectId(v)
 
-class ProblemLevel(BaseModel):
-    problemLevelCode: str
-    name: str
 
-class ProblemType(BaseModel):
-    problemTypeCode: str
-    problemTypeDetailCode: str
-    name: str
+class Metadata(BaseModel):
+    options: List[str]
 
 class Problem(BaseModel):
-    problemId: int
+    id: PydanticObjectId = Field(alias="_id")
     title: str
     content: str
-    problemOptions: List[ProblemOption]
+    answer: int
     solution: str
-    problemLevel: ProblemLevel
-    problemType: ProblemType
-
-class ProblemsResponse(BaseModel):
-    problems: List[Problem]
-
-class UserResponse(BaseModel):
-    user_id: int
-    login_id: str
-    nickname: str
-    password: str
-    birth: date
-    is_deleted: bool
-    stage: int
-    exp: int
-    day_count: int
+    word_count: int
+    word_avg: int
+    word_hard: int
+    length: int
+    classification: int
+    questionTypeCode: str
+    problemLevelCode: str
+    problemTypeCode: str
+    problemTypeDetailCode: str
+    metadata: Metadata
+    vector: List[int]
+    createdDate: datetime
+    modifiedDate: datetime
 
     class Config:
-        from_attributes = True
+        allow_population_by_field_name = True
+        json_encoders = {
+            ObjectId: str
+        }

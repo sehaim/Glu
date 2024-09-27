@@ -5,6 +5,9 @@ from db import mongo_db
 problem_collection = mongo_db['problem']
 user_problem_status_collection = mongo_db['userProblemStatus']
 
+def get_one_problem():
+    return problem_collection.find_one()
+
 def get_all_problems():
     # 모든 문제를 리스트로 변환하여 반환
     return list(problem_collection.find())
