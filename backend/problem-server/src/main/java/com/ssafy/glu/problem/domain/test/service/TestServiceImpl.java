@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+import com.ssafy.glu.problem.domain.problem.exception.log.UserProblemLogNotFoundException;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +26,7 @@ import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
 import com.ssafy.glu.problem.domain.problem.service.ProblemGradingServiceImpl;
 import com.ssafy.glu.problem.domain.test.domain.Test;
 import com.ssafy.glu.problem.domain.test.dto.request.TestSolveRequest;
+import com.ssafy.glu.problem.domain.test.dto.response.TestGradingDetailResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
 import com.ssafy.glu.problem.domain.test.repository.TestRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
@@ -37,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TestServiceImpl implements TestService {
 	private final TestRepository testRepository;
 	private final ProblemRepository problemRepository;
+	private final UserProblemLogRepository userProblemLogRepository;
 	private final UserService userService;
 	private final ProblemGradingServiceImpl problemGradingServiceImpl;
 	private final ProblemSolvedEventPublisher problemSolvedEventPublisher;
@@ -66,6 +73,12 @@ public class TestServiceImpl implements TestService {
 
 		// 최종 응답 생성
 		return createTestGradingResponse(test, gradingResultByTypeList, gradingResultByProblemList, expUpdateResponse);
+	}
+
+	@Override
+	public Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable) {
+		Page<Test> testList = testRepository.findByUserId(userId, pageable);
+		return testList.map((test)-> TestGradingDetailResponse.of(test,userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
 	}
 
 	private List<ProblemGradingResultResponse> gradeProblems(Long userId, String testId, UserResponse user,
@@ -102,7 +115,7 @@ public class TestServiceImpl implements TestService {
 
 				return TypeGradingResultResponse.builder()
 					.correctCount(correctCount)
-					.problemTypeCode(CommonCodeResponse.of(problemTypeCode))
+					.problemType(CommonCodeResponse.of(problemTypeCode))
 					.acquiredScore(totalAcquiredScore)
 					.totalScore(totalScore)
 					.build();
