@@ -72,7 +72,27 @@ export const createAuthAxios = (context?: {
               Authorization: `Bearer ${newToken}`, // 새로운 토큰 설정
             },
           };
-
+          // 나중에 삭제
+          setCookie(
+            'accessToken',
+            newToken,
+            context
+              ? {
+                  req: context.req,
+                  res: context.res,
+                  maxAge: 60 * 60 * 24 * 14,
+                  domain: 'j11a506.p.ssafy.io',
+                  sameSite: 'none',
+                  path: '/',
+                }
+              : {
+                  maxAge: 60 * 60 * 24 * 14,
+                  domain: 'j11a506.p.ssafy.io',
+                  sameSite: 'none',
+                  path: '/',
+                },
+          );
+          // 나중에 수정
           setCookie(
             'accessToken',
             newToken,
@@ -83,7 +103,10 @@ export const createAuthAxios = (context?: {
                   maxAge: 60 * 60 * 24 * 14,
                   path: '/',
                 }
-              : { maxAge: 60 * 60 * 24 * 14, path: '/' },
+              : {
+                  maxAge: 60 * 60 * 24 * 14,
+                  path: '/',
+                },
           );
 
           return axios(updatedConfig); // 요청 재시도

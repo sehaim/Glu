@@ -7,6 +7,15 @@ import { createAuthAxios, defaultAxios } from '../common';
 export const loginAPI = async (data: LoginUser) => {
   try {
     const res = await defaultAxios.post(`auth/login`, data);
+    // 나중에 수정
+    setCookie('accessToken', res.headers.accesstoken, {
+      maxAge: 60 * 60 * 24 * 14,
+      domain: 'j11a506.p.ssafy.io',
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
+    // 나중에 삭제
     setCookie('accessToken', res.headers.accesstoken, {
       maxAge: 60 * 60 * 24 * 14,
       path: '/',
