@@ -9,6 +9,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.TypeGradingResultRespon
 import com.ssafy.glu.problem.domain.test.domain.Test;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public record TestGradingDetailResponse (
     String testId,
     Integer totalCorrectCount,
     Integer totalSolvedTime,
+    LocalDateTime createdDate,
 
     List<TypeGradingResultResponse> gradingResultByTypeList,
     List<ProblemGradingResultResponse> gradingResultByProblemList
@@ -29,6 +31,7 @@ public record TestGradingDetailResponse (
                 .testId(test.getTestId())
                 .totalCorrectCount(test.getCorrectCount())
                 .totalSolvedTime(test.getTotalSolveTime())
+                .createdDate(test.getCreatedDate())
                 .gradingResultByTypeList(createGradingResultByTypeList(userProblemLogList))
                 .gradingResultByProblemList(createGradingResultByProblemList(userProblemLogList))
                 .build();
