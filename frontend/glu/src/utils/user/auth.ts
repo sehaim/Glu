@@ -9,7 +9,6 @@ export const loginAPI = async (data: LoginUser) => {
     const res = await defaultAxios.post(`auth/login`, data);
     setCookie('accessToken', res.headers.accesstoken, {
       maxAge: 60 * 60 * 24 * 14,
-      sameSite: 'none',
       path: '/',
     });
     window.location.href = '/home';
