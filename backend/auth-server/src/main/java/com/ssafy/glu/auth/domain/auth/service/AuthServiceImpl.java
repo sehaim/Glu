@@ -3,6 +3,7 @@ package com.ssafy.glu.auth.domain.auth.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -85,8 +86,11 @@ public class AuthServiceImpl implements AuthService {
 		String refreshToken = jwtUtil.createToken("refresh", userId, nickname, isFirst, refreshTime);
 
 		//쿠키에 저장
-		httpResponse.addCookie(createCookie("access", accessToken, accessTime/1000));
-		httpResponse.addCookie(createCookie("refresh", refreshToken, refreshTime/1000));
+		// httpResponse.addCookie(createCookie(httpResponse, "access", accessToken, accessTime/1000));
+		// httpResponse.addCookie(createCookie(httpResponse, "refresh", refreshToken, refreshTime/1000));
+
+		createCookie(httpResponse, "access", accessToken, accessTime/1000);
+		createCookie(httpResponse, "refresh", refreshToken, refreshTime/1000);
 
 		//response 헤더에 access토큰 저장
 		httpResponse.setHeader("accessToken", accessToken);
@@ -95,13 +99,25 @@ public class AuthServiceImpl implements AuthService {
 		jwtTokenService.saveRefreshToken(userId, refreshToken);
 	}
 
-	private Cookie createCookie(String key, String value, Long time) {
-		Cookie cookie = new Cookie(key, value);
-		cookie.setMaxAge(Math.toIntExact(time));
-		cookie.setSecure(true);
-		cookie.setPath("/");
-		cookie.setHttpOnly(true);
-		return cookie;
+	private void createCookie(HttpServletResponse response, String key, String value, Long time) {
+		//서버용
+		// Cookie cookie = new Cookie(key, value);
+		// cookie.setMaxAge(Math.toIntExact(time));
+		// cookie.setSecure(true);
+		// cookie.setPath("/");
+		// cookie.setHttpOnly(true);
+		// return cookie;
+
+		//로컬호스트 테스트용
+		ResponseCookie cookie = ResponseCookie.from(key, value)
+			.path("/")
+			.sameSite("None")
+			.httpOnly(false)
+			.secure(false)
+			.maxAge(time)
+			.build();
+
+		response.addHeader("Set-Cookie", cookie.toString());
 	}
 
 	private Cookie removeCookie(String key) {
