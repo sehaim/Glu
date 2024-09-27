@@ -20,6 +20,7 @@ import ProblemImageOptionList from '@/components/problem/problemImageOptionList'
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
 import { GetServerSideProps } from 'next';
+import Loading from '@/components/common/loading';
 import styles from './testProblems.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -71,7 +72,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const currentProblem = problems[currentProblemIndex];
   const [memoList, setMemoList] = useState<Memo[]>(initialMemoList || []);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleResize = throttle(() => {
@@ -157,19 +158,21 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     }));
 
     try {
+      setLoading(true); // 로딩 시작
       const res = await postTestProblemGradingAPI(
         totalSolvedTime,
         problemSolveRequests,
       );
-      console.log('Response from server:', res);
+      console.log('서버 응답: ', res);
 
       dispatch(
         levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
       );
 
+      setLoading(false); // 로딩 종료
       router.push('/test/result');
     } catch (error) {
-      console.error('Error submitting answers:', error);
+      console.error('정답 제출 중 오류 발생:', error);
     }
   };
 
@@ -229,7 +232,11 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
   if (loading) {
-    return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
+    return (
+      <div className={styles.container}>
+        <Loading size="large" showText />
+      </div>
+    ); // 로딩 중일 때 표시할 메시지
   }
 
   return (
