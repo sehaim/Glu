@@ -5,16 +5,6 @@ from db import mongo_db
 problem_collection = mongo_db['problem']
 user_problem_status_collection = mongo_db['userProblemStatus']
 
-
-def save_problem(problem: Problem):
-    # Pydantic 모델을 dict로 변환
-    problem_dict = problem.dict()
-
-    # 데이터 삽입
-    result = problem_collection.insert_one(problem_dict)
-    return result.inserted_id
-
-
 def get_all_problems():
     # 모든 문제를 리스트로 변환하여 반환
     return list(problem_collection.find())

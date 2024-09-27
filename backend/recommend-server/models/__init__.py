@@ -6,5 +6,3 @@ from .model import (
     ProblemOption,
     UserResponse
 )
-
-from .User import Users
