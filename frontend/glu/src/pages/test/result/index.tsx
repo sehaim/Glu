@@ -8,6 +8,8 @@ import { formatTime } from '@/utils/problem/result';
 import { RootState } from '@/store';
 import LevelUpModal from '@/components/problem/result/levelUpModal';
 import { resetLevel } from '@/store/levelupSlice';
+import { FaCheck, FaTimes } from 'react-icons/fa';
+import Loading from '@/components/common/loading';
 import styles from './testResult.module.css';
 
 interface ApiResponse {
@@ -79,14 +81,24 @@ export default function TestResult() {
       </tr>
       <tr>
         {problemList.slice(startIndex, endIndex).map((problem) => (
-          <td key={problem.problemId}>{problem.isCorrect ? '✔️' : '❌'}</td>
+          <td key={problem.problemId}>
+            {problem.isCorrect ? (
+              <FaCheck className={styles.solve} />
+            ) : (
+              <FaTimes className={styles['solve-not']} />
+            )}
+          </td>
         ))}
       </tr>
     </>
   );
 
   if (loading) {
-    return <div>문제 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
+    return (
+      <div className={styles.container}>
+        <Loading size="large" showText />
+      </div>
+    );
   }
 
   return (
@@ -110,7 +122,7 @@ export default function TestResult() {
       <div className={styles['result-container']}>
         <div className={styles['result-wrapper']}>
           <div className={styles['result-item-row']}>
-            <h5 className={styles['item-title']}>내 점수</h5>
+            <p className={styles['item-title']}>내 점수</p>
             <div
               className={`${styles['item-content']} ${styles['item-content-text']}`}
             >
@@ -118,7 +130,7 @@ export default function TestResult() {
             </div>
           </div>
           <div className={styles['result-item-row']}>
-            <h5 className={styles['item-title']}>걸린 시간</h5>
+            <p className={styles['item-title']}>걸린 시간</p>
             <p
               className={`${styles['item-content']} ${styles['item-content-text']}`}
             >
@@ -126,7 +138,7 @@ export default function TestResult() {
             </p>
           </div>
           <div className={styles['result-item']}>
-            <h5 className={styles['item-title']}>맞힌 문제</h5>
+            <p className={styles['item-title']}>맞힌 문제</p>
             <div className={styles['item-content']}>
               <table
                 className={`${styles['item-content']} ${styles['result-table']}`}
@@ -142,7 +154,7 @@ export default function TestResult() {
         </div>
         <div className={styles['result-wrapper']}>
           <div className={styles['result-item']}>
-            <h5 className={styles['item-title']}>영역별 점수</h5>
+            <p className={styles['item-title']}>영역별 점수</p>
             <div className={styles.canvasWrapper}>
               {/* RadarChart 컴포넌트 */}
               <RadarChart problemTypeList={problemTypeList} />
@@ -150,29 +162,34 @@ export default function TestResult() {
           </div>
         </div>
       </div>
+
       {/* 문제 해설 */}
       <div className={styles['solution-container']}>
-        <h5 className={styles['item-title']}>문제 해설</h5>
+        <p className={styles['item-title']}>문제 해설</p>
         <div className={styles['solution-list']}>
           {problemList.map((problem, index) => (
             <div key={problem.problemId} className={styles['solution-item']}>
               <p className={styles['solution-title']}>
                 {index + 1}. {problem.title}
               </p>
-              <div className={styles['problem-content']}>{problem.content}</div>
-              <div className={styles['problem-option-list']}>
-                {problem?.problemOptions.map((problemOption, optionIndex) => (
-                  <p
-                    key={problemOption.problemOptionId}
-                    className={`${styles['problem-option-item']} ${
-                      problem.userAnswer === optionIndex + 1
-                        ? styles['user-answer'] // userAnswer와 같으면 붉은색으로 표시
-                        : ''
-                    }`}
-                  >
-                    {optionIndex + 1}. {problemOption.option}{' '}
-                  </p>
-                ))}
+              <div className={styles['solution-problem']}>
+                <div className={styles['problem-content']}>
+                  {problem.content}
+                </div>
+                <div className={styles['problem-option-list']}>
+                  {problem?.problemOptions.map((problemOption, optionIndex) => (
+                    <p
+                      key={problemOption.problemOptionId}
+                      className={`${styles['problem-option-item']} ${
+                        Number(problem.userAnswer) === optionIndex + 1
+                          ? styles['user-answer']
+                          : ''
+                      }`}
+                    >
+                      {optionIndex + 1}. {problemOption.option}{' '}
+                    </p>
+                  ))}
+                </div>
               </div>
               <div className={styles['problem-solution']}>
                 {!problem.isCorrect && (

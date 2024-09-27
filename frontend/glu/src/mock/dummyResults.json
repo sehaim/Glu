@@ -15,7 +15,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 60
     },
@@ -28,7 +28,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": false,
-      "userAnswer": 2,
+      "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 50
     },
@@ -41,7 +41,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 40
     },
@@ -54,7 +54,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 45
     },
@@ -67,7 +67,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 35
     },
@@ -80,7 +80,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": false,
-      "userAnswer": 2,
+      "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 55
     },
@@ -93,7 +93,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 30
     },
@@ -106,7 +106,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 40
     },
@@ -119,7 +119,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 60
     },
@@ -132,7 +132,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": false,
-      "userAnswer": 2,
+      "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 45
     },
@@ -145,7 +145,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 55
     },
@@ -158,7 +158,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 50
     },
@@ -171,7 +171,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": false,
-      "userAnswer": 2,
+      "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 35
     },
@@ -184,7 +184,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 60
     },
@@ -197,7 +197,7 @@
         { "problemOptionId": 2, "option": "선택지 2" }
       ],
       "isCorrect": true,
-      "userAnswer": 1,
+      "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 40
     }

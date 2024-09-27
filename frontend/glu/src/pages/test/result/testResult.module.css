@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   gap: 40px;
+  padding: 20px;
 }
 
 .page-title {
@@ -11,7 +12,8 @@
   font-family: 'HDBOLD';
   font-size: 28px;
   width: 1040px;
-  margin-top: 40px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .result-container {
@@ -21,8 +23,9 @@
   gap: 24px;
   background-color: var(--WHITE);
   border-radius: 10px;
-  width: 1040px;
   padding: 24px 40px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .result-wrapper {
@@ -38,19 +41,11 @@
   align-items: flex-start;
 }
 
-.result-item-column {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 16px 0px;
-}
-
 .item-title {
   flex: 1;
   color: var(--TEXT_SECONDARY);
   font-family: 'BMJUA';
   font-size: 18px;
-  margin-right: 16px;
   white-space: nowrap;
 }
 
@@ -72,7 +67,7 @@
 }
 
 .result-table td {
-  border: 1px solid var(--BLACK);
+  border: 1px solid var(--GRAY);
   text-align: center;
   padding: 6px;
   font-family: 'BMJUA';
@@ -87,6 +82,16 @@
   background-color: var(--WHITE);
 }
 
+.solve {
+  color: var(--GREEN);
+  font-size: 18px;
+}
+
+.solve-not {
+  color: var(--RED);
+  font-size: 18px;
+}
+
 .solution-container {
   display: flex;
   flex-direction: column;
@@ -95,13 +100,14 @@
   gap: 24px;
   background-color: var(--WHITE);
   border-radius: 10px;
-  width: 1040px;
   padding: 24px 40px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .solution-list {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 24px;
@@ -120,6 +126,14 @@
   border-radius: 20px;
 }
 
+.solution-problem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  gap: 24px;
+}
+
 .solution-title {
   color: var(--BLACK);
   font-family: 'BMJUA';
@@ -134,14 +148,16 @@
   font-family: 'PT';
   font-size: 16px;
   line-height: 12px;
-  width: 100%;
+  width: calc(50% - 12px);
+  height: 100px;
 }
 
 .problem-option-list {
+  padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0px 24px;
+  width: calc(50% - 12px);
 }
 
 .problem-option-item {
@@ -150,23 +166,23 @@
   font-size: 14px;
 }
 
+.user-answer {
+  color: var(--TEXT_PRIMARY);
+}
+
 .problem-solution {
   background-color: var(--WHITE);
   border: 2px dashed var(--SKYBLUE);
-  margin-top: 20px;
   padding: 16px 24px;
   width: 100%;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
 }
 
-.user-answer {
-  color: var(--TEXT_PRIMARY);
-}
-
 .incorrect-message {
   color: var(--RED);
   margin-bottom: 12px;
+  font-size: 14px;
 }
 
 .levelUp {
@@ -235,6 +251,10 @@
     width: 100%;
   }
 
+  .item-content {
+    flex: 3;
+  }
+
   .result-table {
     font-size: 14px;
     width: 320px;
@@ -243,6 +263,18 @@
   .solution-container {
     width: 440px;
     flex-direction: column;
+  }
+
+  .solution-problem {
+    flex-direction: column;
+  }
+
+  .problem-content {
+    width: 100%;
+  }
+
+  .problem-option-list {
+    width: 100%;
   }
 }
 
