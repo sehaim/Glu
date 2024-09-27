@@ -6,6 +6,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 // 로그인이 필요없는 axios
 export const defaultAxios: AxiosInstance = axios.create({
   baseURL: `${BACKEND_URL}`,
+  withCredentials: true,
 });
 
 // 토큰 재발급
@@ -51,6 +52,7 @@ export const createAuthAxios = (context?: {
     baseURL: `${BACKEND_URL}`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
     },
     withCredentials: true, // 쿠키 전송 허용
   });
@@ -79,10 +81,9 @@ export const createAuthAxios = (context?: {
                   req: context.req,
                   res: context.res,
                   maxAge: 60 * 60 * 24 * 14,
-                  sameSite: 'none',
                   path: '/',
                 }
-              : { maxAge: 60 * 60 * 24 * 14, sameSite: 'none', path: '/' },
+              : { maxAge: 60 * 60 * 24 * 14, path: '/' },
           );
 
           return axios(updatedConfig); // 요청 재시도

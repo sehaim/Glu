@@ -1,6 +1,21 @@
 import { GetServerSidePropsContext } from 'next';
-import { createAuthAxios } from '../common';
+import { Birth } from '@/types/UserTypes';
+import { createAuthAxios, refreshUserAPI } from '../common';
 
+// yyyy-mm-dd 형식의 생년월일을 Birth 객체로 변환하는 함수
+export function parseDate(dateString: string) {
+  const [year, month, day] = dateString.split('-'); // '-'로 문자열을 나눔
+
+  const birth: Birth = {
+    year: parseInt(year, 10), // 정수로 변환하여 year 값에 넣음
+    month: parseInt(month, 10), // 정수로 변환하여 month 값에 넣음
+    day: parseInt(day, 10), // 정수로 변환하여 day 값에 넣음
+  };
+
+  return birth;
+}
+
+// user 정보 조회 API
 export const getUserInfoAPI = async (context: GetServerSidePropsContext) => {
   try {
     const authAxios = createAuthAxios(context);
@@ -11,6 +26,7 @@ export const getUserInfoAPI = async (context: GetServerSidePropsContext) => {
   }
 };
 
+// user 출석 정보 조회 API
 export const getAttendanceAPI = async (context: GetServerSidePropsContext) => {
   try {
     const authAxios = createAuthAxios(context);
@@ -18,5 +34,35 @@ export const getAttendanceAPI = async (context: GetServerSidePropsContext) => {
     return res.data;
   } catch (err) {
     return null;
+  }
+};
+
+// user 정보 수정 API
+export const putUserInfoAPI = async (
+  nickname?: string,
+  password?: string,
+  newPassword?: string,
+  birth?: string,
+) => {
+  try {
+    const authAxios = createAuthAxios();
+
+    const requestBody: { [key: string]: string | null } = {
+      nickname: nickname || null,
+      password: password || null,
+      newPassword: newPassword || null,
+      birth: birth || null,
+    };
+
+    await authAxios.put(`users`, requestBody);
+    refreshUserAPI();
+  } catch (err) {
+    if (err.response) {
+      if (err.response.status === 403) {
+        alert('현재 비밀번호를 확인해주세요.'); // 추후 수정
+      } else {
+        alert(`Error: ${err.response.statusText}`);
+      }
+    }
   }
 };
