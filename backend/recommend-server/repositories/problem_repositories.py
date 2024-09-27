@@ -6,7 +6,7 @@ problem_collection = mongo_db['problem']
 user_problem_status_collection = mongo_db['userProblemStatus']
 
 def get_one_problem():
-    return problem_collection.find_one()
+    return problem_collection.find_one({"problemTypeDetailCode": "PT0211"})
 
 def get_all_problems():
     # 모든 문제를 리스트로 변환하여 반환
