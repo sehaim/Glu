@@ -28,6 +28,7 @@ import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
 import com.ssafy.glu.user.domain.user.exception.DateInValidException;
 import com.ssafy.glu.user.domain.user.exception.LoginIdDuplicateException;
+import com.ssafy.glu.user.domain.user.exception.PasswordInValidException;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
 import com.ssafy.glu.user.domain.user.repository.AttendanceRepository;
 import com.ssafy.glu.user.domain.user.repository.UserProblemTypeRepository;
@@ -157,6 +158,8 @@ public class UserServiceImpl implements UserService {
 
 			//유저 정보 업데이트
 			findUser.updateUser(encodedPassword, request.nickname(), request.birth());
+		} else {
+			throw new PasswordInValidException();
 		}
 	}
 
