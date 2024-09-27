@@ -10,24 +10,37 @@ import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import { Memo } from '@/types/MemoTypes';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
 import { postProblemMemoAPI, putProblemMemoAPI } from '@/utils/problem/memo';
+import {
+  getRecommendedTestProblemsAPI,
+  postTestProblemGradingAPI,
+} from '@/utils/problem/test';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
+import { GetServerSideProps } from 'next';
 import styles from './testProblems.module.css';
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const dummyProblems = await import('@/mock/dummyProblems.json');
   const dummyMemo = await import('@/mock/dummyMemo.json');
 
+  let testProblems;
+
+  try {
+    testProblems = await getRecommendedTestProblemsAPI(context);
+  } catch (error) {
+    console.error('Failed to fetch test problems:', error);
+  }
+
   return {
     props: {
-      initialProblems: dummyProblems.default,
+      initialProblems: testProblems || dummyProblems.default,
       initialMemoList: dummyMemo.default,
     },
   };
-}
+};
 
 interface TestProps {
   initialProblems: Problem[];
@@ -54,7 +67,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     return answers.filter((answer) => answer.userAnswer !== '').length;
   }, [answers]);
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
-  const [, setTotalSolvedTime] = useState<number>(0);
+  const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
   const [memoList, setMemoList] = useState<Memo[]>(initialMemoList || []);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
@@ -77,6 +90,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     return () => {};
   }, []);
 
+  // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
     problemIndex: number,
     updatedFields: Partial<ProblemAnswer>,
@@ -119,13 +133,47 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     };
   }, [currentProblemIndex]);
 
-  // 퍼센티지 계산
   const progressPercentage = useMemo(() => {
     return problems.length > 0
       ? Math.floor((solvedCount / problems.length) * 100)
       : 100;
   }, [solvedCount, problems.length]);
 
+  const handleAnswer = (problemIndex: number, userAnswer: string) => {
+    updateAnswers(problemIndex, { userAnswer });
+  };
+
+  const handleSubmit = async () => {
+    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+    updateAnswers(currentProblemIndex, {
+      solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
+    });
+
+    const problemSolveRequests = answers.map((answer) => ({
+      problemId: answer.problemId.toString(),
+      userAnswer: answer.userAnswer,
+      solvedTime: answer.solvedTime || 0,
+    }));
+
+    try {
+      const res = await postTestProblemGradingAPI(
+        totalSolvedTime,
+        problemSolveRequests,
+      );
+      console.log('Response from server:', res);
+
+      dispatch(
+        levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
+      );
+
+      router.push('/test/result');
+    } catch (error) {
+      console.error('Error submitting answers:', error);
+    }
+  };
+
+  // 문제 네비게이션 ///////////////////////////////////////////////////////////////////////////
   const handleNextProblem = () => {
     if (currentProblemIndex < problems.length - 1) {
       setCurrentProblemIndex((prevIndex) => prevIndex + 1);
@@ -142,24 +190,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     setCurrentProblemIndex(index);
   };
 
-  const handleAnswer = (problemIndex: number, userAnswer: string) => {
-    updateAnswers(problemIndex, { userAnswer });
-  };
-
-  const handleSubmit = () => {
-    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-
-    updateAnswers(currentProblemIndex, {
-      solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
-    });
-
-    dispatch(
-      levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
-    ); // 임시로 levelup상태로 만듦
-
-    router.push('/test/result');
-  };
-
+  // 메모 관련 로직 ///////////////////////////////////////////////////////////////////////////
   const handleMemoSave = async (newMemo: Memo) => {
     try {
       if (currentProblem && newMemo.memoId && newMemo.memoId !== -1) {
@@ -196,6 +227,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     }
   };
 
+  // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
   if (loading) {
     return <div>결과 로딩 중...</div>; // 로딩 중일 때 표시할 메시지
   }
