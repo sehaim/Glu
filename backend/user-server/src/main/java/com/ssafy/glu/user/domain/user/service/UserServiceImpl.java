@@ -151,15 +151,20 @@ public class UserServiceImpl implements UserService {
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-		//비밀번호 일치할때
-		if (passwordEncoder.matches(request.password(), findUser.getPassword())) {
-			String encodedPassword =
-				StringUtils.hasText(request.newPassword()) ? passwordEncoder.encode(request.newPassword()) : null;
+		//비밀번호 변경시
+		if (StringUtils.hasText(request.password()) || StringUtils.hasText(request.newPassword())) {
+			if (passwordEncoder.matches(request.password(), findUser.getPassword())) {
+				String encodedPassword =
+					StringUtils.hasText(request.newPassword()) ? passwordEncoder.encode(request.newPassword()) : null;
 
-			//유저 정보 업데이트
-			findUser.updateUser(encodedPassword, request.nickname(), request.birth());
-		} else {
-			throw new PasswordInValidException();
+				//유저 정보 업데이트
+				findUser.updateUser(encodedPassword, request.nickname(), request.birth());
+			} else {
+				throw new PasswordInValidException();
+			}
+		}
+		else {
+			findUser.updateUser(null, request.nickname(), request.birth());
 		}
 	}
 
