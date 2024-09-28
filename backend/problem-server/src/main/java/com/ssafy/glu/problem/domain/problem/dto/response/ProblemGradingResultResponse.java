@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
@@ -39,18 +40,24 @@ public record ProblemGradingResultResponse(
 			.build();
 	}
 
-	public static ProblemGradingResultResponse of (UserProblemLog userProblemLog) {
-		if (userProblemLog == null) return null;
+	public static ProblemGradingResultResponse of(UserProblemLog userProblemLog) {
+		if (userProblemLog == null)
+			return null;
 		Problem problem = userProblemLog.getProblem();
 		return ProblemGradingResultResponse.builder()
-				.problemId(problem.getProblemId())
-				.title(problem.getTitle())
-				.content(problem.getContent())
-				.metadata(problem.getMetadata())
-				.solution(problem.getSolution())
-				.isCorrect(userProblemLog.isCorrect())
-				.userAnswer(userProblemLog.getUserAnswer())
-				.solveTime(userProblemLog.getSolvedTime())
-				.build();
+			.problemId(problem.getProblemId())
+			.title(problem.getTitle())
+			.content(problem.getContent())
+			.metadata(problem.getMetadata())
+			.solution(problem.getSolution())
+			.isCorrect(userProblemLog.isCorrect())
+			.userAnswer(userProblemLog.getUserAnswer())
+			.solveTime(userProblemLog.getSolvedTime())
+			.build();
+	}
+
+	public static List<ProblemGradingResultResponse> createGradingResultByProblemList(
+		List<UserProblemLog> userProblemLogList) {
+		return userProblemLogList.stream().map(ProblemGradingResultResponse::of).toList();
 	}
 }

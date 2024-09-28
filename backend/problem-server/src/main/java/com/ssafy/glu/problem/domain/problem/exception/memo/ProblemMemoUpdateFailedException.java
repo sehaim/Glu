@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class ProblemMemoUpdateFailedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.PROBLEM_MEMO_UPDATE_FAILED;
+
 	public ProblemMemoUpdateFailedException() {
-		super(ErrorCode.PROBLEM_MEMO_UPDATE_FAILED);
+		super(errorCode);
 	}
 
 	public ProblemMemoUpdateFailedException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_UPDATE_FAILED, exception);
+		super(errorCode, exception);
 	}
 }

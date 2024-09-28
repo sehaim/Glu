@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class ProblemMemoUpdateUnauthorizedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.PROBLEM_MEMO_UPDATE_UNAUTHORIZED;
+
 	public ProblemMemoUpdateUnauthorizedException() {
-		super(ErrorCode.PROBLEM_MEMO_UPDATE_UNAUTHORIZED);
+		super(errorCode);
 	}
 
 	public ProblemMemoUpdateUnauthorizedException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_UPDATE_UNAUTHORIZED, exception);
+		super(errorCode, exception);
 	}
 }

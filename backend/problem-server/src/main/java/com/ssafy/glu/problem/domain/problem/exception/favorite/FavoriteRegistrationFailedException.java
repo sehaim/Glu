@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class FavoriteRegistrationFailedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.FAVORITE_REGISTRATION_FAILED;
+
 	public FavoriteRegistrationFailedException() {
-		super(ErrorCode.FAVORITE_REGISTRATION_FAILED);
+		super(errorCode);
 	}
 
 	public FavoriteRegistrationFailedException(Exception exception) {
-		super(ErrorCode.FAVORITE_REGISTRATION_FAILED, exception);
+		super(errorCode, exception);
 	}
 }

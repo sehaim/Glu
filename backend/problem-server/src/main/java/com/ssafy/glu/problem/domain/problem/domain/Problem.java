@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Problem extends BaseTimeDocument {
-	public enum Status{
+	public enum Status {
 		CORRECT,
 		WRONG
 	}
@@ -42,7 +42,9 @@ public class Problem extends BaseTimeDocument {
 	private final Map<String, Object> metadata;
 
 	@Builder
-	public Problem(String title, String content, String answer, String solution, ProblemLevelCode problemLevelCode, ProblemTypeCode problemTypeCode, ProblemTypeDetailCode problemTypeDetailCode, QuestionTypeCode questionTypeCode, Map<String, Object> metadata) {
+	public Problem(String title, String content, String answer, String solution, ProblemLevelCode problemLevelCode,
+		ProblemTypeCode problemTypeCode, ProblemTypeDetailCode problemTypeDetailCode, QuestionTypeCode questionTypeCode,
+		Map<String, Object> metadata) {
 		this.title = title;
 		this.content = content;
 		this.answer = answer;
@@ -65,6 +67,7 @@ public class Problem extends BaseTimeDocument {
 	public int score() {
 		return problemLevelCode.score();
 	}
+
 	public int level() {
 		return problemLevelCode.getLevel();
 	}

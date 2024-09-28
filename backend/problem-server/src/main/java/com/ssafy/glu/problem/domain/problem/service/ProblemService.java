@@ -13,13 +13,20 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 
 public interface ProblemService {
 	ProblemBaseResponse getProblem(String problemId);
+
 	Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition, Pageable pageable);
+
 	ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
+
 	ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request);
+
 	void deleteProblemMemo(Long userId, String problemId, Long memoIndex);
+
 	Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable);
+
 	void createUserProblemFavorite(Long userId, String problemId);
+
 	void deleteUserProblemFavorite(Long userId, String problemId);
 
 	ProblemGradingResponse gradeProblem(Long userId, String problemId, ProblemSolveRequest request);
-	}
+}

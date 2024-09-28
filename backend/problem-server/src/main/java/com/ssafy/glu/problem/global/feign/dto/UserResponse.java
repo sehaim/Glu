@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record UserResponse (
+public record UserResponse(
 	String id,
 	String nickname,
 	Integer stage,
@@ -13,4 +13,5 @@ public record UserResponse (
 	String imageUrl,
 	Integer dayCount,
 	List<UserProblemTypeResponse> problemTypeList
-){}
+) {
+}

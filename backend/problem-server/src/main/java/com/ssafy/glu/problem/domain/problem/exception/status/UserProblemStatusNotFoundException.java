@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class UserProblemStatusNotFoundException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.USER_PROBLEM_STATUS_NOT_FOUND;
+
 	public UserProblemStatusNotFoundException() {
-		super(ErrorCode.USER_PROBLEM_STATUS_NOT_FOUND);
+		super(errorCode);
 	}
 
 	public UserProblemStatusNotFoundException(Exception exception) {
-		super(ErrorCode.USER_PROBLEM_STATUS_NOT_FOUND, exception);
+		super(errorCode, exception);
 	}
 }

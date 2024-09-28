@@ -32,7 +32,6 @@ public class KafkaConfig {
 	@Value("${kafka.consumer.group-id.user-problem-status}")
 	String GROUP_ID_USER_PROBLEM_STATUS;
 
-
 	@Bean
 	public ProducerFactory<String, ProblemSolvedEvent> producerFactory() {
 		Map<String, Object> configProps = new HashMap<>();

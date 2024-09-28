@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
-import com.ssafy.glu.problem.domain.problem.exception.log.UserProblemLogNotFoundException;
-import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,11 +20,14 @@ import com.ssafy.glu.problem.domain.problem.dto.response.TypeGradingResultRespon
 import com.ssafy.glu.problem.domain.problem.event.ProblemSolvedEventPublisher;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import com.ssafy.glu.problem.domain.problem.service.ProblemGradingServiceImpl;
 import com.ssafy.glu.problem.domain.test.domain.Test;
 import com.ssafy.glu.problem.domain.test.dto.request.TestSolveRequest;
+import com.ssafy.glu.problem.domain.test.dto.response.TestGradingBaseResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingDetailResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
+import com.ssafy.glu.problem.domain.test.exception.PreviousTestResultNotFoundException;
 import com.ssafy.glu.problem.domain.test.repository.TestRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
 import com.ssafy.glu.problem.global.feign.dto.ExpUpdateResponse;
@@ -78,7 +78,19 @@ public class TestServiceImpl implements TestService {
 	@Override
 	public Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable) {
 		Page<Test> testList = testRepository.findByUserId(userId, pageable);
-		return testList.map((test)-> TestGradingDetailResponse.of(test,userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
+		return testList.map((test) -> TestGradingDetailResponse.of(test,
+			userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
+	}
+
+	@Override
+	public TestGradingBaseResponse getPreviousTest(Long userId) {
+		// 이전 테스트 찾기
+		Test previousTest = testRepository.findTopByUserIdOrderByCreatedDateDesc(userId).orElseThrow(
+			PreviousTestResultNotFoundException::new);
+
+		// DTO 형식으로 변환 후 반환
+		return TestGradingBaseResponse.of(previousTest,
+			userProblemLogRepository.findAllById(previousTest.getUserProblemLogIdList()));
 	}
 
 	private List<ProblemGradingResultResponse> gradeProblems(Long userId, String testId, UserResponse user,

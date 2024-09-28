@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class FavoriteNotRegisteredException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.FAVORITE_NOT_REGISTERED;
+
 	public FavoriteNotRegisteredException() {
-		super(ErrorCode.FAVORITE_NOT_REGISTERED);
+		super(errorCode);
 	}
 
 	public FavoriteNotRegisteredException(Exception exception) {
-		super(ErrorCode.FAVORITE_NOT_REGISTERED, exception);
+		super(errorCode, exception);
 	}
 }

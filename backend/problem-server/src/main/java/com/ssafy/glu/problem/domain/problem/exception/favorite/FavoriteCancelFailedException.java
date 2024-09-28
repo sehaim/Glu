@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class FavoriteCancelFailedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.FAVORITE_CANCEL_FAILED;
+
 	public FavoriteCancelFailedException() {
-		super(ErrorCode.FAVORITE_CANCEL_FAILED);
+		super(errorCode);
 	}
 
 	public FavoriteCancelFailedException(Exception exception) {
-		super(ErrorCode.FAVORITE_CANCEL_FAILED, exception);
+		super(errorCode, exception);
 	}
 }

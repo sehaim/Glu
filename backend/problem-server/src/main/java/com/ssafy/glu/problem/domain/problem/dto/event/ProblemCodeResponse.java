@@ -17,7 +17,7 @@ public record ProblemCodeResponse(
 	ProblemTypeCode problemTypeCode
 ) {
 	public static ProblemCodeResponse from(Problem problem) {
-		if(problem == null)
+		if (problem == null)
 			return null;
 		return ProblemCodeResponse.builder()
 			.problemId(problem.getProblemId())

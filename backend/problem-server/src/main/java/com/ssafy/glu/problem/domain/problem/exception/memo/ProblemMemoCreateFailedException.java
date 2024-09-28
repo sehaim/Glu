@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class ProblemMemoCreateFailedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.PROBLEM_MEMO_CREATION_FAILED;
+
 	public ProblemMemoCreateFailedException() {
-		super(ErrorCode.PROBLEM_MEMO_CREATION_FAILED);
+		super(errorCode);
 	}
 
 	public ProblemMemoCreateFailedException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_CREATION_FAILED, exception);
+		super(errorCode, exception);
 	}
 }
