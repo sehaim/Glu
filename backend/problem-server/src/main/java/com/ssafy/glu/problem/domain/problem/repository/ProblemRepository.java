@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 
 @Repository
-public interface ProblemRepository extends MongoRepository<Problem,String>, ProblemQueryRepository {
+public interface ProblemRepository extends MongoRepository<Problem, String>, ProblemQueryRepository {
 }

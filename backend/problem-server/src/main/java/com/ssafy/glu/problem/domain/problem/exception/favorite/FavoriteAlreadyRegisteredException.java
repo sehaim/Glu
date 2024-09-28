@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class FavoriteAlreadyRegisteredException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.FAVORITE_ALREADY_REGISTERED;
+
 	public FavoriteAlreadyRegisteredException() {
-		super(ErrorCode.FAVORITE_ALREADY_REGISTERED);
+		super(errorCode);
 	}
 
 	public FavoriteAlreadyRegisteredException(Exception exception) {
-		super(ErrorCode.FAVORITE_ALREADY_REGISTERED, exception);
+		super(errorCode, exception);
 	}
 }

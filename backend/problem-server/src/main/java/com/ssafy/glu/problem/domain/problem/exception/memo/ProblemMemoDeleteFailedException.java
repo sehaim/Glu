@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class ProblemMemoDeleteFailedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.PROBLEM_MEMO_DELETE_FAILED;
+
 	public ProblemMemoDeleteFailedException() {
-		super(ErrorCode.PROBLEM_MEMO_DELETE_FAILED);
+		super(errorCode);
 	}
 
 	public ProblemMemoDeleteFailedException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_DELETE_FAILED, exception);
+		super(errorCode, exception);
 	}
 }

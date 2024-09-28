@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ProblemMemoNotFoundException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.PROBLEM_MEMO_NOT_FOUND;
+
 	public ProblemMemoNotFoundException() {
-		super(ErrorCode.PROBLEM_MEMO_NOT_FOUND);
+		super(errorCode);
 	}
 
 	public ProblemMemoNotFoundException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_NOT_FOUND, exception);
+		super(errorCode, exception);
 	}
 }

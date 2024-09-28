@@ -8,11 +8,13 @@ import com.ssafy.glu.problem.global.error.ServiceException;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class ProblemMemoDeletedUnauthorizedException extends ServiceException {
+	private static final ErrorCode errorCode = ErrorCode.PROBLEM_MEMO_DELETE_UNAUTHORIZED;
+
 	public ProblemMemoDeletedUnauthorizedException() {
-		super(ErrorCode.PROBLEM_MEMO_DELETE_UNAUTHORIZED);
+		super(errorCode);
 	}
 
 	public ProblemMemoDeletedUnauthorizedException(Exception exception) {
-		super(ErrorCode.PROBLEM_MEMO_DELETE_UNAUTHORIZED, exception);
+		super(errorCode, exception);
 	}
 }
