@@ -1,8 +1,13 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
-import com.ssafy.glu.problem.domain.common.dto.CommonCodeResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.ssafy.glu.problem.domain.common.dto.CommonCodeResponse;
+import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
+
 import lombok.Builder;
 
 @Builder
@@ -12,7 +17,8 @@ public record TypeGradingResultResponse(
 	Integer acquiredScore,
 	Integer totalScore
 ) {
-	public static TypeGradingResultResponse of(Integer correctCount, CommonCodeResponse problemType, Integer acquiredScore, Integer totalScore) {
+	public static TypeGradingResultResponse of(Integer correctCount, CommonCodeResponse problemType,
+		Integer acquiredScore, Integer totalScore) {
 		return TypeGradingResultResponse.builder()
 			.correctCount(correctCount)
 			.problemType(problemType)
@@ -21,12 +27,22 @@ public record TypeGradingResultResponse(
 			.build();
 	}
 
-//	public static TypeGradingResultResponse of(UserProblemLog userProblemLog) {
-//		return TypeGradingResultResponse.builder()
-//				.correctCount(correctCount)
-//				.problemTypeCode(problemTypeCode)
-//				.acquiredScore(acquiredScore)
-//				.totalScore(totalScore)
-//				.build();
-//	}
+	public static List<TypeGradingResultResponse> createGradingResultByTypeList(
+		List<UserProblemLog> userProblemLogList) {
+		Map<ProblemTypeCode, List<UserProblemLog>> resultsByType = userProblemLogList.stream()
+			.collect(Collectors.groupingBy(userProblemLog -> userProblemLog.getProblem().getProblemTypeCode()));
+
+		return resultsByType.entrySet().stream()
+			.map(entry -> {
+				ProblemTypeCode problemTypeCode = entry.getKey();
+				List<UserProblemLog> typeGradeResults = entry.getValue();
+
+				int correctCount = (int)typeGradeResults.stream().filter(UserProblemLog::isCorrect).count();
+
+				return TypeGradingResultResponse.builder()
+					.correctCount(correctCount)
+					.problemType(CommonCodeResponse.of(problemTypeCode))
+					.build();
+			}).collect(Collectors.toList());
+	}
 }
