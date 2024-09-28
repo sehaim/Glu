@@ -1,18 +1,18 @@
 package com.ssafy.glu.problem.global.shared;
 
-import lombok.Getter;
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public abstract class BaseTimeDocument {
 
-    @CreatedDate
-    protected LocalDateTime createdDate;
+	@CreatedDate
+	protected LocalDateTime createdDate;
 
-    @LastModifiedDate
-    protected LocalDateTime modifiedDate;
+	@LastModifiedDate
+	protected LocalDateTime modifiedDate;
 }

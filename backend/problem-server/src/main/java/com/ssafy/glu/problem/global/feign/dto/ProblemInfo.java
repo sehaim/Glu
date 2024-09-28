@@ -17,6 +17,7 @@ public record ProblemInfo(
 			.code(problem.getProblemTypeCode())
 			.build();
 	}
+
 	public static ProblemInfo from(GradeResult gradeResult) {
 		return ProblemInfo.builder()
 			.level(gradeResult.problemLevel())

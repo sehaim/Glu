@@ -10,7 +10,6 @@ import com.ssafy.glu.problem.global.feign.dto.UserProblemTypeResponse;
 import com.ssafy.glu.problem.global.feign.dto.UserResponse;
 import com.ssafy.glu.problem.global.util.ScoreUtil;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -42,7 +41,8 @@ public class ProblemGradingServiceImpl implements ProblemGradingService {
 	}
 
 	private UserProblemTypeResponse getUserProblemType(UserResponse user, Problem problem) {
-		return user.problemTypeList().stream()
+		return user.problemTypeList()
+			.stream()
 			.filter(problemType -> problem.getProblemTypeCode().name().equals(problemType.type().code()))
 			.findFirst()
 			.orElseThrow(ProblemTypeCodeMismatchException::new);

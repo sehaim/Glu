@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProblemController {
 	private final ProblemService problemService;
+	// TODO: API Swagger 문서화
 
 	@GetMapping("/{problemId}")
 	public ResponseEntity<ProblemBaseResponse> getProblem(@PathVariable("problemId") String problemId) {
@@ -46,24 +47,24 @@ public class ProblemController {
 
 	@GetMapping("/solve")
 	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
-		@ModelAttribute ProblemSearchCondition condition, Pageable pageable) {
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @ModelAttribute ProblemSearchCondition condition,
+		Pageable pageable) {
 		log.info("condition : {}", condition);
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblemList(userId, condition, pageable));
 	}
 
 	@PostMapping("/{problemId}/memo")
 	public ResponseEntity<ProblemMemoResponse> createUserProblemMemo(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId, @RequestBody ProblemMemoCreateRequest request) {
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId,
+		@RequestBody ProblemMemoCreateRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(problemService.createProblemMemo(userId, problemId, request));
 	}
 
 	@PutMapping("/{problemId}/memo")
 	public ResponseEntity<ProblemMemoResponse> updateUserProblemMemo(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId, @RequestBody ProblemMemoUpdateRequest request) {
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId,
+		@RequestBody ProblemMemoUpdateRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.updateProblemMemo(userId, problemId, request));
 	}
 
@@ -76,8 +77,8 @@ public class ProblemController {
 
 	@GetMapping("/{problemId}/memo")
 	public ResponseEntity<Page<ProblemMemoResponse>> getProblemMemoListInProblem(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId, @PageableDefault(size = 4) Pageable pageable) {
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId,
+		@PageableDefault(size = 4) Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(problemService.getProblemMemoList(userId, problemId, pageable));
 	}
@@ -98,8 +99,7 @@ public class ProblemController {
 
 	@PostMapping("/{problemId}/grading")
 	public ResponseEntity<ProblemGradingResponse> gradeProblem(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
-		@PathVariable("problemId") String problemId,
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId,
 		@RequestBody ProblemSolveRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(problemService.gradeProblem(userId, problemId, request));
 	}
