@@ -20,7 +20,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
@@ -31,18 +33,22 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Void> login (@RequestBody LoginRequest loginRequest, HttpServletResponse httpResponse) {
+		log.info("Login request: {}", loginRequest);
 		authService.login(loginRequest, httpResponse);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 	@PostMapping("/logout")
 	public ResponseEntity<Void> logout (@RequestHeader(USER_ID) Long userId, HttpServletResponse httpResponse) {
+		log.info("Logout request: {}", userId);
 		authService.logout(userId, httpResponse);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@PostMapping("/reissue")
 	public ResponseEntity<Void> reissue (HttpServletRequest request, HttpServletResponse httpResponse) {
+
+		log.info("Reissue request: ");
 
 		// Retrieve cookies from the request
 		Cookie[] cookies = request.getCookies();
