@@ -109,6 +109,7 @@ public class AuthServiceImpl implements AuthService {
 		cookie.setMaxAge(Math.toIntExact(time));
 		cookie.setSecure(false);
 		cookie.setPath("/");
+		cookie.setDomain("localhost");
 		cookie.setHttpOnly(false);
 		return cookie;
 	}
