@@ -21,6 +21,8 @@ public enum ErrorCode {
     LOGIN_INVALID(400, "LOGIN_INVALID", "아이디 또는 비밀번호가 잘못되었습니다."),
     USER_NOT_FOUND(404, "USER_NOT_FOUND", "유저가 없습니다."),
     REFRESH_TOKEN_EXPIRED(401, "REFRESH_TOKEN_EXPIRED", "리프레시 토큰이 만료되었습니다."),
+    REFRESH_TOKEN_INVALID(401, "REFRESH_TOKEN_INVALID", "리프레시 토큰이 유효하지 않습니다."),
+
     // JWT 관련 오류
     INVALID_TOKEN(422, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
     EXPIRED_TOKEN(401, "EXPIRED_TOKEN", "토큰이 만료되었습니다."),

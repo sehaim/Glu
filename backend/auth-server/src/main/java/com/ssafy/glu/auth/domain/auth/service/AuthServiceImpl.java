@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.glu.auth.domain.auth.domain.Users;
 import com.ssafy.glu.auth.domain.auth.dto.request.LoginRequest;
 import com.ssafy.glu.auth.domain.auth.exception.LoginInValidException;
-import com.ssafy.glu.auth.domain.auth.exception.RefreshTokenExpiredException;
+import com.ssafy.glu.auth.domain.auth.exception.RefreshTokenInValidException;
 import com.ssafy.glu.auth.domain.auth.exception.UserNotFoundException;
 import com.ssafy.glu.auth.domain.auth.repository.UserRepository;
 import com.ssafy.glu.auth.domain.auth.util.JWTUtil;
@@ -72,6 +72,12 @@ public class AuthServiceImpl implements AuthService {
 
 		Long userId = jwtUtil.getUserId(claims);
 
+		String saveRefreshToken = jwtTokenService.getRefreshToken(userId);
+
+		if (!refreshToken.equals(saveRefreshToken)) {
+			throw new RefreshTokenInValidException();
+		}
+
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
 		boolean isFirst = findUser.getStage() == 0;
@@ -109,7 +115,6 @@ public class AuthServiceImpl implements AuthService {
 		cookie.setMaxAge(Math.toIntExact(time));
 		cookie.setSecure(false);
 		cookie.setPath("/");
-		cookie.setDomain("localhost");
 		cookie.setHttpOnly(false);
 		return cookie;
 	}
