@@ -48,8 +48,6 @@ public class AuthController {
 	@PostMapping("/reissue")
 	public ResponseEntity<Void> reissue (HttpServletRequest request, HttpServletResponse httpResponse) {
 
-		log.info("Reissue request: ");
-
 		// Retrieve cookies from the request
 		Cookie[] cookies = request.getCookies();
 		String refreshToken = null;
@@ -62,6 +60,8 @@ public class AuthController {
 				}
 			}
 		}
+
+		log.info("Reissue request refreshToken: {}", refreshToken);
 
 		authService.reissue(refreshToken, httpResponse);
 		return ResponseEntity.status(HttpStatus.OK).build();
