@@ -6,6 +6,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 // 로그인이 필요없는 axios
 export const defaultAxios: AxiosInstance = axios.create({
   baseURL: `${BACKEND_URL}`,
+  withCredentials: true, // 쿠키 전송 허용
 });
 
 // 토큰 재발급
@@ -14,9 +15,8 @@ export const refreshUserAPI = async (context?: {
   res: ServerResponse;
 }): Promise<string | null> => {
   try {
-    console.log('리이슈 에러'); // 추후 수정
     const res = await defaultAxios.post(`auth/reissue`);
-    const newToken: string = res.data.accessToken;
+    const newToken: string = res.headers.accesstoken;
     return newToken;
   } catch (err) {
     deleteCookie(
@@ -51,6 +51,7 @@ export const createAuthAxios = (context?: {
     baseURL: `${BACKEND_URL}`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
     },
     withCredentials: true, // 쿠키 전송 허용
   });
@@ -79,10 +80,12 @@ export const createAuthAxios = (context?: {
                   req: context.req,
                   res: context.res,
                   maxAge: 60 * 60 * 24 * 14,
-                  sameSite: 'none',
                   path: '/',
                 }
-              : { maxAge: 60 * 60 * 24 * 14, sameSite: 'none', path: '/' },
+              : {
+                  maxAge: 60 * 60 * 24 * 14,
+                  path: '/',
+                },
           );
 
           return axios(updatedConfig); // 요청 재시도

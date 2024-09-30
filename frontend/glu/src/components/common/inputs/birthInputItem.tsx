@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
+import { Birth } from '@/types/UserTypes';
 import styles from './birthInputItem.module.css';
 
 interface BirthInputItemProps {
-  onChange?: (birth: string) => void;
-  canEdit?: boolean;
+  value?: Birth;
+  onChange?: (birth: Birth) => void;
 }
 
 export default function BirthInputItem({
+  value,
   onChange,
-  canEdit = true,
 }: BirthInputItemProps) {
   const years: number[] = Array.from(
     { length: 11 },
@@ -17,19 +18,16 @@ export default function BirthInputItem({
   const months: number[] = Array.from({ length: 12 }, (_, index) => 1 + index);
   const days: number[] = Array.from({ length: 31 }, (_, index) => 1 + index);
 
-  const [year, setYear] = useState(years[0]);
-  const [month, setMonth] = useState(months[0]);
-  const [day, setDay] = useState(days[0]);
-  const [birth, setBirth] = useState('');
+  const [year, setYear] = useState(value ? value.year : years[0]);
+  const [month, setMonth] = useState(value ? value.month : months[0]);
+  const [day, setDay] = useState(value ? value.day : days[0]);
 
   useEffect(() => {
-    setBirth(
-      `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
-    );
     if (onChange) {
-      onChange(birth);
+      const newBirth: Birth = { year, month, day };
+      onChange(newBirth);
     }
-  }, [year, month, day, birth, onChange]);
+  }, [year, month, day, onChange]);
 
   return (
     <div className={styles.container}>
@@ -38,7 +36,6 @@ export default function BirthInputItem({
           name="year"
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
-          disabled={!canEdit}
         >
           {years.map((yearOption) => (
             <option key={yearOption} value={yearOption}>
@@ -53,7 +50,6 @@ export default function BirthInputItem({
           name="month"
           value={month}
           onChange={(e) => setMonth(Number(e.target.value))}
-          disabled={!canEdit}
         >
           {months.map((monthOption) => (
             <option key={monthOption} value={monthOption}>
@@ -68,7 +64,6 @@ export default function BirthInputItem({
           name="day"
           value={day}
           onChange={(e) => setDay(Number(e.target.value))}
-          disabled={!canEdit}
         >
           {days.map((dayOption) => (
             <option key={dayOption} value={dayOption}>

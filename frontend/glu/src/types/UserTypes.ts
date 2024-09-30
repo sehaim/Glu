@@ -36,6 +36,12 @@ export interface MypageUser {
   }[];
 }
 
+export interface Birth {
+  year: number;
+  month: number;
+  day: number;
+}
+
 export interface Attendance {
   date: string;
   totalSolvedProblemCnt: number;

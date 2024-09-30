@@ -1,10 +1,12 @@
+import { Birth } from '@/types/UserTypes';
 import styles from './inputItem.module.css';
 import BirthInputItem from './birthInputItem';
 
 interface InputItemProps {
-  value: string;
+  value?: string;
+  birth?: Birth;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBirthChange?: (birth: string) => void;
+  onBirthChange?: (birth: Birth) => void;
   label: string;
   placeholder?: string;
   direction?: string;
@@ -15,6 +17,7 @@ interface InputItemProps {
 
 export default function InputItem({
   value,
+  birth,
   onChange,
   onBirthChange,
   label,
@@ -32,7 +35,7 @@ export default function InputItem({
       </div>
       <div id={styles[`${direction}-input`]}>
         {isBirth ? (
-          <BirthInputItem onChange={onBirthChange} />
+          <BirthInputItem value={birth} onChange={onBirthChange} />
         ) : (
           <input
             type={label.includes('비밀번호') ? 'password' : 'text'}

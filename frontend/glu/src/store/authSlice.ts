@@ -16,9 +16,9 @@ const authSlice = createSlice({
       return {
         ...state,
         isLoggedIn: true,
-        userId: action.payload.userId,
-        isFirst: action.payload.isFirst,
-        nickname: action.payload.nickname,
+        userId: action.payload.userId ?? state.userId,
+        isFirst: action.payload.isFirst ?? state.isFirst,
+        nickname: action.payload.nickname ?? state.nickname,
       };
     },
     logout: (state) => {

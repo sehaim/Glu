@@ -1,22 +1,88 @@
 import InputItem from '@/components/common/inputs/inputItem';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Modal from '@/components/common/modal';
+import { GetServerSideProps } from 'next';
+import { getUserInfoAPI, parseDate, putUserInfoAPI } from '@/utils/user/mypage';
+import { Birth, MypageUser } from '@/types/UserTypes';
+import { useDispatch } from 'react-redux';
+import { login } from '@/store/authSlice';
 import styles from './mypage.module.css';
 
-export default function Mypage() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // 서버에서 회원정보 API 호출
+  const userInfo = await getUserInfoAPI(context);
+
+  const currentBirth = parseDate(userInfo.birth);
+
+  return {
+    props: {
+      userInfo,
+      currentBirth,
+    },
+  };
+};
+
+interface MypageProps {
+  userInfo: MypageUser;
+  currentBirth: Birth;
+}
+
+export default function Mypage({ userInfo, currentBirth }: MypageProps) {
   const [showModal, setShowModal] = useState(false);
+  const [nickname, setNickname] = useState(userInfo.nickname);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordCheck, setNewPasswordCheck] = useState('');
+  const [birth, setBirth] = useState(currentBirth);
+  const [passwordError, setPasswordError] = useState('');
 
-  const handleNicknameChnage = () => {};
+  const dispatch = useDispatch();
 
-  const handlePasswordChnage = () => {
-    console.log('변경 완료'); // 추후 삭제
+  // 닉네임 변경
+  const handleNicknameSubmit = () => {
+    putUserInfoAPI(nickname, undefined, undefined, undefined);
+    dispatch(login({ nickname }));
+
+    alert('닉네임이 변경되었습니다.');
   };
 
-  const handleBirthChnage = () => {};
-
+  // 비밀번호 변경
   const handleShowModal = () => {
     setShowModal(!showModal);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(!showModal);
+    setCurrentPassword('');
+    setNewPassword('');
+    setNewPasswordCheck('');
+    setPasswordError('');
+  };
+
+  useEffect(() => {
+    if (newPassword !== newPasswordCheck) {
+      setPasswordError('비밀번호가 일치하지 않습니다');
+    } else {
+      setPasswordError('');
+    }
+  }, [newPassword, newPasswordCheck]);
+
+  const handlePasswordSubmit = async () => {
+    await putUserInfoAPI(undefined, currentPassword, newPassword, undefined);
+    alert('비밀번호가 변경되었습니다.'); // alert 추후 수정 , 현재 비밀번호 틀렸을 때 수정 예정
+    handleCloseModal();
+  };
+
+  // 생년월일 변경
+  const handleBirthChange = useCallback((newBirth: Birth) => {
+    setBirth(newBirth);
+  }, []);
+
+  const handleBirthSubmit = () => {
+    const formattedBirth = `${birth.year}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`;
+    putUserInfoAPI(undefined, undefined, undefined, formattedBirth);
+    alert('생년월일이 변경되었습니다.'); // 추후 수정
   };
 
   return (
@@ -26,7 +92,7 @@ export default function Mypage() {
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
             <InputItem
-              value="id"
+              value={userInfo.id}
               label="아이디"
               direction="row"
               canEdit={false}
@@ -35,13 +101,18 @@ export default function Mypage() {
         </div>
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
-            <InputItem value="nickname" label="닉네임" direction="row" />
+            <InputItem
+              value={nickname}
+              label="닉네임"
+              direction="row"
+              onChange={(e) => setNickname(e.target.value)}
+            />
           </div>
           <div>
             <SecondaryButton
               label="변경하기"
               size="medium"
-              onClick={handleNicknameChnage}
+              onClick={handleNicknameSubmit}
             />
           </div>
         </div>
@@ -64,39 +135,50 @@ export default function Mypage() {
         </div>
         <div className={styles['inline-items']}>
           <div className={styles['input-container']}>
-            <InputItem value="birth" label="생년월일" direction="row" isBirth />
+            <InputItem
+              birth={currentBirth}
+              label="생년월일"
+              direction="row"
+              isBirth
+              onBirthChange={handleBirthChange}
+            />
           </div>
           <div>
             <SecondaryButton
               label="변경하기"
               size="medium"
-              onClick={handleBirthChnage}
+              onClick={handleBirthSubmit}
             />
           </div>
         </div>
       </div>
       <Modal
-        onSubmit={handlePasswordChnage}
+        onSubmit={handlePasswordSubmit}
         show={showModal}
         title="비밀번호 변경"
-        onClose={handleShowModal}
+        onClose={handleCloseModal}
       >
         <div className={styles['modal-content']}>
           <InputItem
-            value="password"
+            value={currentPassword}
             label="현재 비밀번호"
             placeholder="현재 비밀번호를 입력해주세요."
+            onChange={(e) => setCurrentPassword(e.target.value)}
           />
           <InputItem
-            value="password"
+            value={newPassword}
             label="새로운 비밀번호"
             placeholder="8자 이상의 영문, 숫자, 특수기호"
+            onChange={(e) => setNewPassword(e.target.value)}
           />
           <InputItem
-            value="password"
+            value={newPasswordCheck}
             label="비밀번호 확인"
             placeholder="비밀번호를 다시 입력해주세요."
-          />
+            onChange={(e) => setNewPasswordCheck(e.target.value)}
+          >
+            <div className={styles['password-error']}>{passwordError}</div>
+          </InputItem>
         </div>
       </Modal>
     </div>
