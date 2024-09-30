@@ -123,7 +123,7 @@ public class AuthServiceImpl implements AuthService {
 			.path("/")
 			.sameSite("None")
 			.httpOnly(false)
-			.secure(false) // 필요에 따라 true로 변경
+			.secure(true) // 필요에 따라 true로 변경
 			.maxAge(time) // time을 Long으로 받아서 maxAge 설정
 			.build();
 
