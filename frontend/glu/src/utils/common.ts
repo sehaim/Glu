@@ -15,9 +15,8 @@ export const refreshUserAPI = async (context?: {
   res: ServerResponse;
 }): Promise<string | null> => {
   try {
-    console.log('리이슈 에러'); // console 추후 수정
     const res = await defaultAxios.post(`auth/reissue`);
-    const newToken: string = res.data.accessToken;
+    const newToken: string = res.headers.accesstoken;
     return newToken;
   } catch (err) {
     deleteCookie(
@@ -72,27 +71,7 @@ export const createAuthAxios = (context?: {
               Authorization: `Bearer ${newToken}`, // 새로운 토큰 설정
             },
           };
-          // 나중에 삭제
-          setCookie(
-            'accessToken',
-            newToken,
-            context
-              ? {
-                  req: context.req,
-                  res: context.res,
-                  maxAge: 60 * 60 * 24 * 14,
-                  domain: 'j11a506.p.ssafy.io',
-                  sameSite: 'none',
-                  path: '/',
-                }
-              : {
-                  maxAge: 60 * 60 * 24 * 14,
-                  domain: 'j11a506.p.ssafy.io',
-                  sameSite: 'none',
-                  path: '/',
-                },
-          );
-          // 나중에 수정
+
           setCookie(
             'accessToken',
             newToken,

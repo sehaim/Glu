@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node server.mjs",
     "build": "next build",
-    "start": "node server.js",
+    "start": "node server.mjs",
     "lint": "next lint",
     "postbuild": "next-sitemap"
   },

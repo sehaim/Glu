@@ -5,6 +5,8 @@ import Modal from '@/components/common/modal';
 import { GetServerSideProps } from 'next';
 import { getUserInfoAPI, parseDate, putUserInfoAPI } from '@/utils/user/mypage';
 import { Birth, MypageUser } from '@/types/UserTypes';
+import { useDispatch } from 'react-redux';
+import { login } from '@/store/authSlice';
 import styles from './mypage.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -35,14 +37,14 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
   const [birth, setBirth] = useState(currentBirth);
   const [passwordError, setPasswordError] = useState('');
 
+  const dispatch = useDispatch();
+
   // 닉네임 변경
   const handleNicknameSubmit = () => {
-    try {
-      putUserInfoAPI(nickname, undefined, undefined, undefined);
-      alert('닉네임이 변경되었습니다.');
-    } catch {
-      alert('닉네임 변경에 실패했습니다.'); // alert 추후 수정
-    }
+    putUserInfoAPI(nickname, undefined, undefined, undefined);
+    dispatch(login({ nickname }));
+
+    alert('닉네임이 변경되었습니다.');
   };
 
   // 비밀번호 변경
@@ -66,14 +68,10 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
     }
   }, [newPassword, newPasswordCheck]);
 
-  const handlePasswordSubmit = () => {
-    try {
-      putUserInfoAPI(undefined, currentPassword, newPassword, undefined);
-      alert('비밀번호가 변경되었습니다.'); // alert 추후 수정
-      handleCloseModal();
-    } catch {
-      alert('현재 비밀번호를 확인해주세요.'); // alert 추후 수정
-    }
+  const handlePasswordSubmit = async () => {
+    await putUserInfoAPI(undefined, currentPassword, newPassword, undefined);
+    alert('비밀번호가 변경되었습니다.'); // alert 추후 수정 , 현재 비밀번호 틀렸을 때 수정 예정
+    handleCloseModal();
   };
 
   // 생년월일 변경

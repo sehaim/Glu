@@ -12,7 +12,7 @@ const handle = app.getRequestHandler();
 
 const httpsOptions = {
   key: readFileSync('./localhost-key.pem'),
-  cert: readFileSync('./cert.pem'),
+  cert: readFileSync('./localhost.pem'),
 };
 
 app.prepare().then(() => {
