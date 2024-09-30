@@ -1,6 +1,6 @@
 import InputItem from '@/components/common/inputs/inputItem';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Modal from '@/components/common/modal';
 import { GetServerSideProps } from 'next';
 import { getUserInfoAPI, parseDate, putUserInfoAPI } from '@/utils/user/mypage';
@@ -46,9 +46,9 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
     console.log('변경 완료'); // 추후 삭제
   };
 
-  const handleBirthChange = (newBirth: Birth) => {
+  const handleBirthChange = useCallback((newBirth: Birth) => {
     setBirth(newBirth);
-  };
+  }, []);
 
   const handleBirthSubmit = () => {
     const formattedBirth = `${birth.year}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`;

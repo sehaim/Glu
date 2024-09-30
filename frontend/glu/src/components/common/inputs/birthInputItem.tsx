@@ -20,11 +20,11 @@ export default function BirthInputItem({
 
   const [year, setYear] = useState(value ? value.year : years[0]);
   const [month, setMonth] = useState(value ? value.month : months[0]);
-  const [day, setDay] = useState(value ? value.month : days[0]);
+  const [day, setDay] = useState(value ? value.day : days[0]);
 
   useEffect(() => {
-    const newBirth: Birth = { year, month, day };
     if (onChange) {
+      const newBirth: Birth = { year, month, day };
       onChange(newBirth);
     }
   }, [year, month, day, onChange]);

@@ -55,7 +55,7 @@ export const putUserInfoAPI = async (
     };
 
     await authAxios.put(`users`, requestBody);
-    refreshUserAPI();
+    // refreshUserAPI();
   } catch (err) {
     if (err.response) {
       if (err.response.status === 403) {
