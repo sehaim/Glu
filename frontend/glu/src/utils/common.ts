@@ -6,7 +6,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 // 로그인이 필요없는 axios
 export const defaultAxios: AxiosInstance = axios.create({
   baseURL: `${BACKEND_URL}`,
-  withCredentials: true,
+  withCredentials: true, // 쿠키 전송 허용
 });
 
 // 토큰 재발급
@@ -15,7 +15,7 @@ export const refreshUserAPI = async (context?: {
   res: ServerResponse;
 }): Promise<string | null> => {
   try {
-    console.log('리이슈 에러'); // 추후 수정
+    console.log('리이슈 에러'); // console 추후 수정
     const res = await defaultAxios.post(`auth/reissue`);
     const newToken: string = res.data.accessToken;
     return newToken;

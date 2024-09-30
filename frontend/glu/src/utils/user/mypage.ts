@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import { Birth } from '@/types/UserTypes';
+import axios from 'axios';
 import { createAuthAxios, refreshUserAPI } from '../common';
 
 // yyyy-mm-dd 형식의 생년월일을 Birth 객체로 변환하는 함수
@@ -55,13 +56,13 @@ export const putUserInfoAPI = async (
     };
 
     await authAxios.put(`users`, requestBody);
-    // refreshUserAPI();
+    refreshUserAPI();
   } catch (err) {
-    if (err.response) {
-      if (err.response.status === 403) {
-        alert('현재 비밀번호를 확인해주세요.'); // 추후 수정
-      } else {
-        alert(`Error: ${err.response.statusText}`);
+    if (axios.isAxiosError(err)) {
+      if (err.response) {
+        if (err.response.status !== 403) {
+          alert(`Error: ${err.response.statusText}`); // 추후 수정
+        }
       }
     }
   }

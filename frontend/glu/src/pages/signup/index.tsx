@@ -39,7 +39,6 @@ export default function SignupPage() {
       birth: '2009-01-01',
     };
     await signupAPI(data);
-    console.log('회원가입'); // 나중에 삭제
   };
 
   return (
