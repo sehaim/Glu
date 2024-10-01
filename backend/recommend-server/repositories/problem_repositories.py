@@ -25,7 +25,4 @@ def get_problems_not_solve(user_id: int):
         {"_id": {"$nin": solved_problem_ids}}
     ))
 
-    for unsolved_problem in unsolved_problems:
-        print(unsolved_problem)
-
     return unsolved_problems
