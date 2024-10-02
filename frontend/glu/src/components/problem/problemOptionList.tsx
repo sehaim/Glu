@@ -3,15 +3,15 @@ import styles from './problemOptionList.module.css';
 
 interface ProblemOptionListProps {
   selectedOption: string;
-  problemIndex?: number;
+  problemId?: string;
   problemOptions: string[];
-  onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
+  onTestProblemAnswer?: (problemId: string, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
   onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
 
 export default function ProblemOptionList({
   selectedOption,
-  problemIndex,
+  problemId,
   problemOptions,
   onTestProblemAnswer,
   onSingleProblemAnswer,
@@ -26,8 +26,8 @@ export default function ProblemOptionList({
     if (!userAnswer) return; // Null 또는 undefined 체크
 
     // Test 문제 풀이
-    if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
-      onTestProblemAnswer(problemIndex, String(userAnswer));
+    if (onTestProblemAnswer && typeof problemId !== 'undefined') {
+      onTestProblemAnswer(problemId, String(userAnswer));
     }
 
     // 단일 문제 풀이

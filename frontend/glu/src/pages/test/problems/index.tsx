@@ -48,7 +48,7 @@ interface TestProps {
   initialMemoList: Memo[];
 }
 interface ProblemAnswer {
-  problemId: number;
+  problemId: string;
   userAnswer: string; // 사용자의 선택
   problemAnswer: string; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)
@@ -74,6 +74,8 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [loading, setLoading] = useState(false);
 
+  console.log(answers);
+
   useEffect(() => {
     const handleResize = throttle(() => {
       setIsMobile(window.innerWidth < 1024);
@@ -93,12 +95,14 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
-    problemIndex: number,
+    problemIndex: string,
     updatedFields: Partial<ProblemAnswer>,
   ) => {
     setAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers.map((answer, index) =>
-        index === problemIndex ? { ...answer, ...updatedFields } : answer,
+      const updatedAnswers = prevAnswers.map((answer) =>
+        answer.problemId === problemIndex
+          ? { ...answer, ...updatedFields }
+          : answer,
       );
       return updatedAnswers;
     });
@@ -106,8 +110,8 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   useEffect(() => {
     const initializeAnswers = () => {
-      const initialAnswers = problems.map((problem, index) => ({
-        problemId: index + 1,
+      const initialAnswers = problems.map((problem) => ({
+        problemId: problem.problemId,
         problemAnswer: problem.solution,
         userAnswer: '', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
@@ -128,7 +132,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
       );
 
-      updateAnswers(currentProblemIndex, {
+      updateAnswers(problems[currentProblemIndex].problemId, {
         solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
       });
     };
@@ -140,14 +144,14 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
       : 100;
   }, [solvedCount, problems.length]);
 
-  const handleAnswer = (problemIndex: number, userAnswer: string) => {
+  const handleAnswer = (problemIndex: string, userAnswer: string) => {
     updateAnswers(problemIndex, { userAnswer });
   };
 
   const handleSubmit = async () => {
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
-    updateAnswers(currentProblemIndex, {
+    updateAnswers(problems[currentProblemIndex].problemId, {
       solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
     });
 
@@ -170,7 +174,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
       );
 
       setLoading(false); // 로딩 종료
-      router.push('/test/result');
+      router.push(`/test/result/${res?.data?.testId}`);
     } catch (error) {
       console.error('정답 제출 중 오류 발생:', error);
     }
@@ -277,7 +281,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
                       : currentProblem.metadata.options // string일 경우 그대로 사용
                   }
                   initialAnswer={answers[currentProblemIndex].userAnswer}
-                  problemIndex={currentProblemIndex}
+                  problemId={answers[currentProblemIndex]?.problemId}
                   onTestProblemAnswer={handleAnswer}
                 />
               )}
@@ -288,7 +292,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
                       ? currentProblem.metadata.options // string[]일 경우
                       : [currentProblem.metadata.options] // string일 경우 배열로 변환
                   }
-                  problemIndex={currentProblemIndex}
+                  problemId={answers[currentProblemIndex]?.problemId}
                   selectedOption={answers[currentProblemIndex]?.userAnswer}
                   onTestProblemAnswer={handleAnswer}
                 />

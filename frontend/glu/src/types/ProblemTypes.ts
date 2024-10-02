@@ -25,9 +25,10 @@ export interface SolvedProblemType {
 }
 
 export interface PreviousSolvedProblemType {
-  problemTypeCode: string;
-  name: string;
   correctCount: number;
+  problemType: ProblemType;
+  acquiredScore: number;
+  totalScore: number;
 }
 
 export interface Problem {
