@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styles from './problemHeader.module.css';
 import {
+  getProblemLikeAPI,
   postProblemLikeAPI,
   deleteProblemLikeAPI,
 } from '../../utils/problem/like';
@@ -16,7 +17,7 @@ interface ProblemHeaderProps {
   problemLevel: string;
   problemType: string;
   problemTitle: string;
-  problemLike: boolean; // 초기 좋아요 상태
+  problemLike?: boolean; // 초기 좋아요 상태
 }
 
 export default function ProblemHeader({
@@ -25,13 +26,27 @@ export default function ProblemHeader({
   problemLevel,
   problemType,
   problemTitle,
-  problemLike, // 좋아요 초기 상태를 props로 받음
+  problemLike,
 }: ProblemHeaderProps) {
-  const [liked, setLiked] = useState<boolean>(problemLike); // 좋아요 상태 관리
+  const [liked, setLiked] = useState<boolean | undefined | null>(problemLike); // 좋아요 상태 관리
 
   useEffect(() => {
-    setLiked(problemLike);
-  }, []);
+    // 문제 ID가 존재하는 경우에만 좋아요 상태를 가져옴
+    if (!problemLike) {
+      const fetchLikeStatus = async () => {
+        try {
+          const res = await getProblemLikeAPI(problemId); // API로 좋아요 상태 가져오기
+          setLiked(res.data);
+        } catch (error) {
+          console.error('좋아요 상태 가져오기 실패:', error);
+        }
+      };
+
+      fetchLikeStatus();
+    } else {
+      setLiked(problemLike); // props로 받은 초기 좋아요 상태 반영
+    }
+  }, [problemId, problemLike]);
 
   const handleLikeClick = async () => {
     try {
@@ -42,8 +57,7 @@ export default function ProblemHeader({
       }
       setLiked((prevLiked) => !prevLiked); // 좋아요 상태 토글
     } catch (error) {
-      // TODO: 필요하다면 에러 처리 로직 추가 (예: 사용자에게 에러 메시지 표시)
-      console.error('좋아요 처리 중 오류 발생:', error);
+      // 오류 발생
     }
   };
 
