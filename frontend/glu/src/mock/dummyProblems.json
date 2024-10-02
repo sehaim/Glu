@@ -7,7 +7,7 @@
     "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
     "status": "CORRECT",
     "questionType": {
-      "code": "QT01",
+      "code": "QT08",
       "name": "객관식"
     },
     "problemLevel": {
@@ -56,32 +56,37 @@
     "isFavorite": true
   },
   {
-    "problemId": "66f63857b1ecdc758ed9e9bf",
-    "title": "다음 문장의 괄호친 단어와 유의어를 고르시오",
-    "content": "그는 상황을 (판단)하여 적절한 결정을 내렸다.",
-    "answer": "2",
-    "solution": "판단이라는 단어는 사물을 인식하여 평가하는 것을 의미하므로, 유의어로는 평가가 적합하다.",
-    "status": null,
+    "problemId": "66f63a4c6ac15852cc76601e",
+    "title": "주어진 글을 읽고, 연상되는 그림을 선택하십시오.",
+    "content": "깜짝 놀란 베키는 살금살금 소리가 나는 곳으로 가 보았어요. 앗! 그런데 입이 길쭉, 이빨이 뾰족뾰족. 무서운 늑대가 앉아 있는 게 아니겠어요! 그 순간 베키는 거울로 늑대와 눈이 마주치고 말았어요.",
+    "answer": "1",
+    "solution": "해설",
+    "status": "CORRECT",
     "questionType": {
       "code": "QT01",
       "name": "객관식"
     },
     "problemLevel": {
-      "code": "PL07",
-      "name": "초등 6학년"
+      "code": "PL01",
+      "name": "유아"
     },
     "problemType": {
-      "code": "PT01",
-      "name": "어휘 및 문법"
+      "code": "PT03",
+      "name": "추론"
     },
     "problemTypeDetail": {
-      "code": "PT0112",
-      "name": "문장의 해당 단어와 비슷한 / 반대되는 단어 고르기"
+      "code": "PT0311",
+      "name": "그림을 보고 상황에 맞는 문장 고르기"
     },
     "metadata": {
-      "options": ["결정", "평가", "이해", "행동"]
+      "options": [
+        "https://eglubucket.s3.amazonaws.com/images/03_01T_01S_9788959991051_57122.jpg",
+        "https://eglubucket.s3.amazonaws.com/images/03_02T_01S_9791167082169_63274.jpg",
+        "https://eglubucket.s3.amazonaws.com/images/03_04T_02S_9791165431549_33415.jpg",
+        "https://eglubucket.s3.amazonaws.com/images/03_03T_02S_9791165955625_37837.jpg"
+      ]
     },
-    "isFavorite": null
+    "isFavorite": true
   },
   {
     "problemId": "66f63857b1ecdc758ed9e9bf",
@@ -91,7 +96,7 @@
     "solution": "특성과 속성은 같은 의미로 사용되며, 특정 사물이나 사람에게 나타나는 고유한 성질을 나타냅니다.",
     "status": null,
     "questionType": {
-      "code": "QT01",
+      "code": "QT09",
       "name": "객관식"
     },
     "problemLevel": {
@@ -119,7 +124,7 @@
     "solution": "특성과 속성은 같은 의미로 사용되며, 특정 사물이나 사람에게 나타나는 고유한 성질을 나타냅니다.",
     "status": null,
     "questionType": {
-      "code": "QT01",
+      "code": "QT09",
       "name": "객관식"
     },
     "problemLevel": {
@@ -147,7 +152,7 @@
     "solution": "판단이라는 단어는 사물을 인식하여 평가하는 것을 의미하므로, 유의어로는 평가가 적합하다.",
     "status": null,
     "questionType": {
-      "code": "QT01",
+      "code": "QT07",
       "name": "객관식"
     },
     "problemLevel": {
@@ -175,7 +180,7 @@
     "solution": "효과는 어떤 행위에 의해 나타나는 결과와 같은 의미이므로 유의어로 '결과'가 적절하다.",
     "status": null,
     "questionType": {
-      "code": "QT01",
+      "code": "QT09",
       "name": "객관식"
     },
     "problemLevel": {
@@ -399,7 +404,7 @@
     "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
     "status": null,
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {

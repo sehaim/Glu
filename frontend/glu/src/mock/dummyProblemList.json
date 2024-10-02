@@ -4,7 +4,7 @@
     "title": "수학 문제 1",
     "content": "이 문제는 수학과 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {
@@ -46,7 +46,7 @@
     "title": "영어 문제 1",
     "content": "이 문제는 영어와 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {
@@ -88,7 +88,7 @@
     "title": "국어 문제 1",
     "content": "이 문제는 국어와 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {
@@ -172,7 +172,7 @@
     "title": "음악 문제 1",
     "content": "이 문제는 음악과 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT05",
       "name": "객관식"
     },
     "problemLevel": {
