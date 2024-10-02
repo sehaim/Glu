@@ -3,7 +3,7 @@ import { LuDot } from 'react-icons/lu';
 import styles from './problemNavigationManager.module.css'; // 새로운 CSS 파일로 스타일을 분리
 
 interface ProblemAnswer {
-  problemId: number;
+  problemId: string;
   userAnswer: string; // 사용자의 선택
   problemAnswer: string; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)

@@ -33,7 +33,7 @@ export const postTestProblemGradingAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios();
-    const res = await authAxios.post(`/test/grading`, {
+    const res = await authAxios.post(`tests/grading`, {
       totalSolvedTime,
       problemSolveRequestList,
     });

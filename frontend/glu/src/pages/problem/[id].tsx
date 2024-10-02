@@ -11,7 +11,6 @@ import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
-import { Memo } from '@/types/MemoTypes';
 import {
   getSingleProblemAPI,
   postSingleProblemGradingAPI,
@@ -20,10 +19,12 @@ import {
 import throttle from 'lodash/throttle';
 import { useRouter } from 'next/router';
 import ProblemInputField from '@/components/problem/problemInputField';
+import Image from 'next/image';
+import LevelUpModal from '@/components/problem/result/levelUpModal';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
-  problemId: number;
+  problemId: string;
   title: string;
   content: string;
   questionType: QuestionType;
@@ -32,6 +33,7 @@ interface ProblemResponse {
   metadata: ProblemOption;
   solution: string;
   isFavorite: boolean;
+  answer: string;
 }
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -68,27 +70,24 @@ interface ProblemResponse {
 // }
 
 export default function Test() {
+  const router = useRouter();
+  const { id } = router.query;
   const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
-
-  const [memoList, setMemoList] = useState<Memo[]>([
-    { memoId: 1, content: 'This is the first memo content.' },
-    { memoId: 2, content: 'This is the second memo content.' },
-    { memoId: 3, content: 'This is the third memo content.' },
-    { memoId: 4, content: 'This is the fourth memo content.' },
-  ]);
-
-  const router = useRouter();
-  const { id } = router.query;
+  const [isSolved, setIsSolved] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [stageImage, setStageImage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       if (typeof id === 'string') {
         // id가 string인 경우에만 API 호출
         const res = await getSingleProblemAPI(id);
+        console.log(res);
         setProblem(res.data);
       }
     };
@@ -116,6 +115,7 @@ export default function Test() {
   }, []);
 
   const handleAnswer = (userAnswer: string) => {
+    if (isSolved) return;
     setAnswer(userAnswer);
   };
 
@@ -134,31 +134,37 @@ export default function Test() {
           timeTaken,
         );
         console.log('단일 문제 채점 결과:', response);
+        setIsSolved(true);
+        setIsCorrect(response.data.isCorrect);
+        if (response.data.isStageUp) {
+          setIsModalOpen(true);
+          setStageImage(response.data.stageUpUrl);
+        }
       } catch (error) {
         console.error('단일 문제 채점 중 에러 발생:', error);
       }
     }
   };
 
-  const handleMemoSave = (newMemo: Memo) => {
-    setMemoList((prevMemoList) => {
-      // 만약 기존 메모를 수정하는 경우 memoId를 비교하여 업데이트
-      const memoIndex = prevMemoList.findIndex(
-        (memo) => memo.memoId === newMemo.memoId,
-      );
-      if (memoIndex > -1) {
-        // 기존 메모 수정
-        const updatedMemoList = [...prevMemoList];
-        updatedMemoList[memoIndex] = newMemo;
-        return updatedMemoList;
-      }
-      // 새로운 메모 추가
-      return [...prevMemoList, newMemo];
-    });
+  const handleLevelUpModalClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <div className={styles.container}>
+      {/* 레벨업 모달 */}
+      <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
+        <div className={styles.levelUp}>
+          <Image
+            className={styles['levelUp-image']}
+            src={stageImage}
+            alt="레벨업 이미지"
+            width={300}
+            height={356}
+          />
+        </div>
+      </LevelUpModal>
+
       {problem && (
         <div className={styles['problem-container']}>
           <div className={styles.problem}>
@@ -193,14 +199,42 @@ export default function Test() {
                 />
               )}
             </div>
-            <div className={styles['problem-button-list']}>
-              <div />
-              <PrimaryButton
-                size="small"
-                label="제출하기"
-                onClick={handleSubmit}
-              />
-            </div>
+            {!isSolved && (
+              <div className={styles['problem-button-list']}>
+                <div />
+                <PrimaryButton
+                  size="small"
+                  label="제출하기"
+                  onClick={handleSubmit}
+                />
+              </div>
+            )}
+            {isSolved && (
+              <div className={styles['problem-solution']}>
+                {isCorrect && (
+                  <>
+                    <div className={styles['problem-solution-correct']}>
+                      <p className={styles['problem-answer']}>
+                        {problem.answer}
+                      </p>
+                      맞았습니다!
+                    </div>{' '}
+                    {problem?.solution}
+                  </>
+                )}
+                {!isCorrect && (
+                  <>
+                    <div className={styles['problem-solution-incorret']}>
+                      <p className={styles['problem-answer']}>
+                        {problem.answer}
+                      </p>
+                      틀렸습니다ㅠㅠ
+                    </div>{' '}
+                    {problem?.solution}
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <div
             className={styles['problem-memo']}
@@ -210,10 +244,7 @@ export default function Test() {
               zIndex: 10,
             }}
           >
-            <ProblemMemoManager
-              memoList={memoList}
-              onSaveMemo={handleMemoSave}
-            />
+            <ProblemMemoManager problemId={problem.problemId} />
           </div>
         </div>
       )}

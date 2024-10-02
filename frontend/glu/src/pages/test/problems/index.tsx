@@ -7,9 +7,7 @@ import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
 import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
-import { Memo } from '@/types/MemoTypes';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
-import { postProblemMemoAPI, putProblemMemoAPI } from '@/utils/problem/memo';
 import {
   getRecommendedTestProblemsAPI,
   postTestProblemGradingAPI,
@@ -25,7 +23,6 @@ import styles from './testProblems.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const dummyProblems = await import('@/mock/dummyProblems.json');
-  const dummyMemo = await import('@/mock/dummyMemo.json');
 
   let testProblems;
 
@@ -38,23 +35,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       initialProblems: testProblems || dummyProblems.default,
-      initialMemoList: dummyMemo.default,
     },
   };
 };
 
 interface TestProps {
   initialProblems: Problem[];
-  initialMemoList: Memo[];
 }
 interface ProblemAnswer {
-  problemId: number;
+  problemId: string;
   userAnswer: string; // 사용자의 선택
   problemAnswer: string; // 문제의 정답
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
-export default function Test({ initialProblems, initialMemoList }: TestProps) {
+export default function Test({ initialProblems }: TestProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const PROBLEM_COUNT = 15; // 문제 개수 고정
@@ -70,9 +65,10 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [memoList, setMemoList] = useState<Memo[]>(initialMemoList || []);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [loading, setLoading] = useState(false);
+
+  console.log(answers);
 
   useEffect(() => {
     const handleResize = throttle(() => {
@@ -93,12 +89,14 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
-    problemIndex: number,
+    problemIndex: string,
     updatedFields: Partial<ProblemAnswer>,
   ) => {
     setAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers.map((answer, index) =>
-        index === problemIndex ? { ...answer, ...updatedFields } : answer,
+      const updatedAnswers = prevAnswers.map((answer) =>
+        answer.problemId === problemIndex
+          ? { ...answer, ...updatedFields }
+          : answer,
       );
       return updatedAnswers;
     });
@@ -106,8 +104,8 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   useEffect(() => {
     const initializeAnswers = () => {
-      const initialAnswers = problems.map((problem, index) => ({
-        problemId: index + 1,
+      const initialAnswers = problems.map((problem) => ({
+        problemId: problem.problemId,
         problemAnswer: problem.solution,
         userAnswer: '', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
@@ -128,7 +126,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
       );
 
-      updateAnswers(currentProblemIndex, {
+      updateAnswers(problems[currentProblemIndex].problemId, {
         solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
       });
     };
@@ -140,14 +138,14 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
       : 100;
   }, [solvedCount, problems.length]);
 
-  const handleAnswer = (problemIndex: number, userAnswer: string) => {
+  const handleAnswer = (problemIndex: string, userAnswer: string) => {
     updateAnswers(problemIndex, { userAnswer });
   };
 
   const handleSubmit = async () => {
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
-    updateAnswers(currentProblemIndex, {
+    updateAnswers(problems[currentProblemIndex].problemId, {
       solvedTime: (answers[currentProblemIndex]?.solvedTime || 0) + timeSpent,
     });
 
@@ -170,7 +168,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
       );
 
       setLoading(false); // 로딩 종료
-      router.push('/test/result');
+      router.push(`/test/result/${res?.data?.testId}`);
     } catch (error) {
       console.error('정답 제출 중 오류 발생:', error);
     }
@@ -191,43 +189,6 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   const handlProblemIndex = (index: number) => {
     setCurrentProblemIndex(index);
-  };
-
-  // 메모 관련 로직 ///////////////////////////////////////////////////////////////////////////
-  const handleMemoSave = async (newMemo: Memo) => {
-    try {
-      if (currentProblem && newMemo.memoId && newMemo.memoId !== -1) {
-        // currentProblem이 존재하고, memoId가 존재하고, -1이 아닐 경우 => 기존 메모 수정
-        await putProblemMemoAPI(
-          currentProblem.problemId,
-          newMemo.memoId,
-          newMemo.content,
-        );
-        // TODO: 새로운 메모 받아오기
-        // setMemoList((prevMemoList) => {
-        //   const memoIndex = prevMemoList.findIndex(
-        //     (memo) => memo.memoId === newMemo.memoId,
-        //   );
-        //   if (memoIndex > -1) {
-        //     // 기존 메모 업데이트
-        //     const updatedMemoList = [...prevMemoList];
-        //     updatedMemoList[memoIndex] = newMemo;
-        //     return updatedMemoList;
-        //   }
-        //   return prevMemoList;
-        // });
-      } else {
-        // 새로운 메모 등록
-        const createdMemo = await postProblemMemoAPI(
-          currentProblem.problemId,
-          newMemo.content,
-        );
-        // TODO: 이걸로는 안됨. 다시 메모를 받아와야함 -1로 보냈기 때문에
-        setMemoList((prevMemoList) => [...prevMemoList, createdMemo]);
-      }
-    } catch (error) {
-      console.error('메모 저장 중 오류 발생:', error);
-    }
   };
 
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
@@ -265,7 +226,6 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
               problemLevel={currentProblem?.problemLevel?.name}
               problemType={currentProblem?.problemType?.name}
               problemTitle={currentProblem?.title}
-              problemLike={false}
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={currentProblem?.content} />
@@ -277,7 +237,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
                       : currentProblem.metadata.options // string일 경우 그대로 사용
                   }
                   initialAnswer={answers[currentProblemIndex].userAnswer}
-                  problemIndex={currentProblemIndex}
+                  problemId={answers[currentProblemIndex]?.problemId}
                   onTestProblemAnswer={handleAnswer}
                 />
               )}
@@ -288,7 +248,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
                       ? currentProblem.metadata.options // string[]일 경우
                       : [currentProblem.metadata.options] // string일 경우 배열로 변환
                   }
-                  problemIndex={currentProblemIndex}
+                  problemId={answers[currentProblemIndex]?.problemId}
                   selectedOption={answers[currentProblemIndex]?.userAnswer}
                   onTestProblemAnswer={handleAnswer}
                 />
@@ -330,7 +290,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
             zIndex: 10,
           }}
         >
-          <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
+          <ProblemMemoManager problemId={currentProblem.problemId} />
         </div>
       </div>
     </div>

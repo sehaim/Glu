@@ -1,57 +1,75 @@
 /* eslint-disable prettier/prettier */
-import { GetServerSideProps } from 'next';
+// import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import RadarChart from '@/components/problem/result/radarChart';
 import { PreviousSolvedProblemType } from '@/types/ProblemTypes';
-import { formatTime, transformProblemType } from '@/utils/problem/result';
+import {
+  formatTime,
+  getPreviousTestAPI,
+  transformProblemType,
+} from '@/utils/problem/result';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import dummyPreviousTest from '@/mock/dummyPreviousTest.json';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './test.module.css';
 
-interface ApiResponse {
-  testId: number;
-  correctCount: number;
-  totalSolveTime: number; // 초 단위
-  problemType: PreviousSolvedProblemType[];
-}
+// interface ApiResponse {
+//   testId: number;
+//   correctCount: number;
+//   totalSolveTime: number; // 초 단위
+//   problemType: PreviousSolvedProblemType[];
+// }
 
-interface TestProps {
-  correctCount: number;
-  totalSolveTime: number;
-  problemTypeList: PreviousSolvedProblemType[];
-}
+// interface TestProps {
+//   correctCount: number;
+//   totalSolveTime: number;
+//   problemTypeList: PreviousSolvedProblemType[];
+// }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  // TODO: axios로 변경 -> 실제 data fetch
-  const response: ApiResponse = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(dummyPreviousTest);
-    }, 1000);
-  });
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   // TODO: axios로 변경 -> 실제 data fetch
+//   const response: ApiResponse = await new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(dummyPreviousTest);
+//     }, 1000);
+//   });
 
-  return {
-    props: {
-      correctCount: response.correctCount,
-      totalSolveTime: response.totalSolveTime,
-      problemTypeList: response.problemType,
-    },
-  };
-};
+//   return {
+//     props: {
+//       correctCount: response.correctCount,
+//       totalSolveTime: response.totalSolveTime,
+//       problemTypeList: response.problemType,
+//     },
+//   };
+// };
 
-export default function Test({
-  correctCount,
-  totalSolveTime,
-  problemTypeList,
-}: TestProps) {
+export default function Test() {
   const router = useRouter();
   const username = useSelector((state: RootState) => state.auth.nickname);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [totalSolveTime, setTotalSolveTime] = useState(0);
+  const [problemTypeList, setProblemTypeList] = useState<
+    PreviousSolvedProblemType[] | null
+  >(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getPreviousTestAPI();
+
+      if (res) {
+        setCorrectCount(res.totalCorrectCount);
+        setTotalSolveTime(res.totalSolvedTime);
+        setProblemTypeList(res.gradingResultByTypeList.problemType);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const transformedProblemTypeList = useMemo(
-    () => transformProblemType(problemTypeList),
+    () => (problemTypeList ? transformProblemType(problemTypeList) : null),
     [problemTypeList],
   );
 
@@ -105,7 +123,9 @@ export default function Test({
               <div className={styles['last-test-item-column']}>
                 <p className={styles['last-test-item-title']}>영역별 점수</p>
                 <div className={styles['last-test-item-content-column']}>
-                  <RadarChart problemTypeList={transformedProblemTypeList} />
+                  {transformedProblemTypeList && (
+                    <RadarChart problemTypeList={transformedProblemTypeList} />
+                  )}
                 </div>
               </div>
             </div>
