@@ -197,7 +197,7 @@ def get_random_problems_by_log(detail_code: str, level: int, classification: int
     # 코사인 유사도 기준으로 정렬 (내림차순)
     sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
 
-    return sorted_problems[:5]
+    return sorted_problems[:3]
 
 
 def get_problems_by_detail_code(detail_code: str, limit: int = 2):

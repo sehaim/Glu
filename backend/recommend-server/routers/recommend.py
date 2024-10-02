@@ -4,16 +4,17 @@ from typing import Optional
 import random
 import numpy as np
 from fastapi import APIRouter, HTTPException, Header
-from numba.core.typing.builtins import type_index_value
 
-from repositories import get_all_problems, get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
+from repositories import get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
 from repositories.problem_repositories import (
     get_problem_by_id,
     get_problem_by_ids,
     get_problems_by_level_and_type,
     get_similar, get_random_problems_by_log)
-from repositories.problem_repositories import get_random_problems_by_code_and_level, \
+from repositories.problem_repositories import (
+    get_random_problems_by_code_and_level,
     get_random_problems_by_code_and_level_and_classification
+)
 from repositories.user_problem_status_repositories import get_top_n_classifications
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
@@ -23,8 +24,8 @@ classifications = [
     "사회관계", "시사", "과학", "문화",
     "사설", "교육", "경제", "nie"
 ]
-story_classifications = [0,1,2,3,4]
-news_classifications = [5,6,7,8,9,10,11]
+story_classifications = [0, 1, 2, 3, 4]
+news_classifications = [5, 6, 7, 8, 9, 10, 11]
 
 code_classifications = {
     "PT0211": story_classifications,
@@ -41,12 +42,14 @@ detail_codes_dict = {
     "PT03": ["PT0311", "PT0312", "PT0321"]
 }
 
+
 def calculate_age(birth_date: str) -> int:
     from datetime import datetime
     birth_date = datetime.strptime(birth_date, "%Y-%m-%d")
     today = datetime.today()
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     return age
+
 
 def calculate_user_level(age: int) -> int:
     if 6 <= age <= 12:
@@ -152,8 +155,10 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
     selected_problems = []
     type_index = [0, 1, 2]
-    level_offsets = [-1, 0, 0, 1, 1] #난이도 조정
+    level_offsets = [-1, 0, 0, 1, 1]  # 난이도 조정
+    user_level = 5
 
+    #3개 PT01 PT02 PT03
     for pt_type, detail_codes in detail_codes_dict.items():
         # if 유형레벨 = 1
         #     level_offsets = [0, 0, 0, 1, 1]
@@ -172,41 +177,44 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
         print(level_offsets)
         print(detail_types)
 
-        idx=0
+        #5개
+        idx = 0
         for i in indices:
             detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
-            level = 5 + level_offsets[i]  # 현재 레벨 매칭
+            level = user_level + level_offsets[i]  # 현재 레벨 매칭
+            fetched_problem = None
 
-            if idx<3:
-                fetched_problems = get_random_problems_by_code_and_level(
+            if idx < 3:
+                fetched_problem = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
                     level=level,
                     limit=1
                 )
-                idx=idx+1
+                idx = idx + 1
             else:
                 if pt_type == "PT01":
                     # 문제 가져오기
-                    fetched_problems = get_random_problems_by_code_and_level(
+                    fetched_problem = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
                         level=level,
                         limit=1
                     )
                 else:
-                    top_classifications = top_n_classification(2,get_wrong_status(int(user_id)))
+                    top_classifications = top_n_classification(2, get_wrong_status(int(user_id)))
                     for classification in top_classifications:
-
                         correct_ids = get_correct_ids(int(user_id))
                         wrong_ids = get_wrong_ids(int(user_id))
 
-                        fetched_problems = get_random_problems_by_log(
+                        fetched_problem = get_random_problems_by_log(
                             detail_code=classification[1],
                             level=level,
                             classification=classification[0],
                             correct_ids=correct_ids,
                             wrong_ids=wrong_ids,
                             vector=classification[3]
-                        )
+                        )[0]
+
+            selected_problems.append(fetched_problem)
 
     # print(selected_problems)
     # 총 15문제가 선택되었는지 확인
@@ -228,9 +236,9 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
     # 초기 값 설정
     type_index = [0, 1, 2]
 
-    levels = [-1, 0, 1] # 레벨 범위
+    levels = [-1, 0, 1]  # 레벨 범위
 
-    i=0
+    i = 0
     for pt_type, detail_codes in detail_codes_dict.items():
         # if 유형레벨 = 1
         #     levels = [0, 1]
@@ -252,7 +260,7 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
         print(detail_levels)
         print(detail_types)
 
-        idx=0
+        idx = 0
         for detail_code in detail_codes:
             if pt_type == "PT01":
                 # 문제 가져오기
@@ -278,8 +286,8 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
                         vector=classification[3]
                     )
                     selected_problems.extend(fetched_problems)
-            idx=idx+1
-        i=i+1
+            idx = idx + 1
+        i = i + 1
 
     print(len(selected_problems))
     if len(selected_problems) != 30:
@@ -358,7 +366,6 @@ def get_wrong_status(user_id: int):
         # classification_vectors에 추가
         classification_vectors[classification][detailcode].append(vector)
 
-
     # 각 classification에 대해 detailcode별 평균 벡터와 횟수 계산
     classification_avg_vectors = {}
     for classification, detail_codes in classification_vectors.items():
@@ -381,6 +388,7 @@ def get_wrong_status(user_id: int):
 async def not_solve_problems():
     not_solve_problems = get_problems_not_solve(1)
     return not_solve_problems
+
 
 def top_n_classification(n, map):
     result = []
