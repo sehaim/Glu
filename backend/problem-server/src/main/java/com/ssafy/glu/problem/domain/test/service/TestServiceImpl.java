@@ -28,6 +28,7 @@ import com.ssafy.glu.problem.domain.test.dto.response.TestGradingBaseResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingDetailResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
 import com.ssafy.glu.problem.domain.test.exception.PreviousTestResultNotFoundException;
+import com.ssafy.glu.problem.domain.test.exception.TestNotFoundException;
 import com.ssafy.glu.problem.domain.test.repository.TestRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
 import com.ssafy.glu.problem.global.feign.dto.ExpUpdateResponse;
@@ -80,6 +81,13 @@ public class TestServiceImpl implements TestService {
 		Page<Test> testList = testRepository.findByUserId(userId, pageable);
 		return testList.map((test) -> TestGradingDetailResponse.of(test,
 			userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
+	}
+
+	@Override
+	public TestGradingDetailResponse getTest(Long userId, String testId) {
+		Test test = testRepository.findById(testId).orElseThrow(TestNotFoundException::new);
+		return TestGradingDetailResponse.of(test,
+			userProblemLogRepository.findAllById((test.getUserProblemLogIdList())));
 	}
 
 	@Override

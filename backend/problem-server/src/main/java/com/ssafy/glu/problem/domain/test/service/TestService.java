@@ -13,5 +13,7 @@ public interface TestService {
 
 	Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable);
 
+	TestGradingDetailResponse getTest(Long userId, String testId);
+
 	TestGradingBaseResponse getPreviousTest(Long userId);
 }
