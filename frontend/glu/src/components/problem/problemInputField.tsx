@@ -16,7 +16,10 @@ export default function ProblemEssay({
   onTestProblemAnswer,
   onSingleProblemAnswer,
 }: ProblemEssayProps) {
+  console.log(placeholder);
+  console.log('initial:', initialAnswer);
   const [userInput, setUserInput] = useState<string>(initialAnswer);
+  console.log(userInput);
 
   useEffect(() => {
     setUserInput(initialAnswer);

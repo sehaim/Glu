@@ -16,11 +16,11 @@ import {
 } from '@/utils/problem/test';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
-import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
 import { GetServerSideProps } from 'next';
 import Loading from '@/components/common/loading';
+import ProblemInputField from '@/components/problem/problemInputField';
 import styles from './testProblems.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -106,8 +106,8 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
 
   useEffect(() => {
     const initializeAnswers = () => {
-      const initialAnswers = problems.map((problem) => ({
-        problemId: problem.problemId,
+      const initialAnswers = problems.map((problem, index) => ({
+        problemId: index + 1,
         problemAnswer: problem.solution,
         userAnswer: '', // 기본값은 0
         solvedTime: 0, // 기본 풀이 시간은 0
@@ -269,19 +269,27 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={currentProblem?.content} />
-              {currentProblem?.problemType?.problemTypeDetailCode === '0' && (
-                <ProblemImageOptionList
-                  selectedOption={answers[currentProblemIndex]?.userAnswer}
+              {currentProblem.questionType.code === 'QT02' && (
+                <ProblemInputField
+                  placeholder={
+                    Array.isArray(currentProblem.metadata.options)
+                      ? currentProblem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
+                      : currentProblem.metadata.options // string일 경우 그대로 사용
+                  }
+                  initialAnswer={answers[currentProblemIndex].userAnswer}
                   problemIndex={currentProblemIndex}
-                  problemOptions={currentProblem?.problemOptions}
                   onTestProblemAnswer={handleAnswer}
                 />
               )}
-              {currentProblem?.problemType?.problemTypeDetailCode !== '0' && (
+              {currentProblem.questionType.code !== 'QT02' && (
                 <ProblemOptionList
-                  selectedOption={answers[currentProblemIndex]?.userAnswer}
+                  problemOptions={
+                    Array.isArray(currentProblem.metadata.options)
+                      ? currentProblem.metadata.options // string[]일 경우
+                      : [currentProblem.metadata.options] // string일 경우 배열로 변환
+                  }
                   problemIndex={currentProblemIndex}
-                  problemOptions={currentProblem?.problemOptions}
+                  selectedOption={answers[currentProblemIndex]?.userAnswer}
                   onTestProblemAnswer={handleAnswer}
                 />
               )}

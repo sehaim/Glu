@@ -34,10 +34,11 @@ export interface Problem {
   problemId: number;
   title: string;
   content: string;
-  metadata: ProblemOption;
-  solution: string;
+  questionType: QuestionType;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
+  metadata: ProblemOption;
+  solution: string;
 }
 
 export interface SolvedProblem {

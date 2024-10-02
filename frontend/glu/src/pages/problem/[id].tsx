@@ -92,7 +92,9 @@ export default function Test() {
       }
     };
 
-    fetchData();
+    if (id) {
+      fetchData();
+    }
   }, [id]);
 
   useEffect(() => {

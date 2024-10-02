@@ -1,172 +1,422 @@
 [
   {
-    "problemId": 1,
-    "title": "수학 문제 1",
-    "content": "이 문제는 수학과 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 1" },
-      { "problemOptionId": 2, "option": "옵션 2" },
-      { "problemOptionId": 3, "option": "옵션 3" }
-    ],
-    "solution": "정답 1",
-    "problemLevel": { "problemLevelCode": "Lv.1", "name": "레벨 1" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "math",
-      "problemTypeDetailCode": "geometry",
-      "name": "기하학"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 2,
-    "title": "과학 문제 1",
-    "content": "이 문제는 과학과 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 1" },
-      { "problemOptionId": 2, "option": "옵션 2" },
-      { "problemOptionId": 3, "option": "옵션 3" }
-    ],
-    "solution": "정답 2",
-    "problemLevel": { "problemLevelCode": "Lv.2", "name": "레벨 2" },
+    "problemId": "66f63857b1ecdc758ed9e9bf",
+    "title": "다음 문장에서 문맥상 빈칸에 들어갈 적절한 단어를 적으세요",
+    "content": "학교에서 학생들에게 역사를 _____는 것은 매우 중요하다.",
+    "answer": "가르치다",
+    "solution": "새로운 개념을 학생들에게 전달하는 행위는 '가르치다'이므로 정답은 '가르치다'입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT02",
+      "name": "단답식"
+    },
+    "problemLevel": {
+      "code": "PL02",
+      "name": "초등 1학년"
+    },
     "problemType": {
-      "problemTypeCode": "science",
-      "problemTypeDetailCode": "physics",
-      "name": "물리학"
-    }
+      "code": "PT01",
+      "name": "어휘 및 문법"
+    },
+    "problemTypeDetail": {
+      "code": "PT0121",
+      "name": "어색한 문장 찾기 - 맞춤법이 올바른 문장 찾기"
+    },
+    "metadata": {
+      "options": "가르치다 vs 가리키다"
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 3,
-    "title": "영어 문제 1",
-    "content": "이 문제는 영어와 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 1" },
-      { "problemOptionId": 2, "option": "옵션 2" },
-      { "problemOptionId": 3, "option": "옵션 3" }
-    ],
-    "solution": "정답 3",
-    "problemLevel": { "problemLevelCode": "Lv.3", "name": "레벨 3" },
+    "problemId": "66f63857b1ecdc758ed9e9bf",
+    "title": "다음 문장에서 문맥상 빈칸에 들어갈 적절한 단어를 적으세요",
+    "content": "학교에서 학생들에게 역사를 _____는 것은 매우 중요하다.",
+    "answer": "가르치다",
+    "solution": "새로운 개념을 학생들에게 전달하는 행위는 '가르치다'이므로 정답은 '가르치다'입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT02",
+      "name": "단답식"
+    },
+    "problemLevel": {
+      "code": "PL02",
+      "name": "초등 1학년"
+    },
     "problemType": {
-      "problemTypeCode": "english",
-      "problemTypeDetailCode": "grammar",
-      "name": "문법"
-    }
+      "code": "PT01",
+      "name": "어휘 및 문법"
+    },
+    "problemTypeDetail": {
+      "code": "PT0121",
+      "name": "어색한 문장 찾기 - 맞춤법이 올바른 문장 찾기"
+    },
+    "metadata": {
+      "options": "가르치다 vs 가리키다"
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 4,
-    "title": "역사 문제 1",
-    "content": "이 문제는 역사와 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 A" },
-      { "problemOptionId": 2, "option": "옵션 B" },
-      { "problemOptionId": 3, "option": "옵션 C" }
-    ],
-    "solution": "정답 A",
-    "problemLevel": { "problemLevelCode": "Lv.2", "name": "레벨 2" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "history",
-      "problemTypeDetailCode": "modern",
-      "name": "현대사"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 5,
-    "title": "국어 문제 1",
-    "content": "이 문제는 국어와 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 ①" },
-      { "problemOptionId": 2, "option": "옵션 ②" },
-      { "problemOptionId": 3, "option": "옵션 ③" }
-    ],
-    "solution": "정답 ①",
-    "problemLevel": { "problemLevelCode": "Lv.1", "name": "레벨 1" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "korean",
-      "problemTypeDetailCode": "literature",
-      "name": "문학"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 6,
-    "title": "사회 문제 1",
-    "content": "이 문제는 사회와 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 1" },
-      { "problemOptionId": 2, "option": "옵션 2" },
-      { "problemOptionId": 3, "option": "옵션 3" }
-    ],
-    "solution": "정답 2",
-    "problemLevel": { "problemLevelCode": "Lv.3", "name": "레벨 3" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "social",
-      "problemTypeDetailCode": "economics",
-      "name": "경제학"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 7,
-    "title": "정보 기술 문제 1",
-    "content": "이 문제는 정보 기술과 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 X" },
-      { "problemOptionId": 2, "option": "옵션 Y" },
-      { "problemOptionId": 3, "option": "옵션 Z" }
-    ],
-    "solution": "정답 Y",
-    "problemLevel": { "problemLevelCode": "Lv.2", "name": "레벨 2" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "it",
-      "problemTypeDetailCode": "programming",
-      "name": "프로그래밍"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 8,
-    "title": "미술 문제 1",
-    "content": "이 문제는 미술과 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 α" },
-      { "problemOptionId": 2, "option": "옵션 β" },
-      { "problemOptionId": 3, "option": "옵션 γ" }
-    ],
-    "solution": "정답 β",
-    "problemLevel": { "problemLevelCode": "Lv.1", "name": "레벨 1" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "art",
-      "problemTypeDetailCode": "painting",
-      "name": "회화"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 9,
-    "title": "음악 문제 1",
-    "content": "이 문제는 음악과 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 I" },
-      { "problemOptionId": 2, "option": "옵션 II" },
-      { "problemOptionId": 3, "option": "옵션 III" }
-    ],
-    "solution": "정답 II",
-    "problemLevel": { "problemLevelCode": "Lv.3", "name": "레벨 3" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "music",
-      "problemTypeDetailCode": "theory",
-      "name": "음악 이론"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   },
   {
-    "problemId": 10,
-    "title": "체육 문제 1",
-    "content": "이 문제는 체육과 관련된 문제입니다.",
-    "problemOptions": [
-      { "problemOptionId": 1, "option": "옵션 A1" },
-      { "problemOptionId": 2, "option": "옵션 B2" },
-      { "problemOptionId": 3, "option": "옵션 C3" }
-    ],
-    "solution": "정답 B2",
-    "problemLevel": { "problemLevelCode": "Lv.2", "name": "레벨 2" },
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
     "problemType": {
-      "problemTypeCode": "physical_education",
-      "problemTypeDetailCode": "fitness",
-      "name": "체력 단련"
-    }
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
+  },
+  {
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
+    "problemType": {
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
+  },
+  {
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
+    "problemType": {
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
+  },
+  {
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
+    "problemType": {
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
+  },
+  {
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
+    "problemType": {
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
+  },
+  {
+    "problemId": "66f6385fb1ecdc758ed9ec49",
+    "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
+    "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
+    "answer": "2",
+    "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
+    "status": null,
+    "questionType": {
+      "code": "QT01",
+      "name": "객관식"
+    },
+    "problemLevel": {
+      "code": "PL01",
+      "name": "유아"
+    },
+    "problemType": {
+      "code": "PT02",
+      "name": "독해"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
+    "metadata": {
+      "options": ["바닷가", "연못가", "숲속", "산 위"]
+    },
+    "isFavorite": null
   }
 ]
