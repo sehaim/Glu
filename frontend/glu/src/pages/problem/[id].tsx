@@ -1,7 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from 'react';
-import dummyImageProblem from '@/mock/dummyImageProblem.json';
-import { ProblemLevel, ProblemOption, ProblemType } from '@/types/ProblemTypes';
+import {
+  ProblemLevel,
+  ProblemOption,
+  ProblemType,
+  QuestionType,
+} from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemOptionList from '@/components/problem/problemOptionList';
@@ -12,57 +16,58 @@ import {
   getSingleProblemAPI,
   postSingleProblemGradingAPI,
 } from '@/utils/problem/problem';
-import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
-import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import ProblemInputField from '@/components/problem/problemInputField';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
   problemId: number;
   title: string;
   content: string;
-  problemOptions: ProblemOption[];
-  solution: string;
+  questionType: QuestionType;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
+  metadata: ProblemOption;
+  solution: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { Id } = context.query; // URL에서 problemId 가져오기
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { Id } = context.query; // URL에서 problemId 가져오기
 
-  try {
-    // 단일 문제 API 호출
-    const problemData = await getSingleProblemAPI(context, Number(Id));
+//   try {
+//     // 단일 문제 API 호출
+//     const problemData = await getSingleProblemAPI(context, Number(Id));
 
-    // problemData가 없으면 404 처리
-    if (!problemData) {
-      return {
-        notFound: true,
-      };
-    }
+//     // problemData가 없으면 404 처리
+//     if (!problemData) {
+//       return {
+//         notFound: true,
+//       };
+//     }
 
-    return {
-      props: {
-        problemData,
-      },
-    };
-  } catch (error) {
-    // 에러가 발생하면 더미 데이터를 반환
-    return {
-      props: {
-        problemData: dummyImageProblem,
-      },
-    };
-  }
-};
+//     return {
+//       props: {
+//         problemData,
+//       },
+//     };
+//   } catch (error) {
+//     // 에러가 발생하면 더미 데이터를 반환
+//     return {
+//       props: {
+//         problemData: dummyImageProblem,
+//       },
+//     };
+//   }
+// };
 
-interface TestProps {
-  problemData: ProblemResponse;
-}
+// interface TestProps {
+//   problemData: ProblemResponse;
+// }
 
-export default function Test({ problemData }: TestProps) {
-  const [problem] = useState<ProblemResponse>(problemData);
+export default function Test() {
+  const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
@@ -74,6 +79,23 @@ export default function Test({ problemData }: TestProps) {
     { memoId: 3, content: 'This is the third memo content.' },
     { memoId: 4, content: 'This is the fourth memo content.' },
   ]);
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (typeof id === 'string') {
+        // id가 string인 경우에만 API 호출
+        const res = await getSingleProblemAPI(id);
+        setProblem(res.data);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   useEffect(() => {
     const handleResize = throttle(() => {
@@ -110,9 +132,9 @@ export default function Test({ problemData }: TestProps) {
           answer,
           timeTaken,
         );
-        console.log('Submission response:', response);
+        console.log('단일 문제 채점 결과:', response);
       } catch (error) {
-        console.error('Error submitting answer:', error);
+        console.error('단일 문제 채점 중 에러 발생:', error);
       }
     }
   };
@@ -136,52 +158,64 @@ export default function Test({ problemData }: TestProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles['problem-container']}>
-        <div className={styles.problem}>
-          <ProblemHeader
-            problemLevel={problem.problemLevel.name}
-            problemType={problem.problemType.name}
-            problemTitle={problem.title}
-            problemId={problem.problemId}
-            problemLike={false}
-          />
-          <div className={styles['problem-content']}>
-            <ProblemContentText problemContent={problem.content} />
-            {problem.problemType?.problemTypeDetailCode === '0' && (
-              <ProblemImageOptionList
-                problemOptions={problem.problemOptions}
-                selectedOption={answer}
-                onSingleProblemAnswer={handleAnswer}
+      {problem && (
+        <div className={styles['problem-container']}>
+          <div className={styles.problem}>
+            <ProblemHeader
+              problemLevel={problem.problemLevel.name}
+              problemType={problem.problemType.name}
+              problemTitle={problem.title}
+              problemId={problem.problemId.toString()}
+              problemLike={false}
+            />
+            <div className={styles['problem-content']}>
+              <ProblemContentText problemContent={problem.content} />
+              {problem.questionType.code === 'QT02' && (
+                <ProblemInputField
+                  placeholder={
+                    Array.isArray(problem.metadata.options)
+                      ? problem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
+                      : problem.metadata.options // string일 경우 그대로 사용
+                  }
+                  onSingleProblemAnswer={handleAnswer}
+                />
+              )}
+              {problem.questionType.code !== 'QT02' && (
+                <ProblemOptionList
+                  problemOptions={
+                    Array.isArray(problem.metadata.options)
+                      ? problem.metadata.options // string[]일 경우
+                      : [problem.metadata.options] // string일 경우 배열로 변환
+                  }
+                  selectedOption={answer}
+                  onSingleProblemAnswer={handleAnswer}
+                />
+              )}
+            </div>
+            <div className={styles['problem-button-list']}>
+              <div />
+              <PrimaryButton
+                size="small"
+                label="제출하기"
+                onClick={handleSubmit}
               />
-            )}
-            {problem.problemType?.problemTypeDetailCode !== '0' && (
-              <ProblemOptionList
-                problemOptions={problem.problemOptions}
-                selectedOption={answer}
-                onSingleProblemAnswer={handleAnswer}
-              />
-            )}
+            </div>
           </div>
-          <div className={styles['problem-button-list']}>
-            <div />
-            <PrimaryButton
-              size="small"
-              label="제출하기"
-              onClick={handleSubmit}
+          <div
+            className={styles['problem-memo']}
+            style={{
+              position: isMobile ? 'static' : 'sticky',
+              top: '60px',
+              zIndex: 10,
+            }}
+          >
+            <ProblemMemoManager
+              memoList={memoList}
+              onSaveMemo={handleMemoSave}
             />
           </div>
         </div>
-        <div
-          className={styles['problem-memo']}
-          style={{
-            position: isMobile ? 'static' : 'sticky',
-            top: '60px',
-            zIndex: 10,
-          }}
-        >
-          <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
-        </div>
-      </div>
+      )}
     </div>
   );
 }

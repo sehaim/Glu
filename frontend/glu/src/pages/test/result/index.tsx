@@ -177,18 +177,21 @@ export default function TestResult() {
                   {problem.content}
                 </div>
                 <div className={styles['problem-option-list']}>
-                  {problem?.problemOptions.map((problemOption, optionIndex) => (
-                    <p
-                      key={problemOption.problemOptionId}
-                      className={`${styles['problem-option-item']} ${
-                        Number(problem.userAnswer) === optionIndex + 1
-                          ? styles['user-answer']
-                          : ''
-                      }`}
-                    >
-                      {optionIndex + 1}. {problemOption.option}{' '}
-                    </p>
-                  ))}
+                  {Array.isArray(problem?.metadata?.options) &&
+                    problem.metadata.options.map(
+                      (problemOption: string, optionIndex: number) => (
+                        <p
+                          key={problemOption}
+                          className={`${styles['problem-option-item']} ${
+                            Number(problem.userAnswer) === optionIndex + 1
+                              ? styles['user-answer']
+                              : ''
+                          }`}
+                        >
+                          {optionIndex + 1}. {problemOption}{' '}
+                        </p>
+                      ),
+                    )}
                 </div>
               </div>
               <div className={styles['problem-solution']}>

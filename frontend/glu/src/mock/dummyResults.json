@@ -7,195 +7,180 @@
   "stageUpUrl": "https://example.com/next-stage",
   "problemList": [
     {
-      "problemId": 1,
+      "problemId": "66f6385fb1ecdc758ed9ec49",
       "title": "문제 1",
       "content": "문제 내용 1",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 60
     },
     {
-      "problemId": 2,
+      "problemId": "66f6385fb1ecdc758ed9ec48",
       "title": "문제 2",
       "content": "문제 내용 2",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": false,
       "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 50
     },
     {
-      "problemId": 3,
+      "problemId": "66f6385fb1ecdc758ed9ec47",
       "title": "문제 3",
       "content": "문제 내용 3",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 40
     },
     {
-      "problemId": 4,
+      "problemId": "66f6385fb1ecdc758ed9ec46",
       "title": "문제 4",
       "content": "문제 내용 4",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 45
     },
     {
-      "problemId": 5,
+      "problemId": "66f6385fb1ecdc758ed9ec45",
       "title": "문제 5",
       "content": "문제 내용 5",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 35
     },
     {
-      "problemId": 6,
+      "problemId": "66f6385fb1ecdc758ed9ec44",
       "title": "문제 6",
       "content": "문제 내용 6",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": false,
       "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 55
     },
     {
-      "problemId": 7,
+      "problemId": "66f6385fb1ecdc758ed9ec43",
       "title": "문제 7",
       "content": "문제 내용 7",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 30
     },
     {
-      "problemId": 8,
+      "problemId": "66f6385fb1ecdc758ed9ec42",
       "title": "문제 8",
       "content": "문제 내용 8",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 40
     },
     {
-      "problemId": 9,
+      "problemId": "66f6385fb1ecdc758ed9ec41",
       "title": "문제 9",
       "content": "문제 내용 9",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 60
     },
     {
-      "problemId": 10,
+      "problemId": "66f6385fb1ecdc758ed9ec40",
       "title": "문제 10",
       "content": "문제 내용 10",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": false,
       "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 45
     },
     {
-      "problemId": 11,
+      "problemId": "66f6385fb1ecdc758ed9ec3f",
       "title": "문제 11",
       "content": "문제 내용 11",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 55
     },
     {
-      "problemId": 12,
+      "problemId": "66f6385fb1ecdc758ed9ec3e",
       "title": "문제 12",
       "content": "문제 내용 12",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 50
     },
     {
-      "problemId": 13,
+      "problemId": "66f6385fb1ecdc758ed9ec3d",
       "title": "문제 13",
       "content": "문제 내용 13",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": false,
       "userAnswer": "2",
       "solution": "선택지 1",
       "solveTime": 35
     },
     {
-      "problemId": 14,
+      "problemId": "66f6385fb1ecdc758ed9ec3c",
       "title": "문제 14",
       "content": "문제 내용 14",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
       "solveTime": 60
     },
     {
-      "problemId": 15,
+      "problemId": "66f6385fb1ecdc758ed9ec3b",
       "title": "문제 15",
       "content": "문제 내용 15",
-      "problemOptions": [
-        { "problemOptionId": 1, "option": "선택지 1" },
-        { "problemOptionId": 2, "option": "선택지 2" }
-      ],
+      "metadata": {
+        "options": ["선택지 1", "선택지 2"]
+      },
       "isCorrect": true,
       "userAnswer": "1",
       "solution": "선택지 1",
