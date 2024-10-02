@@ -4,6 +4,7 @@ from typing import Optional
 import random
 import numpy as np
 from fastapi import APIRouter, HTTPException, Header
+from numba.core.typing.builtins import type_index_value
 
 from repositories import get_all_problems, get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
 from repositories.problem_repositories import (
@@ -22,6 +23,17 @@ classifications = [
     "사회관계", "시사", "과학", "문화",
     "사설", "교육", "경제", "nie"
 ]
+story_classifications = [0,1,2,3,4]
+news_classifications = [5,6,7,8,9,10,11]
+
+code_classifications = {
+    "PT0211": story_classifications,
+    "PT0221": news_classifications,
+    "PT0222": news_classifications,
+    "PT0311": story_classifications,
+    "PT0312": story_classifications,
+    "PT0321": news_classifications
+}
 
 detail_codes_dict = {
     "PT01": ["PT0111", "PT0112", "PT0121"],
@@ -139,37 +151,56 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
     #     raise HTTPException(status_code=400, detail=str(e))
 
     selected_problems = []
-    type_counts = [2, 2, 1]  #분배 개수
+    type_index = [0, 1, 2]
     level_offsets = [-1, 0, 0, 1, 1] #난이도 조정
 
     for pt_type, detail_codes in detail_codes_dict.items():
-        random.shuffle(type_counts)
+        # if 유형레벨 = 1
+        #     level_offsets = [0, 0, 0, 1, 1]
+        # elif 유형레벨 = 7
+        #     level_offsets = [-1, 0, 0, 0, 0]
 
-        # 랜덤한 세부 유형 배열 생성
-        detail_types = []
-        for detail_type, count in zip([0, 1, 2], type_counts):
-            detail_types.extend([detail_type] * count)  # 각 세부 유형을 count만큼 추가
+        detail_types = [0, 1, 2]
+        detail_types.extend(random.choices(type_index, k=2))
 
         # 세부 유형 배열을 랜덤으로 섞기
-        random.shuffle(detail_types)
         random.shuffle(level_offsets)
 
         # 인덱스와 레벨 배열 매칭
         indices = list(range(len(detail_types)))
         # print(indices)
-        # print(level_offsets)
-        # print(detail_types)
+        print(level_offsets)
+        print(detail_types)
 
+        idx=0
         for i in indices:
-            detail_code = detail_codes_dict["PT01"][detail_types[i]]  # PT01 대유형에서 detail_code 선택
+            detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
             level = 5 + level_offsets[i]  # 현재 레벨 매칭
 
-            # 문제 가져오기
-            fetched_problems = get_random_problems_by_code_and_level(
-                detail_code=detail_code,
-                level=level,
-                limit=1  # 각 인덱스에 대해 1문제 가져오기
-            )
+
+
+            if idx<3:
+                fetched_problems = get_random_problems_by_code_and_level(
+                    detail_code=detail_code,
+                    level=level,
+                    limit=1
+                )
+                idx=idx+1
+            else:
+                if pt_type == "PT01":
+                    # 문제 가져오기
+                    fetched_problems = get_random_problems_by_code_and_level(
+                        detail_code=detail_code,
+                        level=level,
+                        limit=1
+                    )
+                else:
+                    # 문제 가져오기 (수정필요)
+                    fetched_problems = get_random_problems_by_code_and_level(
+                        detail_code=detail_code,
+                        level=level,
+                        limit=1
+                    )
 
             if not fetched_problems:
                 raise HTTPException(
@@ -179,7 +210,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
             selected_problems.extend(fetched_problems)
 
-    print(len(selected_problems))
+    print(selected_problems)
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
         raise HTTPException(
@@ -200,6 +231,11 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
     levels = [-1, 0, 1] # 레벨 범위
 
     for pt_type, detail_codes in detail_codes_dict.items():
+        # if 유형레벨 = 1
+        #     levels = [0, 1]
+        # elif 유형레벨 = 7
+        #     levels = [-1, 0]
+
         random.shuffle(type_counts)
 
         # 랜덤한 세부 유형 배열 생성
@@ -329,18 +365,22 @@ async def get_wrong_status(user_id: int):
 
     print("classification_vector", classification_vectors)
 
-    # 각 classification에 대해 detailcode별 평균 벡터 계산
+    # 각 classification에 대해 detailcode별 평균 벡터와 횟수 계산
     classification_avg_vectors = {}
     for classification, detail_codes in classification_vectors.items():
         classification_avg_vectors[classification] = {}
         for detailcode, vectors in detail_codes.items():
             # numpy를 사용하여 각 벡터 요소별 평균 계산
             avg_vector = np.mean(vectors, axis=0).tolist()
-            classification_avg_vectors[classification][detailcode] = avg_vector
+            count = len(vectors)  # 벡터의 개수 (횟수) 계산
 
-    print("classification_avg_vectors:", classification_avg_vectors)
+            # 평균 벡터와 횟수를 함께 저장
+            classification_avg_vectors[classification][detailcode] = {
+                "average_vector": avg_vector,
+                "count": count
+            }
 
-    return "wrong call"
+    return classification_avg_vectors
 
 
 @router.get("/not_solve")
