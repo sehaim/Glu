@@ -1,14 +1,20 @@
 import MytestGrade from '@/components/mytest/mytestGrade';
 import MytestAttendance from '@/components/mytest/mytestAttendance';
-import { getUserInfoAPI, getAttendanceAPI } from '@/utils/user/mypage';
+import { getUserInfoAPI } from '@/utils/user/mypage';
+import {
+  getAttendanceAPI,
+  getSolvedComprehensiveTestAPI,
+} from '@/utils/user/mytest';
 import { MypageUser, Attendances } from '@/types/UserTypes';
 import { GetServerSideProps } from 'next';
+import MytestComprehensiveTestRecordList from '@/components/mytest/mytestComprehensiveTestRecordList';
 import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // 서버에서 회원정보 API 호출
   const userInfo = await getUserInfoAPI(context);
   const attendances = await getAttendanceAPI(context);
+  const TestList = await getSolvedComprehensiveTestAPI(context, 1, 5);
 
   // 데이터를 props로 페이지 컴포넌트에 전달
   return {
@@ -29,12 +35,15 @@ export default function MytestGrowthPage({
   attendances,
 }: MytestGrowthPageProps) {
   return (
-    <div className={`${styles.section} ${styles.row}`}>
+    <div className={`${styles.container} ${styles.row}`}>
       <MytestGrade userInfo={userInfo} />
-      <MytestAttendance
-        attendances={attendances}
-        attendanceRate={userInfo.attendanceRate}
-      />
+      <div className={styles.section}>
+        <MytestAttendance
+          attendances={attendances}
+          attendanceRate={userInfo.attendanceRate}
+        />
+        <MytestComprehensiveTestRecordList />
+      </div>
     </div>
   );
 }
