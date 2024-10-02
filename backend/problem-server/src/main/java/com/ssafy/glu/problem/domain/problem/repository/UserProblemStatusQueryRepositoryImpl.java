@@ -50,7 +50,7 @@ public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupp
 	}
 
 	public BooleanExpression levelEq(ProblemLevelCode problemLevelCode) {
-		log.info("problemLevelCode : {}", problemLevelCode);
+		log.info("problemLevel : {}", problemLevelCode);
 		return problemLevelCode != null ? userProblemStatus.problem.problemLevelCode.eq(problemLevelCode) :
 			null;
 	}
@@ -62,7 +62,7 @@ public class UserProblemStatusQueryRepositoryImpl extends QuerydslRepositorySupp
 	}
 
 	public BooleanExpression detailTypeEq(ProblemTypeDetailCode problemTypeDetailCode) {
-		log.info("problemTypeDetailCode : {}", problemTypeDetailCode);
+		log.info("problemTypeDetail : {}", problemTypeDetailCode);
 		return problemTypeDetailCode != null ?
 			userProblemStatus.problem.problemTypeDetailCode.eq(problemTypeDetailCode) : null;
 	}

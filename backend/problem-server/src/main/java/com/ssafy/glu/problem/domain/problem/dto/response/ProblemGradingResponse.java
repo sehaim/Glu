@@ -9,7 +9,7 @@ import lombok.Builder;
 @Builder
 public record ProblemGradingResponse(
 	boolean isCorrect,
-	CommonCodeResponse problemTypeCode,
+	CommonCodeResponse problemType,
 	Integer acquiredScore,
 	Integer totalScore,
 	boolean isStageUp,
@@ -18,7 +18,7 @@ public record ProblemGradingResponse(
 	public static ProblemGradingResponse of(GradeResult gradeResult) {
 		return ProblemGradingResponse.builder()
 			.isCorrect(gradeResult.isCorrect())
-			.problemTypeCode(CommonCodeResponse.of(gradeResult.problemTypeCode()))
+			.problemType(CommonCodeResponse.of(gradeResult.problemTypeCode()))
 			.acquiredScore(gradeResult.acquiredScore())
 			.totalScore(gradeResult.totalUserScore())
 			.build();
@@ -27,7 +27,7 @@ public record ProblemGradingResponse(
 	public static ProblemGradingResponse of(GradeResult gradeResult, ExpUpdateResponse expUpdateResponse) {
 		return ProblemGradingResponse.builder()
 			.isCorrect(gradeResult.isCorrect())
-			.problemTypeCode(CommonCodeResponse.of(gradeResult.problemTypeCode()))
+			.problemType(CommonCodeResponse.of(gradeResult.problemTypeCode()))
 			.acquiredScore(gradeResult.acquiredScore())
 			.totalScore(gradeResult.totalUserScore())
 			.isStageUp(expUpdateResponse.isStageUp())

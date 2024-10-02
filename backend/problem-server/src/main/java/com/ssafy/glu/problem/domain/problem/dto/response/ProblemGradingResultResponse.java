@@ -26,10 +26,10 @@ public record ProblemGradingResultResponse(
 	Integer solveTime,
 
 	// 타입 관련 정보
-	CommonCodeResponse questionTypeCode,
-	CommonCodeResponse problemLevelCode,
-	CommonCodeResponse problemTypeDetailCode,
-	CommonCodeResponse problemTypeCode
+	CommonCodeResponse questionType,
+	CommonCodeResponse problemLevel,
+	CommonCodeResponse problemTypeDetail,
+	CommonCodeResponse problemType
 ) {
 	public static ProblemGradingResultResponse of(Problem problem, Boolean isCorrect,
 		ProblemSolveRequest problemSolveRequest) {
@@ -45,10 +45,10 @@ public record ProblemGradingResultResponse(
 			.userAnswer(problemSolveRequest.userAnswer())
 			.solveTime(problemSolveRequest.solvedTime())
 
-			.questionTypeCode(CommonCodeResponse.of(problem.getQuestionTypeCode()))
-			.problemLevelCode(CommonCodeResponse.of(problem.getProblemLevelCode()))
-			.problemTypeCode(CommonCodeResponse.of(problem.getProblemTypeCode()))
-			.problemTypeDetailCode(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
+			.questionType(CommonCodeResponse.of(problem.getQuestionTypeCode()))
+			.problemLevel(CommonCodeResponse.of(problem.getProblemLevelCode()))
+			.problemType(CommonCodeResponse.of(problem.getProblemTypeCode()))
+			.problemTypeDetail(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
 
 			.build();
 	}
@@ -67,10 +67,10 @@ public record ProblemGradingResultResponse(
 			.userAnswer(userProblemLog.getUserAnswer())
 			.solveTime(userProblemLog.getSolvedTime())
 
-			.questionTypeCode(CommonCodeResponse.of(problem.getQuestionTypeCode()))
-			.problemLevelCode(CommonCodeResponse.of(problem.getProblemLevelCode()))
-			.problemTypeCode(CommonCodeResponse.of(problem.getProblemTypeCode()))
-			.problemTypeDetailCode(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
+			.questionType(CommonCodeResponse.of(problem.getQuestionTypeCode()))
+			.problemLevel(CommonCodeResponse.of(problem.getProblemLevelCode()))
+			.problemType(CommonCodeResponse.of(problem.getProblemTypeCode()))
+			.problemTypeDetail(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
 
 			.build();
 	}
