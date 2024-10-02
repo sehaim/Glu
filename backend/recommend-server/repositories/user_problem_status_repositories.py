@@ -31,3 +31,11 @@ def get_wrong_sevendays(user_id):
         'modifiedDate': {'$gte': one_week_ago},  # modifiedDate one_week_ago 이후인 문서만
         'status': 'WRONG'
     }))
+
+def get_top_n_classifications(n: int):
+    # 수정 필요
+    top_classifications = [
+        {"classification": "시사", "count": 5},
+        {"classification": "의사소통", "count": 3},
+    ]
+    return [item["classification"] for item in top_classifications[:n]]

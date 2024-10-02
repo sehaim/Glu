@@ -8,7 +8,9 @@ from fastapi import APIRouter, HTTPException,  Header
 
 from models import Problem
 from repositories import get_all_problems, get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
-from repositories.problem_repositories import get_one_problem, get_random_problems_by_code_and_level
+from repositories.problem_repositories import get_one_problem, get_random_problems_by_code_and_level, \
+    get_random_problems_by_code_and_level_and_classification
+from repositories.user_problem_status_repositories import get_top_n_classifications
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 
@@ -106,11 +108,83 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 
 
 @router.get("/test/general")
-async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
-    # 더미 데이터 생성
-    return get_all_problems()
+
+    # try:
+    #     # 사용자 정보 API 호출
+    #     async with httpx.AsyncClient() as client:
+    #         response = await client.get(f"http://j11a506.p.ssafy.io:8082/api/users/{user_id}")
+    #
+    #     if response.status_code != 200:
+    #         raise HTTPException(status_code=response.status_code, detail="사용자 정보를 불러올 수 없습니다.")
+    #
+    #     user_data = response.json()
+    #     birth_date = user_data.get("birth")
+    #
+    #     if not birth_date:
+    #         raise HTTPException(status_code=400, detail="사용자 출생일 정보가 없습니다.")
+    #     # 출생일을 기준으로 나이 계산
+    #     age = calculate_age(birth_date)
+    #     # 나이를 기반으로 사용자 레벨 계산
+    #     user_level = calculate_user_level(age)
+    #
+    # except httpx.RequestError as exc:
+    #     raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
+    # except ValueError as e:
+    #     raise HTTPException(status_code=400, detail=str(e))
+
+    selected_problems = []
+    type_counts = [2, 2, 1]  #분배 개수
+    level_offsets = [-1, 0, 0, 1, 1] #난이도 조정
+
+    for pt_type, detail_codes in detail_codes_dict.items():
+        random.shuffle(type_counts)
+
+        # 랜덤한 세부 유형 배열 생성
+        detail_types = []
+        for detail_type, count in zip([0, 1, 2], type_counts):
+            detail_types.extend([detail_type] * count)  # 각 세부 유형을 count만큼 추가
+
+        # 세부 유형 배열을 랜덤으로 섞기
+        random.shuffle(detail_types)
+        random.shuffle(level_offsets)
+
+        # 인덱스와 레벨 배열 매칭
+        indices = list(range(len(detail_types)))
+        # print(indices)
+        # print(level_offsets)
+        # print(detail_types)
+
+        for i in indices:
+            detail_code = detail_codes_dict["PT01"][detail_types[i]]  # PT01 대유형에서 detail_code 선택
+            level = 5 + level_offsets[i]  # 현재 레벨 매칭
+
+            # 문제 가져오기
+            fetched_problems = get_random_problems_by_code_and_level(
+                detail_code=detail_code,
+                level=level,
+                limit=1  # 각 인덱스에 대해 1문제 가져오기
+            )
+
+            if not fetched_problems:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"세부유형 코드 {detail_code}에 충분한 문제가 없습니다."
+                )
+
+            selected_problems.extend(fetched_problems)
+
+    print(len(selected_problems))
+    # 총 15문제가 선택되었는지 확인
+    if len(selected_problems) != 15:
+        raise HTTPException(
+            status_code=500,
+            detail="문제 선택 과정에서 예상치 못한 오류가 발생했습니다."
+        )
+
+    return selected_problems
 
 
 @router.get("/type")
