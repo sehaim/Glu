@@ -42,14 +42,14 @@ public class ProblemController {
 	// TODO: API Swagger 문서화
 
 	@GetMapping("/{problemId}")
-	public ResponseEntity<ProblemBaseResponse> getProblem(@PathVariable("problemId") String problemId) {
-		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblem(problemId));
+	public ResponseEntity<ProblemBaseResponse> getProblem(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
+		@PathVariable("problemId") String problemId) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblem(userId, problemId));
 	}
 
 	@GetMapping("/solve")
 	public ResponseEntity<PageResponse<ProblemBaseResponse>> getProblemListInLog(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
-		@ModelAttribute ProblemSearchCondition condition,
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @ModelAttribute ProblemSearchCondition condition,
 		Pageable pageable) {
 		log.info("condition : {}", condition);
 		Page<ProblemBaseResponse> pageResult = problemService.getProblemList(userId, condition, pageable);

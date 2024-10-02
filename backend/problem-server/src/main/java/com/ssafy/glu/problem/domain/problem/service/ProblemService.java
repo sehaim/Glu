@@ -12,7 +12,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 
 public interface ProblemService {
-	ProblemBaseResponse getProblem(String problemId);
+	ProblemBaseResponse getProblem(Long userId, String problemId);
 
 	Boolean getIsFavorite(Long userId, String problemId);
 

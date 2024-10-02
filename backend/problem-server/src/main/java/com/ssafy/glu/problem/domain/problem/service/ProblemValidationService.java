@@ -37,9 +37,9 @@ public class ProblemValidationService implements ProblemService {
 	private final ProblemRepository problemRepository;
 
 	@Override
-	public ProblemBaseResponse getProblem(String problemId) {
+	public ProblemBaseResponse getProblem(Long userId, String problemId) {
 		validateProblemIdIsNullOrEmpty(problemId);
-		return problemService.getProblem(problemId);
+		return problemService.getProblem(userId, problemId);
 	}
 
 	@Override

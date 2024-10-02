@@ -22,6 +22,7 @@ import com.ssafy.glu.problem.domain.problem.event.ProblemSolvedEventPublisher;
 import com.ssafy.glu.problem.domain.problem.exception.problem.ProblemNotFoundException;
 import com.ssafy.glu.problem.domain.problem.exception.status.UserProblemStatusNotFoundException;
 import com.ssafy.glu.problem.domain.problem.repository.ProblemRepository;
+import com.ssafy.glu.problem.domain.problem.repository.UserProblemLogRepository;
 import com.ssafy.glu.problem.domain.problem.repository.UserProblemStatusRepository;
 import com.ssafy.glu.problem.domain.user.service.UserService;
 import com.ssafy.glu.problem.global.feign.dto.ExpUpdateResponse;
@@ -41,10 +42,14 @@ public class ProblemServiceImpl implements ProblemService {
 	private final ProblemSolvedEventPublisher problemSolvedEventPublisher;
 	private final ProblemGradingService problemGradingService;
 	private final UserService userService;
+	private final UserProblemLogRepository userProblemLogRepository;
 
 	@Override
-	public ProblemBaseResponse getProblem(String problemId) {
-		return ProblemBaseResponse.of(getProblemOrThrow(problemId));
+	public ProblemBaseResponse getProblem(Long userId, String problemId) {
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
+				problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
+		return ProblemBaseResponse.of(userProblemStatus);
 	}
 
 	@Override
