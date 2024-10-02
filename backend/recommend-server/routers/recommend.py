@@ -42,24 +42,67 @@ def calculate_user_level(age: int) -> int:
 
 @router.get("/test/level")
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-    # if not user_id:
-    #     raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
+    if not user_id:
+        raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
-    # 더미 데이터 생성
-    problem_data = get_one_problem()
+    # try:
+    #     # 사용자 정보 API 호출
+    #     async with httpx.AsyncClient() as client:
+    #         response = await client.get(f"http://j11a506.p.ssafy.io:8082/api/users/{user_id}")
+    #
+    #     if response.status_code != 200:
+    #         raise HTTPException(status_code=response.status_code, detail="사용자 정보를 불러올 수 없습니다.")
+    #
+    #     user_data = response.json()
+    #     birth_date = user_data.get("birth")
+    #
+    #     if not birth_date:
+    #         raise HTTPException(status_code=400, detail="사용자 출생일 정보가 없습니다.")
+    #     # 출생일을 기준으로 나이 계산
+    #     age = calculate_age(birth_date)
+    #     # 나이를 기반으로 사용자 레벨 계산
+    #     user_level = calculate_user_level(age)
+    #
+    # except httpx.RequestError as exc:
+    #     raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
+    # except ValueError as e:
+    #     raise HTTPException(status_code=400, detail=str(e))
 
-    print("problem data", problem_data)
+    selected_problems = []
 
-    # 날짜 형식 변환
-    from datetime import datetime
-    problem_data['createdDate'] = datetime.fromisoformat(problem_data['createdDate'])
-    problem_data['modifiedDate'] = datetime.fromisoformat(problem_data['modifiedDate'])
+    # 각 대유형별로 문제 선택
+    for pt_type, detail_codes in detail_codes_dict.items():
+        # 세부유형 순서를 랜덤하게 섞어 어떤 세부유형에서 문제를 가져올지 결정
+        shuffled_detail_codes = detail_codes.copy()
+        random.shuffle(shuffled_detail_codes)
 
-    # Pydantic 모델을 사용해 데이터 변환
-    problem = Problem(**problem_data)
+        print(shuffled_detail_codes)
+        # 첫 두 세부유형에서 2개씩, 마지막 세부유형에서 1개를 가져옴
+        problem_counts = [2, 2, 1]
 
-    print("problem info" , problem)
-    return problem
+        for i, count in enumerate(problem_counts):
+            detail_code = shuffled_detail_codes[i]  # 랜덤으로 섞인 세부유형에서 가져오기
+            fetched_problems = get_random_problems_by_code_and_level(
+                detail_code=detail_code,
+                level=6,  # 나중에 user_level로
+                limit=count
+            )
+
+            # fetched_problems가 MongoDB에서 가져온 경우 ObjectId를 문자열로 변환
+            for problem in fetched_problems:
+                if "_id" in problem:  # '_id' 필드가 있을 경우
+                    problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
+
+            selected_problems.extend(fetched_problems)
+
+    # 총 15문제가 선택되었는지 확인
+    if len(selected_problems) != 15:
+        raise HTTPException(
+            status_code=500,
+            detail="문제 선택 과정에서 예상치 못한 오류가 발생했습니다."
+        )
+
+    return selected_problems
 
 
 @router.get("/test/general")
