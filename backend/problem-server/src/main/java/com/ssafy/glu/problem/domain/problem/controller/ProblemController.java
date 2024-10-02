@@ -86,6 +86,12 @@ public class ProblemController {
 			.body(new PageResponse<>(problemService.getProblemMemoList(userId, problemId, pageable)));
 	}
 
+	@GetMapping("/{problemId}/favorite")
+	public ResponseEntity<Boolean> getUserProblemFavorite(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId) {
+		return ResponseEntity.status(HttpStatus.OK).body(problemService.getIsFavorite(userId, problemId));
+	}
+
 	@PostMapping("/{problemId}/favorite")
 	public ResponseEntity<Void> createUserProblemFavorite(@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
 		@PathVariable("problemId") String problemId) {

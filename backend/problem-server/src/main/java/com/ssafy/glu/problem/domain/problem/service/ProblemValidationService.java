@@ -43,6 +43,13 @@ public class ProblemValidationService implements ProblemService {
 	}
 
 	@Override
+	public Boolean getIsFavorite(Long userId, String problemId) {
+		validateUserIdIsNull(userId);
+		validateProblemIdIsNullOrEmpty(problemId);
+		return problemService.getIsFavorite(userId, problemId);
+	}
+
+	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
 		validateUserIdIsNull(userId);
