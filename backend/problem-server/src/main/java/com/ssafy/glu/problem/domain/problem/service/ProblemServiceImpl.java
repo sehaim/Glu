@@ -48,6 +48,13 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
+	public Boolean getIsFavorite(Long userId, String problemId) {
+		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblemId(userId, problemId)
+			.orElseThrow(UserProblemStatusNotFoundException::new);
+		return userProblemStatus.getIsFavorite();
+	}
+
+	@Override
 	public Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition,
 		Pageable pageable) {
 		return userProblemStatusRepository.findAllProblemByCondition(userId, condition, pageable)

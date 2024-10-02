@@ -14,6 +14,8 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 public interface ProblemService {
 	ProblemBaseResponse getProblem(String problemId);
 
+	Boolean getIsFavorite(Long userId, String problemId);
+
 	Page<ProblemBaseResponse> getProblemList(Long userId, ProblemSearchCondition condition, Pageable pageable);
 
 	ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request);
