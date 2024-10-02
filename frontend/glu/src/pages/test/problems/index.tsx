@@ -269,7 +269,6 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
               problemLevel={currentProblem?.problemLevel?.name}
               problemType={currentProblem?.problemType?.name}
               problemTitle={currentProblem?.title}
-              problemLike={false}
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={currentProblem?.content} />
