@@ -11,7 +11,7 @@ from repositories.problem_repositories import (
     get_problem_by_id,
     get_problem_by_ids,
     get_problems_by_level_and_type,
-    get_similar)
+    get_similar, get_random_problems_by_log)
 from repositories.problem_repositories import get_random_problems_by_code_and_level, \
     get_random_problems_by_code_and_level_and_classification
 from repositories.user_problem_status_repositories import get_top_n_classifications
@@ -195,12 +195,20 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                         limit=1
                     )
                 else:
-                    # 문제 가져오기 (수정필요)
-                    fetched_problems = get_random_problems_by_code_and_level(
-                        detail_code=detail_code,
-                        level=level,
-                        limit=1
-                    )
+                    top_classifications = top_n_classification(2,get_wrong_status(int(user_id)))
+                    for classification in top_classifications:
+
+                        correct_ids = get_correct_ids(int(user_id))
+                        wrong_ids = get_wrong_ids(int(user_id))
+
+                        fetched_problems = get_random_problems_by_log(
+                            detail_code=classification[1],
+                            level=level,
+                            classification=classification[0],
+                            correct_ids=correct_ids,
+                            wrong_ids=wrong_ids,
+                            vector=classification[3]
+                        )
 
             if not fetched_problems:
                 raise HTTPException(
@@ -210,7 +218,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
             selected_problems.extend(fetched_problems)
 
-    print(selected_problems)
+    # print(selected_problems)
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
         raise HTTPException(
@@ -343,7 +351,7 @@ def get_wrong_ids(user_id: int):
 
 
 @router.get("/wrong")
-async def get_wrong_status(user_id: int):
+def get_wrong_status(user_id: int):
     wrong_problem_ids = get_wrong_ids(user_id)
 
     problems = get_problem_by_ids(wrong_problem_ids)
@@ -387,3 +395,18 @@ async def get_wrong_status(user_id: int):
 async def not_solve_problems():
     not_solve_problems = get_problems_not_solve(1)
     return not_solve_problems
+
+def top_n_classification(n, map):
+    result = []
+    for ckey in map.keys():
+        detail_code_map = map.get(ckey)
+        for dkey in detail_code_map.keys():
+            value = detail_code_map.get(dkey)
+            count = value.get('count')
+            avg_vector = value.get('average_vector')
+
+            result.append((ckey, dkey, count, avg_vector))
+
+    result_sorted = sorted(result, key=lambda x: x[2], reverse=True)
+
+    return result_sorted[:n]

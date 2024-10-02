@@ -9,6 +9,7 @@ from db import mongo_db
 problem_collection = mongo_db['problem']
 user_problem_status_collection = mongo_db['userProblemStatus']
 
+
 def get_one_problem():
     return problem_collection.find_one({"problemTypeDetailCode": "PT0211"})
 
@@ -31,6 +32,7 @@ def get_problem_by_id(problem_id: str):
         print(f"Error occurred while fetching problem by ID: {e}")
         return None
 
+
 def get_problem_by_ids(problem_ids: list[str]):
     try:
         # 문자열 ID를 ObjectId로 변환하여 MongoDB에서 조회
@@ -51,7 +53,8 @@ def get_problem_by_ids(problem_ids: list[str]):
         print(f"Error occurred while fetching problems by IDs: {e}")
         return None
 
-def get_problems_by_level_and_type(level_code:str, type_detail_code:str, problem_id: str):
+
+def get_problems_by_level_and_type(level_code: str, type_detail_code: str, problem_id: str):
     try:
         # 필터 조건에 맞는 전체 문서 수 확인
         total_count = problem_collection.count_documents({
@@ -121,10 +124,11 @@ def cosine_similarity(vec_a: list[float], vec_b: list[float]) -> float:
 
     return dot_product / (norm_a * norm_b)
 
-def get_similar(level_code:str, type_detail_code:str, vector: list[float], problem_id: str):
+
+def get_similar(level_code: str, type_detail_code: str, vector: list[float], problem_id: str):
     problem_data = problem_collection.find({"problemLevelCode": level_code,
                                             "problemTypeDetailCode": type_detail_code,
-                                            "_id": {"$ne": ObjectId(problem_id)} })
+                                            "_id": {"$ne": ObjectId(problem_id)}})
 
     problems_with_scores = []
     for problem in problem_data:
@@ -138,13 +142,15 @@ def get_similar(level_code:str, type_detail_code:str, vector: list[float], probl
     # 상위 3개 문제 반환
     return sorted_problems[:3]
 
+
 def get_all_problems():
     # 모든 문제를 리스트로 변환하여 반환
     return list(problem_collection.find())
 
+
 def get_random_problems_by_code_and_level(detail_code: str, level: int, limit: int):
     # MongoDB에서 문제를 조회
-    problems = list(problem_collection.find({ ## 랜덤으로 가져올 방법 고민
+    problems = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
         "problemTypeDetailCode": detail_code,
         "problemLevelCode": f"PL0{level}"
     }).limit(limit))
@@ -155,9 +161,10 @@ def get_random_problems_by_code_and_level(detail_code: str, level: int, limit: i
 
     return problems
 
+
 def get_random_problems_by_code_and_level_and_classification(detail_code: str, level: int, classification: int):
     # MongoDB에서 문제를 조회
-    problems = list(problem_collection.find({ ## 랜덤으로 가져올 방법 고민
+    problems = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
         "problemTypeDetailCode": detail_code,
         "problemLevelCode": f"PL0{level}",
         "classification": classification
@@ -168,6 +175,31 @@ def get_random_problems_by_code_and_level_and_classification(detail_code: str, l
         problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
 
     return problems
+
+
+def get_random_problems_by_log(detail_code: str, level: int, classification: int, correct_ids: list[str],
+                               wrong_ids: list[str], vector):
+    # MongoDB에서 문제를 조회
+    problem_data = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
+        "problemTypeDetailCode": detail_code,
+        "problemLevelCode": f"PL0{level}",
+        "classification": classification
+    }))
+
+    problems_with_scores = []
+    for problem in problem_data:
+        problem["_id"] = str(problem["_id"])
+        if (problem["_id"] in correct_ids): problem["cosine_score"] = cosine_similarity(vector, problem["vector"]) - 1
+        elif (problem["_id"] in wrong_ids): problem["cosine_score"] = cosine_similarity(vector, problem["vector"]) - 0.5
+        else : problem["cosine_score"] = cosine_similarity(vector, problem["vector"])
+        problems_with_scores.append(problem)
+
+    # 코사인 유사도 기준으로 정렬 (내림차순)
+    sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
+
+    # 상위 3개 문제 반환
+    return sorted_problems[:3]
+
 
 def get_problems_by_detail_code(detail_code: str, limit: int = 2):
     return list(problem_collection.find({"problemTypeDetailCode": detail_code}).limit(limit))
