@@ -177,8 +177,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
             detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
             level = 5 + level_offsets[i]  # 현재 레벨 매칭
 
-
-
             if idx<3:
                 fetched_problems = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
@@ -210,14 +208,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                             vector=classification[3]
                         )
 
-            if not fetched_problems:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"세부유형 코드 {detail_code}에 충분한 문제가 없습니다."
-                )
-
-            selected_problems.extend(fetched_problems)
-
     # print(selected_problems)
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
@@ -230,21 +220,24 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
 
 @router.get("/type")
-async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
     selected_problems = []
-    type_counts = [3, 3, 4]  # 분배 개수
+    # 초기 값 설정
+    type_index = [0, 1, 2]
+
     levels = [-1, 0, 1] # 레벨 범위
 
+    i=0
     for pt_type, detail_codes in detail_codes_dict.items():
         # if 유형레벨 = 1
         #     levels = [0, 1]
         # elif 유형레벨 = 7
         #     levels = [-1, 0]
 
-        random.shuffle(type_counts)
+        type_counts = [3, 3, 4]  # 각 항목의 개수를 지정, 총합이 10
 
         # 랜덤한 세부 유형 배열 생성
         detail_types = []
@@ -253,36 +246,42 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
             detail_types.extend([detail_type] * count)  # 각 세부 유형을 count만큼 추가
         detail_levels.extend(random.choices(levels, k=10))
 
-        # 세부 유형 배열을 랜덤으로 섞기
-        random.shuffle(detail_types)
-
         # 인덱스와 레벨 배열 매칭
         indices = list(range(len(detail_types)))
-        print(indices)
+        # print(indices)
         print(detail_levels)
         print(detail_types)
 
-        for i in indices:
-            detail_code = detail_codes_dict["PT01"][detail_types[i]]  # PT01 대유형에서 detail_code 선택
-            level = 5 + detail_levels[i]  # 현재 레벨 매칭
-
-            # 문제 가져오기
-            fetched_problems = get_random_problems_by_code_and_level(
-                detail_code=detail_code,
-                level=level,
-                limit=1  # 각 인덱스에 대해 1문제 가져오기
-            )
-
-            if not fetched_problems:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"세부유형 코드 {detail_code}에 충분한 문제가 없습니다."
+        idx=0
+        for detail_code in detail_codes:
+            if pt_type == "PT01":
+                # 문제 가져오기
+                fetched_problems = get_random_problems_by_code_and_level(
+                    detail_code=detail_code,
+                    level=5 + detail_levels[idx],
+                    limit=1
                 )
+                selected_problems.extend(fetched_problems)
+            else:
+                top_classifications = top_n_classification(type_counts[i], get_wrong_status(int(user_id)))
+                print(top_classifications)
+                for classification in top_classifications:
+                    correct_ids = get_correct_ids(int(user_id))
+                    wrong_ids = get_wrong_ids(int(user_id))
 
-            selected_problems.extend(fetched_problems)
+                    fetched_problems = get_random_problems_by_log(
+                        detail_code=classification[1],
+                        level=5 + detail_levels[idx],
+                        classification=classification[0],
+                        correct_ids=correct_ids,
+                        wrong_ids=wrong_ids,
+                        vector=classification[3]
+                    )
+                    selected_problems.extend(fetched_problems)
+            idx=idx+1
+        i=i+1
 
     print(len(selected_problems))
-    # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 30:
         raise HTTPException(
             status_code=500,
@@ -314,17 +313,11 @@ def get_correct_ids(user_id: int):
     problem_ids = []
 
     for document in status:
-        print(document)  # document의 전체 구조 출력하여 확인
         if 'problem' in document and document['problem'] is not None:
             if '_id' in document['problem']:
                 # ObjectId를 문자열로 변환
                 problem_id = str(document['problem']['_id'])
-                print(problem_id)  # 디버깅용 출력
                 problem_ids.append(problem_id)  # 문제 ID 추가
-            else:
-                print("Key '_id' not found in 'problem'")
-        else:
-            print("Key 'problem' not found or is None in document")
 
     return problem_ids
 
@@ -335,17 +328,11 @@ def get_wrong_ids(user_id: int):
     problem_ids = []
 
     for document in status:
-        print(document)  # document의 전체 구조 출력하여 확인
         if 'problem' in document and document['problem'] is not None:
             if '_id' in document['problem']:
                 # ObjectId를 문자열로 변환
                 problem_id = str(document['problem']['_id'])
-                print(problem_id)  # 디버깅용 출력
                 problem_ids.append(problem_id)  # 문제 ID 추가
-            else:
-                print("Key '_id' not found in 'problem'")
-        else:
-            print("Key 'problem' not found or is None in document")
 
     return problem_ids
 
@@ -371,7 +358,6 @@ def get_wrong_status(user_id: int):
         # classification_vectors에 추가
         classification_vectors[classification][detailcode].append(vector)
 
-    print("classification_vector", classification_vectors)
 
     # 각 classification에 대해 detailcode별 평균 벡터와 횟수 계산
     classification_avg_vectors = {}
