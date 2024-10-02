@@ -1,4 +1,5 @@
 beautifulsoup4==4.12.3
+cryptography==42.0.7
 konlpy==0.6.0
 matplotlib==3.8.4
 matplotlib-inline==0.1.6
