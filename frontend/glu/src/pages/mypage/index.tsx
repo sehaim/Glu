@@ -43,8 +43,6 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
   const handleNicknameSubmit = () => {
     putUserInfoAPI(nickname, undefined, undefined, undefined);
     dispatch(login({ nickname }));
-
-    alert('닉네임이 변경되었습니다.');
   };
 
   // 비밀번호 변경
