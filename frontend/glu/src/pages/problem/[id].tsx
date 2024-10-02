@@ -20,6 +20,8 @@ import {
 import throttle from 'lodash/throttle';
 import { useRouter } from 'next/router';
 import ProblemInputField from '@/components/problem/problemInputField';
+import Image from 'next/image';
+import LevelUpModal from '@/components/problem/result/levelUpModal';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -32,6 +34,7 @@ interface ProblemResponse {
   metadata: ProblemOption;
   solution: string;
   isFavorite: boolean;
+  answer: string;
 }
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -73,7 +76,10 @@ export default function Test() {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
-
+  const [isSolved, setIsSolved] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [stageImage, setStageImage] = useState('');
   const [memoList, setMemoList] = useState<Memo[]>([
     { memoId: 1, content: 'This is the first memo content.' },
     { memoId: 2, content: 'This is the second memo content.' },
@@ -89,6 +95,7 @@ export default function Test() {
       if (typeof id === 'string') {
         // id가 string인 경우에만 API 호출
         const res = await getSingleProblemAPI(id);
+        console.log(res);
         setProblem(res.data);
       }
     };
@@ -134,10 +141,20 @@ export default function Test() {
           timeTaken,
         );
         console.log('단일 문제 채점 결과:', response);
+        setIsSolved(true);
+        setIsCorrect(response.data.isCorrect);
+        if (response.data.isStageUp) {
+          setIsModalOpen(true);
+          setStageImage(response.data.stageUpUrl);
+        }
       } catch (error) {
         console.error('단일 문제 채점 중 에러 발생:', error);
       }
     }
+  };
+
+  const handleLevelUpModalClose = () => {
+    setIsModalOpen(false);
   };
 
   const handleMemoSave = (newMemo: Memo) => {
@@ -159,6 +176,19 @@ export default function Test() {
 
   return (
     <div className={styles.container}>
+      {/* 레벨업 모달 */}
+      <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
+        <div className={styles.levelUp}>
+          <Image
+            className={styles['levelUp-image']}
+            src={stageImage}
+            alt="레벨업 이미지"
+            width={300}
+            height={356}
+          />
+        </div>
+      </LevelUpModal>
+
       {problem && (
         <div className={styles['problem-container']}>
           <div className={styles.problem}>
@@ -193,14 +223,42 @@ export default function Test() {
                 />
               )}
             </div>
-            <div className={styles['problem-button-list']}>
-              <div />
-              <PrimaryButton
-                size="small"
-                label="제출하기"
-                onClick={handleSubmit}
-              />
-            </div>
+            {!isSolved && (
+              <div className={styles['problem-button-list']}>
+                <div />
+                <PrimaryButton
+                  size="small"
+                  label="제출하기"
+                  onClick={handleSubmit}
+                />
+              </div>
+            )}
+            {isSolved && (
+              <div className={styles['problem-solution']}>
+                {isCorrect && (
+                  <>
+                    <div className={styles['problem-solution-correct']}>
+                      <p className={styles['problem-answer']}>
+                        {problem.answer}
+                      </p>
+                      맞았습니다!
+                    </div>{' '}
+                    {problem?.solution}
+                  </>
+                )}
+                {!isCorrect && (
+                  <>
+                    <div className={styles['problem-solution-incorret']}>
+                      <p className={styles['problem-answer']}>
+                        {problem.answer}
+                      </p>
+                      틀렸습니다ㅠㅠ
+                    </div>{' '}
+                    {problem?.solution}
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <div
             className={styles['problem-memo']}
