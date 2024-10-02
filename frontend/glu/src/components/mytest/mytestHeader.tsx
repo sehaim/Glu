@@ -8,8 +8,8 @@ export default function MytestHeader() {
   const tabs = [
     { path: '/mytest/growth', label: '나의 성장' },
     { path: '/mytest/starred', label: '찜한 문제' },
-    { path: '/mytest/solved', label: '해결한 문제' },
-    { path: '/mytest/unsolved', label: '틀린 문제' },
+    { path: '/mytest/correct', label: '해결한 문제' },
+    { path: '/mytest/incorrect', label: '틀린 문제' },
   ];
 
   return (

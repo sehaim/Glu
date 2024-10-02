@@ -61,7 +61,9 @@ export const createAuthAxios = (context?: {
     (response) => response,
     async (error) => {
       if (error.response.status === 401) {
-        const newToken = await refreshUserAPI(context);
+        const newToken = context
+          ? await refreshUserAPI(context)
+          : await refreshUserAPI();
         if (newToken) {
           // 새로운 토큰으로 헤더 업데이트
           const updatedConfig = {

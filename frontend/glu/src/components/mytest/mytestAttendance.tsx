@@ -136,10 +136,6 @@ export default function MytestAttendance({
           </div>
         </div>
       </div>
-      <div className={styles.section}>
-        <div className={styles['section-name']}>나의 테스트 기록</div>
-        <div className={styles['test-list']}>테스트 기록</div>
-      </div>
     </div>
   );
 }

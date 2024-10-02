@@ -28,17 +28,6 @@ export const getUserInfoAPI = async (context: GetServerSidePropsContext) => {
   }
 };
 
-// user 출석 정보 조회 API
-export const getAttendanceAPI = async (context: GetServerSidePropsContext) => {
-  try {
-    const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(`users/attendance`);
-    return res.data;
-  } catch (err) {
-    return null;
-  }
-};
-
 // user 정보 수정 API
 export const putUserInfoAPI = async (
   nickname?: string,

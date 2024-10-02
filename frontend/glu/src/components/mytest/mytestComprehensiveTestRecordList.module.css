@@ -1,0 +1,49 @@
+.container {
+  width: 100%;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.section-name {
+  font-family: 'BMJUA';
+  font-size: 20px;
+  color: var(--TEXT_SECONDARY);
+  margin-right: 30px;
+}
+
+.record-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.line-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  font-family: 'PT';
+  font-weight: 600;
+  justify-content: space-between;
+  margin: 7px 0;
+}
+
+.item-container {
+  background-color: var(--WHITEGREEN);
+  border-radius: 15px;
+  height: 40px;
+}
+
+.element-name {
+  width: 15%;
+  text-align: center;
+  color: var(--TEXT_SECONDARY);
+}
+
+.element {
+  width: 15%;
+  text-align: center;
+  color: var(--TEXT_PRIMARY);
+}
