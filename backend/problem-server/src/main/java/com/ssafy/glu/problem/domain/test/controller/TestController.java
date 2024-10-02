@@ -2,7 +2,6 @@ package com.ssafy.glu.problem.domain.test.controller;
 
 import static com.ssafy.glu.problem.global.util.HeaderUtil.*;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,7 @@ import com.ssafy.glu.problem.domain.test.dto.response.TestGradingBaseResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingDetailResponse;
 import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
 import com.ssafy.glu.problem.domain.test.service.TestService;
+import com.ssafy.glu.problem.global.dto.PageResponse;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +39,9 @@ public class TestController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<TestGradingDetailResponse>> getTestList(
+	public ResponseEntity<PageResponse<TestGradingDetailResponse>> getTestList(
 		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, Pageable pageable) {
-		return ResponseEntity.status(HttpStatus.OK).body(testService.getTestList(userId, pageable));
+		return ResponseEntity.status(HttpStatus.OK).body(new PageResponse<>(testService.getTestList(userId, pageable)));
 	}
 
 	@GetMapping("/previous")

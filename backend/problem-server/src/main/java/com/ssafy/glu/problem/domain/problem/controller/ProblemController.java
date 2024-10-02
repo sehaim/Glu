@@ -27,6 +27,7 @@ import com.ssafy.glu.problem.domain.problem.dto.response.ProblemBaseResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemGradingResponse;
 import com.ssafy.glu.problem.domain.problem.dto.response.ProblemMemoResponse;
 import com.ssafy.glu.problem.domain.problem.service.ProblemService;
+import com.ssafy.glu.problem.global.dto.PageResponse;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +47,13 @@ public class ProblemController {
 	}
 
 	@GetMapping("/solve")
-	public ResponseEntity<Page<ProblemBaseResponse>> getProblemListInLog(
-		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @ModelAttribute ProblemSearchCondition condition,
+	public ResponseEntity<PageResponse<ProblemBaseResponse>> getProblemListInLog(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId,
+		@ModelAttribute ProblemSearchCondition condition,
 		Pageable pageable) {
 		log.info("condition : {}", condition);
-		return ResponseEntity.status(HttpStatus.OK).body(problemService.getProblemList(userId, condition, pageable));
+		Page<ProblemBaseResponse> pageResult = problemService.getProblemList(userId, condition, pageable);
+		return ResponseEntity.status(HttpStatus.OK).body(new PageResponse<>(pageResult));
 	}
 
 	@PostMapping("/{problemId}/memo")
@@ -76,11 +79,11 @@ public class ProblemController {
 	}
 
 	@GetMapping("/{problemId}/memo")
-	public ResponseEntity<Page<ProblemMemoResponse>> getProblemMemoListInProblem(
+	public ResponseEntity<PageResponse<ProblemMemoResponse>> getProblemMemoListInProblem(
 		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId,
 		@PageableDefault(size = 4) Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(problemService.getProblemMemoList(userId, problemId, pageable));
+			.body(new PageResponse<>(problemService.getProblemMemoList(userId, problemId, pageable)));
 	}
 
 	@PostMapping("/{problemId}/favorite")
