@@ -2,7 +2,7 @@ import { createAuthAxios } from '../common';
 
 // 메모 가져오기
 export const getProblemMemoAPI = async (
-  problemId: number,
+  problemId: string,
   page: number,
   size: number,
   sort: string,
@@ -30,7 +30,7 @@ export const getProblemMemoAPI = async (
 
 // 메모 등록
 export const postProblemMemoAPI = async (
-  problemId: number,
+  problemId: string,
   content: string,
 ) => {
   try {
@@ -52,7 +52,7 @@ export const postProblemMemoAPI = async (
 
 // 메모 수정
 export const putProblemMemoAPI = async (
-  problemId: number,
+  problemId: string,
   memoIndex: number,
   content: string,
 ) => {
@@ -76,7 +76,7 @@ export const putProblemMemoAPI = async (
 
 // 메모 삭제
 export const deleteProblemMemoAPI = async (
-  problemId: number,
+  problemId: string,
   memoIndex: number,
 ) => {
   try {

@@ -31,7 +31,7 @@ export interface PreviousSolvedProblemType {
 }
 
 export interface Problem {
-  problemId: number;
+  problemId: string;
   title: string;
   content: string;
   questionType: QuestionType;
@@ -42,7 +42,7 @@ export interface Problem {
 }
 
 export interface SolvedProblem {
-  problemId: number;
+  problemId: string;
   title: string;
   content: string;
   metadata: ProblemOption;

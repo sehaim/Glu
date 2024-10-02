@@ -1,4 +1,3 @@
-import { ProblemOption } from '@/types/ProblemTypes';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './problemImageOptionList.module.css';
@@ -6,7 +5,7 @@ import styles from './problemImageOptionList.module.css';
 interface ProblemOptionListProps {
   selectedOption: string;
   problemIndex?: number;
-  problemOptions: ProblemOption[];
+  problemOptions: string[];
   onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
   onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
@@ -18,29 +17,29 @@ export default function ProblemOptionList({
   onTestProblemAnswer,
   onSingleProblemAnswer,
 }: ProblemOptionListProps) {
-  const [options, setOptions] = useState<ProblemOption[]>([]);
+  const [options, setOptions] = useState<string[]>(problemOptions);
 
   useEffect(() => {
     setOptions(problemOptions);
   }, [problemOptions]);
 
-  const handleOptionClick = (userAnswer: string | null | undefined) => {
+  const handleOptionClick = (userAnswer: number | null | undefined) => {
     if (!userAnswer) return; // Null 또는 undefined 체크
 
     // Test 문제 풀이
     if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
-      onTestProblemAnswer(problemIndex, userAnswer);
+      onTestProblemAnswer(problemIndex, String(userAnswer));
     }
 
     // 단일 문제 풀이
     if (onSingleProblemAnswer) {
-      onSingleProblemAnswer(userAnswer);
+      onSingleProblemAnswer(String(userAnswer));
     }
   };
 
   const handleKeyDown = (
     event: React.KeyboardEvent,
-    userAnswer: string | null | undefined,
+    userAnswer: number | null | undefined,
   ) => {
     if (!userAnswer) return; // Null 또는 undefined 체크
     if (event.key === 'Enter' || event.key === ' ') {
@@ -61,20 +60,20 @@ export default function ProblemOptionList({
     <div className={styles['problem-option-list']}>
       {options?.map((option, index) => (
         <div
-          key={option.problemOptionId}
+          key={option}
           className={`${styles['problem-option']} ${
-            selectedOption === option.option
+            selectedOption === String(index + 1)
               ? styles['problem-option-selected']
               : ''
           }`}
-          onClick={() => handleOptionClick(option.option)}
-          onKeyDown={(e) => handleKeyDown(e, option.option)} // 키보드 이벤트
+          onClick={() => handleOptionClick(index + 1)}
+          onKeyDown={(e) => handleKeyDown(e, index + 1)} // 키보드 이벤트
           tabIndex={0} // 키보드 포커스 받을 수 있게 설정
           role="button" // ARIA 역할 설정
         >
           <div className={styles['problem-option-number']}>{index + 1}</div>
           <Image
-            src={getImageSrc(option.option)}
+            src={getImageSrc(option)}
             alt={`Option ${index + 1}`}
             width={100} // 적절한 width 설정
             height={100} // 적절한 height 설정

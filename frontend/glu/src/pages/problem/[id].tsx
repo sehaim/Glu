@@ -165,7 +165,7 @@ export default function Test() {
               problemLevel={problem.problemLevel.name}
               problemType={problem.problemType.name}
               problemTitle={problem.title}
-              problemId={problem.problemId}
+              problemId={problem.problemId.toString()}
               problemLike={false}
             />
             <div className={styles['problem-content']}>

@@ -11,7 +11,7 @@ import {
 } from '../../utils/problem/like';
 
 interface ProblemHeaderProps {
-  problemId: number;
+  problemId: string;
   problemIndex?: number;
   problemLevel: string;
   problemType: string;
