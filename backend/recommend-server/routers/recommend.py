@@ -8,7 +8,8 @@ from fastapi import APIRouter, HTTPException,  Header
 
 from models import Problem
 from repositories import get_all_problems, get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
-from repositories.problem_repositories import get_one_problem, get_random_problems_by_code_and_level
+from repositories.problem_repositories import get_one_problem, get_problem_by_id, get_problems_by_level_and_type, \
+    get_similar
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 
@@ -79,11 +80,18 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 
 
 @router.get("/similar")
-async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_level_test(problem_id: str,  user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
-    # 더미 데이터 생성
-    return get_all_problems()
+
+    find_problem = get_problem_by_id(problem_id)
+
+
+    if (find_problem['problemTypeCode'] == "PT01"):
+        return get_problems_by_level_and_type(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'], problem_id)
+
+    else :
+        return get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'], find_problem['vector'], problem_id)
 
 def get_correct_ids(user_id : int):
     status = get_correct_sevendays(user_id)
