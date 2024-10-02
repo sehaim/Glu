@@ -16,11 +16,11 @@ classifications = [
     "사설", "교육", "경제", "nie"
 ]
 
-detail_codes_list = [
-    "PT0111", "PT0112", "PT0121",
-    "PT0211", "PT0221", "PT0222",
-    "PT0311", "PT0312", "PT0321"
-]
+detail_codes_dict = {
+    "PT01": ["PT0111", "PT0112", "PT0121"],
+    "PT02": ["PT0211", "PT0221", "PT0222"],
+    "PT03": ["PT0311", "PT0312", "PT0321"]
+}
 
 @router.get("/test/level")
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
@@ -67,23 +67,37 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
     # 더미 데이터 생성
     return get_all_problems()
 
-@router.get("/correct")
-async def get_correct_status():
-    status = get_correct_sevendays(1)
-    print("correct status", status)
-    return "correct call"
+def get_correct_ids(user_id : int):
+    status = get_correct_sevendays(user_id)
+
+    problem_ids = []
+
+    for document in status:
+        print(document)  # document의 전체 구조 출력하여 확인
+        if 'problem' in document and document['problem'] is not None:
+            if '_id' in document['problem']:
+                # ObjectId를 문자열로 변환
+                problem_id = str(document['problem']['_id'])
+                print(problem_id)  # 디버깅용 출력
+                problem_ids.append(problem_id)  # 문제 ID 추가
+            else:
+                print("Key '_id' not found in 'problem'")
+        else:
+            print("Key 'problem' not found or is None in document")
+
+    return problem_ids
 
 @router.get("/wrong")
 async def get_wrong_status():
     status = get_wrong_sevendays(1)
 
-    #초기화
-    map_dict = {key: [] for key in detail_codes_list}
-
     # classification_vectors를 중첩 defaultdict로 정의
     classification_vectors = defaultdict(lambda: defaultdict(list))
 
     for document in status:
+
+        if (document["problem"]["problemTypeCode"] == "PT01"): continue
+
         # document에서 classification과 vector를 추출
         classification = document["problem"]["classification"]
         vector = document["problem"]["vector"]
