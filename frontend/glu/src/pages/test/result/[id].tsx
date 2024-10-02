@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { SolvedProblem, SolvedProblemType } from '@/types/ProblemTypes';
-import dummyResults from '@/mock/dummyResults.json';
 import RadarChart from '@/components/problem/result/radarChart';
 import { formatTime } from '@/utils/problem/result';
 import { RootState } from '@/store';
@@ -10,34 +9,35 @@ import LevelUpModal from '@/components/problem/result/levelUpModal';
 import { resetLevel } from '@/store/levelupSlice';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Loading from '@/components/common/loading';
+import { getTestResultAPI } from '@/utils/problem/test';
+import { useRouter } from 'next/router';
 import styles from './testResult.module.css';
 
 interface ApiResponse {
   totalCorrectCount: number;
   totalSolvedTime: number; // 초 단위
-  acquiredScore: number;
-  totalScore: number;
-  isStageUp: boolean;
-  stageUpUrl: string;
-  problemTypeList: SolvedProblemType[];
-  problemList: SolvedProblem[];
+  gradingResultByTypeList: SolvedProblemType[];
+  gradingResultByProblemList: SolvedProblem[];
 }
 
 export default function TestResult() {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { id } = router.query;
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 추가
-  const [, setTotalCorrectCount] = useState<number | null>(null);
+  const [totalCorrectCount, setTotalCorrectCount] = useState<number | null>(
+    null,
+  );
   const [totalSolvedTime, setTotalSolvedTime] = useState<number | null>(null);
   const [problemTypeList, setProblemTypeList] = useState<SolvedProblemType[]>(
     [],
   );
   const [problemList, setProblemList] = useState<SolvedProblem[]>([]);
-  const [acquiredScore, setAcquiredScore] = useState<number | null>(null);
-  const [totalScore, setTotalScore] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { level, levelImage, isLeveledUp } = useSelector(
     (state: RootState) => state.levelup,
   );
+
   useEffect(() => {
     // 레벨업이 되었을 때 모달을 열기
     if (isLeveledUp) {
@@ -49,39 +49,45 @@ export default function TestResult() {
     setIsModalOpen(false);
     dispatch(resetLevel());
   };
+
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // 데이터를 가져오는 동안 로딩 상태를 true로 설정
-      const response: ApiResponse = await new Promise((resolve) => {
-        setTimeout(() => {
-          return resolve(dummyResults);
-        }, 0);
-      });
+      if (!id) return; // Ensure testId is available
 
-      setTotalCorrectCount(response.totalCorrectCount);
-      setTotalSolvedTime(response.totalSolvedTime);
-      setProblemTypeList(response.problemTypeList);
-      setProblemList(response.problemList);
-      setAcquiredScore(response.acquiredScore);
-      setTotalScore(response.totalScore);
-      // setIsStageUp(response.isStageUp);
-      // setStageUpUrl(response.stageUpUrl);
-      setLoading(false); // 데이터가 다 로드되면 로딩 상태를 false로 설정
+      const testId = Array.isArray(id) ? id[0] : id;
+      setLoading(true); // Set loading state to true while fetching
+      try {
+        const response = await getTestResultAPI(testId);
+        console.log(response);
+
+        setTotalCorrectCount(response.data.totalCorrectCount);
+        setTotalSolvedTime(response.data.totalSolvedTime);
+        setProblemTypeList(response.data.problemTypeList);
+        setProblemList(response.data.gradingResultByProblemList);
+      } catch (error) {
+        console.error('Error fetching test results:', error);
+      } finally {
+        setLoading(false); // Set loading state to false after fetching
+      }
     };
 
     fetchData();
-  }, []);
+  }, [id]); // Add testId as a dependency to fetch data when it changes
 
   const renderProblemRows = (startIndex: number, endIndex: number) => (
     <>
       <tr>
-        {problemList.slice(startIndex, endIndex).map((problem, index) => (
-          <td key={problem.problemId}>{startIndex + index + 1}</td>
-        ))}
+        {problemList
+          ?.slice(startIndex, endIndex)
+          .map((problem, index) => (
+            <td key={problem.problemId + String(startIndex) + String(index)}>
+              {startIndex + index + 1}
+            </td>
+          ))}
       </tr>
       <tr>
-        {problemList.slice(startIndex, endIndex).map((problem) => (
-          <td key={problem.problemId}>
+        {problemList.slice(startIndex, endIndex).map((problem, index) => (
+          <td key={problem.problemId + String(startIndex) + String(index)}>
             {problem.isCorrect ? (
               <FaCheck className={styles.solve} />
             ) : (
@@ -126,7 +132,7 @@ export default function TestResult() {
             <div
               className={`${styles['item-content']} ${styles['item-content-text']}`}
             >
-              {acquiredScore}/{totalScore}
+              {totalCorrectCount}/15
             </div>
           </div>
           <div className={styles['result-item-row']}>
@@ -157,7 +163,7 @@ export default function TestResult() {
             <p className={styles['item-title']}>영역별 점수</p>
             <div className={styles.canvasWrapper}>
               {/* RadarChart 컴포넌트 */}
-              <RadarChart problemTypeList={problemTypeList} />
+              {/* <RadarChart problemTypeList={problemTypeList} /> */}
             </div>
           </div>
         </div>
@@ -168,7 +174,10 @@ export default function TestResult() {
         <p className={styles['item-title']}>문제 해설</p>
         <div className={styles['solution-list']}>
           {problemList.map((problem, index) => (
-            <div key={problem.problemId} className={styles['solution-item']}>
+            <div
+              key={problem.problemId + String(index)}
+              className={styles['solution-item']}
+            >
               <p className={styles['solution-title']}>
                 {index + 1}. {problem.title}
               </p>
@@ -177,21 +186,22 @@ export default function TestResult() {
                   {problem.content}
                 </div>
                 <div className={styles['problem-option-list']}>
-                  {Array.isArray(problem?.metadata?.options) &&
-                    problem.metadata.options.map(
-                      (problemOption: string, optionIndex: number) => (
-                        <p
-                          key={problemOption}
-                          className={`${styles['problem-option-item']} ${
-                            Number(problem.userAnswer) === optionIndex + 1
-                              ? styles['user-answer']
-                              : ''
-                          }`}
-                        >
-                          {optionIndex + 1}. {problemOption}{' '}
-                        </p>
-                      ),
-                    )}
+                  {(Array.isArray(problem.metadata.options)
+                    ? problem.metadata.options
+                    : [problem.metadata.options]
+                  ) // 문자열일 경우 배열로 변환
+                    .map((problemOption: string, optionIndex: number) => (
+                      <p
+                        key={problemOption}
+                        className={`${styles['problem-option-item']} ${
+                          Number(problem.userAnswer) === optionIndex + 1
+                            ? styles['user-answer']
+                            : ''
+                        }`}
+                      >
+                        {optionIndex + 1}. {problemOption}{' '}
+                      </p>
+                    ))}
                 </div>
               </div>
               <div className={styles['problem-solution']}>
