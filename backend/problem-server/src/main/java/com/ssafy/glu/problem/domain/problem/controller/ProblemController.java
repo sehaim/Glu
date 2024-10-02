@@ -4,6 +4,7 @@ import static com.ssafy.glu.problem.global.util.HeaderUtil.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -106,6 +107,18 @@ public class ProblemController {
 		@PathVariable("problemId") String problemId, @RequestParam("memoIndex") Long memoIndex) {
 		problemService.deleteProblemMemo(userId, problemId, memoIndex);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@Operation(summary = "문제 메모 조회", description = "특정 문제에 대한 메모를 조회합니다.")
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "메모가 성공적으로 조회되었습니다"),
+		@ApiResponse(responseCode = "404", description = "메모를 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+		@ApiResponse(responseCode = "500", description = "서버 오류가 발생했습니다", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+	@GetMapping("/{problemId}/memo")
+	public ResponseEntity<PageResponse<ProblemMemoResponse>> getProblemMemoListInProblem(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("problemId") String problemId,
+		@PageableDefault(size = 4) Pageable pageable) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(new PageResponse<>(problemService.getProblemMemoList(userId, problemId, pageable)));
 	}
 
 	@Operation(summary = "문제 즐겨찾기 여부 조회", description = "특정 문제에 대해 사용자가 즐겨찾기한 상태인지 확인합니다.")
