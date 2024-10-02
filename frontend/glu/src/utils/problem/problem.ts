@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from 'next';
+import { AxiosError } from 'axios';
 import { createAuthAxios } from '../common';
 
 // 단일 문제 가져오기
@@ -14,6 +14,13 @@ export const getSingleProblemAPI = async (problemId: string) => {
 
     return res;
   } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response && error.response.status >= 500) {
+        throw new Error(
+          '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+        );
+      }
+    }
     throw new Error('단일 문제를 가져오는 중 문제가 발생했습니다.');
   }
 };
