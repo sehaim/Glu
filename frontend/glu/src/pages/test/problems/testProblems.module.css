@@ -56,6 +56,18 @@
   cursor: pointer;
 }
 
+.problem-navigation {
+  position: sticky;
+  top: 60px;
+  z-index: 10;
+}
+
+.problem-memo {
+  position: sticky;
+  top: 60px;
+  z-index: 10;
+}
+
 @media (max-width: 1200px) {
   .problem-button-list {
     width: 720px;
@@ -70,6 +82,11 @@
   .problem-button-list {
     margin: 40px 0px;
     margin-bottom: 0px;
+  }
+
+  .problem-navigation,
+  .problem-memo {
+    position: static;
   }
 }
 
