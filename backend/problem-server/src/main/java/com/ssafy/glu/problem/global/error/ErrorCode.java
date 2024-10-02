@@ -67,6 +67,7 @@ public enum ErrorCode {
 
 	// 테스트 결과 리스트 조회
 	TEST_RESULT_LIST_NOT_FOUND(404, "TEST_RESULT_LIST_NOT_FOUND", "테스트 결과 리스트를 찾을 수 없습니다."),
+	TEST_NOT_FOUND(404, "TEST_NOT_FOUND", "테스트 결과를 찾을 수 없습니다."),
 
 	USER_FEIGN_ERROR(500, "USER_FEIGN_ERROR", "user server API요청이 실패하였습니다."),
 	PROBLEM_TYPE_CODE_MISMATCH(400, "PROBLEM_TYPE_CODE_MISMATCH", "일치하는 문제 유형이 존재하지 않습니다."),
