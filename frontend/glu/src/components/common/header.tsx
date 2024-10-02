@@ -4,34 +4,22 @@ import { RootState } from '@/store';
 import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
 import { logoutAPI } from '@/utils/user/auth';
+import throttle from 'lodash/throttle';
 import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
-
-function throttle(
-  func: (event: Event) => void,
-  delay: number,
-): (event: Event) => void {
-  let lastCall = 0;
-  return function callback(event: Event) {
-    const now = new Date().getTime();
-    if (now - lastCall < delay) return undefined;
-    lastCall = now;
-    return func(event);
-  };
-}
 
 const getHeaderStyle = (color: string, isScrolled: boolean) => {
   const style: { [key: string]: string } = {};
 
   if (color === 'transparent') {
-    style.backgroundColor = 'transparent'; // 카멜케이스로 수정
+    style.backgroundColor = 'transparent';
   } else {
     style.backgroundColor = isScrolled
       ? 'VAR(--WHITE)' // 스크롤 시 흰색
       : 'transparent'; // 스크롤되지 않았을 때 투명
   }
 
-  style.transition = 'background-color 0.5s ease'; // transition도 backgroundColor로 적용
+  style.transition = 'background-color 0.5s ease';
 
   return style;
 };
@@ -92,7 +80,7 @@ export default function Header({ color }: { color: string }) {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/problem/1" className={styles['menu-name']}>
+                  <Link href="/problem" className={styles['menu-name']}>
                     유형
                     <br />
                     테스트

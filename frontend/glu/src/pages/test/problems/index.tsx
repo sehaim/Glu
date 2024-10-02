@@ -12,8 +12,6 @@ import {
   getRecommendedTestProblemsAPI,
   postTestProblemGradingAPI,
 } from '@/utils/problem/test';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import throttle from 'lodash/throttle';
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
 import { GetServerSideProps } from 'next';
@@ -67,25 +65,7 @@ export default function Test({ initialProblems }: TestProps) {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const handleResize = throttle(() => {
-      setIsMobile(window.innerWidth < 1024);
-    }, 300); // 0.3초 간격으로 이벤트 처리
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      handleResize(); // 초기 사이즈 체크
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-
-    return () => {};
-  }, []);
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
@@ -203,14 +183,7 @@ export default function Test({ initialProblems }: TestProps) {
   return (
     <div className={styles.container}>
       <div className={styles['problem-container']}>
-        <div
-          className={styles['problem-navigation']}
-          style={{
-            position: isMobile ? 'static' : 'sticky',
-            top: '60px',
-            zIndex: 10,
-          }}
-        >
+        <div className={styles['problem-navigation']}>
           <ProblemSolvedNavigation
             answers={answers}
             currentProblemIndex={currentProblemIndex}
@@ -295,14 +268,7 @@ export default function Test({ initialProblems }: TestProps) {
           </div>
         )}
 
-        <div
-          className={styles['problem-memo']}
-          style={{
-            position: isMobile ? 'static' : 'sticky',
-            top: '60px',
-            zIndex: 10,
-          }}
-        >
+        <div className={styles['problem-memo']}>
           <ProblemMemoManager problemId={currentProblem.problemId} />
         </div>
       </div>

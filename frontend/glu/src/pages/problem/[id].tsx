@@ -15,8 +15,6 @@ import {
   getSingleProblemAPI,
   postSingleProblemGradingAPI,
 } from '@/utils/problem/problem';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import throttle from 'lodash/throttle';
 import { useRouter } from 'next/router';
 import ProblemInputField from '@/components/problem/problemInputField';
 import Image from 'next/image';
@@ -97,23 +95,6 @@ export default function Test() {
       fetchData();
     }
   }, [id]);
-
-  useEffect(() => {
-    const handleResize = throttle(() => {
-      setIsMobile(window.innerWidth < 1024);
-    }, 300); // 0.3초 간격으로 이벤트 처리
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      handleResize(); // 초기 사이즈 체크
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-
-    return () => {};
-  }, []);
 
   const handleAnswer = (userAnswer: string) => {
     if (isSolved) return;
@@ -248,14 +229,7 @@ export default function Test() {
               </div>
             )}
           </div>
-          <div
-            className={styles['problem-memo']}
-            style={{
-              position: isMobile ? 'static' : 'sticky',
-              top: '60px',
-              zIndex: 10,
-            }}
-          >
+          <div className={styles['problem-memo']}>
             <ProblemMemoManager problemId={problem.problemId} />
           </div>
         </div>
