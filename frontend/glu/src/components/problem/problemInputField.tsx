@@ -4,6 +4,7 @@ import styles from './problemInputField.module.css';
 interface ProblemEssayProps {
   initialAnswer?: string;
   problemIndex?: number;
+  placeholder: string;
   onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
   onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
@@ -11,6 +12,7 @@ interface ProblemEssayProps {
 export default function ProblemEssay({
   initialAnswer = '',
   problemIndex,
+  placeholder,
   onTestProblemAnswer,
   onSingleProblemAnswer,
 }: ProblemEssayProps) {
@@ -42,7 +44,7 @@ export default function ProblemEssay({
         value={userInput}
         onChange={handleInputChange}
         className={styles['problem-input']}
-        placeholder="답을 입력하세요..."
+        placeholder={placeholder}
       />
     </div>
   );

@@ -1,16 +1,18 @@
 export interface ProblemOption {
-  problemOptionId: number;
-  option: string;
+  options: string | string[];
 }
 
+export interface QuestionType {
+  code: string;
+  name: string;
+}
 export interface ProblemLevel {
-  problemLevelCode: string;
+  code: string;
   name: string;
 }
 
 export interface ProblemType {
-  problemTypeCode: string;
-  problemTypeDetailCode: string;
+  code: string;
   name: string;
 }
 
@@ -32,7 +34,7 @@ export interface Problem {
   problemId: number;
   title: string;
   content: string;
-  problemOptions: ProblemOption[];
+  metadata: ProblemOption;
   solution: string;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
@@ -42,7 +44,7 @@ export interface SolvedProblem {
   problemId: number;
   title: string;
   content: string;
-  problemOptions: ProblemOption[];
+  metadata: ProblemOption;
   isCorrect: boolean;
   userAnswer: string;
   solution: string;

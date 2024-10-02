@@ -2,12 +2,9 @@ import { GetServerSidePropsContext } from 'next';
 import { createAuthAxios } from '../common';
 
 // 단일 문제 가져오기
-export const getSingleProblemAPI = async (
-  context: GetServerSidePropsContext,
-  problemId: number,
-) => {
+export const getSingleProblemAPI = async (problemId: string) => {
   try {
-    const authAxios = createAuthAxios(context);
+    const authAxios = createAuthAxios();
     const res = await authAxios.get(`/problems/${problemId}`);
 
     // 커스텀 응답에서 httpStatus 확인
