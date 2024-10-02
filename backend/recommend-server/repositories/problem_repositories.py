@@ -31,6 +31,26 @@ def get_problem_by_id(problem_id: str):
         print(f"Error occurred while fetching problem by ID: {e}")
         return None
 
+def get_problem_by_ids(problem_ids: list[str]):
+    try:
+        # 문자열 ID를 ObjectId로 변환하여 MongoDB에서 조회
+        object_ids = [ObjectId(pid) for pid in problem_ids]  # 각 ID를 개별적으로 변환
+        problems = list(problem_collection.find({"_id": {"$in": object_ids}}))  # find() 사용
+
+        # 문제가 존재하지 않을 경우 None 반환
+        if not problems:
+            return None
+
+        # MongoDB의 ObjectId를 문자열로 변환
+        for problem in problems:
+            problem["_id"] = str(problem["_id"])
+
+        return problems
+
+    except Exception as e:
+        print(f"Error occurred while fetching problems by IDs: {e}")
+        return None
+
 def get_problems_by_level_and_type(level_code:str, type_detail_code:str, problem_id: str):
     try:
         # 필터 조건에 맞는 전체 문서 수 확인
