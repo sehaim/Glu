@@ -26,7 +26,7 @@ def get_wrong_sevendays(user_id):
     one_week_ago = datetime.now() - timedelta(days=7)
 
     # userId와 일주일 이내의 lastSolvedDate 조건으로 문서 필터링
-    problem_status = list(user_problem_status_collection.find({
+    return list(user_problem_status_collection.find({
         'userId': user_id,  # 특정 사용자 ID
         'modifiedDate': {'$gte': one_week_ago},  # modifiedDate one_week_ago 이후인 문서만
         'status': 'WRONG'
@@ -37,3 +37,11 @@ def get_wrong_sevendays(user_id):
         status["problem"]["_id"] = str(status["problem"]["_id"])
 
     return problem_status
+
+def get_top_n_classifications(n: int):
+    # 수정 필요
+    top_classifications = [
+        {"classification": "시사", "count": 5},
+        {"classification": "의사소통", "count": 3},
+    ]
+    return [item["classification"] for item in top_classifications[:n]]

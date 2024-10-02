@@ -124,10 +124,24 @@ def get_all_problems():
 
 def get_random_problems_by_code_and_level(detail_code: str, level: int, limit: int):
     # MongoDB에서 문제를 조회
-    problems = list(problem_collection.find({
+    problems = list(problem_collection.find({ ## 랜덤으로 가져올 방법 고민
         "problemTypeDetailCode": detail_code,
         "problemLevelCode": f"PL0{level}"
     }).limit(limit))
+
+    # MongoDB 결과에서 ObjectId를 문자열로 변환
+    for problem in problems:
+        problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
+
+    return problems
+
+def get_random_problems_by_code_and_level_and_classification(detail_code: str, level: int, classification: int):
+    # MongoDB에서 문제를 조회
+    problems = list(problem_collection.find({ ## 랜덤으로 가져올 방법 고민
+        "problemTypeDetailCode": detail_code,
+        "problemLevelCode": f"PL0{level}",
+        "classification": classification
+    }).limit(1))
 
     # MongoDB 결과에서 ObjectId를 문자열로 변환
     for problem in problems:
