@@ -88,7 +88,7 @@ export default function Test() {
       if (typeof id === 'string') {
         // id가 string인 경우에만 API 호출
         const res = await getSingleProblemAPI(id);
-        console.log(res);
+
         setProblem(res.data);
       }
     };
@@ -128,13 +128,12 @@ export default function Test() {
 
     if (problem) {
       try {
-        // Call the postSingleProblemGrading function to submit the answer and time
         const response = await postSingleProblemGradingAPI(
           problem.problemId,
           answer,
           timeTaken,
         );
-        console.log('단일 문제 채점 결과:', response);
+
         setIsSolved(true);
         setIsCorrect(response.data.isCorrect);
         if (response.data.isStageUp) {
@@ -178,17 +177,7 @@ export default function Test() {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={problem.content} />
-              {problem.questionType.code === 'QT02' && (
-                <ProblemInputField
-                  placeholder={
-                    Array.isArray(problem.metadata.options)
-                      ? problem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
-                      : problem.metadata.options // string일 경우 그대로 사용
-                  }
-                  onSingleProblemAnswer={handleAnswer}
-                />
-              )}
-              {problem.questionType.code === 'QT03' && (
+              {problem.questionType.code === 'QT01' && (
                 <ProblemImageOptionList
                   problemOptions={
                     Array.isArray(problem.metadata.options)
@@ -199,8 +188,18 @@ export default function Test() {
                   onSingleProblemAnswer={handleAnswer}
                 />
               )}
-              {problem.questionType.code !== 'QT02' &&
-                problem.questionType.code !== 'QT03' && (
+              {problem.questionType.code === 'QT02' && (
+                <ProblemInputField
+                  placeholder={
+                    Array.isArray(problem.metadata.options)
+                      ? problem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
+                      : problem.metadata.options // string일 경우 그대로 사용
+                  }
+                  onSingleProblemAnswer={handleAnswer}
+                />
+              )}
+              {problem.questionType.code !== 'QT01' &&
+                problem.questionType.code !== 'QT02' && (
                   <ProblemOptionList
                     problemOptions={
                       Array.isArray(problem.metadata.options)

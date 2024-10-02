@@ -19,6 +19,7 @@ import { levelUp } from '@/store/levelupSlice';
 import { GetServerSideProps } from 'next';
 import Loading from '@/components/common/loading';
 import ProblemInputField from '@/components/problem/problemInputField';
+import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import styles from './testProblems.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -42,6 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 interface TestProps {
   initialProblems: Problem[];
 }
+
 interface ProblemAnswer {
   problemId: string;
   userAnswer: string; // 사용자의 선택
@@ -67,8 +69,6 @@ export default function Test({ initialProblems }: TestProps) {
   const currentProblem = problems[currentProblemIndex];
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [loading, setLoading] = useState(false);
-
-  console.log(answers);
 
   useEffect(() => {
     const handleResize = throttle(() => {
@@ -134,8 +134,8 @@ export default function Test({ initialProblems }: TestProps) {
 
   const progressPercentage = useMemo(() => {
     return problems.length > 0
-      ? Math.floor((solvedCount / problems.length) * 100)
-      : 100;
+      ? Math.floor((solvedCount / problems.length) * 90)
+      : 90;
   }, [solvedCount, problems.length]);
 
   const handleAnswer = (problemIndex: string, userAnswer: string) => {
@@ -229,6 +229,18 @@ export default function Test({ initialProblems }: TestProps) {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={currentProblem?.content} />
+              {currentProblem.questionType.code === 'QT01' && (
+                <ProblemImageOptionList
+                  problemOptions={
+                    Array.isArray(currentProblem.metadata.options)
+                      ? currentProblem.metadata.options // string[]일 경우
+                      : [currentProblem.metadata.options] // string일 경우 배열로 변환
+                  }
+                  problemId={answers[currentProblemIndex]?.problemId}
+                  selectedOption={answers[currentProblemIndex]?.userAnswer}
+                  onTestProblemAnswer={handleAnswer}
+                />
+              )}
               {currentProblem.questionType.code === 'QT02' && (
                 <ProblemInputField
                   placeholder={
@@ -241,18 +253,19 @@ export default function Test({ initialProblems }: TestProps) {
                   onTestProblemAnswer={handleAnswer}
                 />
               )}
-              {currentProblem.questionType.code !== 'QT02' && (
-                <ProblemOptionList
-                  problemOptions={
-                    Array.isArray(currentProblem.metadata.options)
-                      ? currentProblem.metadata.options // string[]일 경우
-                      : [currentProblem.metadata.options] // string일 경우 배열로 변환
-                  }
-                  problemId={answers[currentProblemIndex]?.problemId}
-                  selectedOption={answers[currentProblemIndex]?.userAnswer}
-                  onTestProblemAnswer={handleAnswer}
-                />
-              )}
+              {currentProblem.questionType.code !== 'QT01' &&
+                currentProblem.questionType.code !== 'QT02' && (
+                  <ProblemOptionList
+                    problemOptions={
+                      Array.isArray(currentProblem.metadata.options)
+                        ? currentProblem.metadata.options // string[]일 경우
+                        : [currentProblem.metadata.options] // string일 경우 배열로 변환
+                    }
+                    problemId={answers[currentProblemIndex]?.problemId}
+                    selectedOption={answers[currentProblemIndex]?.userAnswer}
+                    onTestProblemAnswer={handleAnswer}
+                  />
+                )}
             </div>
             <div className={styles['problem-button-list']}>
               {currentProblemIndex > 0 ? (

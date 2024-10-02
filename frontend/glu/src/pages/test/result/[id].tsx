@@ -55,24 +55,23 @@ export default function TestResult() {
       if (!id) return; // Ensure testId is available
 
       const testId = Array.isArray(id) ? id[0] : id;
-      setLoading(true); // Set loading state to true while fetching
+      setLoading(true);
       try {
         const response = await getTestResultAPI(testId);
-        console.log(response);
 
         setTotalCorrectCount(response.data.totalCorrectCount);
         setTotalSolvedTime(response.data.totalSolvedTime);
-        setProblemTypeList(response.data.problemTypeList);
+        setProblemTypeList(response.data.gradingResultByTypeList);
         setProblemList(response.data.gradingResultByProblemList);
       } catch (error) {
         console.error('Error fetching test results:', error);
       } finally {
-        setLoading(false); // Set loading state to false after fetching
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [id]); // Add testId as a dependency to fetch data when it changes
+  }, [id]);
 
   const renderProblemRows = (startIndex: number, endIndex: number) => (
     <>
@@ -112,7 +111,7 @@ export default function TestResult() {
       {/* 레벨업 모달 */}
       <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
         <div className={styles.levelUp}>
-          <h2 className={styles['levelUp-title']}>LV. {level}</h2>
+          {/* <h2 className={styles['levelUp-title']}>LV. {level}</h2> */}
           <Image
             className={styles['levelUp-image']}
             src={levelImage}
@@ -163,7 +162,7 @@ export default function TestResult() {
             <p className={styles['item-title']}>영역별 점수</p>
             <div className={styles.canvasWrapper}>
               {/* RadarChart 컴포넌트 */}
-              {/* <RadarChart problemTypeList={problemTypeList} /> */}
+              <RadarChart problemTypeList={problemTypeList} />
             </div>
           </div>
         </div>
@@ -186,22 +185,42 @@ export default function TestResult() {
                   {problem.content}
                 </div>
                 <div className={styles['problem-option-list']}>
-                  {(Array.isArray(problem.metadata.options)
-                    ? problem.metadata.options
-                    : [problem.metadata.options]
-                  ) // 문자열일 경우 배열로 변환
-                    .map((problemOption: string, optionIndex: number) => (
-                      <p
-                        key={problemOption}
-                        className={`${styles['problem-option-item']} ${
-                          Number(problem.userAnswer) === optionIndex + 1
-                            ? styles['user-answer']
-                            : ''
-                        }`}
-                      >
-                        {optionIndex + 1}. {problemOption}{' '}
-                      </p>
-                    ))}
+                  {problem.problemTypeDetail.code === 'PT0311'
+                    ? (Array.isArray(problem.metadata.options)
+                        ? problem.metadata.options
+                        : [problem.metadata.options]
+                      ) // 문자열일 경우 배열로 변환
+                        .map((imageSrc: string, imageIndex: number) => (
+                          <div
+                            key={imageSrc}
+                            className={styles['problem-image-item']}
+                          >
+                            <Image
+                              key={imageSrc}
+                              src={imageSrc}
+                              alt={`Option ${imageIndex + 1}`}
+                              width={100}
+                              height={100}
+                              className={styles['problem-image']}
+                            />
+                          </div>
+                        ))
+                    : (Array.isArray(problem.metadata.options)
+                        ? problem.metadata.options
+                        : [problem.metadata.options]
+                      ) // 문자열일 경우 배열로 변환
+                        .map((problemOption: string, optionIndex: number) => (
+                          <p
+                            key={problemOption}
+                            className={`${styles['problem-option-item']} ${
+                              Number(problem.userAnswer) === optionIndex + 1
+                                ? styles['user-answer']
+                                : ''
+                            }`}
+                          >
+                            {optionIndex + 1}. {problemOption}{' '}
+                          </p>
+                        ))}
                 </div>
               </div>
               <div className={styles['problem-solution']}>
