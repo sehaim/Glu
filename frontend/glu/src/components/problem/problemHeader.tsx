@@ -27,7 +27,7 @@ export default function ProblemHeader({
   problemTitle,
   problemLike, // 좋아요 초기 상태를 props로 받음
 }: ProblemHeaderProps) {
-  const [liked, setLiked] = useState<boolean>(false); // 좋아요 상태 관리
+  const [liked, setLiked] = useState<boolean>(problemLike); // 좋아요 상태 관리
 
   useEffect(() => {
     setLiked(problemLike);
@@ -55,7 +55,11 @@ export default function ProblemHeader({
         </div>
         <div className={styles['status-like-wrapper']}>
           <div className={styles['status-like-icon']} onClick={handleLikeClick}>
-            {liked ? <BsStarFill /> : <BsStar />}
+            {liked ? (
+              <BsStarFill className={styles['status-like']} />
+            ) : (
+              <BsStar />
+            )}
           </div>
         </div>
       </div>

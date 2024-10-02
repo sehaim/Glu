@@ -36,6 +36,10 @@
   cursor: pointer;
 }
 
+.status-like {
+  color: var(--ORANGE);
+}
+
 .info-container {
   position: relative;
   width: 100%;
