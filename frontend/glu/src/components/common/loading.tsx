@@ -1,7 +1,7 @@
 import styles from './loading.module.css';
 
 interface LoadingProps {
-  size: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large'; // 사이즈
+  size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large'; // 사이즈
   showText?: boolean; // 로딩 텍스트 표시 여부
 }
 

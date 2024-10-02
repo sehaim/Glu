@@ -35,7 +35,7 @@ export default function MytestGrowthPage({
   attendances,
 }: MytestGrowthPageProps) {
   return (
-    <div className={`${styles.container} ${styles.row}`}>
+    <div className={`${styles['growth-container']} ${styles.row}`}>
       <MytestGrade userInfo={userInfo} />
       <div className={styles.section}>
         <MytestAttendance

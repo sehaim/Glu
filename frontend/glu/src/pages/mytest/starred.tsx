@@ -1,10 +1,17 @@
 import styles from './mytest.module.css';
+import TestCardList from '@/components/test/testCardList';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {},
+  };
+};
 
 export default function MytestStarredPage() {
   return (
-    <div className={styles.section}>
+    <div className={styles.container}>
       <div>
-        <div>찜한 문제</div>
+        <TestCardList />
       </div>
     </div>
   );

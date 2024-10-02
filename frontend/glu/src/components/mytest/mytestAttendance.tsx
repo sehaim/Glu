@@ -47,10 +47,6 @@ export default function MytestAttendance({
     return days;
   };
 
-  useEffect(() => {
-    console.log(attendances);
-  }, [attendances]);
-
   // 이전 달로 이동
   const handlePreviousMonth = () => {
     setCurrentDate(
