@@ -3,23 +3,20 @@ import styles from './problemInputField.module.css';
 
 interface ProblemEssayProps {
   initialAnswer?: string;
-  problemIndex?: number;
+  problemId?: string;
   placeholder: string;
-  onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
+  onTestProblemAnswer?: (problemId: string, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
   onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
 
 export default function ProblemEssay({
   initialAnswer = '',
-  problemIndex,
+  problemId,
   placeholder,
   onTestProblemAnswer,
   onSingleProblemAnswer,
 }: ProblemEssayProps) {
-  console.log(placeholder);
-  console.log('initial:', initialAnswer);
   const [userInput, setUserInput] = useState<string>(initialAnswer);
-  console.log(userInput);
 
   useEffect(() => {
     setUserInput(initialAnswer);
@@ -30,8 +27,8 @@ export default function ProblemEssay({
     setUserInput(event.target.value);
 
     // Test 문제 풀이
-    if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
-      onTestProblemAnswer(problemIndex, userAnswer);
+    if (onTestProblemAnswer && typeof problemId !== 'undefined') {
+      onTestProblemAnswer(problemId, userAnswer);
     }
 
     // 단일 문제 풀이
