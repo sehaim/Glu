@@ -14,18 +14,85 @@ export default function MytestComprehensiveTestRecordList() {
   //   currentPage * pageSize,
   // );
 
+  const itemNameList = [
+    '내 점수',
+    '어휘 및 문법',
+    '독해',
+    '추론',
+    '날짜',
+    '걸린 시간',
+  ];
+
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
 
   return (
-    <div className={styles['list-container']}>
+    <div className={styles.container}>
       <div className={styles['section-name']}>나의 테스트 기록</div>
-      <div className={styles['test-list']}>테스트 기록</div>
+      <div className={styles['record-container']}>
+        <div className={styles['line-container']}>
+          {itemNameList.map((itemName) => (
+            <div key={itemName} className={styles['element-name']}>
+              {itemName}
+            </div>
+          ))}
+        </div>
+        <div
+          className={`${styles['line-container']} ${styles['item-container']}`}
+        >
+          <div className={styles.element}>10/15</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>4/5</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>2024-08-20</div>
+          <div className={styles.element}>12분 10초</div>
+        </div>
+        <div
+          className={`${styles['line-container']} ${styles['item-container']}`}
+        >
+          <div className={styles.element}>10/15</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>4/5</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>2024-08-20</div>
+          <div className={styles.element}>12분 10초</div>
+        </div>
+        <div
+          className={`${styles['line-container']} ${styles['item-container']}`}
+        >
+          <div className={styles.element}>10/15</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>4/5</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>2024-08-20</div>
+          <div className={styles.element}>12분 10초</div>
+        </div>
+        <div
+          className={`${styles['line-container']} ${styles['item-container']}`}
+        >
+          <div className={styles.element}>10/15</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>4/5</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>2024-08-20</div>
+          <div className={styles.element}>12분 10초</div>
+        </div>
+        <div
+          className={`${styles['line-container']} ${styles['item-container']}`}
+        >
+          <div className={styles.element}>10/15</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>4/5</div>
+          <div className={styles.element}>3/5</div>
+          <div className={styles.element}>2024-08-20</div>
+          <div className={styles.element}>12분 10초</div>
+        </div>
+      </div>
       <PaginationBar
         pageNumbers={Array.from({ length: 7 }, (_, i) => i + 1)}
         currentPage={currentPage}
-        onClick={handlePageClick}
+        handleClick={handlePageClick}
       />
     </div>
   );

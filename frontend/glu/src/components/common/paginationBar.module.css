@@ -1,27 +1,29 @@
 .container {
   display: flex;
   justify-content: center;
-  margin-top: 32px;
 }
 
 .page-button {
   padding: 6px 10px;
   margin: 0 5px;
   background-color: var(--WHITE);
-  color: var(--PINK);
+  color: var(--DARKYELLOW);
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  font-family: 'PT';
   font-size: 15px;
   font-weight: 600;
 }
 
 .page-button-active {
-  background-color: var(--PINK);
-  color: var(--WHITE);
+  background-color: var(--YELLOW);
+  color: var(--ORANGE);
   font-weight: 700;
 }
 
 .page-button:hover {
-  background-color: var(--WHITEPINK);
+  background-color: var(--DARKYELLOW);
+  color: var(--WHITE);
+  font-weight: 700;
 }
