@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,10 +32,9 @@ public class TestController {
 	private final TestService testService;
 	// TODO: API Swagger 문서화
 
-	// TODO: 모든 테스트 API 구현 후 USER_ID를 hidden = true 설정 예정
 	@PostMapping("/grading")
-	public ResponseEntity<TestGradingResponse> getTestGradingResult(@RequestHeader(USER_ID) Long userId,
-		@RequestBody TestSolveRequest request) {
+	public ResponseEntity<TestGradingResponse> getTestGradingResult(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @RequestBody TestSolveRequest request) {
 		return ResponseEntity.status(HttpStatus.OK).body(testService.gradeTest(userId, request));
 	}
 
@@ -44,9 +44,15 @@ public class TestController {
 		return ResponseEntity.status(HttpStatus.OK).body(testService.getTestList(userId, pageable));
 	}
 
-	// TODO: 모든 테스트 API 구현 후 USER_ID를 hidden = true 설정 예정
 	@GetMapping("/previous")
-	public ResponseEntity<TestGradingBaseResponse> getPreviousTest(@RequestHeader(USER_ID) Long userId) {
+	public ResponseEntity<TestGradingBaseResponse> getPreviousTest(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId) {
 		return ResponseEntity.status(HttpStatus.OK).body(testService.getPreviousTest(userId));
+	}
+
+	@GetMapping("/{testId}")
+	public ResponseEntity<TestGradingDetailResponse> getTest(
+		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, @PathVariable("testId") String testId) {
+		return ResponseEntity.status(HttpStatus.OK).body(testService.getTest(userId, testId));
 	}
 }
