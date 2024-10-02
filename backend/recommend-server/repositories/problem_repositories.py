@@ -1,5 +1,6 @@
 from models import Problem
 from db import mongo_db
+from typing import List, Dict
 
 # 컬렉션 선택
 problem_collection = mongo_db['problem']
@@ -11,6 +12,22 @@ def get_one_problem():
 def get_all_problems():
     # 모든 문제를 리스트로 변환하여 반환
     return list(problem_collection.find())
+
+def get_random_problems_by_code_and_level(detail_code: str, level: int, limit: int):
+    # MongoDB에서 문제를 조회
+    problems = list(problem_collection.find({
+        "problemTypeDetailCode": detail_code,
+        "problemLevelCode": f"PL0{level}"
+    }).limit(limit))
+
+    # MongoDB 결과에서 ObjectId를 문자열로 변환
+    for problem in problems:
+        problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
+
+    return problems
+
+def get_problems_by_detail_code(detail_code: str, limit: int = 2):
+    return list(problem_collection.find({"problemTypeDetailCode": detail_code}).limit(limit))
 
 
 def get_problems_not_solve(user_id: int):
