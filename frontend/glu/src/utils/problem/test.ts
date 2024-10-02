@@ -48,3 +48,20 @@ export const postTestProblemGradingAPI = async (
     throw new Error('문제 채점 중 문제가 발생했습니다.');
   }
 };
+
+// 종합 테스트 결과 조회
+export const getTestResultAPI = async (testId: string) => {
+  try {
+    const authAxios = createAuthAxios();
+    const res = await authAxios.get(`tests/${testId}`);
+
+    // 커스텀 응답에서 httpStatus 확인
+    if (res.data.httpStatus === 400) {
+      throw new Error(res.data.detailMessage || '잘못된 요청입니다.');
+    }
+
+    return res;
+  } catch (error) {
+    throw new Error('종합 테스트 결과 조회 중 문제가 발생했습니다.');
+  }
+};

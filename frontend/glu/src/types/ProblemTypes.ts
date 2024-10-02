@@ -46,6 +46,9 @@ export interface SolvedProblem {
   problemId: string;
   title: string;
   content: string;
+  questionType: QuestionType;
+  problemLevel: ProblemLevel;
+  problemType: ProblemType;
   metadata: ProblemOption;
   isCorrect: boolean;
   userAnswer: string;

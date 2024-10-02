@@ -1,11 +1,11 @@
 [
   {
-    "problemId": "66f63857b1ecdc758ed9e9bf",
+    "problemId": "66f6385fb1ecdc758ed9ec49",
     "title": "돌 깨는 소리만 들려오자 아사녀는 어디에 주저 앉아 눈물을 흘렸나요?",
     "content": "혹시라도 아사달의 모습이 비치지 않을까, 연못에서 한시도 눈을 떼지 못한 아사녀는 연못 주위를 돌며 탑 그림자를 찾았어요. 어느새 해거름이 되었지만, 여전히 돌 깨는 소리만 들려올 뿐이었지요. 아사녀는 연못가에 주저앉아 하염없이 눈물을 흘렸어요.",
     "answer": "2",
     "solution": "지문에서 아사녀가 연못가에 주저앉아 눈물을 흘렸다고 나와있기 때문입니다.",
-    "status": null,
+    "status": "CORRECT",
     "questionType": {
       "code": "QT01",
       "name": "객관식"
@@ -25,35 +25,35 @@
     "metadata": {
       "options": ["바닷가", "연못가", "숲속", "산 위"]
     },
-    "isFavorite": null
+    "isFavorite": true
   },
   {
     "problemId": "66f63857b1ecdc758ed9e9bf",
-    "title": "다음 문장에서 괄호친 단어의 유의어를 고르시오",
-    "content": "이 방법은 좋은 (효과)를 거두었다.",
-    "answer": "1",
-    "solution": "효과는 어떤 행위에 의해 나타나는 결과와 같은 의미이므로 유의어로 '결과'가 적절하다.",
-    "status": null,
+    "title": "다음 문장에서 문맥상 빈칸에 들어갈 적절한 단어를 적으세요",
+    "content": "학교에서 학생들에게 역사를 _____는 것은 매우 중요하다.",
+    "answer": "가르치다",
+    "solution": "새로운 개념을 학생들에게 전달하는 행위는 '가르치다'이므로 정답은 '가르치다'입니다.",
+    "status": "WRONG",
     "questionType": {
-      "code": "QT01",
-      "name": "객관식"
+      "code": "QT02",
+      "name": "단답식"
     },
     "problemLevel": {
-      "code": "PL07",
-      "name": "초등 6학년"
+      "code": "PL02",
+      "name": "초등 1학년"
     },
     "problemType": {
       "code": "PT01",
       "name": "어휘 및 문법"
     },
     "problemTypeDetail": {
-      "code": "PT0112",
-      "name": "문장의 해당 단어와 비슷한 / 반대되는 단어 고르기"
+      "code": "PT0121",
+      "name": "어색한 문장 찾기 - 맞춤법이 올바른 문장 찾기"
     },
     "metadata": {
-      "options": ["결과", "과정", "문제", "손해"]
+      "options": "가르치다 vs 가리키다"
     },
-    "isFavorite": null
+    "isFavorite": true
   },
   {
     "problemId": "66f63857b1ecdc758ed9e9bf",

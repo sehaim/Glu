@@ -21,6 +21,7 @@ import { useRouter } from 'next/router';
 import ProblemInputField from '@/components/problem/problemInputField';
 import Image from 'next/image';
 import LevelUpModal from '@/components/problem/result/levelUpModal';
+import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -187,8 +188,8 @@ export default function Test() {
                   onSingleProblemAnswer={handleAnswer}
                 />
               )}
-              {problem.questionType.code !== 'QT02' && (
-                <ProblemOptionList
+              {problem.questionType.code === 'QT03' && (
+                <ProblemImageOptionList
                   problemOptions={
                     Array.isArray(problem.metadata.options)
                       ? problem.metadata.options // string[]일 경우
@@ -198,6 +199,18 @@ export default function Test() {
                   onSingleProblemAnswer={handleAnswer}
                 />
               )}
+              {problem.questionType.code !== 'QT02' &&
+                problem.questionType.code !== 'QT03' && (
+                  <ProblemOptionList
+                    problemOptions={
+                      Array.isArray(problem.metadata.options)
+                        ? problem.metadata.options // string[]일 경우
+                        : [problem.metadata.options] // string일 경우 배열로 변환
+                    }
+                    selectedOption={answer}
+                    onSingleProblemAnswer={handleAnswer}
+                  />
+                )}
             </div>
             {!isSolved && (
               <div className={styles['problem-button-list']}>
