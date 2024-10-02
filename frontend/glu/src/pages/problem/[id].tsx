@@ -31,6 +31,7 @@ interface ProblemResponse {
   problemType: ProblemType;
   metadata: ProblemOption;
   solution: string;
+  isFavorite: boolean;
 }
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -166,7 +167,7 @@ export default function Test() {
               problemType={problem.problemType.name}
               problemTitle={problem.title}
               problemId={problem.problemId.toString()}
-              problemLike={false}
+              problemLike={problem.isFavorite}
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={problem.content} />
