@@ -123,6 +123,7 @@ export default function Test() {
   }, []);
 
   const handleAnswer = (userAnswer: string) => {
+    if (isSolved) return;
     setAnswer(userAnswer);
   };
 
