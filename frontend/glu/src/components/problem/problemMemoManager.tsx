@@ -1,18 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import ProblemMemoIcon from '@/components/problem/problemMemoIcon';
 import { Memo } from '@/types/MemoTypes';
+import {
+  getProblemMemoAPI,
+  postProblemMemoAPI,
+  putProblemMemoAPI,
+  deleteProblemMemoAPI,
+} from '@/utils/problem/memo';
 import styles from './problemMemoManager.module.css';
 
 interface MemoManagerProps {
-  memoList: Memo[];
-  onSaveMemo: (memo: Memo) => void;
+  problemId: string;
 }
 
-export default function ProblemMemoManager({
-  memoList,
-  onSaveMemo,
-}: MemoManagerProps) {
+export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
+  const [memos, setMemos] = useState<Memo[]>([]);
   const [isEditingMemo, setIsEditingMemo] = useState<boolean>(false);
   const [newMemoContent, setNewMemoContent] = useState<string>('');
   const [selectedMemoIndex, setSelectedMemoIndex] = useState<number | null>(
@@ -20,24 +23,10 @@ export default function ProblemMemoManager({
   );
 
   const handleMemoClick = (index: number) => {
-    const selectedMemo = memoList[index];
+    const selectedMemo = memos[index];
     setSelectedMemoIndex(index);
     setNewMemoContent(selectedMemo.content);
     setIsEditingMemo(true);
-  };
-
-  const handleMemoSave = () => {
-    if (selectedMemoIndex !== null) {
-      onSaveMemo({
-        memoId: memoList[selectedMemoIndex].memoId,
-        content: newMemoContent,
-      });
-    } else {
-      onSaveMemo({ memoId: -1, content: newMemoContent });
-    }
-    setIsEditingMemo(false);
-    setNewMemoContent('');
-    setSelectedMemoIndex(null);
   };
 
   const handleMemoCancel = () => {
@@ -51,6 +40,60 @@ export default function ProblemMemoManager({
     setSelectedMemoIndex(null);
     setNewMemoContent('');
   };
+
+  const getMemos = async () => {
+    try {
+      const response = await getProblemMemoAPI(
+        problemId,
+        0,
+        100,
+        'createdDate,asc',
+      );
+      setMemos(response.content);
+    } catch (error) {
+      // 메모 가져오는 중 에러발생
+    }
+  };
+
+  const handleMemoSave = async () => {
+    try {
+      if (selectedMemoIndex !== null) {
+        // 메모 수정
+        await putProblemMemoAPI(
+          problemId,
+          memos[selectedMemoIndex].memoIndex,
+          newMemoContent,
+        );
+      } else {
+        // 새 메모 등록
+        await postProblemMemoAPI(problemId, newMemoContent);
+      }
+
+      getMemos();
+
+      // 상태 초기화
+      handleMemoCancel();
+    } catch (error) {
+      console.error('메모를 저장하는 중 문제가 발생했습니다.', error);
+    }
+  };
+
+  const handleMemoDelete = async () => {
+    if (selectedMemoIndex == null) return;
+
+    try {
+      await deleteProblemMemoAPI(problemId, memos[selectedMemoIndex].memoIndex);
+      getMemos();
+      // 상태 초기화
+      handleMemoCancel();
+    } catch (error) {
+      // 메모 삭제 중 에러발생
+    }
+  };
+
+  useEffect(() => {
+    getMemos();
+  }, [problemId]);
 
   return (
     <div className={styles.container}>
@@ -73,6 +116,13 @@ export default function ProblemMemoManager({
               size="small"
               onClick={handleMemoCancel}
             />
+            {selectedMemoIndex !== null && (
+              <SecondaryButton
+                label="삭제"
+                size="small"
+                onClick={handleMemoDelete}
+              />
+            )}
           </div>
         </>
       ) : (
@@ -85,13 +135,14 @@ export default function ProblemMemoManager({
         </div>
       )}
       <div className={styles['memo-list']}>
-        {memoList.map((memo, index) => (
-          <ProblemMemoIcon
-            key={memo.memoId}
-            onClick={() => handleMemoClick(index)}
-            role="button"
-            tabIndex={0}
-          />
+        {memos?.map((memo, index) => (
+          <div key={memo.memoIndex} className={styles['memo-item']}>
+            <ProblemMemoIcon
+              onClick={() => handleMemoClick(index)}
+              role="button"
+              tabIndex={0}
+            />
+          </div>
         ))}
       </div>
     </div>

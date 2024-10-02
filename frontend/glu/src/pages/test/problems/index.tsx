@@ -7,9 +7,7 @@ import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
 import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
-import { Memo } from '@/types/MemoTypes';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
-import { postProblemMemoAPI, putProblemMemoAPI } from '@/utils/problem/memo';
 import {
   getRecommendedTestProblemsAPI,
   postTestProblemGradingAPI,
@@ -25,7 +23,6 @@ import styles from './testProblems.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const dummyProblems = await import('@/mock/dummyProblems.json');
-  const dummyMemo = await import('@/mock/dummyMemo.json');
 
   let testProblems;
 
@@ -38,14 +35,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       initialProblems: testProblems || dummyProblems.default,
-      initialMemoList: dummyMemo.default,
     },
   };
 };
 
 interface TestProps {
   initialProblems: Problem[];
-  initialMemoList: Memo[];
 }
 interface ProblemAnswer {
   problemId: string;
@@ -54,7 +49,7 @@ interface ProblemAnswer {
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
-export default function Test({ initialProblems, initialMemoList }: TestProps) {
+export default function Test({ initialProblems }: TestProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const PROBLEM_COUNT = 15; // 문제 개수 고정
@@ -70,7 +65,6 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [memoList, setMemoList] = useState<Memo[]>(initialMemoList || []);
   const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [loading, setLoading] = useState(false);
 
@@ -197,43 +191,6 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
     setCurrentProblemIndex(index);
   };
 
-  // 메모 관련 로직 ///////////////////////////////////////////////////////////////////////////
-  const handleMemoSave = async (newMemo: Memo) => {
-    try {
-      if (currentProblem && newMemo.memoId && newMemo.memoId !== -1) {
-        // currentProblem이 존재하고, memoId가 존재하고, -1이 아닐 경우 => 기존 메모 수정
-        await putProblemMemoAPI(
-          currentProblem.problemId,
-          newMemo.memoId,
-          newMemo.content,
-        );
-        // TODO: 새로운 메모 받아오기
-        // setMemoList((prevMemoList) => {
-        //   const memoIndex = prevMemoList.findIndex(
-        //     (memo) => memo.memoId === newMemo.memoId,
-        //   );
-        //   if (memoIndex > -1) {
-        //     // 기존 메모 업데이트
-        //     const updatedMemoList = [...prevMemoList];
-        //     updatedMemoList[memoIndex] = newMemo;
-        //     return updatedMemoList;
-        //   }
-        //   return prevMemoList;
-        // });
-      } else {
-        // 새로운 메모 등록
-        const createdMemo = await postProblemMemoAPI(
-          currentProblem.problemId,
-          newMemo.content,
-        );
-        // TODO: 이걸로는 안됨. 다시 메모를 받아와야함 -1로 보냈기 때문에
-        setMemoList((prevMemoList) => [...prevMemoList, createdMemo]);
-      }
-    } catch (error) {
-      console.error('메모 저장 중 오류 발생:', error);
-    }
-  };
-
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
   if (loading) {
     return (
@@ -333,7 +290,7 @@ export default function Test({ initialProblems, initialMemoList }: TestProps) {
             zIndex: 10,
           }}
         >
-          <ProblemMemoManager memoList={memoList} onSaveMemo={handleMemoSave} />
+          <ProblemMemoManager problemId={currentProblem.problemId} />
         </div>
       </div>
     </div>
