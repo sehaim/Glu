@@ -11,7 +11,6 @@ import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
-import { Memo } from '@/types/MemoTypes';
 import {
   getSingleProblemAPI,
   postSingleProblemGradingAPI,
@@ -25,7 +24,7 @@ import LevelUpModal from '@/components/problem/result/levelUpModal';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
-  problemId: number;
+  problemId: string;
   title: string;
   content: string;
   questionType: QuestionType;
@@ -71,6 +70,8 @@ interface ProblemResponse {
 // }
 
 export default function Test() {
+  const router = useRouter();
+  const { id } = router.query;
   const [problem, setProblem] = useState<ProblemResponse | null>(null);
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(Date.now());
@@ -80,15 +81,6 @@ export default function Test() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stageImage, setStageImage] = useState('');
-  const [memoList, setMemoList] = useState<Memo[]>([
-    { memoId: 1, content: 'This is the first memo content.' },
-    { memoId: 2, content: 'This is the second memo content.' },
-    { memoId: 3, content: 'This is the third memo content.' },
-    { memoId: 4, content: 'This is the fourth memo content.' },
-  ]);
-
-  const router = useRouter();
-  const { id } = router.query;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -156,23 +148,6 @@ export default function Test() {
 
   const handleLevelUpModalClose = () => {
     setIsModalOpen(false);
-  };
-
-  const handleMemoSave = (newMemo: Memo) => {
-    setMemoList((prevMemoList) => {
-      // 만약 기존 메모를 수정하는 경우 memoId를 비교하여 업데이트
-      const memoIndex = prevMemoList.findIndex(
-        (memo) => memo.memoId === newMemo.memoId,
-      );
-      if (memoIndex > -1) {
-        // 기존 메모 수정
-        const updatedMemoList = [...prevMemoList];
-        updatedMemoList[memoIndex] = newMemo;
-        return updatedMemoList;
-      }
-      // 새로운 메모 추가
-      return [...prevMemoList, newMemo];
-    });
   };
 
   return (
@@ -269,10 +244,7 @@ export default function Test() {
               zIndex: 10,
             }}
           >
-            <ProblemMemoManager
-              memoList={memoList}
-              onSaveMemo={handleMemoSave}
-            />
+            <ProblemMemoManager problemId={problem.problemId} />
           </div>
         </div>
       )}

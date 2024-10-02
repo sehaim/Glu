@@ -27,7 +27,7 @@ export const getSingleProblemAPI = async (problemId: string) => {
 
 // 단일 문제 채점
 export const postSingleProblemGradingAPI = async (
-  problemId: number,
+  problemId: string,
   userAnswer: string,
   solvedTime: number,
 ) => {
