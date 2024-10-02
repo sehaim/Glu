@@ -90,7 +90,7 @@ export default function MytestComprehensiveTestRecordList() {
         </div>
       </div>
       <PaginationBar
-        pageNumbers={Array.from({ length: 7 }, (_, i) => i + 1)}
+        totalPageCount={7}
         currentPage={currentPage}
         handleClick={handlePageClick}
       />

@@ -1,6 +1,7 @@
 .container {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .page-button {
@@ -26,4 +27,23 @@
   background-color: var(--DARKYELLOW);
   color: var(--WHITE);
   font-weight: 700;
+}
+
+.dir-button {
+  background: none;
+  border-style: none;
+  cursor: pointer;
+  color: var(--ORANGE);
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  padding-top: 2px;
+}
+
+.dir-button-disabled {
+  visibility: hidden;
+}
+
+.dir-button:hover {
+  background-color: var(--YELLOW);
 }
