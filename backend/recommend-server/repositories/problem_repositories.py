@@ -178,7 +178,7 @@ def get_random_problems_by_code_and_level_and_classification(detail_code: str, l
 
 
 def get_random_problems_by_log(detail_code: str, level: int, classification: int, correct_ids: list[str],
-                               wrong_ids: list[str], vector):
+                               wrong_ids: list[str], vector, num):
     # MongoDB에서 문제를 조회
     problem_data = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
         "problemTypeDetailCode": detail_code,
@@ -197,7 +197,7 @@ def get_random_problems_by_log(detail_code: str, level: int, classification: int
     # 코사인 유사도 기준으로 정렬 (내림차순)
     sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
 
-    return sorted_problems[:3]
+    return sorted_problems[:num]
 
 
 def get_problems_by_detail_code(detail_code: str, limit: int = 2):
