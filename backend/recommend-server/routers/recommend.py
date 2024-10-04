@@ -7,18 +7,14 @@ import httpx
 import numpy as np
 from fastapi import APIRouter, Header
 
-from repositories import get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
+from repositories import get_wrong_sevendays, get_correct_sevendays
 from repositories.problem_repositories import (
     get_problem_by_id,
     get_problem_by_ids,
     get_similar, get_random_problems_by_log)
 from repositories.problem_repositories import get_random_problems_by_code_and_level
 
-from fastapi import HTTPException, Security
-from fastapi.security import APIKeyHeader
-
-def verify_header(access_token=Security(APIKeyHeader(name='accessToken'))):
-    return access_token
+from fastapi import HTTPException
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 
@@ -62,6 +58,7 @@ def calculate_user_level(age: int) -> int:
     else:
         return 7
 
+
 async def get_user_info(user_id: str) -> dict:
     headers = {"X-User-Id": user_id}
     async with httpx.AsyncClient() as client:
@@ -78,9 +75,8 @@ async def get_user_info(user_id: str) -> dict:
         return {"error": "Failed to call other service", "status_code": response.status_code}
 
 
-@router.get(path="/test/level", dependencies=[verify_header()])
+@router.get(path="/test/level")
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-
     print("test/level x-user-id", user_id)
 
     if not user_id:
@@ -139,9 +135,8 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
     return selected_problems
 
 
-@router.get(path="/test/general", dependencies=[verify_header()])
+@router.get(path="/test/general")
 async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-
     print("test/general x-user-id", user_id)
 
     if not user_id:
@@ -168,7 +163,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
     # 3개 PT01 PT02 PT03
     for pt_type, detail_codes in detail_codes_dict.items():
-
 
         user_level = user_problemtype_level.get(pt_type)
         print(f"ptlevel {pt_type} user_level {user_level}")
@@ -239,9 +233,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
 
 # 10개 가져오기
-@router.get(path="/type", dependencies=[verify_header()])
+@router.get(path="/type")
 async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-
     print("type x-user-id", user_id)
 
     if not user_id:
@@ -339,9 +332,8 @@ def make_type_problems(user_id, user_problemtype_level):
     return selected_problems
 
 
-@router.get(path="/similar", dependencies=[verify_header()])
+@router.get(path="/similar")
 async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
-
     print("/similar x-user-id", user_id)
 
     if not user_id:
@@ -427,6 +419,7 @@ def get_wrong_status(user_id: int):
             }
 
     return classification_avg_vectors
+
 
 def top_n_classification(n, map):
     result = []
