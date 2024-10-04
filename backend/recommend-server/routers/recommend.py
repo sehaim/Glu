@@ -18,6 +18,10 @@ from repositories.problem_repositories import get_random_problems_by_code_and_le
 from fastapi.security import HTTPBearer
 from fastapi import Request, HTTPException
 from jose import jwt, JWTError
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv("glu-recommend.env")
 
 SECRET_KEY = os.getenv('SECRET_KEY') # 실제 운영 환경에서는 안전하게 관리해야 합니다
 ALGORITHM = os.getenv('ALGORITHM')
