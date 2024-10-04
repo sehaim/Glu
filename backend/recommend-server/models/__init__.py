@@ -1,3 +1,2 @@
-from .model import (
-    Problem
-)
+from .model import Problem
+from .response import ProblemResponse
