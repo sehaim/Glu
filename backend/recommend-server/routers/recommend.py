@@ -80,6 +80,9 @@ async def get_user_info(user_id: str) -> dict:
 
 @router.get(path="/test/level", dependencies=[verify_header()])
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+
+    print("test/level x-user-id", user_id)
+
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -138,6 +141,9 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 
 @router.get(path="/test/general", dependencies=[verify_header()])
 async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+
+    print("test/general x-user-id", user_id)
+
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -235,6 +241,9 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 # 10개 가져오기
 @router.get(path="/type", dependencies=[verify_header()])
 async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+
+    print("type x-user-id", user_id)
+
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -332,6 +341,9 @@ def make_type_problems(user_id, user_problemtype_level):
 
 @router.get(path="/similar", dependencies=[verify_header()])
 async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
+
+    print("/similar x-user-id", user_id)
+
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
