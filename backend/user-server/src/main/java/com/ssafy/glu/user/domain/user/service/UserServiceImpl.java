@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 			.exp(findUser.getExp())
 			.imageUrl(userImage)
 			.birth(findUser.getBirth())
-			.createDate(LocalDate.from(findUser.getCreatedDate()))
+			.createDate(findUser.getCreatedDate().toLocalDate())
 			.attendanceRate(rate)
 			.nickname(findUser.getNickname())
 			.problemTypeList(getProblemTypeLists(userProblemTypes))
@@ -184,19 +184,6 @@ public class UserServiceImpl implements UserService {
 	public Boolean checkUser(String loginId) {
 		return userRepository.existsByLoginId(loginId);
 	}
-
-	// /**
-	//  * 출석정보 가져오기
-	//  */
-	// @Override
-	// public List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request) {
-	// 	//날짜 체크
-	// 	if (request.year() < 1900 || request.year() > 2100 || request.month() < 1 || request.month() > 12) {
-	// 		throw new DateInValidException();
-	// 	}
-	// 	return attendanceRepository.countAttendanceByYearAndMonth(userId, request);
-	// }
-
 
 	/**
 	 * 출석정보 가져오기
