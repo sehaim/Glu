@@ -115,7 +115,7 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
             detail_code = shuffled_detail_codes[i]  # 랜덤으로 섞인 세부유형에서 가져오기
             fetched_problems = get_random_problems_by_code_and_level(
                 detail_code=detail_code,
-                level=f"PL0{user_level}",  # 나중에 user_level로
+                level=f"PL0{user_level}",
                 limit=count
             )
 
