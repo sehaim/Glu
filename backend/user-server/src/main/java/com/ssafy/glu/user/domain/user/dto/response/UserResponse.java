@@ -14,6 +14,7 @@ public record UserResponse (
 	String imageUrl,
 	Integer dayCount,
 	LocalDate birth,
+	LocalDate createDate,
 	Integer attendanceRate,
 	List<UserProblemTypeResponse> problemTypeList
 ){}

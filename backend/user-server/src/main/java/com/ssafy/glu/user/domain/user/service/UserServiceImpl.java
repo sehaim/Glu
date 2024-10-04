@@ -18,7 +18,6 @@ import com.ssafy.glu.user.domain.user.domain.Attendance;
 import com.ssafy.glu.user.domain.user.domain.ProblemTypeCode;
 import com.ssafy.glu.user.domain.user.domain.UserProblemType;
 import com.ssafy.glu.user.domain.user.domain.Users;
-import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
 import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
@@ -26,7 +25,6 @@ import com.ssafy.glu.user.domain.user.dto.response.AttendanceResponse;
 import com.ssafy.glu.user.domain.user.dto.response.ExpUpdateResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserProblemTypeResponse;
 import com.ssafy.glu.user.domain.user.dto.response.UserResponse;
-import com.ssafy.glu.user.domain.user.exception.DateInValidException;
 import com.ssafy.glu.user.domain.user.exception.LoginIdDuplicateException;
 import com.ssafy.glu.user.domain.user.exception.PasswordInValidException;
 import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
@@ -114,6 +112,7 @@ public class UserServiceImpl implements UserService {
 			.exp(findUser.getExp())
 			.imageUrl(userImage)
 			.birth(findUser.getBirth())
+			.createDate(LocalDate.from(findUser.getCreatedDate()))
 			.attendanceRate(rate)
 			.nickname(findUser.getNickname())
 			.problemTypeList(getProblemTypeLists(userProblemTypes))

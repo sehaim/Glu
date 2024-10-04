@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.glu.user.domain.user.dto.request.AttendanceRequest;
 import com.ssafy.glu.user.domain.user.dto.request.ExpUpdateRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserRegisterRequest;
 import com.ssafy.glu.user.domain.user.dto.request.UserUpdateRequest;
@@ -62,12 +61,6 @@ public class UserController {
 		Boolean result = userService.checkUser(id);
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
-
-	// @GetMapping("/attendance")
-	// public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId, AttendanceRequest request) {
-	// 	List<AttendanceResponse> result = userService.getAttendance(userId, request);
-	// 	return ResponseEntity.status(HttpStatus.OK).body(result);
-	// }
 
 	@GetMapping("/attendance")
 	public ResponseEntity<List<AttendanceResponse>> getAttendance(@RequestHeader(USER_ID) Long userId) {
