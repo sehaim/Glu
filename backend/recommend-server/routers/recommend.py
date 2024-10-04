@@ -65,6 +65,8 @@ async def get_user_info(user_id: str) -> dict:
             headers=headers
         )
 
+    print("user_info:", response.json())
+
     if response.status_code == 200:
         return response.json()
     else:

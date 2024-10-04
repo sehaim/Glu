@@ -52,8 +52,6 @@ def get_problem_by_ids(problem_ids: list[str]):
 
 def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_id: str = None, limit: int = 3):
 
-    print("get random input" , level, detail_code, problem_id, limit)
-
     try:
         # 기본 필터 조건 설정
         filter_conditions = {
@@ -67,8 +65,6 @@ def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_
 
         # 필터 조건에 맞는 전체 문서 수 확인
         total_count = problem_collection.count_documents(filter_conditions)
-
-        print("total count", total_count)
 
         if total_count < limit:
             return []
@@ -170,10 +166,7 @@ def get_random_problems_by_log(detail_code: str, level: int, classification: int
     # 코사인 유사도 기준으로 정렬 (내림차순)
     sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
 
-    num_ = sorted_problems[:num]
-
-    print("sorted_problems" , num_)
-    return num_
+    return sorted_problems[:num]
 
 def get_problems_not_solve(user_id: int):
     # 사용자가 이미 푼 문제의 ID를 조회
