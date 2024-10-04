@@ -10,10 +10,6 @@ problem_collection = mongo_db['problem']
 user_problem_status_collection = mongo_db['userProblemStatus']
 
 
-def get_one_problem():
-    return problem_collection.find_one({"problemTypeDetailCode": "PT0211"})
-
-
 def get_problem_by_id(problem_id: str):
     try:
         # 문자열 ID를 ObjectId로 변환하여 MongoDB에서 조회
@@ -54,30 +50,34 @@ def get_problem_by_ids(problem_ids: list[str]):
         return None
 
 
-def get_problems_by_level_and_type(level_code: str, type_detail_code: str, problem_id: str):
+def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_id: str = None, limit: int = 3):
+
     try:
+        # 기본 필터 조건 설정
+        filter_conditions = {
+            "problemLevelCode": level,
+            "problemTypeDetailCode": detail_code
+        }
+
+        # problem_id가 제공된 경우, 해당 ID를 제외하는 조건 추가
+        if problem_id:
+            filter_conditions["_id"] = {"$ne": ObjectId(problem_id)}
+
         # 필터 조건에 맞는 전체 문서 수 확인
-        total_count = problem_collection.count_documents({
-            "problemLevelCode": level_code,
-            "problemTypeDetailCode": type_detail_code,
-            "_id": {"$ne": ObjectId(problem_id)}  # 주어진 problem_id와 일치하지 않는 조건
-        })
+        total_count = problem_collection.count_documents(filter_conditions)
 
-        if total_count == 0:
+        if total_count < limit:
             return []
-
-        print("total_count", total_count)
-        print("total_count", type(total_count))
 
         # 이미 선택된 인덱스 추적을 위한 세트
         selected_indices = set()
         problems = []
 
         # 총 3개의 문서를 선택
-        for _ in range(3):
+        for _ in range(limit):
             while True:
                 # 무작위로 인덱스를 생성
-                random_index = random.randint(0, total_count - 2)
+                random_index = random.randint(0, total_count - 1)
 
                 # 이미 선택한 인덱스는 건너뜀
                 if random_index not in selected_indices:
@@ -86,8 +86,8 @@ def get_problems_by_level_and_type(level_code: str, type_detail_code: str, probl
 
             # 무작위 인덱스의 문서를 조회 (skip을 사용하여 해당 위치로 이동 후 limit(1))
             random_problem = problem_collection.find({
-                "problemLevelCode": level_code,
-                "problemTypeDetailCode": type_detail_code
+                "problemLevelCode": level,
+                "problemTypeDetailCode": detail_code
             }).skip(random_index).limit(1)
 
             # 조회된 결과를 리스트로 변환하고 첫 번째 문서 추가
@@ -143,42 +143,11 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
     return sorted_problems[:3]
 
 
-def get_all_problems():
-    # 모든 문제를 리스트로 변환하여 반환
-    return list(problem_collection.find())
-
-
-def get_random_problems_by_code_and_level(detail_code: str, level: int, limit: int):
-    # MongoDB에서 문제를 조회
-    problems = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
-        "problemTypeDetailCode": detail_code,
-        "problemLevelCode": f"PL0{level}"
-    }).limit(limit))
-
-    # MongoDB 결과에서 ObjectId를 문자열로 변환
-    for problem in problems:
-        problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
-
-    return problems
-
-
-def get_random_problems_by_code_and_level_and_classification(detail_code: str, level: int, classification: int):
-    # MongoDB에서 문제를 조회
-    problems = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
-        "problemTypeDetailCode": detail_code,
-        "problemLevelCode": f"PL0{level}",
-        "classification": classification
-    }).limit(1))
-
-    # MongoDB 결과에서 ObjectId를 문자열로 변환
-    for problem in problems:
-        problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
-
-    return problems
-
-
 def get_random_problems_by_log(detail_code: str, level: int, classification: int, correct_ids: list[str],
-                               wrong_ids: list[str], vector):
+                               wrong_ids: list[str], vector, num):
+
+    print("log call", detail_code, level, classification, correct_ids, wrong_ids, vector, num)
+
     # MongoDB에서 문제를 조회
     problem_data = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
         "problemTypeDetailCode": detail_code,
@@ -197,13 +166,7 @@ def get_random_problems_by_log(detail_code: str, level: int, classification: int
     # 코사인 유사도 기준으로 정렬 (내림차순)
     sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
 
-    # 상위 3개 문제 반환
-    return sorted_problems[:3]
-
-
-def get_problems_by_detail_code(detail_code: str, limit: int = 2):
-    return list(problem_collection.find({"problemTypeDetailCode": detail_code}).limit(limit))
-
+    return sorted_problems[:num]
 
 def get_problems_not_solve(user_id: int):
     # 사용자가 이미 푼 문제의 ID를 조회
