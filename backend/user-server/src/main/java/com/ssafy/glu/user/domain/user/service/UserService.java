@@ -22,8 +22,6 @@ public interface UserService {
 
 	Boolean checkUser(String loginId);
 
-	// List<AttendanceResponse> getAttendance(Long userId, AttendanceRequest request);
-
 	List<AttendanceResponse> getAttendance(Long userId);
 
 	ExpUpdateResponse updateExp(Long userId, ExpUpdateRequest expUpdateRequest);

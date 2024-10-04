@@ -2,6 +2,7 @@ package com.ssafy.glu.user.domain.user.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,11 +77,15 @@ public class UserServiceImpl implements UserService {
 		//유저 저장
 		Users saveUser = userRepository.save(user);
 
+		int age = calculateAge(saveUser.getBirth());
+		int userLevel = calculateUserLevel(age);
+
 		// 유저 문제타입 저장
 		for (ProblemTypeCode problemTypeCode : ProblemTypeCode.values()) {
 
 			UserProblemType userProblemType = UserProblemType.builder()
 				.problemTypeCode(problemTypeCode)
+				.level(userLevel)
 				.user(saveUser)
 				.build();
 
@@ -88,6 +93,23 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return saveUser.getId();
+	}
+
+	// birthDate는 "yyyy-MM-dd" 형식의 문자열로 입력됩니다.
+	public static int calculateAge(LocalDate birthDate) {
+		// 현재 날짜와의 차이를 계산하여 나이 산출
+		LocalDate today = LocalDate.now();
+		return Period.between(birthDate, today).getYears();
+	}
+
+	public static int calculateUserLevel(int age) {
+		if (age >= 6 && age <= 12) {
+			return age - 5; // 만 6세 -> 1레벨, 만 12세 -> 7레벨
+		} else if (age < 6) {
+			return 1;
+		} else {
+			return 7;
+		}
 	}
 
 	/**
