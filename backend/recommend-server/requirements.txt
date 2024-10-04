@@ -24,3 +24,5 @@ uvicorn
 boto3
 python-multipart
 httpx
+
+numba
