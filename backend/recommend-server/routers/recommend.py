@@ -2,18 +2,17 @@ from collections import defaultdict
 from typing import Optional
 
 import random
+
+import httpx
 import numpy as np
 from fastapi import APIRouter, HTTPException, Header
-from numba.core.typing.builtins import type_index_value
 
-from repositories import get_all_problems, get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
+from repositories import get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
 from repositories.problem_repositories import (
     get_problem_by_id,
     get_problem_by_ids,
-    get_problems_by_level_and_type,
     get_similar, get_random_problems_by_log)
-from repositories.problem_repositories import get_random_problems_by_code_and_level, \
-    get_random_problems_by_code_and_level_and_classification
+from repositories.problem_repositories import get_random_problems_by_code_and_level
 from repositories.user_problem_status_repositories import get_top_n_classifications
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
@@ -23,8 +22,8 @@ classifications = [
     "사회관계", "시사", "과학", "문화",
     "사설", "교육", "경제", "nie"
 ]
-story_classifications = [0,1,2,3,4]
-news_classifications = [5,6,7,8,9,10,11]
+story_classifications = [0, 1, 2, 3, 4]
+news_classifications = [5, 6, 7, 8, 9, 10, 11]
 
 code_classifications = {
     "PT0211": story_classifications,
@@ -41,12 +40,14 @@ detail_codes_dict = {
     "PT03": ["PT0311", "PT0312", "PT0321"]
 }
 
+
 def calculate_age(birth_date: str) -> int:
     from datetime import datetime
     birth_date = datetime.strptime(birth_date, "%Y-%m-%d")
     today = datetime.today()
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     return age
+
 
 def calculate_user_level(age: int) -> int:
     if 6 <= age <= 12:
@@ -56,34 +57,43 @@ def calculate_user_level(age: int) -> int:
     else:
         return 7
 
+async def get_user_info(user_id: str) -> dict:
+    headers = {"X-User-Id": user_id}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "http://glu-user:8082/api/users",
+            headers=headers
+        )
+
+    print("user_info:", response.json())
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": "Failed to call other service", "status_code": response.status_code}
+
 
 @router.get("/test/level")
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
-    # try:
-    #     # 사용자 정보 API 호출
-    #     async with httpx.AsyncClient() as client:
-    #         response = await client.get(f"http://j11a506.p.ssafy.io:8082/api/users/{user_id}")
-    #
-    #     if response.status_code != 200:
-    #         raise HTTPException(status_code=response.status_code, detail="사용자 정보를 불러올 수 없습니다.")
-    #
-    #     user_data = response.json()
-    #     birth_date = user_data.get("birth")
-    #
-    #     if not birth_date:
-    #         raise HTTPException(status_code=400, detail="사용자 출생일 정보가 없습니다.")
-    #     # 출생일을 기준으로 나이 계산
-    #     age = calculate_age(birth_date)
-    #     # 나이를 기반으로 사용자 레벨 계산
-    #     user_level = calculate_user_level(age)
-    #
-    # except httpx.RequestError as exc:
-    #     raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
-    # except ValueError as e:
-    #     raise HTTPException(status_code=400, detail=str(e))
+    try:
+        # 사용자 정보 API 호출
+        user_info = await get_user_info(user_id)
+        birth_date = user_info['birth']
+
+        if not birth_date:
+            raise HTTPException(status_code=400, detail="사용자 출생일 정보가 없습니다.")
+        # 출생일을 기준으로 나이 계산
+        age = calculate_age(birth_date)
+        # 나이를 기반으로 사용자 레벨 계산
+        user_level = calculate_user_level(age)
+
+    except httpx.RequestError as exc:
+        raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     selected_problems = []
 
@@ -93,7 +103,6 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
         shuffled_detail_codes = detail_codes.copy()
         random.shuffle(shuffled_detail_codes)
 
-        print(shuffled_detail_codes)
         # 첫 두 세부유형에서 2개씩, 마지막 세부유형에서 1개를 가져옴
         problem_counts = [2, 2, 1]
 
@@ -101,7 +110,7 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
             detail_code = shuffled_detail_codes[i]  # 랜덤으로 섞인 세부유형에서 가져오기
             fetched_problems = get_random_problems_by_code_and_level(
                 detail_code=detail_code,
-                level=6,  # 나중에 user_level로
+                level=f"PL0{user_level}",  # 나중에 user_level로
                 limit=count
             )
 
@@ -127,38 +136,36 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
-    # try:
-    #     # 사용자 정보 API 호출
-    #     async with httpx.AsyncClient() as client:
-    #         response = await client.get(f"http://j11a506.p.ssafy.io:8082/api/users/{user_id}")
-    #
-    #     if response.status_code != 200:
-    #         raise HTTPException(status_code=response.status_code, detail="사용자 정보를 불러올 수 없습니다.")
-    #
-    #     user_data = response.json()
-    #     birth_date = user_data.get("birth")
-    #
-    #     if not birth_date:
-    #         raise HTTPException(status_code=400, detail="사용자 출생일 정보가 없습니다.")
-    #     # 출생일을 기준으로 나이 계산
-    #     age = calculate_age(birth_date)
-    #     # 나이를 기반으로 사용자 레벨 계산
-    #     user_level = calculate_user_level(age)
-    #
-    # except httpx.RequestError as exc:
-    #     raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
-    # except ValueError as e:
-    #     raise HTTPException(status_code=400, detail=str(e))
+    user_problemtype_level = {}
+
+    try:
+        # 사용자 정보 API 호출
+        user_info = await get_user_info(user_id)
+
+        for problemType in user_info['problemTypeList']:
+            user_problemtype_level[problemType['type']['code']] = problemType['level']
+
+
+    except httpx.RequestError as exc:
+        raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     selected_problems = []
     type_index = [0, 1, 2]
-    level_offsets = [-1, 0, 0, 1, 1] #난이도 조정
+    level_offsets = [-1, 0, 0, 1, 1]  # 난이도 조정
 
+    # 3개 PT01 PT02 PT03
     for pt_type, detail_codes in detail_codes_dict.items():
-        # if 유형레벨 = 1
-        #     level_offsets = [0, 0, 0, 1, 1]
-        # elif 유형레벨 = 7
-        #     level_offsets = [-1, 0, 0, 0, 0]
+
+
+        user_level = user_problemtype_level.get(pt_type)
+        print(f"ptlevel {pt_type} user_level {user_level}")
+
+        if user_level == 1:
+            level_offsets = [0, 0, 0, 1, 1]
+        elif user_level == 7:
+            level_offsets = [-1, 0, 0, 0, 0]
 
         detail_types = [0, 1, 2]
         detail_types.extend(random.choices(type_index, k=2))
@@ -168,55 +175,46 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
         # 인덱스와 레벨 배열 매칭
         indices = list(range(len(detail_types)))
-        # print(indices)
-        print(level_offsets)
-        print(detail_types)
 
-        idx=0
+        # 5개
+        idx = 0
         for i in indices:
             detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
-            level = 5 + level_offsets[i]  # 현재 레벨 매칭
+            level = user_level + level_offsets[i]  # 현재 레벨 매칭
+            fetched_problem = None
 
-
-
-            if idx<3:
-                fetched_problems = get_random_problems_by_code_and_level(
+            if idx < 3:
+                fetched_problem = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
-                    level=level,
+                    level=f"PL0{level}",
                     limit=1
                 )
-                idx=idx+1
+                idx = idx + 1
             else:
                 if pt_type == "PT01":
                     # 문제 가져오기
-                    fetched_problems = get_random_problems_by_code_and_level(
+                    fetched_problem = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
-                        level=level,
+                        level=f"PL0{level}",
                         limit=1
                     )
                 else:
-                    top_classifications = top_n_classification(2,get_wrong_status(int(user_id)))
+                    top_classifications = top_n_classification(2, get_wrong_status(int(user_id)))
                     for classification in top_classifications:
-
                         correct_ids = get_correct_ids(int(user_id))
                         wrong_ids = get_wrong_ids(int(user_id))
 
-                        fetched_problems = get_random_problems_by_log(
+                        fetched_problem = get_random_problems_by_log(
                             detail_code=classification[1],
                             level=level,
                             classification=classification[0],
                             correct_ids=correct_ids,
                             wrong_ids=wrong_ids,
-                            vector=classification[3]
+                            vector=classification[3],
+                            num=1
                         )
 
-            if not fetched_problems:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"세부유형 코드 {detail_code}에 충분한 문제가 없습니다."
-                )
-
-            selected_problems.extend(fetched_problems)
+            selected_problems.append(fetched_problem)
 
     # print(selected_problems)
     # 총 15문제가 선택되었는지 확인
@@ -229,22 +227,51 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
     return selected_problems
 
 
+# 10개 가져오기
 @router.get("/type")
-async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
+    user_problemtype_level = {}
+
+    try:
+        # 사용자 정보 API 호출
+        user_info = await get_user_info(user_id)
+
+        for problemType in user_info['problemTypeList']:
+            user_problemtype_level[problemType['type']['code']] = problemType['level']
+
+
+    except httpx.RequestError as exc:
+        raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    selected_problems = make_type_problems(user_id, user_problemtype_level)
+
+    while (len(selected_problems) != 30):
+        selected_problems = make_type_problems(user_id)
+
+    return selected_problems
+
+
+def make_type_problems(user_id, user_problemtype_level):
     selected_problems = []
-    type_counts = [3, 3, 4]  # 분배 개수
-    levels = [-1, 0, 1] # 레벨 범위
-
+    # 초기 값 설정
+    type_index = [0, 1, 2]
+    levels = [-1, 0, 1]  # 레벨 범위
+    i = 0
     for pt_type, detail_codes in detail_codes_dict.items():
-        # if 유형레벨 = 1
-        #     levels = [0, 1]
-        # elif 유형레벨 = 7
-        #     levels = [-1, 0]
 
-        random.shuffle(type_counts)
+        user_level = user_problemtype_level[pt_type]
+
+        if user_level == 1:
+            levels = [0, 1]
+        elif user_level == 7:
+            levels = [-1, 0]
+
+        type_counts = [3, 3, 4]  # 각 항목의 개수를 지정, 총합이 10
 
         # 랜덤한 세부 유형 배열 생성
         detail_types = []
@@ -253,42 +280,48 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
             detail_types.extend([detail_type] * count)  # 각 세부 유형을 count만큼 추가
         detail_levels.extend(random.choices(levels, k=10))
 
-        # 세부 유형 배열을 랜덤으로 섞기
-        random.shuffle(detail_types)
-
-        # 인덱스와 레벨 배열 매칭
-        indices = list(range(len(detail_types)))
-        print(indices)
-        print(detail_levels)
-        print(detail_types)
-
-        for i in indices:
-            detail_code = detail_codes_dict["PT01"][detail_types[i]]  # PT01 대유형에서 detail_code 선택
-            level = 5 + detail_levels[i]  # 현재 레벨 매칭
-
-            # 문제 가져오기
-            fetched_problems = get_random_problems_by_code_and_level(
-                detail_code=detail_code,
-                level=level,
-                limit=1  # 각 인덱스에 대해 1문제 가져오기
-            )
-
-            if not fetched_problems:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"세부유형 코드 {detail_code}에 충분한 문제가 없습니다."
+        idx = 0
+        for detail_code in detail_codes:
+            # 10개
+            if pt_type == "PT01":
+                # 문제 가져오기
+                fetched_problems = get_random_problems_by_code_and_level(
+                    detail_code=detail_code,
+                    level=f"PL0{user_level + detail_levels[idx]}",
+                    limit=type_counts[idx]
                 )
+            # 20개
+            else:
+                top_classifications = top_n_classification(type_counts[i], get_wrong_status(int(user_id)))
 
+                pt_detail_classifications = [item for item in top_classifications if item[1].startswith(detail_code)]
+                print(f"pt_detail {detail_code}", pt_detail_classifications)
+
+                correct_ids = get_correct_ids(int(user_id))
+                wrong_ids = get_wrong_ids(int(user_id))
+
+                # 틀린 기록 없음 랜덤 추천
+                if len(pt_detail_classifications) == 0:
+                    fetched_problems = get_random_problems_by_code_and_level(
+                        detail_code=detail_code,
+                        level=f"PL0{user_level + detail_levels[idx]}",
+                        limit=type_counts[idx]
+                    )
+                # 틀린 기록 있음
+                else:
+                    fetched_problems = get_random_problems_by_log(
+                        detail_code=detail_code,
+                        level=user_level + detail_levels[idx],
+                        classification=pt_detail_classifications[0][0],
+                        correct_ids=correct_ids,
+                        wrong_ids=wrong_ids,
+                        vector=pt_detail_classifications[0][3],
+                        num=type_counts[idx]
+                    )
             selected_problems.extend(fetched_problems)
+            print("detail_code", detail_code, "num", len(selected_problems))
 
-    print(len(selected_problems))
-    # 총 15문제가 선택되었는지 확인
-    if len(selected_problems) != 30:
-        raise HTTPException(
-            status_code=500,
-            detail="문제 선택 과정에서 예상치 못한 오류가 발생했습니다."
-        )
-
+            idx = idx + 1
     return selected_problems
 
 
@@ -300,8 +333,11 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
     find_problem = get_problem_by_id(problem_id)
 
     if (find_problem['problemTypeCode'] == "PT01"):
-        return get_problems_by_level_and_type(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
-                                              problem_id)
+        return get_random_problems_by_code_and_level(
+            level=find_problem['problemLevelCode'],
+            detail_code=find_problem['problemTypeDetailCode'],
+            problem_id=problem_id
+        )
 
     else:
         return get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
@@ -314,17 +350,11 @@ def get_correct_ids(user_id: int):
     problem_ids = []
 
     for document in status:
-        print(document)  # document의 전체 구조 출력하여 확인
         if 'problem' in document and document['problem'] is not None:
             if '_id' in document['problem']:
                 # ObjectId를 문자열로 변환
                 problem_id = str(document['problem']['_id'])
-                print(problem_id)  # 디버깅용 출력
                 problem_ids.append(problem_id)  # 문제 ID 추가
-            else:
-                print("Key '_id' not found in 'problem'")
-        else:
-            print("Key 'problem' not found or is None in document")
 
     return problem_ids
 
@@ -335,17 +365,11 @@ def get_wrong_ids(user_id: int):
     problem_ids = []
 
     for document in status:
-        print(document)  # document의 전체 구조 출력하여 확인
         if 'problem' in document and document['problem'] is not None:
             if '_id' in document['problem']:
                 # ObjectId를 문자열로 변환
                 problem_id = str(document['problem']['_id'])
-                print(problem_id)  # 디버깅용 출력
                 problem_ids.append(problem_id)  # 문제 ID 추가
-            else:
-                print("Key '_id' not found in 'problem'")
-        else:
-            print("Key 'problem' not found or is None in document")
 
     return problem_ids
 
@@ -371,8 +395,6 @@ def get_wrong_status(user_id: int):
         # classification_vectors에 추가
         classification_vectors[classification][detailcode].append(vector)
 
-    print("classification_vector", classification_vectors)
-
     # 각 classification에 대해 detailcode별 평균 벡터와 횟수 계산
     classification_avg_vectors = {}
     for classification, detail_codes in classification_vectors.items():
@@ -395,6 +417,7 @@ def get_wrong_status(user_id: int):
 async def not_solve_problems():
     not_solve_problems = get_problems_not_solve(1)
     return not_solve_problems
+
 
 def top_n_classification(n, map):
     result = []
