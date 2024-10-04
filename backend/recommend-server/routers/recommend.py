@@ -9,12 +9,8 @@ from repositories import get_problems_not_solve, get_wrong_sevendays, get_correc
 from repositories.problem_repositories import (
     get_problem_by_id,
     get_problem_by_ids,
-    get_problems_by_level_and_type,
     get_similar, get_random_problems_by_log)
-from repositories.problem_repositories import (
-    get_random_problems_by_code_and_level,
-    get_random_problems_by_code_and_level_and_classification
-)
+from repositories.problem_repositories import get_random_problems_by_code_and_level
 from repositories.user_problem_status_repositories import get_top_n_classifications
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
@@ -104,7 +100,7 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
             detail_code = shuffled_detail_codes[i]  # 랜덤으로 섞인 세부유형에서 가져오기
             fetched_problems = get_random_problems_by_code_and_level(
                 detail_code=detail_code,
-                level=6,  # 나중에 user_level로
+                level="PL06",  # 나중에 user_level로
                 limit=count
             )
 
@@ -158,7 +154,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
     level_offsets = [-1, 0, 0, 1, 1]  # 난이도 조정
     user_level = 5
 
-    #3개 PT01 PT02 PT03
+    # 3개 PT01 PT02 PT03
     for pt_type, detail_codes in detail_codes_dict.items():
         # if 유형레벨 = 1
         #     level_offsets = [0, 0, 0, 1, 1]
@@ -177,7 +173,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
         print(level_offsets)
         print(detail_types)
 
-        #5개
+        # 5개
         idx = 0
         for i in indices:
             detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
@@ -187,7 +183,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
             if idx < 3:
                 fetched_problem = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
-                    level=level,
+                    level=f"PL0{level}",
                     limit=1
                 )
                 idx = idx + 1
@@ -196,7 +192,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                     # 문제 가져오기
                     fetched_problem = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
-                        level=level,
+                        level=f"PL0{level}",
                         limit=1
                     )
                 else:
@@ -212,7 +208,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                             correct_ids=correct_ids,
                             wrong_ids=wrong_ids,
                             vector=classification[3],
-                            num = 1
+                            num=1
                         )
 
             selected_problems.append(fetched_problem)
@@ -227,7 +223,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
     return selected_problems
 
-#10개 가져오기
+
+# 10개 가져오기
 @router.get("/type")
 async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
@@ -263,15 +260,15 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
 
         idx = 0
         for detail_code in detail_codes:
-            #10개
+            # 10개
             if pt_type == "PT01":
                 # 문제 가져오기
                 fetched_problems = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
-                    level=5 + detail_levels[idx],
+                    level=f"PL0{5 + detail_levels[idx]}",
                     limit=type_counts[idx]
                 )
-            #20개
+            # 20개
             else:
                 top_classifications = top_n_classification(type_counts[i], get_wrong_status(int(user_id)))
 
@@ -281,14 +278,14 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
                 correct_ids = get_correct_ids(int(user_id))
                 wrong_ids = get_wrong_ids(int(user_id))
 
-                #틀린 기록 없음 랜덤 추천
+                # 틀린 기록 없음 랜덤 추천
                 if len(pt_detail_classifications) == 0:
                     fetched_problems = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
-                        level=5 + detail_levels[idx],
+                        level=f"PL0{5 + detail_levels[idx]}",
                         limit=type_counts[idx]
                     )
-                #틀린 기록 있음
+                # 틀린 기록 있음
                 else:
                     fetched_problems = get_random_problems_by_log(
                         detail_code=detail_code,
@@ -322,8 +319,11 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
     find_problem = get_problem_by_id(problem_id)
 
     if (find_problem['problemTypeCode'] == "PT01"):
-        return get_problems_by_level_and_type(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
-                                              problem_id)
+        return get_random_problems_by_code_and_level(
+            level=find_problem['problemLevelCode'],
+            detail_code=find_problem['problemTypeDetailCode'],
+            problem_id=problem_id
+        )
 
     else:
         return get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],

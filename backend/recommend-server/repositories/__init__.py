@@ -1,9 +1,7 @@
 from .problem_repositories import (
-    get_all_problems,
     get_problems_not_solve,
     get_problem_by_id,
     get_problem_by_ids,
-    get_problems_by_level_and_type,
     get_similar,
     get_random_problems_by_log)
 from .user_problem_log_repositories import get_user_problem_logs
