@@ -2,7 +2,7 @@ from datetime import datetime
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Union, Dict
 
 from models.model import PydanticObjectId, Problem
 
@@ -48,8 +48,10 @@ class QuestionType(BaseModel):
     def create(cls, code: str) -> "QuestionType":
         return cls(
             code=code,
-            name=problem_questions.get(code, "Unknown")
+            name=problem_questions[code]
         )
+
+
 
 class ProblemLevel(BaseModel):
     code: str
@@ -59,7 +61,7 @@ class ProblemLevel(BaseModel):
     def create(cls, code: str) -> "ProblemLevel":
         return cls(
             code=code,
-            name=problem_levels.get(code, "Unknown")
+            name=problem_levels[code]
         )
 
 class ProblemType(BaseModel):
@@ -70,7 +72,7 @@ class ProblemType(BaseModel):
     def create(cls, code: str) -> "ProblemType":
         return cls(
             code=code,
-            name=problem_types.get(code, "Unknown")
+            name=problem_types[code]
         )
 
 class ProblemTypeDetail(BaseModel):
@@ -81,14 +83,14 @@ class ProblemTypeDetail(BaseModel):
     def create(cls, code: str) -> "ProblemTypeDetail":
         return cls(
             code=code,
-            name=problem_type_details.get(code, "Unknown")
+            name=problem_type_details[code]
         )
 
 class Metadata(BaseModel):
     options: List[str]
 
 class ProblemResponse(BaseModel):
-    id: PydanticObjectId = Field(alias="_id")
+    id: PydanticObjectId = Field(alias="_id")  # MongoDB ObjectId와 같은 필드
     title: str
     content: str
     answer: int
@@ -108,7 +110,16 @@ class ProblemResponse(BaseModel):
     modifiedDate: datetime
 
     @classmethod
-    def from_problem(cls, problem: Problem) -> "ProblemResponse":
+    def from_problem(cls, problem: Union[Problem, Dict]) -> "ProblemResponse":
+        if isinstance(problem, dict):
+            # MongoDB에서 가져온 '_id' 필드를 'id'로 변환
+            problem_id = problem.pop('_id', None)
+            if problem_id:
+                problem['id'] = problem_id
+
+            # 딕셔너리를 Problem 객체로 변환
+            problem = Problem(**problem)
+
         return cls(
             id=problem.id,
             title=problem.title,
