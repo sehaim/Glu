@@ -230,12 +230,19 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
+    selected_problems = make_type_problems(user_id)
+
+    while (len(selected_problems) != 30):
+        selected_problems = make_type_problems(user_id)
+
+    return selected_problems
+
+
+def make_type_problems(user_id):
     selected_problems = []
     # 초기 값 설정
     type_index = [0, 1, 2]
-
     levels = [-1, 0, 1]  # 레벨 범위
-
     i = 0
     for pt_type, detail_codes in detail_codes_dict.items():
         # if 유형레벨 = 1
@@ -251,12 +258,6 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
         for detail_type, count in zip([0, 1, 2], type_counts):
             detail_types.extend([detail_type] * count)  # 각 세부 유형을 count만큼 추가
         detail_levels.extend(random.choices(levels, k=10))
-
-        # 인덱스와 레벨 배열 매칭
-        indices = list(range(len(detail_types)))
-        # print(indices)
-        print(detail_levels)
-        print("detail_types ", detail_types)
 
         idx = 0
         for detail_code in detail_codes:
@@ -300,14 +301,6 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
             print("detail_code", detail_code, "num", len(selected_problems))
 
             idx = idx + 1
-
-    print(len(selected_problems))
-    if len(selected_problems) != 30:
-        raise HTTPException(
-            status_code=500,
-            detail="문제 선택 과정에서 예상치 못한 오류가 발생했습니다."
-        )
-
     return selected_problems
 
 
