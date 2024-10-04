@@ -13,6 +13,7 @@ from repositories.problem_repositories import (
     get_problem_by_ids,
     get_similar, get_random_problems_by_log)
 from repositories.problem_repositories import get_random_problems_by_code_and_level
+from models import ProblemResponse
 
 from fastapi import HTTPException
 
@@ -120,10 +121,8 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 
             # fetched_problems가 MongoDB에서 가져온 경우 ObjectId를 문자열로 변환
             for problem in fetched_problems:
-                if "_id" in problem:  # '_id' 필드가 있을 경우
-                    problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
-
-            selected_problems.extend(fetched_problems)
+                response = ProblemResponse.from_problem(problem)
+                selected_problems.append(response)
 
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
@@ -219,7 +218,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                             num=1
                         )
 
-            selected_problems.append(fetched_problem)
+            response = ProblemResponse.from_problem(fetched_problem)
+            selected_problems.append(response)
 
     # print(selected_problems)
     # 총 15문제가 선택되었는지 확인
@@ -325,8 +325,10 @@ def make_type_problems(user_id, user_problemtype_level):
                         vector=pt_detail_classifications[0][3],
                         num=type_counts[idx]
                     )
-            selected_problems.extend(fetched_problems)
-            print("detail_code", detail_code, "num", len(selected_problems))
+
+            for fetched_problem in fetched_problems:
+                response = ProblemResponse.from_problem(fetched_problem)
+                selected_problems.append(response)
 
             idx = idx + 1
     return selected_problems
@@ -340,17 +342,26 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
     find_problem = get_problem_by_id(problem_id)
+    selected_problems = []
+
 
     if (find_problem['problemTypeCode'] == "PT01"):
-        return get_random_problems_by_code_and_level(
-            level=find_problem['problemLevelCode'],
-            detail_code=find_problem['problemTypeDetailCode'],
-            problem_id=problem_id
-        )
+        fetched_problems = get_random_problems_by_code_and_level(level=find_problem['problemLevelCode'],
+                                                      detail_code=find_problem['problemTypeDetailCode'],
+                                                      problem_id=problem_id)
+
+        for fetched_problem in fetched_problems:
+            response = ProblemResponse.from_problem(fetched_problem)
+            selected_problems.append(response)
 
     else:
-        return get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
-                           find_problem['vector'], problem_id)
+        fetched_problems = get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
+                              find_problem['vector'], problem_id)
+        for fetched_problem in fetched_problems:
+            response = ProblemResponse.from_problem(fetched_problem)
+            selected_problems.append(response)
+
+    return selected_problems
 
 
 def get_correct_ids(user_id: int):

@@ -7,7 +7,7 @@ from bson import ObjectId
 class PydanticObjectId(ObjectId):
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source_type: Any, handler: GetJsonSchemaHandler
+            cls, source_type: Any, handler: GetJsonSchemaHandler
     ) -> core_schema.CoreSchema:
         return core_schema.json_or_python_schema(
             json_schema=core_schema.str_schema(),
@@ -36,17 +36,17 @@ class Problem(BaseModel):
     content: str
     answer: int
     solution: str
-    word_count: Optional[int] = None
-    word_avg: Optional[int] = None
-    word_hard: Optional[int] = None
-    length: Optional[int] = None
+    word_count: Optional[float] = None
+    word_avg: Optional[float] = None
+    word_hard: Optional[float] = None
+    length: Optional[float] = None
     classification: Optional[int] = None
     questionTypeCode: str
     problemLevelCode: str
     problemTypeCode: str
     problemTypeDetailCode: str
     metadata: Metadata
-    vector: Optional[List[int]] = None
+    vector: Optional[List[float]] = None
     createdDate: datetime
     modifiedDate: datetime
 
