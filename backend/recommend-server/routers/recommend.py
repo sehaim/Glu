@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 from typing import Optional
 
@@ -5,7 +6,7 @@ import random
 
 import httpx
 import numpy as np
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException, Header, Depends
 
 from repositories import get_problems_not_solve, get_wrong_sevendays, get_correct_sevendays
 from repositories.problem_repositories import (
@@ -13,7 +14,36 @@ from repositories.problem_repositories import (
     get_problem_by_ids,
     get_similar, get_random_problems_by_log)
 from repositories.problem_repositories import get_random_problems_by_code_and_level
-from repositories.user_problem_status_repositories import get_top_n_classifications
+
+from fastapi.security import HTTPBearer
+from fastapi import Request, HTTPException
+from jose import jwt, JWTError
+
+SECRET_KEY = os.getenv('SECRET_KEY') # 실제 운영 환경에서는 안전하게 관리해야 합니다
+ALGORITHM = os.getenv('ALGORITHM')
+
+class AuthRequired(HTTPBearer):
+    def __init__(self, auto_error: bool = True):
+        super(AuthRequired, self).__init__(auto_error=auto_error)
+
+    async def __call__(self, request: Request):
+        credentials = await super(AuthRequired, self).__call__(request)
+        if credentials:
+            if not credentials.scheme == "Bearer":
+                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
+            if not self.verify_jwt(credentials.credentials):
+                raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+            return credentials.credentials
+        else:
+            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+
+    def verify_jwt(self, token: str) -> bool:
+        try:
+            jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            return True
+        except JWTError:
+            return False
+
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 
@@ -74,7 +104,7 @@ async def get_user_info(user_id: str) -> dict:
 
 
 @router.get("/test/level")
-async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_level_test(token: str = Depends(AuthRequired()), user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -132,7 +162,7 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 
 
 @router.get("/test/general")
-async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_general_test(token: str = Depends(AuthRequired()), user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -229,7 +259,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
 # 10개 가져오기
 @router.get("/type")
-async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_type_test(token: str = Depends(AuthRequired()), user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -326,7 +356,7 @@ def make_type_problems(user_id, user_problemtype_level):
 
 
 @router.get("/similar")
-async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
+async def get_level_test(problem_id: str, token: str = Depends(AuthRequired()), user_id: Optional[str] = Header(None, alias="X-User-Id")):
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
@@ -374,7 +404,6 @@ def get_wrong_ids(user_id: int):
     return problem_ids
 
 
-@router.get("/wrong")
 def get_wrong_status(user_id: int):
     wrong_problem_ids = get_wrong_ids(user_id)
 
@@ -411,13 +440,6 @@ def get_wrong_status(user_id: int):
             }
 
     return classification_avg_vectors
-
-
-@router.get("/not_solve")
-async def not_solve_problems():
-    not_solve_problems = get_problems_not_solve(1)
-    return not_solve_problems
-
 
 def top_n_classification(n, map):
     result = []
