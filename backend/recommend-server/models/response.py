@@ -121,7 +121,7 @@ class ProblemResponse(BaseModel):
             problem = Problem(**problem)
 
         return cls(
-            id=problem.id,
+            _id=problem.id,
             title=problem.title,
             content=problem.content,
             answer=problem.answer,
