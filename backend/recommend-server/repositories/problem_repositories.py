@@ -45,7 +45,6 @@ def get_problem_by_ids(problem_ids: list[str]):
         problems = []
         for data in problems_data:
             # ObjectId를 문자열로 변환
-            data['id'] = str(data.pop('_id'))
             problem = Problem(**data)
             problems.append(problem)
 
@@ -95,7 +94,7 @@ def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_
 
             # 조회된 결과를 리스트로 변환하고 첫 번째 문서 추가
             problem_data = list(random_problem)[0]
-            problem_data['id'] = str(problem_data.pop('_id'))  # ObjectId를 문자열로 변환하고 키 이름 변경
+            # _id 필드를 그대로 사용
             problem = Problem(**problem_data)
             problems.append(problem)
 

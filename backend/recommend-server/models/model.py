@@ -37,7 +37,7 @@ class Metadata(BaseModel):
     vector: List[float] | None = None
 
 class Problem(BaseModel):
-    id: PydanticObjectId = Field(alias="_id")
+    id: PydanticObjectId = Field(default_factory=PydanticObjectId, alias="_id")
     title: str
     content: str
     answer: int
