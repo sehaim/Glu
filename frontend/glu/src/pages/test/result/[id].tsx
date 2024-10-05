@@ -11,6 +11,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 import Loading from '@/components/common/loading';
 import { getTestResultAPI } from '@/utils/problem/test';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import styles from './testResult.module.css';
 
 interface TestResultResponse {
@@ -32,17 +33,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const response = await getTestResultAPI(context, testId);
     // TODO: 에러 확인할 필요
-    console.log('Full response:', response);
-    console.log('totalCorrectCount:', response.data.totalCorrectCount);
-    console.log('totalSolvedTime:', response.data.totalSolvedTime);
-    console.log(
-      'problemTypeList:',
-      response.data.gradingResultByTypeList.length,
-    );
-    console.log(
-      'problemList:',
-      response.data.gradingResultByProblemList.length,
-    );
+    // console.log('Full response:', response.data);
+    // console.log('totalCorrectCount:', response.data.totalCorrectCount);
+    // console.log('totalSolvedTime:', response.data.totalSolvedTime);
+    // console.log(
+    //   'problemTypeList:',
+    //   response.data.gradingResultByTypeList.length,
+    // );
+    // console.log(
+    //   'problemList:',
+    //   response.data.gradingResultByProblemList.length,
+    // );
 
     return {
       props: {
@@ -119,6 +120,19 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>테스트 결과</title>
+        <meta
+          property="og:title"
+          content={`테스트 결과 - 총점: ${totalCorrectCount}/15`}
+        />
+        <meta
+          property="og:description"
+          content="테스트 결과와 문제 해설을 확인하세요."
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+
       {/* 레벨업 모달 */}
       <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
         <div className={styles.levelUp}>
