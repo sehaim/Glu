@@ -43,6 +43,7 @@ export interface Problem {
   questionType: QuestionType;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
+  problemTypeDetail: ProblemTypeDetail;
   metadata: ProblemOption;
   solution: string;
 }
