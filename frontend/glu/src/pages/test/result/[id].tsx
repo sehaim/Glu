@@ -10,29 +10,64 @@ import { resetLevel } from '@/store/levelupSlice';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Loading from '@/components/common/loading';
 import { getTestResultAPI } from '@/utils/problem/test';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import styles from './testResult.module.css';
 
-// interface ApiResponse {
-//   totalCorrectCount: number;
-//   totalSolvedTime: number; // 초 단위
-//   gradingResultByTypeList: SolvedProblemType[];
-//   gradingResultByProblemList: SolvedProblem[];
-// }
+interface TestResultResponse {
+  totalCorrectCount: number;
+  totalSolvedTime: number;
+  problemTypeList: SolvedProblemType[];
+  problemList: SolvedProblem[];
+}
 
-export default function TestResult() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query;
+
+  if (!id) {
+    return { notFound: true };
+  }
+
+  const testId = Array.isArray(id) ? id[0] : id;
+
+  try {
+    const response = await getTestResultAPI(context, testId);
+    // TODO: 에러 확인할 필요
+    // console.log('Full response:', response.data);
+    // console.log('totalCorrectCount:', response.data.totalCorrectCount);
+    // console.log('totalSolvedTime:', response.data.totalSolvedTime);
+    // console.log(
+    //   'problemTypeList:',
+    //   response.data.gradingResultByTypeList.length,
+    // );
+    // console.log(
+    //   'problemList:',
+    //   response.data.gradingResultByProblemList.length,
+    // );
+
+    return {
+      props: {
+        testResultResponse: {
+          totalCorrectCount: response.data.totalCorrectCount,
+          totalSolvedTime: response.data.totalSolvedTime,
+          problemTypeList: response.data.gradingResultByTypeList,
+          problemList: response.data.gradingResultByProblemList,
+        },
+      },
+    };
+  } catch (error) {
+    return { notFound: true };
+  }
+};
+
+interface TestResultProps {
+  testResultResponse: TestResultResponse;
+}
+
+export default function TestResult({ testResultResponse }: TestResultProps) {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { id } = router.query;
-  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 추가
-  const [totalCorrectCount, setTotalCorrectCount] = useState<number | null>(
-    null,
-  );
-  const [totalSolvedTime, setTotalSolvedTime] = useState<number | null>(null);
-  const [problemTypeList, setProblemTypeList] = useState<SolvedProblemType[]>(
-    [],
-  );
-  const [problemList, setProblemList] = useState<SolvedProblem[]>([]);
+  const { totalCorrectCount, totalSolvedTime, problemTypeList, problemList } =
+    testResultResponse;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { levelImage, isLeveledUp } = useSelector(
     (state: RootState) => state.levelup,
@@ -49,29 +84,6 @@ export default function TestResult() {
     setIsModalOpen(false);
     dispatch(resetLevel());
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return; // Ensure testId is available
-
-      const testId = Array.isArray(id) ? id[0] : id;
-      setLoading(true);
-      try {
-        const response = await getTestResultAPI(testId);
-
-        setTotalCorrectCount(response.data.totalCorrectCount);
-        setTotalSolvedTime(response.data.totalSolvedTime);
-        setProblemTypeList(response.data.gradingResultByTypeList);
-        setProblemList(response.data.gradingResultByProblemList);
-      } catch (error) {
-        console.error('Error fetching test results:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
 
   const renderProblemRows = (startIndex: number, endIndex: number) => (
     <>
@@ -98,7 +110,7 @@ export default function TestResult() {
     </>
   );
 
-  if (loading) {
+  if (problemList.length !== 15) {
     return (
       <div className={styles.container}>
         <Loading size="large" showText />
@@ -108,6 +120,19 @@ export default function TestResult() {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>테스트 결과</title>
+        <meta
+          property="og:title"
+          content={`테스트 결과 - 총점: ${totalCorrectCount}/15`}
+        />
+        <meta
+          property="og:description"
+          content="테스트 결과와 문제 해설을 확인하세요."
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+
       {/* 레벨업 모달 */}
       <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
         <div className={styles.levelUp}>

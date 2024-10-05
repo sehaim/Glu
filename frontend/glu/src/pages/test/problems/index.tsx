@@ -147,7 +147,6 @@ export default function Test({ initialProblems }: TestProps) {
         levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
       );
 
-      setLoading(false); // 로딩 종료
       router.push(`/test/result/${res?.data?.testId}`);
     } catch (error) {
       console.error('정답 제출 중 오류 발생:', error);

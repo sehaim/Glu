@@ -4,6 +4,7 @@ import {
   ProblemLevel,
   ProblemOption,
   ProblemType,
+  ProblemTypeDetail,
   QuestionType,
 } from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -29,44 +30,12 @@ interface ProblemResponse {
   questionType: QuestionType;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
+  problemTypeDetail: ProblemTypeDetail;
   metadata: ProblemOption;
   solution: string;
   isFavorite: boolean;
   answer: string;
 }
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const { Id } = context.query; // URL에서 problemId 가져오기
-
-//   try {
-//     // 단일 문제 API 호출
-//     const problemData = await getSingleProblemAPI(context, Number(Id));
-
-//     // problemData가 없으면 404 처리
-//     if (!problemData) {
-//       return {
-//         notFound: true,
-//       };
-//     }
-
-//     return {
-//       props: {
-//         problemData,
-//       },
-//     };
-//   } catch (error) {
-//     // 에러가 발생하면 더미 데이터를 반환
-//     return {
-//       props: {
-//         problemData: dummyImageProblem,
-//       },
-//     };
-//   }
-// };
-
-// interface TestProps {
-//   problemData: ProblemResponse;
-// }
 
 export default function Test() {
   const router = useRouter();
@@ -157,7 +126,7 @@ export default function Test() {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={problem.content} />
-              {problem.questionType.code === 'QT01' && (
+              {problem.problemTypeDetail.code === 'PT0311' && (
                 <ProblemImageOptionList
                   problemOptions={
                     Array.isArray(problem.metadata.options)
@@ -178,7 +147,7 @@ export default function Test() {
                   onSingleProblemAnswer={handleAnswer}
                 />
               )}
-              {problem.questionType.code !== 'QT01' &&
+              {problem.problemTypeDetail.code !== 'PT0311' &&
                 problem.questionType.code !== 'QT02' && (
                   <ProblemOptionList
                     problemOptions={

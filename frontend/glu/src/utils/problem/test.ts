@@ -50,9 +50,12 @@ export const postTestProblemGradingAPI = async (
 };
 
 // 종합 테스트 결과 조회
-export const getTestResultAPI = async (testId: string) => {
+export const getTestResultAPI = async (
+  context: GetServerSidePropsContext,
+  testId: string,
+) => {
   try {
-    const authAxios = createAuthAxios();
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`tests/${testId}`);
 
     // 커스텀 응답에서 httpStatus 확인
