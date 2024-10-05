@@ -75,7 +75,6 @@ export default function Test() {
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
-  const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

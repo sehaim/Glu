@@ -80,6 +80,8 @@ export default function SignupPage() {
           </InputItem>
           <InputItem
             value={birth}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             onBirthChange={(birthValue) => setBirth(birthValue)}
             label="생년월일"
             isBirth

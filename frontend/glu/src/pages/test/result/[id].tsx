@@ -13,12 +13,12 @@ import { getTestResultAPI } from '@/utils/problem/test';
 import { useRouter } from 'next/router';
 import styles from './testResult.module.css';
 
-interface ApiResponse {
-  totalCorrectCount: number;
-  totalSolvedTime: number; // 초 단위
-  gradingResultByTypeList: SolvedProblemType[];
-  gradingResultByProblemList: SolvedProblem[];
-}
+// interface ApiResponse {
+//   totalCorrectCount: number;
+//   totalSolvedTime: number; // 초 단위
+//   gradingResultByTypeList: SolvedProblemType[];
+//   gradingResultByProblemList: SolvedProblem[];
+// }
 
 export default function TestResult() {
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ export default function TestResult() {
   );
   const [problemList, setProblemList] = useState<SolvedProblem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { level, levelImage, isLeveledUp } = useSelector(
+  const { levelImage, isLeveledUp } = useSelector(
     (state: RootState) => state.levelup,
   );
 
