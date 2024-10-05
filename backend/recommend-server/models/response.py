@@ -131,13 +131,13 @@ class ProblemResponse(BaseModel):
             problemType=ProblemType.create(problem.problemTypeCode),
             problemTypeDetail=ProblemTypeDetail.create(problem.problemTypeDetailCode),
             metadata=Metadata(
-                options=problem.metadata['options'],
-                word_count=problem.metadata['word_count'],
-                word_avg=problem.metadata['word_avg'],
-                word_hard=problem.metadata['word_hard'],
-                length=problem.metadata['length'],
-                classification=problem.metadata['classification'],
-                vector=problem.metadata['vector']
+                options=problem.metadata.options,
+                word_count=problem.metadata.word_count,
+                word_avg=problem.metadata.word_avg,
+                word_hard=problem.metadata.word_hard,
+                length=problem.metadata.length,
+                classification=problem.metadata.classification,
+                vector=problem.metadata.vector
             ),
             createdDate=problem.createdDate,
             modifiedDate=problem.modifiedDate,
