@@ -68,8 +68,6 @@ async def get_user_info(user_id: str) -> dict:
             headers=headers
         )
 
-    print("user_info:", response.json())
-
     if response.status_code == 200:
         return response.json()
     else:
@@ -78,11 +76,6 @@ async def get_user_info(user_id: str) -> dict:
 
 @router.get(path="/test/level")
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-    print("test/level x-user-id", user_id)
-
-    if not user_id:
-        raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
-
     try:
         # 사용자 정보 API 호출
         user_info = await get_user_info(user_id)
@@ -136,11 +129,6 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 
 @router.get(path="/test/general")
 async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-    print("test/general x-user-id", user_id)
-
-    if not user_id:
-        raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
-
     user_problemtype_level = {}
 
     try:
@@ -235,11 +223,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 # 10개 가져오기
 @router.get(path="/type")
 async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
-    print("type x-user-id", user_id)
-
-    if not user_id:
-        raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
-
     user_problemtype_level = {}
 
     try:
@@ -356,7 +339,7 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
 
     else:
         fetched_problems = get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
-                              find_problem['vector'], problem_id)
+                              find_problem['metadata']['vector'], problem_id)
         for fetched_problem in fetched_problems:
             response = ProblemResponse.from_problem(fetched_problem)
             selected_problems.append(response)
@@ -365,33 +348,25 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
 
 
 def get_correct_ids(user_id: int):
-    status = get_correct_sevendays(user_id)
-
-    problem_ids = []
-
-    for document in status:
-        if 'problem' in document and document['problem'] is not None:
-            if '_id' in document['problem']:
-                # ObjectId를 문자열로 변환
-                problem_id = str(document['problem']['_id'])
-                problem_ids.append(problem_id)  # 문제 ID 추가
-
-    return problem_ids
+    return status_to_problem_ids(get_correct_sevendays(user_id))
 
 
 def get_wrong_ids(user_id: int):
-    status = get_wrong_sevendays(user_id)
+    return status_to_problem_ids(get_wrong_sevendays(user_id))
 
+def status_to_problem_ids(status_list):
     problem_ids = []
 
-    for document in status:
-        if 'problem' in document and document['problem'] is not None:
-            if '_id' in document['problem']:
+    for status in status_list:
+        if 'problem' in status and status['problem'] is not None:
+            if '_id' in status['problem']:
                 # ObjectId를 문자열로 변환
-                problem_id = str(document['problem']['_id'])
+                problem_id = str(status['problem']['_id'])
                 problem_ids.append(problem_id)  # 문제 ID 추가
 
     return problem_ids
+
+
 
 
 def get_wrong_status(user_id: int):
@@ -408,7 +383,7 @@ def get_wrong_status(user_id: int):
 
         # document에서 classification과 vector를 추출
         classification = problem["classification"]
-        vector = problem["vector"]
+        vector = problem['metadata']["vector"]
         detailcode = problem["problemTypeDetailCode"]
 
         # classification_vectors에 추가
