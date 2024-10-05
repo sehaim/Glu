@@ -137,7 +137,6 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
 
     problems_with_scores = []
     for problem_dict in problem_data:
-        problem_dict['id'] = str(problem_dict.pop('_id'))  # ObjectId를 문자열로 변환하고 키 이름 변경
         problem = Problem(**problem_dict)
         cosine_score = cosine_similarity(vector, problem.metadata.vector)
         problems_with_scores.append((problem, cosine_score))
@@ -162,7 +161,6 @@ def get_random_problems_by_log(detail_code: str, level: int, classification: int
 
     problems_with_scores = []
     for problem_dict in problem_data:
-        problem_dict['id'] = str(problem_dict.pop('_id'))  # ObjectId를 문자열로 변환하고 키 이름 변경
         problem = Problem(**problem_dict)
 
         if problem.id in correct_ids:
