@@ -111,6 +111,11 @@ class ProblemResponse(BaseModel):
 
     @classmethod
     def from_problem(cls, problem: Union[Problem, Dict]) -> "ProblemResponse":
+
+        print("from_problem", problem)
+        print("problem_metadata", problem.metadata)
+        print("problem_metadata_options", problem.metadata.options)
+
         if isinstance(problem, dict):
             # MongoDB에서 가져온 '_id' 필드를 'id'로 변환
             problem_id = problem.pop('_id', None)
