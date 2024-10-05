@@ -4,6 +4,7 @@ import PaginationBar from '../common/paginationBar';
 
 export default function MytestComprehensiveTestRecordList() {
   const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pageSize = 5; // 한 페이지에 보여줄 테스트 기록 수
 
   // const totalPages = Math.ceil(testRecords.length / pageSize);
