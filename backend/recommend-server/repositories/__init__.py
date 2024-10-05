@@ -1,5 +1,4 @@
 from .problem_repositories import (
-    get_problems_not_solve,
     get_problem_by_id,
     get_problem_by_ids,
     get_similar,

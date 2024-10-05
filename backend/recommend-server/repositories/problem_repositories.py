@@ -1,9 +1,11 @@
 import random
+from typing import List
 
 import numpy as np
 from bson import ObjectId
 
 from db import mongo_db
+from models import Problem
 
 # 컬렉션 선택
 problem_collection = mongo_db['problem']
@@ -13,14 +15,14 @@ user_problem_status_collection = mongo_db['userProblemStatus']
 def get_problem_by_id(problem_id: str):
     try:
         # 문자열 ID를 ObjectId로 변환하여 MongoDB에서 조회
-        problem = problem_collection.find_one({"_id": ObjectId(problem_id)})
+        problem_data = problem_collection.find_one({"_id": ObjectId(problem_id)})
 
         # 문제가 존재하지 않을 경우 None 반환
-        if problem is None:
+        if problem_data is None:
             return None
 
-        # MongoDB의 ObjectId를 문자열로 변환
-        problem["_id"] = str(problem["_id"])
+        # MongoDB의 데이터를 Problem 모델로 변환
+        problem = Problem(**problem_data)
 
         return problem
 
@@ -32,16 +34,20 @@ def get_problem_by_id(problem_id: str):
 def get_problem_by_ids(problem_ids: list[str]):
     try:
         # 문자열 ID를 ObjectId로 변환하여 MongoDB에서 조회
-        object_ids = [ObjectId(pid) for pid in problem_ids]  # 각 ID를 개별적으로 변환
-        problems = list(problem_collection.find({"_id": {"$in": object_ids}}))  # find() 사용
+        object_ids = [ObjectId(pid) for pid in problem_ids]
+        problems_data = list(problem_collection.find({"_id": {"$in": object_ids}}))
 
         # 문제가 존재하지 않을 경우 None 반환
-        if not problems:
+        if not problems_data:
             return None
 
-        # MongoDB의 ObjectId를 문자열로 변환
-        for problem in problems:
-            problem["_id"] = str(problem["_id"])
+        # MongoDB의 데이터를 Problem 모델로 변환
+        problems = []
+        for data in problems_data:
+            # ObjectId를 문자열로 변환
+            data['id'] = str(data.pop('_id'))
+            problem = Problem(**data)
+            problems.append(problem)
 
         return problems
 
@@ -71,9 +77,9 @@ def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_
 
         # 이미 선택된 인덱스 추적을 위한 세트
         selected_indices = set()
-        problems = []
+        problems: List[Problem] = []
 
-        # 총 3개의 문서를 선택
+        # 총 limit개의 문서를 선택
         for _ in range(limit):
             while True:
                 # 무작위로 인덱스를 생성
@@ -85,14 +91,12 @@ def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_
                     break
 
             # 무작위 인덱스의 문서를 조회 (skip을 사용하여 해당 위치로 이동 후 limit(1))
-            random_problem = problem_collection.find({
-                "problemLevelCode": level,
-                "problemTypeDetailCode": detail_code
-            }).skip(random_index).limit(1)
+            random_problem = problem_collection.find(filter_conditions).skip(random_index).limit(1)
 
             # 조회된 결과를 리스트로 변환하고 첫 번째 문서 추가
-            problem = list(random_problem)[0]
-            problem["_id"] = str(problem["_id"])  # ObjectId를 문자열로 변환
+            problem_data = list(random_problem)[0]
+            problem_data['id'] = str(problem_data.pop('_id'))  # ObjectId를 문자열로 변환하고 키 이름 변경
+            problem = Problem(**problem_data)
             problems.append(problem)
 
         return problems
@@ -126,58 +130,53 @@ def cosine_similarity(vec_a: list[float], vec_b: list[float]) -> float:
 
 
 def get_similar(level_code: str, type_detail_code: str, vector: list[float], problem_id: str):
-    problem_data = problem_collection.find({"problemLevelCode": level_code,
-                                            "problemTypeDetailCode": type_detail_code,
-                                            "_id": {"$ne": ObjectId(problem_id)}})
+    problem_data = problem_collection.find({
+        "problemLevelCode": level_code,
+        "problemTypeDetailCode": type_detail_code,
+        "_id": {"$ne": ObjectId(problem_id)}
+    })
 
     problems_with_scores = []
-    for problem in problem_data:
-        problem["_id"] = str(problem["_id"])
-        problem["cosine_score"] = cosine_similarity(vector, problem["vector"])
-        problems_with_scores.append(problem)
+    for problem_dict in problem_data:
+        problem_dict['id'] = str(problem_dict.pop('_id'))  # ObjectId를 문자열로 변환하고 키 이름 변경
+        problem = Problem(**problem_dict)
+        cosine_score = cosine_similarity(vector, problem.metadata.vector)
+        problems_with_scores.append((problem, cosine_score))
 
     # 코사인 유사도 기준으로 정렬 (내림차순)
-    sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
+    sorted_problems = sorted(problems_with_scores, key=lambda x: x[1], reverse=True)
 
-    # 상위 3개 문제 반환
-    return sorted_problems[:3]
+    # 상위 3개 문제의 Problem 객체만 반환
+    return [problem for problem, _ in sorted_problems[:3]]
 
 
 def get_random_problems_by_log(detail_code: str, level: int, classification: int, correct_ids: list[str],
                                wrong_ids: list[str], vector, num):
-
     print("log call", detail_code, level, classification, correct_ids, wrong_ids, vector, num)
 
     # MongoDB에서 문제를 조회
-    problem_data = list(problem_collection.find({  ## 랜덤으로 가져올 방법 고민
+    problem_data = list(problem_collection.find({
         "problemTypeDetailCode": detail_code,
         "problemLevelCode": f"PL0{level}",
         "classification": classification
     }))
 
     problems_with_scores = []
-    for problem in problem_data:
-        problem["_id"] = str(problem["_id"])
-        if (problem["_id"] in correct_ids): problem["cosine_score"] = cosine_similarity(vector, problem["vector"]) - 1
-        elif (problem["_id"] in wrong_ids): problem["cosine_score"] = cosine_similarity(vector, problem["vector"]) - 0.5
-        else : problem["cosine_score"] = cosine_similarity(vector, problem["vector"])
-        problems_with_scores.append(problem)
+    for problem_dict in problem_data:
+        problem_dict['id'] = str(problem_dict.pop('_id'))  # ObjectId를 문자열로 변환하고 키 이름 변경
+        problem = Problem(**problem_dict)
+
+        if problem.id in correct_ids:
+            cosine_score = cosine_similarity(vector, problem.metadata.vector) - 1
+        elif problem.id in wrong_ids:
+            cosine_score = cosine_similarity(vector, problem.metadata.vector) - 0.5
+        else:
+            cosine_score = cosine_similarity(vector, problem.metadata.vector)
+
+        problems_with_scores.append((problem, cosine_score))
 
     # 코사인 유사도 기준으로 정렬 (내림차순)
-    sorted_problems = sorted(problems_with_scores, key=lambda x: x["cosine_score"], reverse=True)
+    sorted_problems = sorted(problems_with_scores, key=lambda x: x[1], reverse=True)
 
-    return sorted_problems[:num]
-
-def get_problems_not_solve(user_id: int):
-    # 사용자가 이미 푼 문제의 ID를 조회
-    solved_problem_ids = user_problem_status_collection.distinct(
-        "problem._id",
-        {"userId": user_id, "status": "CORRECT"}
-    )
-
-    # 아직 풀지 않은 문제를 조회
-    unsolved_problems = list(problem_collection.find(
-        {"_id": {"$nin": solved_problem_ids}}
-    ))
-
-    return unsolved_problems
+    # 상위 num개의 Problem 객체만 반환
+    return [problem for problem, _ in sorted_problems[:num]]

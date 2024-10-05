@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, GetJsonSchemaHandler
 from pydantic_core import core_schema
-from typing import List, Optional, Any
+from typing import List, Any
 from datetime import datetime
 from bson import ObjectId
 
@@ -29,6 +29,12 @@ class PydanticObjectId(ObjectId):
 
 class Metadata(BaseModel):
     options: List[str]
+    word_count: float | None = None
+    word_avg: float | None = None
+    word_hard: float | None = None
+    length: float | None = None
+    classification: int | None = None
+    vector: List[float] | None = None
 
 class Problem(BaseModel):
     id: PydanticObjectId = Field(alias="_id")
@@ -36,17 +42,11 @@ class Problem(BaseModel):
     content: str
     answer: int
     solution: str
-    word_count: Optional[float] = None
-    word_avg: Optional[float] = None
-    word_hard: Optional[float] = None
-    length: Optional[float] = None
-    classification: Optional[int] = None
     questionTypeCode: str
     problemLevelCode: str
     problemTypeCode: str
     problemTypeDetailCode: str
     metadata: Metadata
-    vector: Optional[List[float]] = None
     createdDate: datetime
     modifiedDate: datetime
 

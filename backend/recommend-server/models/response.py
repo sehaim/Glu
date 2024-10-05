@@ -88,6 +88,12 @@ class ProblemTypeDetail(BaseModel):
 
 class Metadata(BaseModel):
     options: List[str]
+    word_count: float | None = None
+    word_avg: float | None = None
+    word_hard: float | None = None
+    length: float | None = None
+    classification: int | None = None
+    vector: List[float] | None = None
 
 class ProblemResponse(BaseModel):
     id: PydanticObjectId = Field(alias="_id")  # MongoDB ObjectId와 같은 필드
@@ -95,17 +101,11 @@ class ProblemResponse(BaseModel):
     content: str
     answer: int
     solution: str
-    word_count: Optional[float] = None
-    word_avg: Optional[float] = None
-    word_hard: Optional[float] = None
-    length: Optional[float] = None
-    classification: Optional[int] = None
     questionType: QuestionType
     problemLevel: ProblemLevel
     problemType: ProblemType
     problemTypeDetail: ProblemTypeDetail
     metadata: Metadata
-    vector: Optional[List[float]] = None
     createdDate: datetime
     modifiedDate: datetime
 
@@ -126,17 +126,19 @@ class ProblemResponse(BaseModel):
             content=problem.content,
             answer=problem.answer,
             solution=problem.solution,
-            word_count=problem.word_count,
-            word_avg=problem.word_avg,
-            word_hard=problem.word_hard,
-            length=problem.length,
-            classification=problem.classification,
             questionType=QuestionType.create(problem.questionTypeCode),
             problemLevel=ProblemLevel.create(problem.problemLevelCode),
             problemType=ProblemType.create(problem.problemTypeCode),
             problemTypeDetail=ProblemTypeDetail.create(problem.problemTypeDetailCode),
-            metadata=problem.metadata,
-            vector=problem.vector,
+            metadata=Metadata(
+                options=problem.metadata['options'],
+                word_count=problem.metadata['word_count'],
+                word_avg=problem.metadata['word_avg'],
+                word_hard=problem.metadata['word_hard'],
+                length=problem.metadata['length'],
+                classification=problem.metadata['classification'],
+                vector=problem.metadata['vector']
+            ),
             createdDate=problem.createdDate,
             modifiedDate=problem.modifiedDate,
         )
