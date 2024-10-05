@@ -117,6 +117,9 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
                 response = ProblemResponse.from_problem(problem)
                 selected_problems.append(response)
 
+    print("selected_problems", selected_problems)
+    print("problems_num", len(selected_problems))
+
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
         raise HTTPException(
