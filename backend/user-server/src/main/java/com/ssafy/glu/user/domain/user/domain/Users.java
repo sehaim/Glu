@@ -36,9 +36,9 @@ public class Users extends BaseTimeEntity {
 	@Builder.Default
 	private Boolean isDeleted = false;
 	@Builder.Default
-	private Integer stage = 0;
+	private Integer stage = 1;
 	@Builder.Default
-	private Integer exp = 0;
+	private Integer exp = 100;
 	@Builder.Default
 	private Integer dayCount = 0;
 
@@ -53,20 +53,14 @@ public class Users extends BaseTimeEntity {
 	}
 
 	public Integer updateStage(Integer score) {
-		this.exp += score;
-
-		if (stage <= 5 && exp >= 100) {
-			stage += 1;
-			exp -= 100;
-		}
-
-		if (exp < 0) exp = 0;
-
+		this.exp = Math.max(100, score + this.exp);
+		this.stage = Math.min(Math.max((exp / 100), 1), 7);
 		return this.stage;
 	}
 
-	public Integer getStage() {
-		return stage + 1;
+	public Integer getExp(){
+		if (this.exp >= 800) return 100;
+		return this.exp % 100;
 	}
 
 	public void updateDayCount() {
