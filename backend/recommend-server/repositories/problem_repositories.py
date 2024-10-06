@@ -71,6 +71,8 @@ def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_
         # 필터 조건에 맞는 전체 문서 수 확인
         total_count = problem_collection.count_documents(filter_conditions)
 
+        print(f"get_random level {level} detail_code {detail_code} total_count {total_count}")
+
         if total_count < limit:
             return []
 

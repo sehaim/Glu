@@ -96,7 +96,7 @@ class Metadata(BaseModel):
     vector: List[float] | None = None
 
 class ProblemResponse(BaseModel):
-    id: PydanticObjectId = Field(alias="_id")  # MongoDB ObjectId와 같은 필드
+    problemId: int = Field(alias="_id")  # MongoDB ObjectId와 같은 필드
     title: str
     content: str
     answer: int
