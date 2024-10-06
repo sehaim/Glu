@@ -106,7 +106,7 @@ class ProblemResponse(BaseModel):
     problemId: str
     title: str
     content: str
-    answer: int
+    answer: Union[int, str]
     solution: str
     questionType: QuestionType
     problemLevel: ProblemLevel

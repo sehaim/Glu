@@ -47,7 +47,7 @@ class Problem(BaseModel):
     id: PydanticObjectId = Field(default_factory=PydanticObjectId, alias="_id")
     title: str
     content: str
-    answer: int
+    answer: Union[int, str]
     solution: str
     questionTypeCode: str
     problemLevelCode: str
