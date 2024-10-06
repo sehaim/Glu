@@ -96,7 +96,7 @@ class Metadata(BaseModel):
     vector: List[float] | None = None
 
 class ProblemResponse(BaseModel):
-    problemId: PydanticObjectId = Field(alias="_id")  # MongoDB ObjectId와 같은 필드
+    problemId: str
     title: str
     content: str
     answer: int
@@ -113,16 +113,12 @@ class ProblemResponse(BaseModel):
     def from_problem(cls, problem: Union[Problem, Dict]) -> "ProblemResponse":
 
         if isinstance(problem, dict):
-            # MongoDB에서 가져온 '_id' 필드를 'id'로 변환
-            problem_id = problem.pop('_id', None)
-            if problem_id:
-                problem['id'] = problem_id
-
-            # 딕셔너리를 Problem 객체로 변환
-            problem = Problem(**problem)
+            problem_id = str(problem.pop('_id', None))  # ObjectId를 문자열로 변환
+        else:
+            problem_id = str(problem.id)  # Problem 객체의 경우 id를 문자열로 변환
 
         return cls(
-            _id=problem.id,
+            problemId=problem_id,
             title=problem.title,
             content=problem.content,
             answer=problem.answer,
