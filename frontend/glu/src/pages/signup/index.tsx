@@ -1,9 +1,10 @@
 import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { checkIdAPI, signupAPI } from '@/utils/user/signup';
-import { SignupUser } from '@/types/UserTypes';
+import { SignupUser, Birth } from '@/types/UserTypes';
+import { sweetalertConfirm, sweetalertError } from '@/utils/common';
 import styles from '../userRegist.module.css';
 
 export default function SignupPage() {
@@ -11,7 +12,7 @@ export default function SignupPage() {
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-  const [birth, setBirth] = useState('');
+  const [birth, setBirth] = useState<Birth>({ year: 2009, month: 1, day: 1 });
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
@@ -25,18 +26,23 @@ export default function SignupPage() {
   const handleCheckId = async () => {
     const isDuplicate = await checkIdAPI(id);
     if (!isDuplicate) {
-      alert('사용 가능한 아이디입니다.'); // 추후 수정 예정
+      sweetalertConfirm('아이디 중복 확인', '사용 가능한 아이디입니다.');
     } else {
-      alert('중복된 아이디입니다.'); // 추후 수정 예정
+      sweetalertError('아이디 중복 확인', '사용할 수 없는 아이디입니다.');
+      setId('');
     }
   };
+
+  const handleBirthChange = useCallback((newBirth: Birth) => {
+    setBirth(newBirth);
+  }, []);
 
   const handleSignUp = async () => {
     const data: SignupUser = {
       id,
       password,
       nickname,
-      birth: '2009-01-01',
+      birth: `${birth.year}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`,
     };
     await signupAPI(data);
   };
@@ -79,12 +85,9 @@ export default function SignupPage() {
             <div className={styles['password-error']}>{passwordError}</div>
           </InputItem>
           <InputItem
-            value={birth}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            onBirthChange={(birthValue) => setBirth(birthValue)}
             label="생년월일"
             isBirth
+            onBirthChange={handleBirthChange}
           />
         </div>
         <PrimaryButton label="가입하기" size="medium" onClick={handleSignUp} />

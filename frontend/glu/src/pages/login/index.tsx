@@ -2,6 +2,7 @@ import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { useState } from 'react';
 import { LoginUser } from '@/types/UserTypes';
+import { sweetalertError } from '@/utils/common';
 import styles from '../userRegist.module.css';
 import { loginAPI } from '../../utils/user/auth';
 
@@ -14,8 +15,11 @@ export default function LoginPage() {
       id,
       password,
     };
-    if (id === '') {
-      alert('아이디를 입력해주세요.');
+    if (id === '' || password === '') {
+      sweetalertError(
+        '로그인 실패',
+        '아이디와 비밀번호를 정확히 입력해주세요.',
+      );
     } else {
       await loginAPI(data);
     }
