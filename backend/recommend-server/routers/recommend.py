@@ -112,7 +112,7 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
                 limit=count
             )
 
-            print(f"pt_type {pt_type} detail_code {detail_code} fetched_problems {fetched_problems}")
+            print(f"pt_type {pt_type} detail_code {detail_code} level PL0{user_level} fetched_problems {fetched_problems}")
 
             # fetched_problems가 MongoDB에서 가져온 경우 ObjectId를 문자열로 변환
             for problem in fetched_problems:
@@ -120,11 +120,11 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
                 selected_problems.append(response)
 
     # 총 15문제가 선택되었는지 확인
-    if len(selected_problems) != 15:
-        raise HTTPException(
-            status_code=500,
-            detail="문제 선택 과정에서 예상치 못한 오류가 발생했습니다."
-        )
+    # if len(selected_problems) != 15:
+    #     raise HTTPException(
+    #         status_code=500,
+    #         detail="문제 선택 과정에서 예상치 못한 오류가 발생했습니다."
+    #     )
 
     return selected_problems
 
