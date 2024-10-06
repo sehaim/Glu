@@ -86,7 +86,7 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
         # 출생일을 기준으로 나이 계산
         age = calculate_age(birth_date)
         # 나이를 기반으로 사용자 레벨 계산
-        user_level = calculate_user_level(age) + 1
+        user_level = calculate_user_level(age)
 
     except httpx.RequestError as exc:
         raise HTTPException(status_code=500, detail=f"사용자 정보를 불러오는 중 오류가 발생했습니다: {exc}")
@@ -154,7 +154,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
     # 3개 PT01 PT02 PT03
     for pt_type, detail_codes in detail_codes_dict.items():
 
-        user_level = user_problemtype_level.get(pt_type) + 1
+        user_level = user_problemtype_level.get(pt_type)
         print(f"ptlevel {pt_type} user_level {user_level}")
 
         if user_level == 1:
@@ -175,7 +175,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
         idx = 0
         for i in indices:
             detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
-            level = user_level + 1 + level_offsets[i]  # 현재 레벨 매칭
+            level = user_level + level_offsets[i]  # 현재 레벨 매칭
             fetched_problem = None
 
             if idx < 3:
@@ -257,7 +257,7 @@ def make_type_problems(user_id, user_problemtype_level):
     i = 0
     for pt_type, detail_codes in detail_codes_dict.items():
 
-        user_level = user_problemtype_level[pt_type] + 1
+        user_level = user_problemtype_level[pt_type]
 
         if user_level == 1:
             levels = [0, 1]
