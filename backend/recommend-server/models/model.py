@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field, GetJsonSchemaHandler
+from pydantic import BaseModel, Field, GetJsonSchemaHandler, field_validator
 from pydantic_core import core_schema
-from typing import List, Any
+from typing import List, Any, Union
 from datetime import datetime
 from bson import ObjectId
 
@@ -28,13 +28,20 @@ class PydanticObjectId(ObjectId):
         return ObjectId(v)
 
 class Metadata(BaseModel):
-    options: List[str]
+    options: Union[List[str], str]
     word_count: float | None = None
     word_avg: float | None = None
     word_hard: float | None = None
     length: float | None = None
     classification: int | None = None
     vector: List[float] | None = None
+
+    @field_validator('options', mode='before')
+    @classmethod
+    def ensure_list_options(cls, v):
+        if isinstance(v, list):
+            return v
+        return [v] if v is not None else []
 
 class Problem(BaseModel):
     id: PydanticObjectId = Field(default_factory=PydanticObjectId, alias="_id")

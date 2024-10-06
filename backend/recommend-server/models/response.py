@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from bson import ObjectId
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Union, Dict
 
 from models.model import PydanticObjectId, Problem
@@ -87,13 +87,20 @@ class ProblemTypeDetail(BaseModel):
         )
 
 class Metadata(BaseModel):
-    options: List[str]
+    options: Union[List[str], str]
     word_count: float | None = None
     word_avg: float | None = None
     word_hard: float | None = None
     length: float | None = None
     classification: int | None = None
     vector: List[float] | None = None
+
+    @field_validator('options', mode='before')
+    @classmethod
+    def ensure_list_options(cls, v):
+        if isinstance(v, list):
+            return v
+        return [v] if v is not None else []
 
 class ProblemResponse(BaseModel):
     problemId: str
