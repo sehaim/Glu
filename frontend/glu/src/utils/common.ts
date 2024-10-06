@@ -109,3 +109,13 @@ export const sweetalertConfirm = (header: string, content: string) => {
     confirmButtonText: '확인',
   });
 };
+
+export const sweetalertError = (header: string, content: string) => {
+  Swal.fire({
+    title: header,
+    text: content,
+    icon: 'error',
+    confirmButtonColor: 'var(--RED)',
+    confirmButtonText: '확인',
+  });
+};

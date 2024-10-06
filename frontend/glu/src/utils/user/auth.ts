@@ -1,7 +1,12 @@
 import { LoginUser } from '@/types/UserTypes';
 import { AxiosError } from 'axios';
 import { setCookie, deleteCookie } from 'cookies-next';
-import { createAuthAxios, defaultAxios } from '../common';
+import {
+  createAuthAxios,
+  defaultAxios,
+  sweetalertConfirm,
+  sweetalertError,
+} from '../common';
 
 // 로그인
 export const loginAPI = async (data: LoginUser) => {
@@ -16,8 +21,7 @@ export const loginAPI = async (data: LoginUser) => {
     if (err instanceof AxiosError && err.response) {
       const msg =
         err.response.data?.message || '로그인 중 오류가 발생했습니다.';
-      // alert 추후 수정 예정
-      alert(msg);
+      sweetalertError('로그인 오류', msg);
     }
   }
 };
@@ -29,7 +33,11 @@ export const logoutAPI = async () => {
     await authAxios.post(`auth/logout`);
     deleteCookie('accessToken');
     window.location.href = '/';
+    sweetalertConfirm('로그아웃', '로그아웃이 완료되었습니다.'); // 추후 수정
   } catch {
-    alert('로그아웃 실패'); // 추후 삭제 예정
+    sweetalertError(
+      '로그아웃 오류',
+      '로그아웃 도중 오류가 발생했습니다. 다시 시도해주세요.',
+    );
   }
 };

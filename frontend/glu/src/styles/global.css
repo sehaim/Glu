@@ -62,6 +62,12 @@ select {
 }
 
 /* SweetAlert 커스텀 */
+body.swal2-shown,
+html.swal2-shown {
+  overflow-y: hidden !important;
+  padding-right: 0 !important;
+}
+
 .swal2-modal {
   width: 400px;
   height: 270px;
@@ -134,14 +140,14 @@ select {
 }
 
 .swal2-x-mark-line-right {
-  top: 1.4em !important;
-  left: 0.5em !important;
+  top: 1.5em !important;
+  left: 0.7em !important;
   width: 2em !important;
 }
 
 .swal2-x-mark-line-left {
-  top: 1.4em !important;
-  left: 0.5em !important;
+  top: 1.5em !important;
+  left: 0.7em !important;
   width: 2em !important;
 }
 

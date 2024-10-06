@@ -2,7 +2,12 @@ import { GetServerSidePropsContext } from 'next';
 import { Birth } from '@/types/UserTypes';
 import axios from 'axios';
 import { setCookie } from 'cookies-next';
-import { createAuthAxios, refreshUserAPI, sweetalertConfirm } from '../common';
+import {
+  createAuthAxios,
+  refreshUserAPI,
+  sweetalertConfirm,
+  sweetalertError,
+} from '../common';
 
 // yyyy-mm-dd 형식의 생년월일을 Birth 객체로 변환하는 함수
 export function parseDate(dateString: string) {
@@ -71,7 +76,10 @@ export const putUserInfoAPI = async (
     if (axios.isAxiosError(err)) {
       if (err.response) {
         if (err.response.status === 403) {
-          alert(`Error: ${err.response.statusText}`); // 추후 수정
+          sweetalertError(
+            '현재 비밀번호 오류',
+            '현재 비밀번호가 일치하지 않습니다.',
+          );
         }
       }
     }

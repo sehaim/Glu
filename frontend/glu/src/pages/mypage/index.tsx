@@ -68,7 +68,6 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
 
   const handlePasswordSubmit = async () => {
     await putUserInfoAPI(undefined, currentPassword, newPassword, undefined);
-    alert('비밀번호가 변경되었습니다.'); // alert 추후 수정 , 현재 비밀번호 틀렸을 때 수정 예정
     handleCloseModal();
   };
 
@@ -80,7 +79,6 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
   const handleBirthSubmit = () => {
     const formattedBirth = `${birth.year}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`;
     putUserInfoAPI(undefined, undefined, undefined, formattedBirth);
-    alert('생년월일이 변경되었습니다.'); // 추후 수정
   };
 
   return (

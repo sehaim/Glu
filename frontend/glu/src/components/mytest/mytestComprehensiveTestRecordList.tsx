@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { ComprehensiveTestRecord } from '@/types/TestTypes';
 import Link from 'next/link';
 import { getSolvedComprehensiveTestAPI } from '@/utils/user/mytest';
+import { format } from 'date-fns';
 import styles from './mytestComprehensiveTestRecordList.module.css';
 import PaginationBar from '../common/paginationBar';
-import { format } from 'date-fns';
 
 interface TestRecordListProps {
   initialTestList: ComprehensiveTestRecord[];
