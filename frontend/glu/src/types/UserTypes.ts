@@ -24,6 +24,7 @@ export interface MypageUser {
   stage: number;
   exp: number;
   imageUrl: string;
+  createDate: string;
   attendanceRate: number;
   dayCount: number;
   problemTypeList: {

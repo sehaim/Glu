@@ -4,7 +4,7 @@
     "title": "수학 문제 1",
     "content": "이 문제는 수학과 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {
@@ -14,6 +14,10 @@
     "problemType": {
       "code": "math",
       "name": "기하학"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
     },
     "metadata": {
       "options": ["옵션 1", "옵션 2", "옵션 3"]
@@ -36,6 +40,10 @@
       "code": "science",
       "name": "물리학"
     },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
     "metadata": {
       "options": ["옵션 1", "옵션 2", "옵션 3"]
     },
@@ -46,7 +54,7 @@
     "title": "영어 문제 1",
     "content": "이 문제는 영어와 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {
@@ -56,6 +64,10 @@
     "problemType": {
       "code": "english",
       "name": "문법"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
     },
     "metadata": {
       "options": ["옵션 1", "옵션 2", "옵션 3"]
@@ -78,6 +90,10 @@
       "code": "history",
       "name": "현대사"
     },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
     "metadata": {
       "options": ["옵션 A", "옵션 B", "옵션 C"]
     },
@@ -88,7 +104,7 @@
     "title": "국어 문제 1",
     "content": "이 문제는 국어와 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT04",
       "name": "객관식"
     },
     "problemLevel": {
@@ -98,6 +114,10 @@
     "problemType": {
       "code": "korean",
       "name": "문학"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
     },
     "metadata": {
       "options": ["옵션 ①", "옵션 ②", "옵션 ③"]
@@ -120,6 +140,10 @@
       "code": "social",
       "name": "경제학"
     },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
     "metadata": {
       "options": ["옵션 1", "옵션 2", "옵션 3"]
     },
@@ -140,6 +164,10 @@
     "problemType": {
       "code": "it",
       "name": "프로그래밍"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
     },
     "metadata": {
       "options": ["옵션 X", "옵션 Y", "옵션 Z"]
@@ -162,6 +190,10 @@
       "code": "art",
       "name": "회화"
     },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
+    },
     "metadata": {
       "options": ["옵션 α", "옵션 β", "옵션 γ"]
     },
@@ -172,7 +204,7 @@
     "title": "음악 문제 1",
     "content": "이 문제는 음악과 관련된 문제입니다.",
     "questionType": {
-      "code": "QT01",
+      "code": "QT05",
       "name": "객관식"
     },
     "problemLevel": {
@@ -182,6 +214,10 @@
     "problemType": {
       "code": "music",
       "name": "음악 이론"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
     },
     "metadata": {
       "options": ["옵션 I", "옵션 II", "옵션 III"]
@@ -203,6 +239,10 @@
     "problemType": {
       "code": "physical_education",
       "name": "체력 단련"
+    },
+    "problemTypeDetail": {
+      "code": "PT0211",
+      "name": "동화 내용 확인하기 - 주어진 글(동화)을 읽고 올바른 것S 옳지 않은 것 고르기"
     },
     "metadata": {
       "options": ["옵션 A1", "옵션 B2", "옵션 C3"]

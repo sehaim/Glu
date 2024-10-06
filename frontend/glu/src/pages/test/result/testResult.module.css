@@ -147,15 +147,15 @@
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   font-size: 16px;
-  line-height: 12px;
+  line-height: 24px;
   width: calc(50% - 12px);
-  height: 100px;
+  min-height: 100px;
 }
 
 .problem-option-list {
   padding: 8px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 16px;
   width: calc(50% - 12px);
 }
@@ -164,6 +164,9 @@
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   font-size: 14px;
+}
+
+.problem-image-item {
 }
 
 .user-answer {

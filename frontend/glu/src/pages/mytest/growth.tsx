@@ -14,9 +14,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // 서버에서 회원정보 API 호출
   const userInfo = await getUserInfoAPI(context);
   const attendances = await getAttendanceAPI(context);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const TestList = await getSolvedComprehensiveTestAPI(context, 1, 5);
 
-  // 데이터를 props로 페이지 컴포넌트에 전달
   return {
     props: {
       userInfo,
@@ -41,6 +41,7 @@ export default function MytestGrowthPage({
         <MytestAttendance
           attendances={attendances}
           attendanceRate={userInfo.attendanceRate}
+          createDate={userInfo.createDate}
         />
         <MytestComprehensiveTestRecordList />
       </div>

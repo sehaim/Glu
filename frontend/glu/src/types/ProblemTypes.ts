@@ -16,6 +16,11 @@ export interface ProblemType {
   name: string;
 }
 
+export interface ProblemTypeDetail {
+  code: string;
+  name: string;
+}
+
 export interface SolvedProblemType {
   correctCount: number;
   problemType: {
@@ -38,6 +43,7 @@ export interface Problem {
   questionType: QuestionType;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
+  problemTypeDetail: ProblemTypeDetail;
   metadata: ProblemOption;
   solution: string;
 }
@@ -46,6 +52,10 @@ export interface SolvedProblem {
   problemId: string;
   title: string;
   content: string;
+  questionType: QuestionType;
+  problemLevel: ProblemLevel;
+  problemType: ProblemType;
+  problemTypeDetail: ProblemTypeDetail;
   metadata: ProblemOption;
   isCorrect: boolean;
   userAnswer: string;

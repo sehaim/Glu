@@ -4,15 +4,15 @@ import styles from './problemImageOptionList.module.css';
 
 interface ProblemOptionListProps {
   selectedOption: string;
-  problemIndex?: number;
+  problemId?: string;
   problemOptions: string[];
-  onTestProblemAnswer?: (problemIndex: number, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
+  onTestProblemAnswer?: (problemId: string, problemAnswer: string) => void; // 테스트 문제에 대한 콜백
   onSingleProblemAnswer?: (problemAnswer: string) => void; // 단일 문제에 대한 콜백
 }
 
 export default function ProblemOptionList({
   selectedOption,
-  problemIndex,
+  problemId,
   problemOptions,
   onTestProblemAnswer,
   onSingleProblemAnswer,
@@ -27,8 +27,8 @@ export default function ProblemOptionList({
     if (!userAnswer) return; // Null 또는 undefined 체크
 
     // Test 문제 풀이
-    if (onTestProblemAnswer && typeof problemIndex !== 'undefined') {
-      onTestProblemAnswer(problemIndex, String(userAnswer));
+    if (onTestProblemAnswer && typeof problemId !== 'undefined') {
+      onTestProblemAnswer(problemId, String(userAnswer));
     }
 
     // 단일 문제 풀이
@@ -45,15 +45,6 @@ export default function ProblemOptionList({
     if (event.key === 'Enter' || event.key === ' ') {
       handleOptionClick(userAnswer); // Enter나 Space를 누르면 옵션 선택
     }
-  };
-
-  // 이미지 소스 검증 후 에러 처리
-  const getImageSrc = (option: string | null | undefined) => {
-    if (option?.startsWith('/images/')) {
-      return option;
-    }
-
-    return '/images/glu_character_shadow.png';
   };
 
   return (
@@ -73,7 +64,7 @@ export default function ProblemOptionList({
         >
           <div className={styles['problem-option-number']}>{index + 1}</div>
           <Image
-            src={getImageSrc(option)}
+            src={option}
             alt={`Option ${index + 1}`}
             width={100} // 적절한 width 설정
             height={100} // 적절한 height 설정

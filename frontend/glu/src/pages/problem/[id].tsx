@@ -4,6 +4,7 @@ import {
   ProblemLevel,
   ProblemOption,
   ProblemType,
+  ProblemTypeDetail,
   QuestionType,
 } from '@/types/ProblemTypes';
 import ProblemHeader from '@/components/problem/problemHeader';
@@ -15,12 +16,11 @@ import {
   getSingleProblemAPI,
   postSingleProblemGradingAPI,
 } from '@/utils/problem/problem';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import throttle from 'lodash/throttle';
 import { useRouter } from 'next/router';
 import ProblemInputField from '@/components/problem/problemInputField';
 import Image from 'next/image';
 import LevelUpModal from '@/components/problem/result/levelUpModal';
+import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -30,44 +30,12 @@ interface ProblemResponse {
   questionType: QuestionType;
   problemLevel: ProblemLevel;
   problemType: ProblemType;
+  problemTypeDetail: ProblemTypeDetail;
   metadata: ProblemOption;
   solution: string;
   isFavorite: boolean;
   answer: string;
 }
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const { Id } = context.query; // URL에서 problemId 가져오기
-
-//   try {
-//     // 단일 문제 API 호출
-//     const problemData = await getSingleProblemAPI(context, Number(Id));
-
-//     // problemData가 없으면 404 처리
-//     if (!problemData) {
-//       return {
-//         notFound: true,
-//       };
-//     }
-
-//     return {
-//       props: {
-//         problemData,
-//       },
-//     };
-//   } catch (error) {
-//     // 에러가 발생하면 더미 데이터를 반환
-//     return {
-//       props: {
-//         problemData: dummyImageProblem,
-//       },
-//     };
-//   }
-// };
-
-// interface TestProps {
-//   problemData: ProblemResponse;
-// }
 
 export default function Test() {
   const router = useRouter();
@@ -76,7 +44,6 @@ export default function Test() {
   const [answer, setAnswer] = useState<string>('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [, setElapsedTime] = useState<number>(0);
-  const [isMobile, setIsMobile] = useState(false); // 초기값 false로 설정
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,7 +54,7 @@ export default function Test() {
       if (typeof id === 'string') {
         // id가 string인 경우에만 API 호출
         const res = await getSingleProblemAPI(id);
-        console.log(res);
+
         setProblem(res.data);
       }
     };
@@ -96,23 +63,6 @@ export default function Test() {
       fetchData();
     }
   }, [id]);
-
-  useEffect(() => {
-    const handleResize = throttle(() => {
-      setIsMobile(window.innerWidth < 1024);
-    }, 300); // 0.3초 간격으로 이벤트 처리
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      handleResize(); // 초기 사이즈 체크
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-
-    return () => {};
-  }, []);
 
   const handleAnswer = (userAnswer: string) => {
     if (isSolved) return;
@@ -127,13 +77,12 @@ export default function Test() {
 
     if (problem) {
       try {
-        // Call the postSingleProblemGrading function to submit the answer and time
         const response = await postSingleProblemGradingAPI(
           problem.problemId,
           answer,
           timeTaken,
         );
-        console.log('단일 문제 채점 결과:', response);
+
         setIsSolved(true);
         setIsCorrect(response.data.isCorrect);
         if (response.data.isStageUp) {
@@ -177,6 +126,17 @@ export default function Test() {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={problem.content} />
+              {problem.problemTypeDetail.code === 'PT0311' && (
+                <ProblemImageOptionList
+                  problemOptions={
+                    Array.isArray(problem.metadata.options)
+                      ? problem.metadata.options // string[]일 경우
+                      : [problem.metadata.options] // string일 경우 배열로 변환
+                  }
+                  selectedOption={answer}
+                  onSingleProblemAnswer={handleAnswer}
+                />
+              )}
               {problem.questionType.code === 'QT02' && (
                 <ProblemInputField
                   placeholder={
@@ -187,17 +147,18 @@ export default function Test() {
                   onSingleProblemAnswer={handleAnswer}
                 />
               )}
-              {problem.questionType.code !== 'QT02' && (
-                <ProblemOptionList
-                  problemOptions={
-                    Array.isArray(problem.metadata.options)
-                      ? problem.metadata.options // string[]일 경우
-                      : [problem.metadata.options] // string일 경우 배열로 변환
-                  }
-                  selectedOption={answer}
-                  onSingleProblemAnswer={handleAnswer}
-                />
-              )}
+              {problem.problemTypeDetail.code !== 'PT0311' &&
+                problem.questionType.code !== 'QT02' && (
+                  <ProblemOptionList
+                    problemOptions={
+                      Array.isArray(problem.metadata.options)
+                        ? problem.metadata.options // string[]일 경우
+                        : [problem.metadata.options] // string일 경우 배열로 변환
+                    }
+                    selectedOption={answer}
+                    onSingleProblemAnswer={handleAnswer}
+                  />
+                )}
             </div>
             {!isSolved && (
               <div className={styles['problem-button-list']}>
@@ -236,14 +197,7 @@ export default function Test() {
               </div>
             )}
           </div>
-          <div
-            className={styles['problem-memo']}
-            style={{
-              position: isMobile ? 'static' : 'sticky',
-              top: '60px',
-              zIndex: 10,
-            }}
-          >
+          <div className={styles['problem-memo']}>
             <ProblemMemoManager problemId={problem.problemId} />
           </div>
         </div>

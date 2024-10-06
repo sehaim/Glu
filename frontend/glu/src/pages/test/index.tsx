@@ -61,7 +61,7 @@ export default function Test() {
       if (res) {
         setCorrectCount(res.totalCorrectCount);
         setTotalSolveTime(res.totalSolvedTime);
-        setProblemTypeList(res.gradingResultByTypeList.problemType);
+        setProblemTypeList(res.gradingResultByTypeList);
       }
     };
 
