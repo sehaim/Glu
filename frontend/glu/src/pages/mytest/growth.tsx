@@ -8,7 +8,7 @@ import {
 import { MypageUser, Attendances } from '@/types/UserTypes';
 import { GetServerSideProps } from 'next';
 import MytestComprehensiveTestRecordList from '@/components/mytest/mytestComprehensiveTestRecordList';
-import { ComprehesiveTestRecord } from '@/types/TestTypes';
+import { ComprehensiveTestRecord } from '@/types/TestTypes';
 import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const attendances = await getAttendanceAPI(context);
 
   // 서버에서 종합 테스트 기록 조회 API 호출
-  const testData = await getSolvedComprehensiveTestAPI(context, 1, 5);
+  const testData = await getSolvedComprehensiveTestAPI(0, 5, context);
   const testList = testData?.content;
   const totalPages = testData?.totalPages;
 
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 interface MytestGrowthPageProps {
   userInfo: MypageUser;
   attendances: Attendances | null;
-  testList: ComprehesiveTestRecord[];
+  testList: ComprehensiveTestRecord[];
   totalPages: number;
 }
 
@@ -54,7 +54,7 @@ export default function MytestGrowthPage({
           createDate={userInfo.createDate}
         />
         <MytestComprehensiveTestRecordList
-          testList={testList}
+          initialTestList={testList}
           totalPages={totalPages}
         />
       </div>

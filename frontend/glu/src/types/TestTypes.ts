@@ -1,4 +1,4 @@
-export interface ComprehesiveTestRecord {
+export interface ComprehensiveTestRecord {
   testId: string;
   totalCorrectCount: number;
   totalSolvedTime: number;

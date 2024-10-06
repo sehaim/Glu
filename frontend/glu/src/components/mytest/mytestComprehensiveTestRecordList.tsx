@@ -1,31 +1,27 @@
 import { useState } from 'react';
-import { ComprehesiveTestRecord } from '@/types/TestTypes';
+import { ComprehensiveTestRecord } from '@/types/TestTypes';
+import Link from 'next/link';
+import { getSolvedComprehensiveTestAPI } from '@/utils/user/mytest';
 import styles from './mytestComprehensiveTestRecordList.module.css';
 import PaginationBar from '../common/paginationBar';
+import { format } from 'date-fns';
 
 interface TestRecordListProps {
-  testList: ComprehesiveTestRecord[];
+  initialTestList: ComprehensiveTestRecord[];
   totalPages: number;
 }
 
 export default function MytestComprehensiveTestRecordList({
-  testList,
+  initialTestList,
   totalPages,
 }: TestRecordListProps) {
+  const [testList, setTestList] = useState(initialTestList);
   const [currentPage, setCurrentPage] = useState(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const pageSize = 5; // 한 페이지에 보여줄 테스트 기록 수
 
-  // const totalPages = Math.ceil(testRecords.length / pageSize);
-
-  // // 현재 페이지에 보여줄 테스트 기록들
-  // const currentRecords = testRecords.slice(
-  //   (currentPage - 1) * pageSize,
-  //   currentPage * pageSize,
-  // );
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const itemNameList = [
-    '내 점수',
+    '총 점수',
     '어휘 및 문법',
     '독해',
     '추론',
@@ -33,8 +29,13 @@ export default function MytestComprehensiveTestRecordList({
     '걸린 시간',
   ];
 
-  const handlePageClick = (page: number) => {
+  const handlePageClick = async (page: number) => {
     setCurrentPage(page);
+
+    if (page !== 1) {
+      const data = await getSolvedComprehensiveTestAPI(page, 5);
+      setTestList(data?.content);
+    }
   };
 
   return (
@@ -48,56 +49,30 @@ export default function MytestComprehensiveTestRecordList({
             </div>
           ))}
         </div>
-        <div
-          className={`${styles['line-container']} ${styles['item-container']}`}
-        >
-          <div className={styles.element}>10/15</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>4/5</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>2024-08-20</div>
-          <div className={styles.element}>12분 10초</div>
-        </div>
-        <div
-          className={`${styles['line-container']} ${styles['item-container']}`}
-        >
-          <div className={styles.element}>10/15</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>4/5</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>2024-08-20</div>
-          <div className={styles.element}>12분 10초</div>
-        </div>
-        <div
-          className={`${styles['line-container']} ${styles['item-container']}`}
-        >
-          <div className={styles.element}>10/15</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>4/5</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>2024-08-20</div>
-          <div className={styles.element}>12분 10초</div>
-        </div>
-        <div
-          className={`${styles['line-container']} ${styles['item-container']}`}
-        >
-          <div className={styles.element}>10/15</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>4/5</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>2024-08-20</div>
-          <div className={styles.element}>12분 10초</div>
-        </div>
-        <div
-          className={`${styles['line-container']} ${styles['item-container']}`}
-        >
-          <div className={styles.element}>10/15</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>4/5</div>
-          <div className={styles.element}>3/5</div>
-          <div className={styles.element}>2024-08-20</div>
-          <div className={styles.element}>12분 10초</div>
-        </div>
+        {testList.map((test) => (
+          <Link
+            href={`${baseUrl}/test/result/${test.testId}`}
+            key={test.testId}
+            className={`${styles['line-container']} ${styles['item-container']}`}
+          >
+            <div className={styles.element}>{test.totalCorrectCount}/15</div>
+            <div className={styles.element}>3/5</div>
+            <div className={styles.element}>4/5</div>
+            <div className={styles.element}>3/5</div>
+            <div className={styles.element}>
+              {format(test.createdDate, 'yyyy-MM-dd')}
+            </div>
+            <div className={styles.element}>
+              {Math.floor(test.totalSolvedTime / 60)}분{' '}
+              {Math.floor(test.totalSolvedTime % 60)}초
+            </div>
+          </Link>
+        ))}
+        {initialTestList.length === 0 && (
+          <div className={styles['test-record-null']}>
+            종합 테스트 기록이 없습니다.
+          </div>
+        )}
       </div>
       <PaginationBar
         totalPageCount={totalPages}

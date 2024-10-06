@@ -12,15 +12,17 @@ export const getAttendanceAPI = async (context: GetServerSidePropsContext) => {
   }
 };
 
-// 종합테스트 기록 조회 API
+// cchl종합테스트 기록 조회 API
 export const getSolvedComprehensiveTestAPI = async (
-  context: GetServerSidePropsContext,
   page: number,
   size: number,
+  context?: GetServerSidePropsContext | undefined,
 ) => {
   try {
     const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(`tests?page=${page}&size=${size}`);
+    const res = await authAxios.get(
+      `tests?page=${page}&size=${size}&sort=createdDate,desc`,
+    );
     return res.data;
   } catch {
     console.log('에러'); // 추후 콘솔 수정
