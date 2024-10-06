@@ -124,16 +124,10 @@ export default function MytestAttendance({
                   >
                     {format(day, 'd')}
                   </div>
-                  {hasAttendance(day) && (
-                    <Image
-                      src="/images/glu_character_shadow.png"
-                      alt="attendance mark"
-                      className={styles['attendance-icon']}
-                      width={70}
-                      height={60}
-                    />
-                  )}
                   {isSameDay(formattedCreateDate, day) && (
+                    <div className={styles['create-date']}>Glu 시작</div>
+                  )}
+                  {hasAttendance(day) && (
                     <Image
                       src="/images/glu_character_shadow.png"
                       alt="attendance mark"

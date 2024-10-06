@@ -12,7 +12,7 @@ export const getAttendanceAPI = async (context: GetServerSidePropsContext) => {
   }
 };
 
-// 종합테스트 이력 조회 API
+// 종합테스트 기록 조회 API
 export const getSolvedComprehensiveTestAPI = async (
   context: GetServerSidePropsContext,
   page: number,
@@ -28,7 +28,7 @@ export const getSolvedComprehensiveTestAPI = async (
   }
 };
 
-// 유형별 테스트 이력 조회 API ->  수정 예정
+// 유형별 테스트 기록 조회 API ->  수정 예정
 export const getSolvedTestAPI = async (context: GetServerSidePropsContext) => {
   try {
     const authAxios = createAuthAxios(context);

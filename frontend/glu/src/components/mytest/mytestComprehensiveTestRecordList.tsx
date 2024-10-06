@@ -1,8 +1,17 @@
 import { useState } from 'react';
+import { ComprehesiveTestRecord } from '@/types/TestTypes';
 import styles from './mytestComprehensiveTestRecordList.module.css';
 import PaginationBar from '../common/paginationBar';
 
-export default function MytestComprehensiveTestRecordList() {
+interface TestRecordListProps {
+  testList: ComprehesiveTestRecord[];
+  totalPages: number;
+}
+
+export default function MytestComprehensiveTestRecordList({
+  testList,
+  totalPages,
+}: TestRecordListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pageSize = 5; // 한 페이지에 보여줄 테스트 기록 수
@@ -91,7 +100,7 @@ export default function MytestComprehensiveTestRecordList() {
         </div>
       </div>
       <PaginationBar
-        totalPageCount={7}
+        totalPageCount={totalPages}
         currentPage={currentPage}
         handleClick={handlePageClick}
       />
