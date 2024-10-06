@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BsCaretLeftFill, BsCaretRightFill } from 'react-icons/bs';
 import { Attendances } from '@/types/UserTypes';
 import {
@@ -20,14 +20,17 @@ import BarGraph from '../common/graphs/barGraph';
 interface MytestAttendanceProps {
   attendanceRate: number;
   attendances: Attendances | null;
+  createDate: string;
 }
 
 export default function MytestAttendance({
   attendanceRate,
   attendances,
+  createDate,
 }: MytestAttendanceProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
+  const formattedCreateDate = parseISO(createDate);
 
   // 해당 월의 날짜들 생성
   const generateCalendar = (date: Date) => {
@@ -46,10 +49,6 @@ export default function MytestAttendance({
 
     return days;
   };
-
-  useEffect(() => {
-    console.log(attendances);
-  }, [attendances]);
 
   // 이전 달로 이동
   const handlePreviousMonth = () => {
@@ -87,8 +86,12 @@ export default function MytestAttendance({
           <div className={styles['calendar-header']}>
             <BsCaretLeftFill
               size={35}
-              onClick={handlePreviousMonth}
-              className={styles['calendar-button']}
+              onClick={
+                !isSameMonth(currentDate, formattedCreateDate)
+                  ? handlePreviousMonth
+                  : undefined
+              }
+              className={`${styles['calendar-button']} ${isSameMonth(currentDate, formattedCreateDate) ? styles['button-enabled'] : ''}`}
             />
             <span>
               {currentDate.getFullYear()}년 {currentDate.getMonth() + 1}월
@@ -121,6 +124,9 @@ export default function MytestAttendance({
                   >
                     {format(day, 'd')}
                   </div>
+                  {isSameDay(formattedCreateDate, day) && (
+                    <div className={styles['create-date']}>Glu 시작</div>
+                  )}
                   {hasAttendance(day) && (
                     <Image
                       src="/images/glu_character_shadow.png"

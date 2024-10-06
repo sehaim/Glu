@@ -16,6 +16,8 @@
 .record-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  height: 400px;
   padding: 10px;
 }
 
@@ -46,4 +48,11 @@
   width: 15%;
   text-align: center;
   color: var(--TEXT_PRIMARY);
+}
+
+.test-record-null {
+  font-family: 'PT';
+  font-size: 16px;
+  color: var(--TEXT_SECONDARY);
+  margin: auto;
 }

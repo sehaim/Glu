@@ -8,20 +8,25 @@ import {
 import { MypageUser, Attendances } from '@/types/UserTypes';
 import { GetServerSideProps } from 'next';
 import MytestComprehensiveTestRecordList from '@/components/mytest/mytestComprehensiveTestRecordList';
+import { ComprehensiveTestRecord } from '@/types/TestTypes';
 import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // 서버에서 회원정보 API 호출
   const userInfo = await getUserInfoAPI(context);
   const attendances = await getAttendanceAPI(context);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const TestList = await getSolvedComprehensiveTestAPI(context, 1, 5);
 
-  // 데이터를 props로 페이지 컴포넌트에 전달
+  // 서버에서 종합 테스트 기록 조회 API 호출
+  const testData = await getSolvedComprehensiveTestAPI(0, 5, context);
+  const testList = testData?.content;
+  const totalPages = testData?.totalPages;
+
   return {
     props: {
       userInfo,
       attendances,
+      testList,
+      totalPages,
     },
   };
 };
@@ -29,21 +34,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 interface MytestGrowthPageProps {
   userInfo: MypageUser;
   attendances: Attendances | null;
+  testList: ComprehensiveTestRecord[];
+  totalPages: number;
 }
 
 export default function MytestGrowthPage({
   userInfo,
   attendances,
+  testList,
+  totalPages,
 }: MytestGrowthPageProps) {
   return (
-    <div className={`${styles.container} ${styles.row}`}>
+    <div className={`${styles['growth-container']} ${styles.row}`}>
       <MytestGrade userInfo={userInfo} />
       <div className={styles.section}>
         <MytestAttendance
           attendances={attendances}
           attendanceRate={userInfo.attendanceRate}
+          createDate={userInfo.createDate}
         />
-        <MytestComprehensiveTestRecordList />
+        <MytestComprehensiveTestRecordList
+          initialTestList={testList}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );

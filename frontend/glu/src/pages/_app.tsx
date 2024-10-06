@@ -1,13 +1,15 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import GlobalLayout from '@/components/layout/global-layout';
 import '@/styles/global.css';
 import '@/styles/color.css';
 import type { AppProps } from 'next/app';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { NextPage } from 'next';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Provider } from 'react-redux';
 import { store } from '@/store';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import Loading from '@/components/common/loading';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -20,6 +22,23 @@ export default function App({
   Component: NextPageWithLayout;
 }) {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleStart = () => setLoading(true);
+    const handleComplete = () => setLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, [router]);
 
   return (
     <>
@@ -36,6 +55,11 @@ export default function App({
         <meta name="author" content="ssafy" />
       </Head>
       <Provider store={store}>
+        {loading && (
+          <div className="loading-screen">
+            <Loading />
+          </div>
+        )}
         <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>
       </Provider>
     </>

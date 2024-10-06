@@ -2,7 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import { Birth } from '@/types/UserTypes';
 import axios from 'axios';
 import { setCookie } from 'cookies-next';
-import { createAuthAxios, refreshUserAPI } from '../common';
+import { createAuthAxios, refreshUserAPI, sweetalertConfirm } from '../common';
 
 // yyyy-mm-dd 형식의 생년월일을 Birth 객체로 변환하는 함수
 export function parseDate(dateString: string) {
@@ -52,6 +52,21 @@ export const putUserInfoAPI = async (
       maxAge: 60 * 60 * 24 * 14,
       path: '/',
     });
+
+    let changedOption: string = '';
+
+    if (nickname) {
+      changedOption = '닉네임';
+    } else if (newPassword) {
+      changedOption = '비밀번호';
+    } else if (birth) {
+      changedOption = '생년월일';
+    }
+
+    sweetalertConfirm(
+      `${changedOption} 변경 완료`,
+      `${changedOption}이 변경되었습니다.`,
+    );
   } catch (err) {
     if (axios.isAxiosError(err)) {
       if (err.response) {

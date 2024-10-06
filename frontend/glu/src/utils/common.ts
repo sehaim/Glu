@@ -2,6 +2,7 @@ import { BACKEND_URL } from '@/config/config';
 import axios, { AxiosInstance } from 'axios';
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 import { IncomingMessage, ServerResponse } from 'http';
+import Swal from 'sweetalert2';
 
 // 로그인이 필요없는 axios
 export const defaultAxios: AxiosInstance = axios.create({
@@ -98,4 +99,13 @@ export const createAuthAxios = (context?: {
   );
 
   return instance;
+};
+
+export const sweetalertConfirm = (header: string, content: string) => {
+  Swal.fire({
+    title: header,
+    text: content,
+    icon: 'success',
+    confirmButtonText: '확인',
+  });
 };

@@ -53,7 +53,7 @@ export default function PaginationBar({
       </button>
       {renderPageButtons()}
       <button
-        className={`${styles['dir-button']} ${currentPage === totalPageCount ? styles['dir-button-disabled'] : ''}`}
+        className={`${styles['dir-button']} ${currentPage === totalPageCount || totalPageCount <= 1 ? styles['dir-button-disabled'] : ''}`}
         onClick={() => handleClick(Math.min(totalPageCount, currentPage + 1))}
         aria-label="Next page"
       >
