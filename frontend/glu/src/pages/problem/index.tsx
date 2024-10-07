@@ -1,25 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Problem } from '@/types/ProblemTypes';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import Link from 'next/link';
 import { getRecommendedTypeProblemsAPI } from '@/utils/problem/problem';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import styles from './problemList.module.css';
 
-export default function ProblemList() {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const res = await getRecommendedTypeProblemsAPI(context);
+  const initialProblems = res.data;
+
+  return {
+    props: {
+      initialProblems,
+    },
+  };
+};
+
+interface ProblemListProps {
+  initialProblems: Problem[];
+}
+
+export default function ProblemList({ initialProblems }: ProblemListProps) {
   const username = useSelector((state: RootState) => state.auth.nickname);
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problems] = useState<Problem[]>(initialProblems);
   const [problemIndex, setProblemIndex] = useState(0);
   const LIMIT = 10;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await getRecommendedTypeProblemsAPI();
-      setProblems(res.data);
-    };
-    fetchData();
-  }, []);
 
   const handleNextCard = () => {
     const newIndex = problemIndex + 1;

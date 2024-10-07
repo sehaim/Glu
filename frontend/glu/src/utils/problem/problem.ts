@@ -1,10 +1,13 @@
 import { AxiosError } from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import { createAuthAxios } from '../common';
 
 // 유형별 추천 문제 가져오기
-export const getRecommendedTypeProblemsAPI = async () => {
+export const getRecommendedTypeProblemsAPI = async (
+  context: GetServerSidePropsContext,
+) => {
   try {
-    const authAxios = createAuthAxios();
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`/recommend/type`);
 
     // 커스텀 응답에서 httpStatus 확인
