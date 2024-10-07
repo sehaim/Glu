@@ -100,13 +100,11 @@ export default function Test() {
     setIsModalOpen(false);
   };
 
-  console.log(problem);
-
   return (
     <div className={styles.container}>
       <Head>
         <title>
-          Glu-{problem?.problemLevel?.name}-{problem?.problemType?.name}
+          Glu 유형 문제
         </title>
         <meta property="og:title" content="종합 테스트 추천 - glu" />
         <meta
