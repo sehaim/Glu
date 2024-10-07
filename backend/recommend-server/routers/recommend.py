@@ -207,6 +207,13 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                             vector=classification[3],
                             num=1
                         )
+                    # 틀린 문제 없을때
+                    if fetched_problems == None:
+                        fetched_problems = get_random_problems_by_code_and_level(
+                            detail_code=detail_code,
+                            level=f"PL0{level}",
+                            limit=1
+                        )
 
             response = ProblemResponse.from_problem(fetched_problems[0])
             selected_problems.append(response)
