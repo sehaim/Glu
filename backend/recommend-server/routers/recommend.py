@@ -253,7 +253,7 @@ async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")
     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
     while (len(selected_problems) != 30):
-        selected_problems = make_type_problems(user_id)
+        selected_problems = make_type_problems(user_id, user_problemtype_level)
 
     return selected_problems
 
