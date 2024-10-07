@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public record TypeGradingResultResponse(
 			.collect(Collectors.groupingBy(userProblemLog -> userProblemLog.getProblem().getProblemTypeCode()));
 
 		return resultsByType.entrySet().stream()
+			.sorted(Map.Entry.comparingByKey(Comparator.comparing(ProblemTypeCode::name)))
 			.map(entry -> {
 				ProblemTypeCode problemTypeCode = entry.getKey();
 				List<UserProblemLog> typeGradeResults = entry.getValue();
