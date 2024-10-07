@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemOptionList from '@/components/problem/problemOptionList';
@@ -155,7 +155,6 @@ export default function Test({ initialProblems }: TestProps) {
         totalSolvedTime,
         problemSolveRequests,
       );
-      console.log('서버 응답: ', res);
 
       const accessToken = getCookie('accessToken');
       const { isFirst } = jwt.decode(accessToken as string) as {
@@ -176,21 +175,21 @@ export default function Test({ initialProblems }: TestProps) {
   };
 
   // 문제 네비게이션 ///////////////////////////////////////////////////////////////////////////
-  const handleNextProblem = () => {
+  const handleNextProblem = useCallback(() => {
     if (currentProblemIndex < problems.length - 1) {
       setCurrentProblemIndex((prevIndex) => prevIndex + 1);
     }
-  };
+  }, [currentProblemIndex, problems.length]);
 
-  const handlePrevProblem = () => {
+  const handlePrevProblem = useCallback(() => {
     if (currentProblemIndex > 0) {
       setCurrentProblemIndex((prevIndex) => prevIndex - 1);
     }
-  };
+  }, [currentProblemIndex]);
 
-  const handlProblemIndex = (index: number) => {
+  const handlProblemIndex = useCallback((index: number) => {
     setCurrentProblemIndex(index);
-  };
+  }, []);
 
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
   if (problems.length === 0 || answers.length === 0) {

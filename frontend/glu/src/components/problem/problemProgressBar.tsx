@@ -12,7 +12,7 @@ export default function ProblemProgressBar({
     <div className={styles['progressbar-container']}>
       <div className={styles.progressbar}>
         <Image
-          src="/images/glu_character.png"
+          src="/images/glu_character_small.webp"
           alt="character"
           className={styles['progress-character']}
           style={{ left: `calc(${progressPercentage}%` }}
@@ -21,7 +21,7 @@ export default function ProblemProgressBar({
         />
       </div>
       <Image
-        src="/images/problem/house.png"
+        src="/images/problem/house.webp"
         alt="house"
         className={styles['progress-house']}
         width={120}

@@ -182,6 +182,12 @@
   font-family: 'PT';
 }
 
+.correct-message {
+  color: var(--GREEN);
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
 .incorrect-message {
   color: var(--RED);
   margin-bottom: 12px;
