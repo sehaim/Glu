@@ -22,7 +22,11 @@ export const getServerSideProps: GetServerSideProps = async (
 
   if (!res) {
     return {
-      notFound: true,
+      props: {
+        totalCorrectCount: 0,
+        totalSolveTime: 0,
+        gradingResultByTypeList: [],
+      },
     };
   }
 
