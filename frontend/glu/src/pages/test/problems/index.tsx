@@ -160,9 +160,9 @@ export default function Test({ initialProblems }: TestProps) {
         await refreshUserAPI();
       }
 
-      dispatch(
-        levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
-      );
+      if (res.data.isStageUp) {
+        dispatch(levelUp({ level: 2, levelImage: res.data.stageUpUrl }));
+      }
 
       router.push(`/test/result/${res?.data?.testId}`);
     } catch (error) {

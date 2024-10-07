@@ -36,6 +36,7 @@ interface ProblemResponse {
   solution: string;
   isFavorite: boolean;
   answer: string;
+  status: string | null;
 }
 
 export default function Test() {
@@ -55,7 +56,7 @@ export default function Test() {
       if (typeof id === 'string') {
         // id가 string인 경우에만 API 호출
         const res = await getSingleProblemAPI(id);
-
+        if (res.data.status !== null) setIsSolved(true);
         setProblem(res.data);
       }
     };
