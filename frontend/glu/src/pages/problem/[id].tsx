@@ -21,6 +21,7 @@ import ProblemInputField from '@/components/problem/problemInputField';
 import Image from 'next/image';
 import LevelUpModal from '@/components/problem/result/levelUpModal';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import Head from 'next/head';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -99,8 +100,18 @@ export default function Test() {
     setIsModalOpen(false);
   };
 
+  console.log(problem);
+
   return (
     <div className={styles.container}>
+      <Head>
+        <title>유형별 문제</title>
+        <meta property="og:title" content="종합 테스트 추천" />
+        <meta property="og:description" content={problem?.content} />
+        <meta name="keywords" content={problem?.content} />
+        <meta property="og:type" content="website" />
+      </Head>
+
       {/* 레벨업 모달 */}
       <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
         <div className={styles.levelUp}>
