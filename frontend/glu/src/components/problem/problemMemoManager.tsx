@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import ProblemMemoIcon from '@/components/problem/problemMemoIcon';
 import { Memo } from '@/types/MemoTypes';
@@ -8,6 +8,8 @@ import {
   putProblemMemoAPI,
   deleteProblemMemoAPI,
 } from '@/utils/problem/memo';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useQuery } from 'react-query';
 import styles from './problemMemoManager.module.css';
 
 interface MemoManagerProps {
@@ -15,11 +17,28 @@ interface MemoManagerProps {
 }
 
 export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
-  const [memos, setMemos] = useState<Memo[]>([]);
   const [isEditingMemo, setIsEditingMemo] = useState<boolean>(false);
   const [newMemoContent, setNewMemoContent] = useState<string>('');
   const [selectedMemoIndex, setSelectedMemoIndex] = useState<number | null>(
     null,
+  );
+
+  const { data: memos = [], refetch } = useQuery<Memo[]>(
+    ['memos', problemId],
+    () =>
+      getProblemMemoAPI(problemId, 0, 100, 'createdDate,asc').then(
+        (response) => response.content,
+      ),
+    {
+      cacheTime: 30 * 60 * 1000, // 30분 동안 캐시 유지
+      staleTime: 5 * 60 * 1000, // 5분 동안 신선한 데이터로 간주
+      onSuccess: (data) => {
+        console.log('memo 가져오기 성공:', data);
+      },
+      onError: (error) => {
+        console.error('memo 가져오는 중 오류 발생:', error);
+      },
+    },
   );
 
   const handleMemoClick = (index: number) => {
@@ -41,20 +60,6 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
     setNewMemoContent('');
   };
 
-  const getMemos = async () => {
-    try {
-      const response = await getProblemMemoAPI(
-        problemId,
-        0,
-        100,
-        'createdDate,asc',
-      );
-      setMemos(response.content);
-    } catch (error) {
-      // 메모 가져오는 중 에러발생
-    }
-  };
-
   const handleMemoSave = async () => {
     try {
       if (selectedMemoIndex !== null) {
@@ -69,7 +74,7 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
         await postProblemMemoAPI(problemId, newMemoContent);
       }
 
-      getMemos();
+      refetch();
 
       // 상태 초기화
       handleMemoCancel();
@@ -83,7 +88,7 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
 
     try {
       await deleteProblemMemoAPI(problemId, memos[selectedMemoIndex].memoIndex);
-      getMemos();
+      refetch();
       // 상태 초기화
       handleMemoCancel();
     } catch (error) {
@@ -91,9 +96,9 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
     }
   };
 
-  useEffect(() => {
-    getMemos();
-  }, [problemId]);
+  // useEffect(() => {
+  //   getMemos();
+  // }, [problemId]);
 
   return (
     <div className={styles.container}>
