@@ -68,7 +68,7 @@ public class ProblemSolvedEventConsumer {
 				.problem(problem)
 				.build());
 
-		userProblemStatus.updateWhenSolve(event.isCorrect());
+		userProblemStatus.updateWhenSolve(event.isCorrect(),event.solvedTime());
 		userProblemStatusRepository.save(userProblemStatus);
 	}
 }

@@ -34,6 +34,8 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	private Boolean isFavorite;
 
+	private int solveTime;
+
 	//== querydsl 조회를 위한 embedding 처리, 성능 개선 ==//
 	// @Field("problemId")
 	// @DocumentReference(lazy = true)
@@ -53,6 +55,11 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	//=== 비즈니스 로직 ===//
 	// 문제 풀이시 데이터 업데이트
+	public void updateWhenSolve(boolean isCorrect, int solveTime) {
+		updateWhenSolve(isCorrect);
+		updateSolveTime(solveTime);
+	}
+
 	public void updateWhenSolve(boolean isCorrect) {
 		increaseAttemptCount();
 		if (isCorrect) {
@@ -134,5 +141,10 @@ public class UserProblemStatus extends BaseTimeDocument {
 		if (!isFavorite)
 			throw new FavoriteNotRegisteredException();
 		this.isFavorite = false;
+	}
+
+	// 최근에 푼 풀이 시간 업데이트
+	public void updateSolveTime(int solveTime) {
+		this.solveTime = solveTime;
 	}
 }
