@@ -383,13 +383,8 @@ def get_wrong_status(user_id: int):
 
         if (problem.problemTypeDetailCode == "PT01"): continue
 
-        # document에서 classification과 vector를 추출
-        classification = problem.metadata.classification
-        vector = problem.metadata.vector
-        detailcode = problem.problemTypeDetailCode
-
         # classification_vectors에 추가
-        classification_vectors[classification][detailcode].append(vector)
+        classification_vectors[problem.metadata.classification][problem.problemTypeDetailCode].append(problem.metadata.vector)
 
     # 각 classification에 대해 detailcode별 평균 벡터와 횟수 계산
     classification_avg_vectors = {}
