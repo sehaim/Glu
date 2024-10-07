@@ -85,7 +85,6 @@ public class UserServiceImpl implements UserService {
 
 			UserProblemType userProblemType = UserProblemType.builder()
 				.problemTypeCode(problemTypeCode)
-				.level(userLevel)
 				.user(saveUser)
 				.build();
 
