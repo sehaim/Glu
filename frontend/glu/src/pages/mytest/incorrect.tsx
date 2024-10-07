@@ -1,6 +1,8 @@
 import { GetServerSideProps } from 'next';
-import styles from './mytest.module.css';
 import { getSolvedTypeTestAPI } from '@/utils/user/mytest';
+import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
+import MytestTestCardList from '@/components/mytest/mytestTestCardList';
+import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const problemData01 = await getSolvedTypeTestAPI(
@@ -52,16 +54,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-interface MytestCorrectPageProps {
+interface MytestIncorrectPageProps {
   testDataList: [
     { problemType: ProblemType; problemData: SolvedProblemResponse },
   ];
 }
 
-export default function MytestIncorrectPage() {
+export default function MytestIncorrectPage({
+  testDataList,
+}: MytestIncorrectPageProps) {
   return (
     <div className={styles.container}>
-      <div>못 푼 문제</div>
+      {testDataList.map((testData) => (
+        <MytestTestCardList
+          key={testData.problemType.code}
+          testData={testData?.problemData}
+          problemType={testData?.problemType}
+          pageType="incorrect"
+        />
+      ))}
     </div>
   );
 }

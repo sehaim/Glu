@@ -1,6 +1,6 @@
 import { createAuthAxios } from '../common';
 
-// 좋아요
+// 좋아요 조회
 export const getProblemLikeAPI = async (problemId: string) => {
   try {
     const authAxios = createAuthAxios();
@@ -18,7 +18,7 @@ export const getProblemLikeAPI = async (problemId: string) => {
   }
 };
 
-// 좋아요
+// 좋아요 등록
 export const postProblemLikeAPI = async (problemId: string) => {
   try {
     const authAxios = createAuthAxios();

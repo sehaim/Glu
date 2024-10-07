@@ -1,8 +1,8 @@
 import { GetServerSideProps } from 'next';
 import { getSolvedTypeTestAPI } from '@/utils/user/mytest';
-import styles from './mytest.module.css';
 import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import MytestTestCardList from '@/components/mytest/mytestTestCardList';
+import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const problemData01 = await getSolvedTypeTestAPI(
