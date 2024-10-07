@@ -175,10 +175,10 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
         for i in indices:
             detail_code = detail_codes_dict[pt_type][detail_types[i]]  # PT01 대유형에서 detail_code 선택
             level = user_level + level_offsets[i]  # 현재 레벨 매칭
-            fetched_problem = None
+            fetched_problems = None
 
             if idx < 3:
-                fetched_problem = get_random_problems_by_code_and_level(
+                fetched_problems = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
                     level=f"PL0{level}",
                     limit=1
@@ -187,7 +187,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
             else:
                 if pt_type == "PT01":
                     # 문제 가져오기
-                    fetched_problem = get_random_problems_by_code_and_level(
+                    fetched_problems = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
                         level=f"PL0{level}",
                         limit=1
@@ -198,7 +198,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                         correct_ids = get_correct_ids(int(user_id))
                         wrong_ids = get_wrong_ids(int(user_id))
 
-                        fetched_problem = get_random_problems_by_log(
+                        fetched_problems = get_random_problems_by_log(
                             detail_code=classification[1],
                             level=level,
                             classification=classification[0],
@@ -208,7 +208,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                             num=1
                         )
 
-            response = ProblemResponse.from_problem(fetched_problem)
+            response = ProblemResponse.from_problem(fetched_problems[0])
             selected_problems.append(response)
 
     # print(selected_problems)
