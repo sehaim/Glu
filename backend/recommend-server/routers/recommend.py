@@ -337,9 +337,9 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
     find_problem = get_problem_by_id(problem_id)
     selected_problems = []
 
-    if (find_problem['problemTypeCode'] == "PT01"):
-        fetched_problems = get_random_problems_by_code_and_level(level=find_problem['problemLevelCode'],
-                                                      detail_code=find_problem['problemTypeDetailCode'],
+    if (find_problem.problemTypeCode == "PT01"):
+        fetched_problems = get_random_problems_by_code_and_level(level=find_problem.problemLevelCode,
+                                                      detail_code=find_problem.problemTypeDetailCode,
                                                       problem_id=problem_id)
 
         for fetched_problem in fetched_problems:
@@ -347,8 +347,8 @@ async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, 
             selected_problems.append(response)
 
     else:
-        fetched_problems = get_similar(find_problem['problemLevelCode'], find_problem['problemTypeDetailCode'],
-                              find_problem['metadata']['vector'], problem_id)
+        fetched_problems = get_similar(find_problem.problemLevelCode, find_problem.problemTypeDetailCode,
+                              find_problem.metadata.vector, problem_id)
         for fetched_problem in fetched_problems:
             response = ProblemResponse.from_problem(fetched_problem)
             selected_problems.append(response)
