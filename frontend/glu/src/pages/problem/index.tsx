@@ -6,6 +6,7 @@ import { getRecommendedTypeProblemsAPI } from '@/utils/problem/problem';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
 import styles from './problemList.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -43,6 +44,15 @@ export default function ProblemList({ initialProblems }: ProblemListProps) {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>유형 테스트 추천</title>
+        <meta
+          property="og:description"
+          content="총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로 평가합니다."
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+
       <div className={styles['content-wrapper']}>
         <div>
           <h2 className={styles['page-title']}>유형 테스트 추천</h2>

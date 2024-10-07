@@ -21,6 +21,7 @@ import ProblemInputField from '@/components/problem/problemInputField';
 import Image from 'next/image';
 import LevelUpModal from '@/components/problem/result/levelUpModal';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import Head from 'next/head';
 import styles from './problem.module.css';
 
 interface ProblemResponse {
@@ -101,6 +102,16 @@ export default function Test() {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Glu 유형 문제</title>
+        <meta property="og:title" content={`Glu 문제: ${problem?.problemLevel?.name}-${problem?.problemType?.name}-${problem?.problemId?.slice(-3)}`} />
+        <meta
+          property="og:description"
+          content={problem?.content?.substring(0, 100)}
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+
       {/* 레벨업 모달 */}
       <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
         <div className={styles.levelUp}>
