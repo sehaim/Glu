@@ -3,7 +3,7 @@
 import { useRouter } from 'next/router';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import RadarChart from '@/components/problem/result/radarChart';
-import { PreviousSolvedProblemType } from '@/types/ProblemTypes';
+import { PreviousSolvedTestType } from '@/types/TestTypes';
 import {
   formatTime,
   getPreviousTestAPI,
@@ -51,7 +51,7 @@ export default function Test() {
   const [correctCount, setCorrectCount] = useState(0);
   const [totalSolveTime, setTotalSolveTime] = useState(0);
   const [problemTypeList, setProblemTypeList] = useState<
-    PreviousSolvedProblemType[] | null
+    PreviousSolvedTestType[] | null
   >(null);
 
   useEffect(() => {

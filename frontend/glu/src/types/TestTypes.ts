@@ -1,3 +1,5 @@
+import { ProblemType } from './ProblemTypes';
+
 export interface ComprehensiveTestRecord {
   testId: string;
   totalCorrectCount: number;
@@ -14,6 +16,13 @@ export interface ComprehensiveTestRecord {
       totalScore: number;
     },
   ];
+}
+
+export interface PreviousSolvedTestType {
+  correctCount: number;
+  problemType: ProblemType;
+  acquiredScore: number;
+  totalScore: number;
 }
 
 // export interface GradingResultByProblemList []{

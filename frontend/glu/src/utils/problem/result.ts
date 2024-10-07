@@ -1,12 +1,10 @@
-import {
-  PreviousSolvedProblemType,
-  SolvedProblemType,
-} from '@/types/ProblemTypes';
+import { SolvedProblemType } from '@/types/ProblemTypes';
+import { PreviousSolvedTestType } from '@/types/TestTypes';
 import { AxiosError } from 'axios';
 import { createAuthAxios } from '../common';
 
 export const transformProblemType = (
-  problemTypeList: PreviousSolvedProblemType[],
+  problemTypeList: PreviousSolvedTestType[],
 ): SolvedProblemType[] => {
   return problemTypeList.map((item) => ({
     correctCount: item.correctCount,
