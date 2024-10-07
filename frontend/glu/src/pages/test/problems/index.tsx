@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemOptionList from '@/components/problem/problemOptionList';
@@ -9,38 +9,21 @@ import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
 import {
+  getRecommendedLevelTestProblemsAPI,
   getRecommendedTestProblemsAPI,
   postTestProblemGradingAPI,
 } from '@/utils/problem/test';
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
-import { GetServerSideProps } from 'next';
 import Loading from '@/components/common/loading';
 import ProblemInputField from '@/components/problem/problemInputField';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import { GetServerSideProps } from 'next';
+import { getCookie } from 'cookies-next';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import jwt from 'jsonwebtoken';
+import { refreshUserAPI } from '@/utils/common';
 import styles from './testProblems.module.css';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const dummyProblems = await import('@/mock/dummyProblems.json');
-
-  let testProblems;
-
-  try {
-    testProblems = await getRecommendedTestProblemsAPI(context);
-  } catch (error) {
-    console.error('Failed to fetch test problems:', error);
-  }
-
-  return {
-    props: {
-      initialProblems: testProblems || dummyProblems.default,
-    },
-  };
-};
-
-interface TestProps {
-  initialProblems: Problem[];
-}
 
 interface ProblemAnswer {
   problemId: string;
@@ -49,13 +32,42 @@ interface ProblemAnswer {
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
+interface TestProps {
+  initialProblems: Problem[];
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const accessToken = getCookie(
+    'accessToken',
+    context ? { req: context.req, res: context.res } : {},
+  );
+
+  // accessToken이 존재하는지 확인
+  if (!accessToken) {
+    return { props: { initialProblems: [] } }; // 기본값으로 빈 배열 전달
+  }
+
+  try {
+    const { isFirst } = jwt.decode(accessToken as string) as {
+      isFirst: boolean;
+    };
+
+    if (isFirst) {
+      const res = await getRecommendedLevelTestProblemsAPI(context);
+      return { props: { initialProblems: res.data } };
+    }
+  } catch (error) {
+    return { props: { initialProblems: [] } };
+  }
+
+  const res = await getRecommendedTestProblemsAPI(context);
+  return { props: { initialProblems: res.data } };
+};
+
 export default function Test({ initialProblems }: TestProps) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const PROBLEM_COUNT = 15; // 문제 개수 고정
-  const [problems] = useState<Problem[]>(
-    initialProblems?.slice(0, PROBLEM_COUNT) || [],
-  );
+  const [problems] = useState<Problem[]>(initialProblems);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   // 푼 문제 개수 계산
@@ -65,7 +77,6 @@ export default function Test({ initialProblems }: TestProps) {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [loading, setLoading] = useState(false);
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
@@ -83,7 +94,7 @@ export default function Test({ initialProblems }: TestProps) {
   };
 
   useEffect(() => {
-    const initializeAnswers = () => {
+    const initializeAnswers = async () => {
       const initialAnswers = problems.map((problem) => ({
         problemId: problem.problemId,
         problemAnswer: problem.solution,
@@ -93,7 +104,9 @@ export default function Test({ initialProblems }: TestProps) {
       setAnswers(initialAnswers);
     };
 
-    initializeAnswers();
+    if (problems.length > 0) {
+      initializeAnswers();
+    }
   }, [problems]);
 
   useEffect(() => {
@@ -101,6 +114,8 @@ export default function Test({ initialProblems }: TestProps) {
     setStartTime(start);
 
     return () => {
+      if (problems.length === 0) return;
+
       const timeSpent = Math.floor((Date.now() - start) / 1000);
       setTotalSolvedTime(
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
@@ -136,12 +151,18 @@ export default function Test({ initialProblems }: TestProps) {
     }));
 
     try {
-      setLoading(true); // 로딩 시작
       const res = await postTestProblemGradingAPI(
         totalSolvedTime,
         problemSolveRequests,
       );
-      console.log('서버 응답: ', res);
+
+      const accessToken = getCookie('accessToken');
+      const { isFirst } = jwt.decode(accessToken as string) as {
+        isFirst: boolean;
+      };
+      if (isFirst) {
+        await refreshUserAPI();
+      }
 
       dispatch(
         levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
@@ -154,24 +175,24 @@ export default function Test({ initialProblems }: TestProps) {
   };
 
   // 문제 네비게이션 ///////////////////////////////////////////////////////////////////////////
-  const handleNextProblem = () => {
+  const handleNextProblem = useCallback(() => {
     if (currentProblemIndex < problems.length - 1) {
       setCurrentProblemIndex((prevIndex) => prevIndex + 1);
     }
-  };
+  }, [currentProblemIndex, problems.length]);
 
-  const handlePrevProblem = () => {
+  const handlePrevProblem = useCallback(() => {
     if (currentProblemIndex > 0) {
       setCurrentProblemIndex((prevIndex) => prevIndex - 1);
     }
-  };
+  }, [currentProblemIndex]);
 
-  const handlProblemIndex = (index: number) => {
+  const handlProblemIndex = useCallback((index: number) => {
     setCurrentProblemIndex(index);
-  };
+  }, []);
 
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
-  if (loading) {
+  if (problems.length === 0 || answers.length === 0) {
     return (
       <div className={styles.container}>
         <Loading size="large" showText />
@@ -201,7 +222,7 @@ export default function Test({ initialProblems }: TestProps) {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={currentProblem?.content} />
-              {currentProblem.questionType.code === 'QT01' && (
+              {currentProblem.problemTypeDetail.code === 'PT0311' && (
                 <ProblemImageOptionList
                   problemOptions={
                     Array.isArray(currentProblem.metadata.options)
@@ -225,7 +246,7 @@ export default function Test({ initialProblems }: TestProps) {
                   onTestProblemAnswer={handleAnswer}
                 />
               )}
-              {currentProblem.questionType.code !== 'QT01' &&
+              {currentProblem.problemTypeDetail.code !== 'PT0311' &&
                 currentProblem.questionType.code !== 'QT02' && (
                   <ProblemOptionList
                     problemOptions={

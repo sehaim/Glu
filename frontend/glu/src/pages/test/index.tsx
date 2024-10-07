@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import RadarChart from '@/components/problem/result/radarChart';
@@ -12,65 +11,49 @@ import {
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { useEffect, useMemo, useState } from 'react';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
 import styles from './test.module.css';
 
-// interface ApiResponse {
-//   testId: number;
-//   correctCount: number;
-//   totalSolveTime: number; // 초 단위
-//   problemType: PreviousSolvedProblemType[];
-// }
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const res = await getPreviousTestAPI(context);
 
-// interface TestProps {
-//   correctCount: number;
-//   totalSolveTime: number;
-//   problemTypeList: PreviousSolvedProblemType[];
-// }
+  if (!res) {
+    return {
+      notFound: true,
+    };
+  }
 
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   // TODO: axios로 변경 -> 실제 data fetch
-//   const response: ApiResponse = await new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(dummyPreviousTest);
-//     }, 1000);
-//   });
+  return {
+    props: {
+      totalCorrectCount: res.totalCorrectCount,
+      totalSolveTime: res.totalSolvedTime,
+      gradingResultByTypeList: res.gradingResultByTypeList,
+    },
+  };
+};
 
-//   return {
-//     props: {
-//       correctCount: response.correctCount,
-//       totalSolveTime: response.totalSolveTime,
-//       problemTypeList: response.problemType,
-//     },
-//   };
-// };
+interface TestProps {
+  totalCorrectCount: number;
+  totalSolveTime: number;
+  gradingResultByTypeList: PreviousSolvedProblemType[];
+}
 
-export default function Test() {
+export default function Test({
+  totalCorrectCount,
+  totalSolveTime,
+  gradingResultByTypeList,
+}: TestProps) {
   const router = useRouter();
   const username = useSelector((state: RootState) => state.auth.nickname);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [totalSolveTime, setTotalSolveTime] = useState(0);
-  const [problemTypeList, setProblemTypeList] = useState<
-    PreviousSolvedTestType[] | null
-  >(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await getPreviousTestAPI();
-
-      if (res) {
-        setCorrectCount(res.totalCorrectCount);
-        setTotalSolveTime(res.totalSolvedTime);
-        setProblemTypeList(res.gradingResultByTypeList);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const transformedProblemTypeList = useMemo(
-    () => (problemTypeList ? transformProblemType(problemTypeList) : null),
-    [problemTypeList],
+  const { correctCount, solveTime } = {
+    correctCount: totalCorrectCount,
+    solveTime: totalSolveTime,
+  };
+  const transformedProblemTypeList = transformProblemType(
+    gradingResultByTypeList,
   );
 
   const handleButtonClick = () => {
@@ -79,10 +62,20 @@ export default function Test() {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>종합 테스트 추천</title>
+        <meta property="og:title" content="종합 테스트 추천" />
+        <meta
+          property="og:description"
+          content="총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로 평가합니다."
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+
       <div className={styles['content-wrapper-row']}>
-        <div>
+        <div className={styles['content-wrapper']}>
           <h2 className={styles['page-title']}>종합 테스트 추천</h2>
-          <p>
+          <p className={styles.content}>
             <span id={styles.username}>{username}</span>님을 위한 종합
             테스트입니다.
             <br />
@@ -115,7 +108,7 @@ export default function Test() {
               <div className={styles['last-test-item']}>
                 <p className={styles['last-test-item-title']}>걸린 시간</p>
                 <div className={styles['last-test-item-content']}>
-                  {formatTime(totalSolveTime)}
+                  {formatTime(solveTime)}
                 </div>
               </div>
             </div>
@@ -131,10 +124,11 @@ export default function Test() {
             </div>
           </div>
           <Image
-            src="/images/glu_character_shadow.png"
+            src="/images/glu_character_shadow_small.webp"
             alt="Glu Character"
             width={300}
             height={356}
+            priority
           />
         </div>
       </div>

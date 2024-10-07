@@ -4,6 +4,7 @@ import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import { GetServerSideProps } from 'next';
 import styles from './mytest.module.css';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const problemData01 = await getSolvedTypeTestAPI(
     'PT01',

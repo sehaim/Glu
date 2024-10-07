@@ -32,18 +32,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const response = await getTestResultAPI(context, testId);
-    // TODO: 에러 확인할 필요
-    // console.log('Full response:', response.data);
-    // console.log('totalCorrectCount:', response.data.totalCorrectCount);
-    // console.log('totalSolvedTime:', response.data.totalSolvedTime);
-    // console.log(
-    //   'problemTypeList:',
-    //   response.data.gradingResultByTypeList.length,
-    // );
-    // console.log(
-    //   'problemList:',
-    //   response.data.gradingResultByProblemList.length,
-    // );
 
     return {
       props: {
@@ -235,23 +223,21 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                         : [problem.metadata.options]
                       ) // 문자열일 경우 배열로 변환
                         .map((problemOption: string, optionIndex: number) => (
-                          <p
-                            key={problemOption}
-                            className={`${styles['problem-option-item']} ${
-                              Number(problem.userAnswer) === optionIndex + 1
-                                ? styles['user-answer']
-                                : ''
-                            }`}
-                          >
+                          <p key={problemOption}>
                             {optionIndex + 1}. {problemOption}{' '}
                           </p>
                         ))}
                 </div>
               </div>
               <div className={styles['problem-solution']}>
+                {problem.isCorrect && (
+                  <p className={styles['correct-message']}>
+                    {problem.userAnswer}
+                  </p>
+                )}
                 {!problem.isCorrect && (
                   <p className={styles['incorrect-message']}>
-                    틀린 문제입니다. 해설을 확인하세요.
+                    {problem.userAnswer}
                   </p>
                 )}
                 {problem.solution}
