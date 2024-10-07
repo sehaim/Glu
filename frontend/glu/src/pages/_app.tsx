@@ -10,6 +10,8 @@ import { store } from '@/store';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Loading from '@/components/common/loading';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -24,6 +26,8 @@ export default function App({
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  // QueryClient 인스턴스 생성
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     const handleStart = () => setLoading(true);
@@ -54,14 +58,16 @@ export default function App({
         />
         <meta name="author" content="ssafy" />
       </Head>
-      <Provider store={store}>
-        {loading && (
-          <div className="loading-screen">
-            <Loading />
-          </div>
-        )}
-        <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          {loading && (
+            <div className="loading-screen">
+              <Loading />
+            </div>
+          )}
+          <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>
+        </Provider>
+      </QueryClientProvider>
     </>
   );
 }
