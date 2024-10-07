@@ -74,7 +74,11 @@ async def get_user_info(user_id: str) -> dict:
         return {"error": "Failed to call other service", "status_code": response.status_code}
 
 
-@router.get(path="/test/level")
+@router.get(
+    path="/test/level",
+    summary="레벨 테스트 생성",
+    description="사용자 나이를 기반으로 레벨 테스트 문제집을 생성합니다."
+)
 async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     try:
         # 사용자 정보 API 호출
@@ -129,7 +133,11 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
     return selected_problems
 
 
-@router.get(path="/test/general")
+@router.get(
+    path="/test/general",
+    summary="종합 테스트 생성",
+    description="사용자의 유형별 등급과 사용자의 문제 풀이 기록을 기반으로 추천된 종합 테스트 문제집을 생성합니다."
+)
 async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     user_problemtype_level = {}
 
@@ -233,8 +241,12 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
 
 # 10개 가져오기
-@router.get(path="/type")
-async def get_type_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
+@router.get(
+    path="/type",
+    summary="유형별 학습 문제 리스트 생성",
+    description="사용자의 유형별 등급과 사용자의 문제 풀이 기록을 기반으로 추천된 유형별 학습 문제집을 생성합니다."
+)
+async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     user_problemtype_level = {}
 
     try:
@@ -330,8 +342,12 @@ def make_type_problems(user_id, user_problemtype_level):
     return selected_problems
 
 
-@router.get(path="/similar/{problem_id}")
-async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
+@router.get(
+    path="/similar/{problem_id}",
+    summary="유사한 문제 추천",
+    description="현재 문제와 유사한 특성을 갖는 문제 3개를 추천해줍니다."
+)
+async def get_similar_problem_set(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
     print("/similar problem_id", problem_id)
 
     if not user_id:
