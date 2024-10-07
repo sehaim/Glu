@@ -53,14 +53,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 
     if (isFirst) {
-      const res = await getRecommendedTestProblemsAPI(context);
+      const res = await getRecommendedLevelTestProblemsAPI(context);
       return { props: { initialProblems: res.data } };
     }
   } catch (error) {
     return { props: { initialProblems: [] } };
   }
 
-  const res = await getRecommendedLevelTestProblemsAPI(context);
+  const res = await getRecommendedTestProblemsAPI(context);
   return { props: { initialProblems: res.data } };
 };
 
