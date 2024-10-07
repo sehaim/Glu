@@ -104,7 +104,7 @@ export default function Test() {
     <div className={styles.container}>
       <Head>
         <title>Glu 유형 문제</title>
-        <meta property="og:title" content={`Glu 문제: ${problem?.problemId}`} />
+        <meta property="og:title" content={`Glu 문제: ${problem?.problemLevel?.name}-${problem?.problemType?.name}-${problem?.problemId?.slice(-3)}`} />
         <meta
           property="og:description"
           content={problem?.content?.substring(0, 100)}
