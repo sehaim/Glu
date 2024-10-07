@@ -375,6 +375,8 @@ def get_wrong_status(user_id: int):
     wrong_problem_ids = get_wrong_ids(user_id)
 
     problems = get_problem_by_ids(wrong_problem_ids)
+    if not problems:
+        return {}
 
     # classification_vectors를 중첩 defaultdict로 정의
     classification_vectors = defaultdict(lambda: defaultdict(list))
