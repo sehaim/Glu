@@ -100,18 +100,18 @@ export default function Test() {
     setIsModalOpen(false);
   };
 
+  console.log(problem);
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>유형별 문제 - glu</title>
+        <title>
+          Glu-{problem?.problemLevel?.name}-{problem?.problemType?.name}
+        </title>
         <meta property="og:title" content="종합 테스트 추천 - glu" />
         <meta
           property="og:description"
-          content={problem?.content?.substring(0, 20)}
-        />
-        <meta
-          name="keywords"
-          content={`glu, ${problem?.content?.substring(0, 20)}`}
+          content={problem?.content?.substring(0, 100)}
         />
         <meta property="og:type" content="website" />
       </Head>
