@@ -3,7 +3,40 @@ import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
+import { GetServerSideProps } from 'next';
+import { jwtDecode } from 'jwt-decode';
+import { getCookie } from 'cookies-next';
 import styles from './home.module.css';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
+  const accessToken = getCookie('accessToken', { req, res });
+
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  const decodedToken: never = jwtDecode(accessToken);
+  const { isFirst } = decodedToken;
+
+  if (!isFirst) {
+    return {
+      redirect: {
+        destination: '/test',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
 
 export default function Home(): JSX.Element {
   const router = useRouter();
