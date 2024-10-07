@@ -9,38 +9,15 @@ import ProblemProgressBar from '@/components/problem/problemProgressBar';
 import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
 import {
-  getRecommendedTestProblemsAPI,
+  getRecommendedLevelTestProblemsAPI,
   postTestProblemGradingAPI,
 } from '@/utils/problem/test';
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
-import { GetServerSideProps } from 'next';
 import Loading from '@/components/common/loading';
 import ProblemInputField from '@/components/problem/problemInputField';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import styles from './testProblems.module.css';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const dummyProblems = await import('@/mock/dummyProblems.json');
-
-  let testProblems;
-
-  try {
-    testProblems = await getRecommendedTestProblemsAPI(context);
-  } catch (error) {
-    console.error('Failed to fetch test problems:', error);
-  }
-
-  return {
-    props: {
-      initialProblems: testProblems || dummyProblems.default,
-    },
-  };
-};
-
-interface TestProps {
-  initialProblems: Problem[];
-}
 
 interface ProblemAnswer {
   problemId: string;
@@ -49,13 +26,10 @@ interface ProblemAnswer {
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
-export default function Test({ initialProblems }: TestProps) {
+export default function Test() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const PROBLEM_COUNT = 15; // 문제 개수 고정
-  const [problems] = useState<Problem[]>(
-    initialProblems?.slice(0, PROBLEM_COUNT) || [],
-  );
+  const [problems, setProblems] = useState<Problem[]>([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   // 푼 문제 개수 계산
@@ -65,7 +39,14 @@ export default function Test({ initialProblems }: TestProps) {
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchProblem = async () => {
+      const res = await getRecommendedLevelTestProblemsAPI();
+      setProblems(res.data);
+    };
+    fetchProblem();
+  }, []);
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
@@ -101,6 +82,8 @@ export default function Test({ initialProblems }: TestProps) {
     setStartTime(start);
 
     return () => {
+      if (problems.length === 0) return;
+
       const timeSpent = Math.floor((Date.now() - start) / 1000);
       setTotalSolvedTime(
         (prevTotalSolvedTime) => prevTotalSolvedTime + timeSpent,
@@ -136,7 +119,6 @@ export default function Test({ initialProblems }: TestProps) {
     }));
 
     try {
-      setLoading(true); // 로딩 시작
       const res = await postTestProblemGradingAPI(
         totalSolvedTime,
         problemSolveRequests,
@@ -171,7 +153,7 @@ export default function Test({ initialProblems }: TestProps) {
   };
 
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
-  if (loading) {
+  if (problems.length === 0 || answers.length === 0) {
     return (
       <div className={styles.container}>
         <Loading size="large" showText />
@@ -201,7 +183,7 @@ export default function Test({ initialProblems }: TestProps) {
             />
             <div className={styles['problem-content']}>
               <ProblemContentText problemContent={currentProblem?.content} />
-              {currentProblem.questionType.code === 'QT01' && (
+              {currentProblem.problemTypeDetail.code === 'PT0311' && (
                 <ProblemImageOptionList
                   problemOptions={
                     Array.isArray(currentProblem.metadata.options)
@@ -225,7 +207,7 @@ export default function Test({ initialProblems }: TestProps) {
                   onTestProblemAnswer={handleAnswer}
                 />
               )}
-              {currentProblem.questionType.code !== 'QT01' &&
+              {currentProblem.problemTypeDetail.code !== 'PT0311' &&
                 currentProblem.questionType.code !== 'QT02' && (
                   <ProblemOptionList
                     problemOptions={
