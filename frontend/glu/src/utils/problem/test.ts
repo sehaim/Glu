@@ -8,9 +8,11 @@ interface ProblemSolveRequest {
 }
 
 // 레벨 테스트 문제 생성
-export const getRecommendedLevelTestProblemsAPI = async () => {
+export const getRecommendedLevelTestProblemsAPI = async (
+  context: GetServerSidePropsContext,
+) => {
   try {
-    const authAxios = createAuthAxios();
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`/recommend/test/level`);
 
     // 커스텀 응답에서 httpStatus 확인

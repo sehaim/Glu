@@ -10,6 +10,7 @@ import ProblemMemoManager from '@/components/problem/problemMemoManager';
 import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
 import {
   getRecommendedLevelTestProblemsAPI,
+  getRecommendedTestProblemsAPI,
   postTestProblemGradingAPI,
 } from '@/utils/problem/test';
 import { useDispatch } from 'react-redux';
@@ -17,6 +18,11 @@ import { levelUp } from '@/store/levelupSlice';
 import Loading from '@/components/common/loading';
 import ProblemInputField from '@/components/problem/problemInputField';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import { GetServerSideProps } from 'next';
+import { getCookie } from 'cookies-next';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import jwt from 'jsonwebtoken';
+import { refreshUserAPI } from '@/utils/common';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -26,10 +32,42 @@ interface ProblemAnswer {
   solvedTime?: number; // 풀이 시간 (선택적)
 }
 
-export default function Test() {
+interface TestProps {
+  initialProblems: Problem[];
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const accessToken = getCookie(
+    'accessToken',
+    context ? { req: context.req, res: context.res } : {},
+  );
+
+  // accessToken이 존재하는지 확인
+  if (!accessToken) {
+    return { props: { initialProblems: [] } }; // 기본값으로 빈 배열 전달
+  }
+
+  try {
+    const { isFirst } = jwt.decode(accessToken as string) as {
+      isFirst: boolean;
+    };
+
+    if (isFirst) {
+      const res = await getRecommendedTestProblemsAPI(context);
+      return { props: { initialProblems: res.data } };
+    }
+  } catch (error) {
+    return { props: { initialProblems: [] } };
+  }
+
+  const res = await getRecommendedLevelTestProblemsAPI(context);
+  return { props: { initialProblems: res.data } };
+};
+
+export default function Test({ initialProblems }: TestProps) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problems] = useState<Problem[]>(initialProblems);
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   // 푼 문제 개수 계산
@@ -40,13 +78,14 @@ export default function Test() {
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
 
-  useEffect(() => {
-    const fetchProblem = async () => {
-      const res = await getRecommendedLevelTestProblemsAPI();
-      setProblems(res.data);
-    };
-    fetchProblem();
-  }, []);
+  // useEffect(() => {
+  //   const fetchProblem = async () => {
+  //     const res = await getRecommendedLevelTestProblemsAPI();
+  //     setProblems(res.data);
+  //   };
+
+  //   fetchProblem();
+  // }, []);
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
@@ -124,6 +163,14 @@ export default function Test() {
         problemSolveRequests,
       );
       console.log('서버 응답: ', res);
+
+      const accessToken = getCookie('accessToken');
+      const { isFirst } = jwt.decode(accessToken as string) as {
+        isFirst: boolean;
+      };
+      if (isFirst) {
+        await refreshUserAPI();
+      }
 
       dispatch(
         levelUp({ level: 2, levelImage: '/images/glu_character_shadow.png' }),
