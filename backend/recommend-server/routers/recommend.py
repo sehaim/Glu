@@ -393,7 +393,7 @@ def get_wrong_status(user_id: int):
 
     for problem in problems:
 
-        if (problem.problemTypeDetailCode == "PT01"): continue
+        if (problem.problemTypeCode == "PT01"): continue
 
         # classification_vectors에 추가
         classification_vectors[problem.metadata.classification][problem.problemTypeDetailCode].append(problem.metadata.vector)
