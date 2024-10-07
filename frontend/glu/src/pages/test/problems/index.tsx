@@ -102,14 +102,6 @@ export default function Test({ initialProblems }: TestProps) {
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
-
-      const problemSolveRequests = answers.map((answer) => ({
-        problemId: answer.problemId.toString(),
-        userAnswer: answer.userAnswer,
-        solvedTime: answer.solvedTime || 0,
-      }));
-
-      await postTestProblemGradingAPI(totalSolvedTime, problemSolveRequests);
     };
 
     if (problems.length > 0) {
