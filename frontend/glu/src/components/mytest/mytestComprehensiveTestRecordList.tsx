@@ -33,7 +33,7 @@ export default function MytestComprehensiveTestRecordList({
     setCurrentPage(page);
 
     if (page !== 1) {
-      const data = await getSolvedComprehensiveTestAPI(page, 5);
+      const data = await getSolvedComprehensiveTestAPI(page - 1, 5);
       setTestList(data?.content);
     }
   };

@@ -29,13 +29,6 @@ export interface SolvedProblemType {
   };
 }
 
-export interface PreviousSolvedProblemType {
-  correctCount: number;
-  problemType: ProblemType;
-  acquiredScore: number;
-  totalScore: number;
-}
-
 export interface Problem {
   problemId: string;
   title: string;
@@ -61,4 +54,12 @@ export interface SolvedProblem {
   userAnswer: string;
   solution: string;
   solveTime: number;
+}
+
+export interface SolvedProblemResponse {
+  content: SolvedProblem[];
+  page: number;
+  size: number;
+  totalPages: number;
+  totalElements: number;
 }

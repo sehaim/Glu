@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import RadarChart from '@/components/problem/result/radarChart';
-import { PreviousSolvedProblemType } from '@/types/ProblemTypes';
+import { PreviousSolvedTestType } from '@/types/TestTypes';
 import {
   formatTime,
   getPreviousTestAPI,
