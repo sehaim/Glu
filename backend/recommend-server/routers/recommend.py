@@ -193,28 +193,30 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                         limit=1
                     )
                 else:
-                    top_classifications = top_n_classification(2, get_wrong_status(int(user_id)))
+                    wrong_status = get_wrong_status(int(user_id))
+                    if wrong_status == {}:
+                        top_classifications = top_n_classification(2, wrong_status)
+                        for classification in top_classifications:
+                            correct_ids = get_correct_ids(int(user_id))
+                            wrong_ids = get_wrong_ids(int(user_id))
 
-                    for classification in top_classifications:
-                        correct_ids = get_correct_ids(int(user_id))
-                        wrong_ids = get_wrong_ids(int(user_id))
-
-                        fetched_problems = get_random_problems_by_log(
-                            detail_code=classification[1],
-                            level=level,
-                            classification=classification[0],
-                            correct_ids=correct_ids,
-                            wrong_ids=wrong_ids,
-                            vector=classification[3],
-                            num=1
-                        )
-                    # 틀린 문제 없을때
-                    if fetched_problems == None:
-                        fetched_problems = get_random_problems_by_code_and_level(
-                            detail_code=detail_code,
-                            level=f"PL0{level}",
-                            limit=1
-                        )
+                            fetched_problems = get_random_problems_by_log(
+                                detail_code=classification[1],
+                                level=level,
+                                classification=classification[0],
+                                correct_ids=correct_ids,
+                                wrong_ids=wrong_ids,
+                                vector=classification[3],
+                                num=1
+                            )
+                    else:
+                        # 틀린 문제 없을때
+                        if fetched_problems == None:
+                            fetched_problems = get_random_problems_by_code_and_level(
+                                detail_code=detail_code,
+                                level=f"PL0{level}",
+                                limit=1
+                            )
 
             response = ProblemResponse.from_problem(fetched_problems[0])
             selected_problems.append(response)
@@ -292,23 +294,24 @@ def make_type_problems(user_id, user_problemtype_level):
                 )
             # 20개
             else:
-                top_classifications = top_n_classification(type_counts[i], get_wrong_status(int(user_id)))
-
-                pt_detail_classifications = [item for item in top_classifications if item[1].startswith(detail_code)]
-                print(f"pt_detail {detail_code}", pt_detail_classifications)
-
-                correct_ids = get_correct_ids(int(user_id))
-                wrong_ids = get_wrong_ids(int(user_id))
-
-                # 틀린 기록 없음 랜덤 추천
-                if len(pt_detail_classifications) == 0:
+                wrong_status = get_wrong_status(int(user_id))
+                #틀린 기록 없음
+                if wrong_status == {}:
                     fetched_problems = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
                         level=f"PL0{user_level + detail_levels[idx]}",
                         limit=type_counts[idx]
                     )
-                # 틀린 기록 있음
+                #틀린 기록 있음
                 else:
+                    top_classifications = top_n_classification(type_counts[i], wrong_status)
+
+                    pt_detail_classifications = [item for item in top_classifications if item[1].startswith(detail_code)]
+                    print(f"pt_detail {detail_code}", pt_detail_classifications)
+
+                    correct_ids = get_correct_ids(int(user_id))
+                    wrong_ids = get_wrong_ids(int(user_id))
+
                     fetched_problems = get_random_problems_by_log(
                         detail_code=detail_code,
                         level=user_level + detail_levels[idx],
