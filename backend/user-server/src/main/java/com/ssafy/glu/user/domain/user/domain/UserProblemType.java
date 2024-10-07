@@ -30,10 +30,10 @@ public class UserProblemType extends BaseTimeEntity {
 	private Long id;
 
 	@Builder.Default
-	private Integer level = 0;
+	private Integer level = 1;
 
 	@Builder.Default
-	private Integer score = 0;
+	private Integer score = 100;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -43,15 +43,12 @@ public class UserProblemType extends BaseTimeEntity {
 	private ProblemTypeCode problemTypeCode;
 
 	public void updateScore(Integer score) {
-		this.score = Math.max(0, score + this.score);
-	}
-
-	public Integer getLevel() {
-		return Math.min(Math.max((score / 100), 0), 6) + 1;
+		this.score = Math.max(100, score + this.score);
+		this.level = Math.min(Math.max((score / 100), 1), 7);
 	}
 
 	public Integer getScore() {
-		if (score >= 700) return 100;
+		if (score >= 800) return 100;
 		return score % 100;
 	}
 }
