@@ -3,6 +3,7 @@ import {
   SolvedProblemType,
 } from '@/types/ProblemTypes';
 import { AxiosError } from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import { createAuthAxios } from '../common';
 
 export const transformProblemType = (
@@ -28,9 +29,11 @@ export const formatTime = (totalSeconds: number | null): string => {
 };
 
 // 이전 테스트 결과 조회
-export const getPreviousTestAPI = async () => {
+export const getPreviousTestAPI = async (
+  context: GetServerSidePropsContext,
+) => {
   try {
-    const authAxios = createAuthAxios();
+    const authAxios = createAuthAxios(context);
     const res = await authAxios.get(`/tests/previous`);
 
     // HTTP 상태 코드 확인

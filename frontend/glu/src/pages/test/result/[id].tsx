@@ -9,10 +9,9 @@ import LevelUpModal from '@/components/problem/result/levelUpModal';
 import { resetLevel } from '@/store/levelupSlice';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Loading from '@/components/common/loading';
-import { getTestResultAPI, getTestResultCSRAPI } from '@/utils/problem/test';
+import { getTestResultAPI } from '@/utils/problem/test';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import styles from './testResult.module.css';
 
 interface TestResultResponse {
@@ -33,18 +32,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const response = await getTestResultAPI(context, testId);
-    // TODO: 에러 확인할 필요
-    console.log('Full response:', response.data);
-    console.log('totalCorrectCount:', response.data.totalCorrectCount);
-    console.log('totalSolvedTime:', response.data.totalSolvedTime);
-    console.log(
-      'problemTypeList:',
-      response.data.gradingResultByTypeList.length,
-    );
-    console.log(
-      'problemList:',
-      response.data.gradingResultByProblemList.length,
-    );
 
     return {
       props: {
@@ -66,8 +53,6 @@ interface TestResultProps {
 }
 
 export default function TestResult({ testResultResponse }: TestResultProps) {
-  const router = useRouter();
-  const { id } = router.query;
   const dispatch = useDispatch();
   const { totalCorrectCount, totalSolvedTime, problemTypeList, problemList } =
     testResultResponse;
@@ -75,17 +60,6 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
   const { levelImage, isLeveledUp } = useSelector(
     (state: RootState) => state.levelup,
   );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (typeof id === 'string') {
-        const data = await getTestResultCSRAPI(id);
-        console.log(data);
-      }
-    };
-
-    fetchData();
-  }, [id]);
 
   useEffect(() => {
     // 레벨업이 되었을 때 모달을 열기
@@ -249,23 +223,21 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                         : [problem.metadata.options]
                       ) // 문자열일 경우 배열로 변환
                         .map((problemOption: string, optionIndex: number) => (
-                          <p
-                            key={problemOption}
-                            className={`${styles['problem-option-item']} ${
-                              Number(problem.userAnswer) === optionIndex + 1
-                                ? styles['user-answer']
-                                : ''
-                            }`}
-                          >
+                          <p key={problemOption}>
                             {optionIndex + 1}. {problemOption}{' '}
                           </p>
                         ))}
                 </div>
               </div>
               <div className={styles['problem-solution']}>
+                {problem.isCorrect && (
+                  <p className={styles['correct-message']}>
+                    {problem.userAnswer}
+                  </p>
+                )}
                 {!problem.isCorrect && (
                   <p className={styles['incorrect-message']}>
-                    틀린 문제입니다. 해설을 확인하세요.
+                    {problem.userAnswer}
                   </p>
                 )}
                 {problem.solution}

@@ -188,7 +188,7 @@ html.swal2-shown {
 /* 폰트 적용 */
 @font-face {
   font-family: 'BMJUA';
-  src: url('../assets/fonts/BMJUA.ttf');
+  src: url('../assets/fonts/BMJUA.woff') format('woff');
   font-display: swap;
 }
 

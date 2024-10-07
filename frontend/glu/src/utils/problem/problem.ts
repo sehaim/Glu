@@ -33,7 +33,6 @@ export const getSingleProblemAPI = async (problemId: string) => {
   try {
     const authAxios = createAuthAxios();
     const res = await authAxios.get(`/problems/${problemId}`);
-
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {
       throw new Error(res.data.detailMessage || '잘못된 요청입니다.');
