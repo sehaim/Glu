@@ -4,7 +4,6 @@ import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import { GetServerSideProps } from 'next';
 import styles from './mytest.module.css';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const problemData01 = await getSolvedTypeTestAPI(
     'PT01',
@@ -66,14 +65,16 @@ export default function MytestStarredPage({
 }: MytestStarredPageProps) {
   return (
     <div className={styles.container}>
-      {testDataList.map((testData) => (
-        <MytestTestCardList
-          key={testData.problemType.code}
-          testData={testData?.problemData}
-          problemType={testData?.problemType}
-          pageType="starred"
-        />
-      ))}
+      <div className={styles.section}>
+        {testDataList.map((testData) => (
+          <MytestTestCardList
+            key={testData.problemType.code}
+            testData={testData?.problemData}
+            problemType={testData?.problemType}
+            pageType="starred"
+          />
+        ))}
+      </div>
     </div>
   );
 }

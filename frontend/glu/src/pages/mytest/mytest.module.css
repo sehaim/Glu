@@ -16,6 +16,17 @@
 }
 
 .section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--WHITE);
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.growth-section {
   width: 72%;
   min-width: 500px;
   height: 100%;

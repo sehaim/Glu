@@ -1,9 +1,10 @@
 .card-container {
   width: 190px;
-  height: 100px;
+  height: 110px;
   background-color: var(--LIGHTPINK);
   position: relative;
   border-radius: 10px;
+  padding: 10px;
 }
 
 .card-container:hover {
@@ -15,7 +16,7 @@
   position: absolute;
 }
 
-#level {
+.level {
   font-family: 'HDBOLD';
   color: white;
   font-size: 25px;
@@ -23,25 +24,31 @@
   left: 10%;
 }
 
-#star {
-  top: 12%;
+.star {
+  top: 10%;
   right: 10%;
-  color: var(--ORANGE);
+  color: var(--WHITE);
+  opacity: 80%;
   cursor: pointer;
 }
 
-#star:hover {
+.star:hover {
   transform: scale(1.2);
-  color: var(--WHITE);
+  opacity: 60%;
 }
 
-#type {
-  top: 45%;
+.star-active {
+  color: var(--ORANGE);
+}
+
+.type {
+  top: 42%;
   left: 10%;
+  width: 80%;
   color: var(--TEXT_PRIMARY);
 }
 
-#date {
+.date {
   right: 10%;
   bottom: 10%;
   font-size: 14px;

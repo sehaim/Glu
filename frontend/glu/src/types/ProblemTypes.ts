@@ -53,7 +53,9 @@ export interface SolvedProblem {
   isCorrect: boolean;
   userAnswer: string;
   solution: string;
+  isFavorite: boolean;
   solveTime: number;
+  solveDate: string;
 }
 
 export interface SolvedProblemResponse {
