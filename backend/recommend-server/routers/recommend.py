@@ -381,12 +381,12 @@ def get_wrong_status(user_id: int):
 
     for problem in problems:
 
-        if (problem["problemTypeCode"] == "PT01"): continue
+        if (problem.problemTypeDetailCode == "PT01"): continue
 
         # document에서 classification과 vector를 추출
-        classification = problem["classification"]
-        vector = problem['metadata']["vector"]
-        detailcode = problem["problemTypeDetailCode"]
+        classification = problem.metadata.classification
+        vector = problem.metadata.vector
+        detailcode = problem.problemTypeDetailCode
 
         # classification_vectors에 추가
         classification_vectors[classification][detailcode].append(vector)
