@@ -55,3 +55,11 @@ export interface SolvedProblem {
   solution: string;
   solveTime: number;
 }
+
+export interface SolvedProblemResponse {
+  content: SolvedProblem[];
+  page: number;
+  size: number;
+  totalPages: number;
+  totalElements: number;
+}

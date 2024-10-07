@@ -41,12 +41,25 @@ export const getSolvedTypeTestAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(
-      `problems/solve?status=${status}&problemTypeCode=${problemTypeCode}&hasMemo=${hasMemo}&isFavorite=${isFavorite}&page=${page}&size=4`,
-    );
+
+    const params = new URLSearchParams();
+    params.append('problemTypeCode', problemTypeCode);
+    params.append('page', String(page));
+    params.append('size', '4');
+
+    if (status) {
+      params.append('status', status);
+    }
+    if (hasMemo !== undefined) {
+      params.append('hasMemo', String(hasMemo));
+    }
+    if (isFavorite !== undefined) {
+      params.append('isFavorite', String(isFavorite));
+    }
+
+    const res = await authAxios.get(`problems/solve?${params.toString()}`);
     return res.data;
   } catch {
-    console.log('에러'); // 추후 콘솔 수정
     return null;
   }
 };
