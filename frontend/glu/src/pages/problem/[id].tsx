@@ -104,10 +104,15 @@ export default function Test() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>유형별 문제</title>
-        <meta property="og:title" content="종합 테스트 추천" />
-        <meta property="og:description" content={problem?.content} />
-        <meta name="keywords" content={problem?.content} />
+        <title>Glu 유형 문제</title>
+        <meta
+          property="og:title"
+          content={`Glu 문제: ${problem?.problemLevel?.name}-${problem?.problemType?.name}-${problem?.problemId?.slice(-3)}`}
+        />
+        <meta
+          property="og:description"
+          content={problem?.content?.substring(0, 100)}
+        />
         <meta property="og:type" content="website" />
       </Head>
 
