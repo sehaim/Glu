@@ -41,5 +41,7 @@ public class Users extends BaseTimeEntity {
 	private Integer exp = 0;
 	@Builder.Default
 	private Integer dayCount = 0;
+	@Builder.Default
+	private Boolean isFirst = true;
 
 }
