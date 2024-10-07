@@ -1,5 +1,6 @@
 package com.ssafy.glu.problem.domain.problem.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.bouncycastle.pqc.legacy.crypto.ntru.IndexGenerator;
@@ -27,9 +28,11 @@ public record ProblemBaseResponse(
 	Map<String, Object> metadata,
 
 	Boolean isFavorite,
-	Integer solveTime
+	Integer solveTime,
+	LocalDateTime solveDate
 ) {
-	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite, Integer solveTime) {
+
+	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite, Integer solveTime, LocalDateTime solveDate) {
 		if (problem == null)
 			return null;
 		return ProblemBaseResponse.builder()
@@ -46,7 +49,12 @@ public record ProblemBaseResponse(
 			.metadata(problem.getMetadata())
 			.isFavorite(isFavorite)
 			.solveTime(solveTime)
+			.solveDate(solveDate)
 			.build();
+	}
+
+	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite, Integer solveTime) {
+		return of(problem, status, isFavorite, solveTime, null);
 	}
 
 	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite) {
@@ -63,6 +71,6 @@ public record ProblemBaseResponse(
 
 	public static ProblemBaseResponse of(UserProblemStatus userProblemStatus) {
 		return of(userProblemStatus.getProblem(), userProblemStatus.getStatus(), userProblemStatus.getIsFavorite(),
-			userProblemStatus.getSolveTime());
+			userProblemStatus.getSolveTime(), userProblemStatus.getModifiedDate());
 	}
 }
