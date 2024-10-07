@@ -34,7 +34,7 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	private Boolean isFavorite;
 
-	private int solveTime;
+	private Integer solveTime;
 
 	//== querydsl 조회를 위한 embedding 처리, 성능 개선 ==//
 	// @Field("problemId")
@@ -43,13 +43,14 @@ public class UserProblemStatus extends BaseTimeDocument {
 
 	@Builder
 	public UserProblemStatus(Problem.Status status, Integer attemptCount, Integer wrongCount, Long userId,
-		List<ProblemMemo> memoList, Boolean isFavorite, Problem problem) {
+		List<ProblemMemo> memoList, Boolean isFavorite, Integer solveTime, Problem problem) {
 		this.status = status;
 		this.attemptCount = attemptCount != null ? attemptCount : 0;
 		this.wrongCount = wrongCount != null ? wrongCount : 0;
 		this.userId = userId;
 		this.memoList = memoList != null ? memoList : new ArrayList<>();
 		this.isFavorite = isFavorite != null ? isFavorite : false;
+		this.solveTime = solveTime;
 		this.problem = problem;
 	}
 
