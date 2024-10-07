@@ -2,6 +2,7 @@ package com.ssafy.glu.problem.domain.problem.service;
 
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,20 +43,16 @@ public class ProblemServiceImpl implements ProblemService {
 	private final ProblemSolvedEventPublisher problemSolvedEventPublisher;
 	private final ProblemGradingService problemGradingService;
 	private final UserService userService;
-	private final UserProblemLogRepository userProblemLogRepository;
 
 	@Override
 	public ProblemBaseResponse getProblem(Long userId, String problemId) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-				problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 		return ProblemBaseResponse.of(userProblemStatus);
 	}
 
 	@Override
 	public Boolean getIsFavorite(Long userId, String problemId) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblemId(userId, problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 		return userProblemStatus.getIsFavorite();
 	}
 
@@ -69,9 +66,7 @@ public class ProblemServiceImpl implements ProblemService {
 	@Override
 	public ProblemMemoResponse createProblemMemo(Long userId, String problemId, ProblemMemoCreateRequest request) {
 		// userId와 problemId로 UserProblemStatus를 찾기
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-				problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 
 		// 비즈니스 로직 분리
 		ProblemMemo memo = userProblemStatus.addMemo(request.content());
@@ -85,9 +80,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public ProblemMemoResponse updateProblemMemo(Long userId, String problemId, ProblemMemoUpdateRequest request) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-				problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 
 		// 비즈니스 로직 분리
 		ProblemMemo memo = userProblemStatus.updateMemo(request.memoIndex(), request.content());
@@ -101,9 +94,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public void deleteProblemMemo(Long userId, String problemId, Long memoIndex) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-				problemId)
-			.orElseThrow(UserProblemStatusNotFoundException::new);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 
 		userProblemStatus.deleteMemo(memoIndex);
 
@@ -112,8 +103,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public Page<ProblemMemoResponse> getProblemMemoList(Long userId, String problemId, Pageable pageable) {
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-			problemId).orElseThrow(UserProblemStatusNotFoundException::new);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 
 		List<ProblemMemo> problemMemoList = userProblemStatus.getMemoList();
 
@@ -122,11 +112,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public void createUserProblemFavorite(Long userId, String problemId) {
-		log.info("===== 문제 찜 요청 - 유저 : {}, 문제: {} =====", userId, problemId);
-
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-			problemId).orElseThrow(UserProblemStatusNotFoundException::new);
-		log.info("===== 문제 찜 추가 - 유저 : {}, 문제: {} =====", userId, problemId);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 
 		userProblemStatus.createFavorite();
 		userProblemStatusRepository.save(userProblemStatus);
@@ -134,12 +120,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	public void deleteUserProblemFavorite(Long userId, String problemId) {
-		log.info("===== 문제 찜 취소 - 유저 : {}, 문제 : {} =====", userId, problemId);
-
-		UserProblemStatus userProblemStatus = userProblemStatusRepository.findByUserIdAndProblem_ProblemId(userId,
-			problemId).orElseThrow(UserProblemStatusNotFoundException::new);
-
-		log.info("===== 문제 찜 취소 - 유저 : {}, 문제: {} =====", userId, problemId);
+		UserProblemStatus userProblemStatus = getUserProblemStatus(userId, problemId);
 
 		userProblemStatus.deleteFavorite();
 		userProblemStatusRepository.save(userProblemStatus);
@@ -171,4 +152,8 @@ public class ProblemServiceImpl implements ProblemService {
 		return problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 	}
 
+	private UserProblemStatus getUserProblemStatus(Long userId, String problemId) {
+		return userProblemStatusRepository.findByUserIdAndProblemId(userId, problemId)
+			.orElse(UserProblemStatus.builder().userId(userId).problem(getProblemOrThrow(problemId)).build());
+	}
 }
