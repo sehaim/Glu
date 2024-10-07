@@ -20,9 +20,7 @@ import ProblemInputField from '@/components/problem/problemInputField';
 import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
 import { GetServerSideProps } from 'next';
 import { getCookie } from 'cookies-next';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import jwt from 'jsonwebtoken';
-import { refreshUserAPI } from '@/utils/common';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -151,14 +149,6 @@ export default function Test({ initialProblems }: TestProps) {
         totalSolvedTime,
         problemSolveRequests,
       );
-
-      const accessToken = getCookie('accessToken');
-      const { isFirst } = jwt.decode(accessToken as string) as {
-        isFirst: boolean;
-      };
-      if (isFirst) {
-        await refreshUserAPI();
-      }
 
       if (res.data.isStageUp) {
         dispatch(levelUp({ level: 2, levelImage: res.data.stageUpUrl }));

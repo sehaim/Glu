@@ -8,7 +8,7 @@ export const getRecommendedTypeProblemsAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(`/recommend/type`);
+    const res = await authAxios.get(`recommend/type`);
 
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {
@@ -32,7 +32,7 @@ export const getRecommendedTypeProblemsAPI = async (
 export const getSingleProblemAPI = async (problemId: string) => {
   try {
     const authAxios = createAuthAxios();
-    const res = await authAxios.get(`/problems/${problemId}`);
+    const res = await authAxios.get(`problems/${problemId}`);
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {
       throw new Error(res.data.detailMessage || '잘못된 요청입니다.');
@@ -59,7 +59,7 @@ export const postSingleProblemGradingAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios();
-    const res = await authAxios.post(`/problems/${problemId}/grading`, {
+    const res = await authAxios.post(`problems/${problemId}/grading`, {
       userAnswer,
       solvedTime,
     });
