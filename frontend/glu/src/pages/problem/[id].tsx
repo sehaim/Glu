@@ -103,10 +103,8 @@ export default function Test() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>
-          Glu 유형 문제
-        </title>
-        <meta property="og:title" content="종합 테스트 추천 - glu" />
+        <title>Glu 유형 문제</title>
+        <meta property="og:title" content={`Glu 문제: ${problem?.problemId}`} />
         <meta
           property="og:description"
           content={problem?.content?.substring(0, 100)}
