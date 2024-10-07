@@ -78,15 +78,6 @@ export default function Test({ initialProblems }: TestProps) {
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
 
-  // useEffect(() => {
-  //   const fetchProblem = async () => {
-  //     const res = await getRecommendedLevelTestProblemsAPI();
-  //     setProblems(res.data);
-  //   };
-
-  //   fetchProblem();
-  // }, []);
-
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
     problemIndex: string,
@@ -103,7 +94,7 @@ export default function Test({ initialProblems }: TestProps) {
   };
 
   useEffect(() => {
-    const initializeAnswers = () => {
+    const initializeAnswers = async () => {
       const initialAnswers = problems.map((problem) => ({
         problemId: problem.problemId,
         problemAnswer: problem.solution,
@@ -111,9 +102,19 @@ export default function Test({ initialProblems }: TestProps) {
         solvedTime: 0, // 기본 풀이 시간은 0
       }));
       setAnswers(initialAnswers);
+
+      const problemSolveRequests = answers.map((answer) => ({
+        problemId: answer.problemId.toString(),
+        userAnswer: answer.userAnswer,
+        solvedTime: answer.solvedTime || 0,
+      }));
+
+      await postTestProblemGradingAPI(totalSolvedTime, problemSolveRequests);
     };
 
-    initializeAnswers();
+    if (problems.length > 0) {
+      initializeAnswers();
+    }
   }, [problems]);
 
   useEffect(() => {
