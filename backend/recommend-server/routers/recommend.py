@@ -194,6 +194,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                     )
                 else:
                     top_classifications = top_n_classification(2, get_wrong_status(int(user_id)))
+
                     for classification in top_classifications:
                         correct_ids = get_correct_ids(int(user_id))
                         wrong_ids = get_wrong_ids(int(user_id))
@@ -326,16 +327,15 @@ def make_type_problems(user_id, user_problemtype_level):
     return selected_problems
 
 
-@router.get(path="/similar")
+@router.get(path="/similar/{problem_id}")
 async def get_level_test(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
-    print("/similar x-user-id", user_id)
+    print("/similar problem_id", problem_id)
 
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")
 
     find_problem = get_problem_by_id(problem_id)
     selected_problems = []
-
 
     if (find_problem['problemTypeCode'] == "PT01"):
         fetched_problems = get_random_problems_by_code_and_level(level=find_problem['problemLevelCode'],
