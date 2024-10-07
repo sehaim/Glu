@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (
 interface TestProps {
   totalCorrectCount: number;
   totalSolveTime: number;
-  gradingResultByTypeList: PreviousSolvedProblemType[];
+  gradingResultByTypeList: PreviousSolvedTestType[];
 }
 
 export default function Test({

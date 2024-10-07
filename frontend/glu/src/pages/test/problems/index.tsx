@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProblemContentText from '@/components/problem/problemContentText';
 import ProblemHeader from '@/components/problem/problemHeader';
 import ProblemOptionList from '@/components/problem/problemOptionList';
@@ -71,12 +71,14 @@ export default function Test({ initialProblems }: TestProps) {
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0); // 현재 문제 인덱스
   const [answers, setAnswers] = useState<ProblemAnswer[]>([]);
   // 푼 문제 개수 계산
-  const solvedCount = useMemo(() => {
-    return answers.filter((answer) => answer.userAnswer !== '').length;
-  }, [answers]);
+  const solvedCount = answers.filter(
+    (answer) => answer.userAnswer !== '',
+  ).length;
   const [startTime, setStartTime] = useState<number>(Date.now()); // 문제 시작 시간
   const [totalSolvedTime, setTotalSolvedTime] = useState<number>(0);
   const currentProblem = problems[currentProblemIndex];
+  const progressPercentage =
+    problems.length > 0 ? Math.floor((solvedCount / problems.length) * 90) : 90;
 
   // 문제 풀이 로직 ///////////////////////////////////////////////////////////////////////////
   const updateAnswers = (
@@ -127,12 +129,6 @@ export default function Test({ initialProblems }: TestProps) {
     };
   }, [currentProblemIndex]);
 
-  const progressPercentage = useMemo(() => {
-    return problems.length > 0
-      ? Math.floor((solvedCount / problems.length) * 90)
-      : 90;
-  }, [solvedCount, problems.length]);
-
   const handleAnswer = (problemIndex: string, userAnswer: string) => {
     updateAnswers(problemIndex, { userAnswer });
   };
@@ -175,21 +171,21 @@ export default function Test({ initialProblems }: TestProps) {
   };
 
   // 문제 네비게이션 ///////////////////////////////////////////////////////////////////////////
-  const handleNextProblem = useCallback(() => {
+  const handleNextProblem = () => {
     if (currentProblemIndex < problems.length - 1) {
       setCurrentProblemIndex((prevIndex) => prevIndex + 1);
     }
-  }, [currentProblemIndex, problems.length]);
+  };
 
-  const handlePrevProblem = useCallback(() => {
+  const handlePrevProblem = () => {
     if (currentProblemIndex > 0) {
       setCurrentProblemIndex((prevIndex) => prevIndex - 1);
     }
-  }, [currentProblemIndex]);
+  };
 
-  const handlProblemIndex = useCallback((index: number) => {
+  const handlProblemIndex = (index: number) => {
     setCurrentProblemIndex(index);
-  }, []);
+  };
 
   // 렌더링 로직 ///////////////////////////////////////////////////////////////////////////
   if (problems.length === 0 || answers.length === 0) {
