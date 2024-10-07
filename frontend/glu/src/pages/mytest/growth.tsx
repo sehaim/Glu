@@ -47,7 +47,7 @@ export default function MytestGrowthPage({
   return (
     <div className={`${styles['growth-container']} ${styles.row}`}>
       <MytestGrade userInfo={userInfo} />
-      <div className={styles.section}>
+      <div className={styles['growth-section']}>
         <MytestAttendance
           attendances={attendances}
           attendanceRate={userInfo.attendanceRate}

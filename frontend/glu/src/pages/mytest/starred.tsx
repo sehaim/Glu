@@ -65,14 +65,16 @@ export default function MytestStarredPage({
 }: MytestStarredPageProps) {
   return (
     <div className={styles.container}>
-      {testDataList.map((testData) => (
-        <MytestTestCardList
-          key={testData.problemType.code}
-          testData={testData?.problemData}
-          problemType={testData?.problemType}
-          pageType="starred"
-        />
-      ))}
+      <div className={styles.section}>
+        {testDataList.map((testData) => (
+          <MytestTestCardList
+            key={testData.problemType.code}
+            testData={testData?.problemData}
+            problemType={testData?.problemType}
+            pageType="starred"
+          />
+        ))}
+      </div>
     </div>
   );
 }
