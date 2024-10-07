@@ -11,7 +11,7 @@ import com.ssafy.glu.problem.domain.test.dto.response.TestGradingResponse;
 public interface TestService {
 	TestGradingResponse gradeTest(Long userId, TestSolveRequest request);
 
-	Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable);
+	Page<TestGradingBaseResponse> getTestList(Long userId, Pageable pageable);
 
 	TestGradingDetailResponse getTest(Long userId, String testId);
 

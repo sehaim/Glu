@@ -77,9 +77,9 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public Page<TestGradingDetailResponse> getTestList(Long userId, Pageable pageable) {
+	public Page<TestGradingBaseResponse> getTestList(Long userId, Pageable pageable) {
 		Page<Test> testList = testRepository.findByUserId(userId, pageable);
-		return testList.map((test) -> TestGradingDetailResponse.of(test,
+		return testList.map((test) -> TestGradingBaseResponse.of(test,
 			userProblemLogRepository.findAllById(test.getUserProblemLogIdList())));
 	}
 

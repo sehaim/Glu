@@ -56,7 +56,7 @@ public class TestController {
 		@ApiResponse(responseCode = "404", description = "테스트 목록을 찾을 수 없습니다", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
 		@ApiResponse(responseCode = "500", description = "서버 오류가 발생했습니다", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
 	@GetMapping
-	public ResponseEntity<PageResponse<TestGradingDetailResponse>> getTestList(
+	public ResponseEntity<PageResponse<TestGradingBaseResponse>> getTestList(
 		@Parameter(hidden = true) @RequestHeader(USER_ID) Long userId, Pageable pageable) {
 		return ResponseEntity.status(HttpStatus.OK).body(new PageResponse<>(testService.getTestList(userId, pageable)));
 	}

@@ -2,6 +2,8 @@ package com.ssafy.glu.problem.domain.problem.dto.response;
 
 import java.util.Map;
 
+import org.bouncycastle.pqc.legacy.crypto.ntru.IndexGenerator;
+
 import com.ssafy.glu.problem.domain.common.dto.CommonCodeResponse;
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemStatus;
@@ -24,9 +26,10 @@ public record ProblemBaseResponse(
 
 	Map<String, Object> metadata,
 
-	Boolean isFavorite
+	Boolean isFavorite,
+	Integer solveTime
 ) {
-	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite) {
+	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite, Integer solveTime) {
 		if (problem == null)
 			return null;
 		return ProblemBaseResponse.builder()
@@ -42,7 +45,12 @@ public record ProblemBaseResponse(
 			.problemTypeDetail(CommonCodeResponse.of(problem.getProblemTypeDetailCode()))
 			.metadata(problem.getMetadata())
 			.isFavorite(isFavorite)
+			.solveTime(solveTime)
 			.build();
+	}
+
+	public static ProblemBaseResponse of(Problem problem, Problem.Status status, Boolean isFavorite) {
+		return of(problem, status, isFavorite, null);
 	}
 
 	public static ProblemBaseResponse of(Problem problem, Problem.Status status) {
@@ -54,6 +62,7 @@ public record ProblemBaseResponse(
 	}
 
 	public static ProblemBaseResponse of(UserProblemStatus userProblemStatus) {
-		return of(userProblemStatus.getProblem(), userProblemStatus.getStatus(), userProblemStatus.getIsFavorite());
+		return of(userProblemStatus.getProblem(), userProblemStatus.getStatus(), userProblemStatus.getIsFavorite(),
+			userProblemStatus.getSolveTime());
 	}
 }
