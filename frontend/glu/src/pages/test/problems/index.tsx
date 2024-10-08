@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import ProblemContentText from '@/components/problem/problemContentText';
-import ProblemHeader from '@/components/problem/problemHeader';
-import ProblemOptionList from '@/components/problem/problemOptionList';
+import ProblemContentText from '@/components/test/problem/problemContentText';
+import ProblemHeader from '@/components/test/problem/problemHeader';
+import ProblemOptionList from '@/components/test/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { Problem } from '@/types/ProblemTypes';
 import { useRouter } from 'next/router';
-import ProblemProgressBar from '@/components/problem/problemProgressBar';
-import ProblemMemoManager from '@/components/problem/problemMemoManager';
-import ProblemSolvedNavigation from '@/components/problem/problemNavigationManager';
+import ProblemProgressBar from '@/components/test/problem/problemProgressBar';
+import ProblemMemoManager from '@/components/test/problem/memo/problemMemoManager';
+import ProblemSolvedNavigation from '@/components/test/problem/problemNavigationManager';
 import {
   getRecommendedLevelTestProblemsAPI,
   getRecommendedTestProblemsAPI,
@@ -16,11 +16,12 @@ import {
 import { useDispatch } from 'react-redux';
 import { levelUp } from '@/store/levelupSlice';
 import Loading from '@/components/common/loading';
-import ProblemInputField from '@/components/problem/problemInputField';
-import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import ProblemInputField from '@/components/test/problem/problemInputField';
+import ProblemImageOptionList from '@/components/test/problem/problemImageOptionList';
 import { GetServerSideProps } from 'next';
 import { getCookie } from 'cookies-next';
 import jwt from 'jsonwebtoken';
+import { login } from '@/store/authSlice';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -153,7 +154,7 @@ export default function Test({ initialProblems }: TestProps) {
       if (res.data.isStageUp) {
         dispatch(levelUp({ level: 2, levelImage: res.data.stageUpUrl }));
       }
-
+      dispatch(login({ isFirst: false }));
       router.push(`/test/result/${res?.data?.testId}`);
     } catch (error) {
       console.error('정답 제출 중 오류 발생:', error);

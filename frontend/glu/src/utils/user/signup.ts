@@ -17,8 +17,13 @@ export const checkIdAPI = async (data: string): Promise<boolean> => {
 export const signupAPI = async (data: SignupUser) => {
   try {
     await defaultAxios.post(`users/register`, data);
-    sweetalertConfirm('회원가입 완료', '회원가입이 완료되었습니다.');
-    window.location.href = '/login';
+    const alertResult = await sweetalertConfirm(
+      '회원가입 완료',
+      '회원가입이 완료되었습니다.',
+    );
+    if (alertResult.isConfirmed) {
+      window.location.href = '/login';
+    }
   } catch {
     sweetalertError('회원가입 오류', '입력값을 확인해주세요.');
   }

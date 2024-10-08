@@ -26,7 +26,11 @@ export default function SignupPage() {
   const handleCheckId = async () => {
     const isDuplicate = await checkIdAPI(id);
     if (!isDuplicate) {
-      sweetalertConfirm('아이디 중복 확인', '사용 가능한 아이디입니다.');
+      sweetalertConfirm(
+        '아이디 중복 확인',
+        '사용 가능한 아이디입니다.',
+        '사용하기',
+      );
     } else {
       sweetalertError('아이디 중복 확인', '사용할 수 없는 아이디입니다.');
       setId('');

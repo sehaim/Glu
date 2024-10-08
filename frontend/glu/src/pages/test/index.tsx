@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { useRouter } from 'next/router';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
-import RadarChart from '@/components/problem/result/radarChart';
+import RadarGraph from '@/components/common/graphs/radarGraph';
 import { PreviousSolvedTestType } from '@/types/TestTypes';
 import {
   formatTime,
@@ -13,16 +13,36 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import { getCookie } from 'cookies-next';
+import { jwtDecode } from 'jwt-decode';
+import { sweetalertError } from '@/utils/common';
+import { useEffect } from 'react';
 import styles from './test.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
-  const res = await getPreviousTestAPI(context);
+  const { req, res } = context;
+  const accessToken = getCookie('accessToken', { req, res });
 
-  if (!res) {
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  const decodedToken: never = jwtDecode(accessToken);
+  const { isFirst } = decodedToken;
+
+  const resData = await getPreviousTestAPI(context);
+
+  if (!resData) {
     return {
       props: {
+        isFirst,
         totalCorrectCount: 0,
         totalSolveTime: 0,
         gradingResultByTypeList: [],
@@ -32,24 +52,45 @@ export const getServerSideProps: GetServerSideProps = async (
 
   return {
     props: {
-      totalCorrectCount: res.totalCorrectCount,
-      totalSolveTime: res.totalSolvedTime,
-      gradingResultByTypeList: res.gradingResultByTypeList,
+      isFirst,
+      totalCorrectCount: resData.totalCorrectCount,
+      totalSolveTime: resData.totalSolvedTime,
+      gradingResultByTypeList: resData.gradingResultByTypeList,
     },
   };
 };
 
 interface TestProps {
+  isFirst: boolean;
   totalCorrectCount: number;
   totalSolveTime: number;
   gradingResultByTypeList: PreviousSolvedTestType[];
 }
 
 export default function Test({
+  isFirst,
   totalCorrectCount,
   totalSolveTime,
   gradingResultByTypeList,
 }: TestProps) {
+  // 레벨테스트 응시 전 페이지 리다이렉트
+  useEffect(() => {
+    const showAlert = async () => {
+      const result = await sweetalertError(
+        '레벨테스트 응시',
+        '레벨테스트 응시 후 종합테스트를 추천받을 수 있습니다.',
+      );
+
+      if (result.isConfirmed) {
+        window.location.href = '/home';
+      }
+    };
+
+    if (isFirst) {
+      showAlert();
+    }
+  }, [isFirst]);
+
   const router = useRouter();
   const username = useSelector((state: RootState) => state.auth.nickname);
   const { correctCount, solveTime } = {
@@ -59,6 +100,11 @@ export default function Test({
   const transformedProblemTypeList = transformProblemType(
     gradingResultByTypeList,
   );
+
+  const data = transformedProblemTypeList.map((item) => ({
+    axis: item.problemType.name,
+    value: item.correctCount,
+  }));
 
   const handleButtonClick = () => {
     router.push('/test/problems');
@@ -121,7 +167,7 @@ export default function Test({
                 <p className={styles['last-test-item-title']}>영역별 점수</p>
                 <div className={styles['last-test-item-content-column']}>
                   {transformedProblemTypeList && (
-                    <RadarChart problemTypeList={transformedProblemTypeList} />
+                    <RadarGraph data={data} maxScore={5} />
                   )}
                 </div>
               </div>

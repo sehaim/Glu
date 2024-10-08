@@ -33,7 +33,13 @@ export const logoutAPI = async () => {
     await authAxios.post(`auth/logout`);
     deleteCookie('accessToken');
     window.location.href = '/';
-    sweetalertConfirm('로그아웃', '로그아웃이 완료되었습니다.'); // 추후 수정
+    const alertResult = await sweetalertConfirm(
+      '로그아웃',
+      '로그아웃이 완료되었습니다.',
+    );
+    if (alertResult.isConfirmed) {
+      window.location.href = '/';
+    }
   } catch {
     sweetalertError(
       '로그아웃 오류',

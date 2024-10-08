@@ -2,7 +2,7 @@ import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import { getSolvedTypeTestAPI } from '@/utils/user/mytest';
 import { useState, useEffect, useCallback } from 'react';
 import styles from './mytestTestCardList.module.css';
-import TestCardItem from '../test/testCardItem';
+import TestCardItem from '../test/test/testCardItem';
 import PaginationBar from '../common/paginationBar';
 import MytestSortOptions from './mytestSortOption';
 import MytestMemoOption from './mytestMemoOption';

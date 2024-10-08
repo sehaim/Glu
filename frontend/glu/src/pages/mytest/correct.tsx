@@ -2,9 +2,22 @@ import { GetServerSideProps } from 'next';
 import { getSolvedTypeTestAPI } from '@/utils/user/mytest';
 import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import MytestTestCardList from '@/components/mytest/mytestTestCardList';
+import { getCookie } from 'cookies-next';
 import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
+  const accessToken = getCookie('accessToken', { req, res });
+
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
   const problemData01 = await getSolvedTypeTestAPI(
     'PT01',
     0,

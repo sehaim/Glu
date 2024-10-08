@@ -6,8 +6,9 @@ import { HiOutlineLogout } from 'react-icons/hi';
 import { logoutAPI } from '@/utils/user/auth';
 import throttle from 'lodash/throttle';
 import { useRouter } from 'next/router';
-import { logout } from '../../store/authSlice';
+import { sweetalertError } from '@/utils/common';
 import styles from './header.module.css';
+import { logout } from '../../store/authSlice';
 
 const getHeaderStyle = (color: string, isScrolled: boolean) => {
   const style: { [key: string]: string } = {};
@@ -54,13 +55,28 @@ export default function Header({ color }: { color: string }) {
   const headerStyle = getHeaderStyle(color, isScrolled);
 
   // 로그인 상태에 따른 헤더 변경 구현
-  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
-  const { nickname } = useSelector((state: RootState) => state.auth);
+  const { isLoggedIn, nickname, isFirst } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     logoutAPI();
     dispatch(logout());
+  };
+
+  // isFirst 상태에 따른 종합테스트 페이지 리다이렉트
+  const handleTestLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    if (isFirst) {
+      e.preventDefault(); // 기본 페이지 이동 막기
+      sweetalertError(
+        '레벨테스트 응시',
+        '레벨테스트 응시 후 종합테스트를 추천받을 수 있습니다.',
+      );
+    }
   };
 
   return (
@@ -79,6 +95,7 @@ export default function Header({ color }: { color: string }) {
                   <Link
                     href="/test"
                     className={`${styles['menu-name']} ${router.pathname === '/test' ? styles.active : ''}`}
+                    onClick={handleTestLinkClick}
                   >
                     종합
                     <br />
@@ -113,6 +130,7 @@ export default function Header({ color }: { color: string }) {
                   <Link
                     href="/test"
                     className={`${styles['menu-name']} ${router.pathname === '/test' ? styles.active : ''}`}
+                    onClick={handleTestLinkClick}
                   >
                     종합 테스트
                   </Link>
