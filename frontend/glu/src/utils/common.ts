@@ -101,21 +101,31 @@ export const createAuthAxios = (context?: {
   return instance;
 };
 
-export const sweetalertConfirm = (header: string, content: string) => {
-  Swal.fire({
+export const sweetalertConfirm = (
+  header: string,
+  content: string,
+  button?: string,
+) => {
+  return Swal.fire({
     title: header,
     text: content,
     icon: 'success',
-    confirmButtonText: '확인',
+    confirmButtonText: button || '확인',
+    allowOutsideClick: false,
   });
 };
 
-export const sweetalertError = (header: string, content: string) => {
-  Swal.fire({
+export const sweetalertError = (
+  header: string,
+  content: string,
+  button?: string,
+) => {
+  return Swal.fire({
     title: header,
     text: content,
     icon: 'error',
     confirmButtonColor: 'var(--RED)',
-    confirmButtonText: '확인',
+    confirmButtonText: button || '확인',
+    allowOutsideClick: false,
   });
 };

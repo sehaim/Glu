@@ -56,9 +56,11 @@ export default function MytestComprehensiveTestRecordList({
             className={`${styles['line-container']} ${styles['item-container']}`}
           >
             <div className={styles.element}>{test.totalCorrectCount}/15</div>
-            <div className={styles.element}>3/5</div>
-            <div className={styles.element}>4/5</div>
-            <div className={styles.element}>3/5</div>
+            {test.gradingResultByTypeList.map((type) => (
+              <div key={type.problemType.code} className={styles.element}>
+                {type.correctCount}/5
+              </div>
+            ))}
             <div className={styles.element}>
               {format(test.createdDate, 'yyyy-MM-dd')}
             </div>

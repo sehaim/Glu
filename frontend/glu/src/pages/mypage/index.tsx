@@ -7,9 +7,22 @@ import { getUserInfoAPI, parseDate, putUserInfoAPI } from '@/utils/user/mypage';
 import { Birth, MypageUser } from '@/types/UserTypes';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/authSlice';
+import { getCookie } from 'cookies-next';
 import styles from './mypage.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
+  const accessToken = getCookie('accessToken', { req, res });
+
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
   // 서버에서 회원정보 API 호출
   const userInfo = await getUserInfoAPI(context);
 

@@ -9,7 +9,7 @@ import {
   getProblemLikeAPI,
   postProblemLikeAPI,
   deleteProblemLikeAPI,
-} from '../../utils/problem/like';
+} from '../../../utils/problem/like';
 
 interface ProblemHeaderProps {
   problemId: string;

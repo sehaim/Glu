@@ -7,20 +7,20 @@ import {
   ProblemTypeDetail,
   QuestionType,
 } from '@/types/ProblemTypes';
-import ProblemHeader from '@/components/problem/problemHeader';
-import ProblemContentText from '@/components/problem/problemContentText';
-import ProblemOptionList from '@/components/problem/problemOptionList';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
-import ProblemMemoManager from '@/components/problem/problemMemoManager';
+import ProblemHeader from '@/components/test/problem/problemHeader';
+import ProblemContentText from '@/components/test/problem/problemContentText';
+import ProblemOptionList from '@/components/test/problem/problemOptionList';
+import ProblemMemoManager from '@/components/test/problem/memo/problemMemoManager';
 import {
   getSingleProblemAPI,
   postSingleProblemGradingAPI,
 } from '@/utils/problem/problem';
 import { useRouter } from 'next/router';
-import ProblemInputField from '@/components/problem/problemInputField';
+import ProblemInputField from '@/components/test/problem/problemInputField';
 import Image from 'next/image';
-import LevelUpModal from '@/components/problem/result/levelUpModal';
-import ProblemImageOptionList from '@/components/problem/problemImageOptionList';
+import LevelUpModal from '@/components/test/result/levelUpModal';
+import ProblemImageOptionList from '@/components/test/problem/problemImageOptionList';
 import styles from './problem.module.css';
 
 interface ProblemResponse {

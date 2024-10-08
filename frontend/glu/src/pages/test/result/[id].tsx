@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { SolvedProblem, SolvedProblemType } from '@/types/ProblemTypes';
-import RadarChart from '@/components/problem/result/radarChart';
+import RadarGraph from '@/components/common/graphs/radarGraph';
 import { formatTime } from '@/utils/problem/result';
 import { RootState } from '@/store';
-import LevelUpModal from '@/components/problem/result/levelUpModal';
 import { resetLevel } from '@/store/levelupSlice';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Loading from '@/components/common/loading';
 import { getTestResultAPI } from '@/utils/problem/test';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import LevelUpModal from '@/components/test/result/levelUpModal';
 import styles from './testResult.module.css';
 
 interface TestResultResponse {
@@ -60,6 +60,11 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
   const { levelImage, isLeveledUp } = useSelector(
     (state: RootState) => state.levelup,
   );
+
+  const data = problemTypeList.map((item) => ({
+    axis: item.problemType.name,
+    value: item.correctCount,
+  }));
 
   useEffect(() => {
     // 레벨업이 되었을 때 모달을 열기
@@ -175,7 +180,7 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
             <p className={styles['item-title']}>영역별 점수</p>
             <div className={styles.canvasWrapper}>
               {/* RadarChart 컴포넌트 */}
-              <RadarChart problemTypeList={problemTypeList} />
+              <RadarGraph data={data} maxScore={5} />
             </div>
           </div>
         </div>

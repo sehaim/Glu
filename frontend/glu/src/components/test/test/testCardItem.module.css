@@ -19,10 +19,15 @@
 
 .level {
   font-family: 'HDBOLD';
-  color: white;
+  color: var(--WHITE);
   font-size: 25px;
   top: 10%;
   left: 10%;
+  text-shadow:
+    -1px -1px 0 #ff6868,
+    1px -1px 0 #ff6868,
+    -1px 1px 0 #ff6868,
+    1px 1px 0 #ff6868;
 }
 
 .star {

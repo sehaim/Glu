@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
-import ProblemMemoIcon from '@/components/problem/problemMemoIcon';
 import { Memo } from '@/types/MemoTypes';
 import {
   getProblemMemoAPI,
@@ -8,8 +7,8 @@ import {
   putProblemMemoAPI,
   deleteProblemMemoAPI,
 } from '@/utils/problem/memo';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useQuery } from 'react-query';
+import ProblemMemoIcon from '@/components/test/problem/memo/problemMemoIcon';
 import styles from './problemMemoManager.module.css';
 
 interface MemoManagerProps {

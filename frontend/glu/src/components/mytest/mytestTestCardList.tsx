@@ -2,7 +2,7 @@ import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import { getSolvedTypeTestAPI } from '@/utils/user/mytest';
 import { useState, useEffect, useCallback } from 'react';
 import styles from './mytestTestCardList.module.css';
-import TestCardItem from '../test/testCardItem';
+import TestCardItem from '../test/test/testCardItem';
 import PaginationBar from '../common/paginationBar';
 import MytestSortOptions from './mytestSortOption';
 import MytestMemoOption from './mytestMemoOption';
@@ -18,6 +18,7 @@ export default function MytestTestCardList({
   problemType,
   pageType,
 }: MytestCardListProps) {
+  const [totalPages, setTotalPages] = useState(testData?.totalPages);
   const [problemList, setProblemList] = useState(testData?.content);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState('createdDate,desc');
@@ -50,6 +51,7 @@ export default function MytestTestCardList({
       );
       if (data) {
         setProblemList(data.content);
+        setTotalPages(data.totalPages);
       }
     },
     [problemType.code, currentPage, sortOption, hasMemo, pageType],
@@ -95,7 +97,7 @@ export default function MytestTestCardList({
         )}
       </div>
       <PaginationBar
-        totalPageCount={testData.totalPages}
+        totalPageCount={totalPages}
         currentPage={currentPage}
         handleClick={handlePageClick}
       />

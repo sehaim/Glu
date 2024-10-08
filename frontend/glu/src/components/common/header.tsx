@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
 import { logoutAPI } from '@/utils/user/auth';
 import throttle from 'lodash/throttle';
-import { logout } from '../../store/authSlice';
+import { useRouter } from 'next/router';
+import { sweetalertError } from '@/utils/common';
 import styles from './header.module.css';
+import { logout } from '../../store/authSlice';
 
 const getHeaderStyle = (color: string, isScrolled: boolean) => {
   const style: { [key: string]: string } = {};
@@ -27,6 +29,8 @@ const getHeaderStyle = (color: string, isScrolled: boolean) => {
 export default function Header({ color }: { color: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const prevScrollYRef = useRef(0); // 이전 스크롤 값을 useRef로 관리
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = throttle(() => {
@@ -51,13 +55,28 @@ export default function Header({ color }: { color: string }) {
   const headerStyle = getHeaderStyle(color, isScrolled);
 
   // 로그인 상태에 따른 헤더 변경 구현
-  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
-  const { nickname } = useSelector((state: RootState) => state.auth);
+  const { isLoggedIn, nickname, isFirst } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     logoutAPI();
     dispatch(logout());
+  };
+
+  // isFirst 상태에 따른 종합테스트 페이지 리다이렉트
+  const handleTestLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    if (isFirst) {
+      e.preventDefault(); // 기본 페이지 이동 막기
+      sweetalertError(
+        '레벨테스트 응시',
+        '레벨테스트 응시 후 종합테스트를 추천받을 수 있습니다.',
+      );
+    }
   };
 
   return (
@@ -73,14 +92,21 @@ export default function Header({ color }: { color: string }) {
             {isLoggedIn && (
               <>
                 <li>
-                  <Link href="/test" className={styles['menu-name']}>
+                  <Link
+                    href="/test"
+                    className={`${styles['menu-name']} ${router.pathname === '/test' ? styles.active : ''}`}
+                    onClick={handleTestLinkClick}
+                  >
                     종합
                     <br />
                     테스트
                   </Link>
                 </li>
                 <li>
-                  <Link href="/problem" className={styles['menu-name']}>
+                  <Link
+                    href="/problem"
+                    className={`${styles['menu-name']} ${router.pathname === '/problem' ? styles.active : ''}`}
+                  >
                     유형
                     <br />
                     테스트
@@ -101,12 +127,19 @@ export default function Header({ color }: { color: string }) {
             {isLoggedIn && (
               <>
                 <li>
-                  <Link href="/test" className={styles['menu-name']}>
+                  <Link
+                    href="/test"
+                    className={`${styles['menu-name']} ${router.pathname === '/test' ? styles.active : ''}`}
+                    onClick={handleTestLinkClick}
+                  >
                     종합 테스트
                   </Link>
                 </li>
                 <li>
-                  <Link href="/problem" className={styles['menu-name']}>
+                  <Link
+                    href="/problem"
+                    className={`${styles['menu-name']} ${router.pathname === '/problem' ? styles.active : ''}`}
+                  >
                     유형 테스트
                   </Link>
                 </li>
@@ -118,12 +151,18 @@ export default function Header({ color }: { color: string }) {
           {!isLoggedIn ? (
             <ul>
               <li>
-                <Link href="/login" className={styles['menu-name']}>
+                <Link
+                  href="/login"
+                  className={`${styles['menu-name']} ${router.pathname === '/login' ? styles.active : ''}`}
+                >
                   로그인
                 </Link>
               </li>
               <li>
-                <Link href="/signup" className={styles['menu-name']}>
+                <Link
+                  href="/signup"
+                  className={`${styles['menu-name']} ${router.pathname === '/signup' ? styles.active : ''}`}
+                >
                   회원가입
                 </Link>
               </li>
@@ -131,12 +170,18 @@ export default function Header({ color }: { color: string }) {
           ) : (
             <ul>
               <li>
-                <Link href="/mytest/growth" className={styles['menu-name']}>
+                <Link
+                  href="/mytest/growth"
+                  className={`${styles['menu-name']} ${router.pathname.startsWith('/mytest') ? styles.active : ''}`}
+                >
                   나의 학습
                 </Link>
               </li>
               <li>
-                <Link href="/mypage" className={styles['menu-name']}>
+                <Link
+                  href="/mypage"
+                  className={`${styles['menu-name']} ${router.pathname === '/mypage' ? styles.active : ''}`}
+                >
                   나의 정보
                 </Link>
               </li>
