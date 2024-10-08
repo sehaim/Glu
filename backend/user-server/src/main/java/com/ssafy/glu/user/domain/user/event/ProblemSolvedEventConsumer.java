@@ -31,12 +31,10 @@ public class ProblemSolvedEventConsumer {
 		log.info("[Kafka] 유저 점수 업데이트, event : {}", event);
 		List<UserProblemType> userProblemTypeList  = userProblemTypeRepository.findAllByUserId(event.userId());
 
-		Users findUser = userRepository.findById(event.userId()).orElseThrow(UserNotFoundException::new);
-
 		for (UserProblemType userProblemType : userProblemTypeList ) {
 			// Enum 비교는 == 사용
 			if (userProblemType.getProblemTypeCode() == event.problem().problemTypeCode()) {
-				userProblemType.updateScore(event.result().acquiredScore(), findUser);
+				userProblemType.updateScore(event.result().acquiredScore());
 				break;
 			}
 		}

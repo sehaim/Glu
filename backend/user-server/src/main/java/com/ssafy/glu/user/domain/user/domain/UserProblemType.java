@@ -45,7 +45,7 @@ public class UserProblemType extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private ProblemTypeCode problemTypeCode;
 
-	public void updateScore(Integer score, Users user) {
+	public void updateScore(Integer score) {
 
 		//처음이면
 		if (user.getIsFirst()) {

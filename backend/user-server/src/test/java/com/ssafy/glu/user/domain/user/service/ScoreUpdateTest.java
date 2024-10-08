@@ -17,9 +17,9 @@ class ScoreUpdateTest {
                 .isFirst(true)
                 .build();
         UserProblemType userProblemType5 = new UserProblemType(null, 1, 100, user5, ProblemTypeCode.PT01);
-        userProblemType5.updateScore(50, user5);
-        assertEquals(40, userProblemType5.getScore()); // 100(초기값) + 50 + 90*1
-        assertEquals(2, userProblemType5.getLevel());
+        userProblemType5.updateScore(50);
+        assertEquals(50, userProblemType5.getScore()); // 100(초기값) + 50 + 90*1
+        assertEquals(1, userProblemType5.getLevel());
 
         // 8세 테스트
         Users user8 = Users.builder()
@@ -27,9 +27,9 @@ class ScoreUpdateTest {
                 .isFirst(true)
                 .build();
         UserProblemType userProblemType8 = new UserProblemType(null, 1, 100, user8, ProblemTypeCode.PT01);
-        userProblemType8.updateScore(50, user8);
+        userProblemType8.updateScore(50);
         assertEquals(20, userProblemType8.getScore()); // 100(초기값) + 50 + 90*3
-        assertEquals(4, userProblemType8.getLevel());
+        assertEquals(3, userProblemType8.getLevel());
 
         // 12세 테스트
         Users user12 = Users.builder()
@@ -37,9 +37,9 @@ class ScoreUpdateTest {
                 .isFirst(true)
                 .build();
         UserProblemType userProblemType12 = new UserProblemType(null, 1, 100, user12, ProblemTypeCode.PT01);
-        userProblemType12.updateScore(50, user12);
+        userProblemType12.updateScore(50);
         assertEquals(80, userProblemType12.getScore()); // 100(초기값) + 50 + 90*7
-        assertEquals(7, userProblemType12.getLevel());
+        assertEquals(6, userProblemType12.getLevel());
 
         // 15세 테스트 (12세 초과)
         Users user15 = Users.builder()
@@ -47,9 +47,9 @@ class ScoreUpdateTest {
                 .isFirst(true)
                 .build();
         UserProblemType userProblemType15 = new UserProblemType(null, 1, 100, user15, ProblemTypeCode.PT01);
-        userProblemType15.updateScore(50, user15);
+        userProblemType15.updateScore(50);
         assertEquals(80, userProblemType15.getScore()); // 100(초기값) + 50 + 90*7
-        assertEquals(7, userProblemType15.getLevel());
+        assertEquals(6, userProblemType15.getLevel());
     }
 
     @Test
@@ -59,7 +59,7 @@ class ScoreUpdateTest {
                 .isFirst(false)
                 .build();
         UserProblemType userProblemType = new UserProblemType(null, 2, 200, user, ProblemTypeCode.PT01);
-        userProblemType.updateScore(50, user);
+        userProblemType.updateScore(50);
         assertEquals(50, userProblemType.getScore());
         assertEquals(2, userProblemType.getLevel());
     }
@@ -71,7 +71,7 @@ class ScoreUpdateTest {
                 .isFirst(false)
                 .build();
         UserProblemType userProblemType = new UserProblemType(null, 7, 700, user, ProblemTypeCode.PT01);
-        userProblemType.updateScore(150, user);
+        userProblemType.updateScore(150);
         assertEquals(100, userProblemType.getScore());
         assertEquals(7, userProblemType.getLevel());
     }
