@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { HiOutlineLogout } from 'react-icons/hi';
 import { logoutAPI } from '@/utils/user/auth';
 import throttle from 'lodash/throttle';
+import { useRouter } from 'next/router';
 import { logout } from '../../store/authSlice';
 import styles from './header.module.css';
-import { useRouter } from 'next/router';
 
 const getHeaderStyle = (color: string, isScrolled: boolean) => {
   const style: { [key: string]: string } = {};

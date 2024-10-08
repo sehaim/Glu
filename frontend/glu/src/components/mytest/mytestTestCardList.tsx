@@ -18,6 +18,7 @@ export default function MytestTestCardList({
   problemType,
   pageType,
 }: MytestCardListProps) {
+  const [totalPages, setTotalPages] = useState(testData?.totalPages);
   const [problemList, setProblemList] = useState(testData?.content);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState('createdDate,desc');
@@ -50,6 +51,7 @@ export default function MytestTestCardList({
       );
       if (data) {
         setProblemList(data.content);
+        setTotalPages(data.totalPages);
       }
     },
     [problemType.code, currentPage, sortOption, hasMemo, pageType],
@@ -95,7 +97,7 @@ export default function MytestTestCardList({
         )}
       </div>
       <PaginationBar
-        totalPageCount={testData.totalPages}
+        totalPageCount={totalPages}
         currentPage={currentPage}
         handleClick={handlePageClick}
       />
