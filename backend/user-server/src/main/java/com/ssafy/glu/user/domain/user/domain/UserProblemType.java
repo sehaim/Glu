@@ -51,7 +51,7 @@ public class UserProblemType extends BaseTimeEntity {
 		if (user.getIsFirst()) {
 			int age = calculateAge(user.getBirth());
 			int userLevel = calculateUserLevel(age);
-			this.score = 90 * userLevel;
+			this.score = Math.max(100, 90 * userLevel);
 		}
 
 		this.score = Math.max(100, score + this.score);
