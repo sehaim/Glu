@@ -61,9 +61,12 @@ export default function Header({ color }: { color: string }) {
 
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    logoutAPI();
-    dispatch(logout());
+  const handleLogout = async () => {
+    const alertResult = await logoutAPI();
+    if (alertResult?.isConfirmed) {
+      dispatch(logout());
+      window.location.href = '/';
+    }
   };
 
   // isFirst 상태에 따른 종합테스트 페이지 리다이렉트
@@ -106,6 +109,7 @@ export default function Header({ color }: { color: string }) {
                   <Link
                     href="/problem"
                     className={`${styles['menu-name']} ${router.pathname === '/problem' ? styles.active : ''}`}
+                    onClick={handleTestLinkClick}
                   >
                     유형
                     <br />
@@ -139,6 +143,7 @@ export default function Header({ color }: { color: string }) {
                   <Link
                     href="/problem"
                     className={`${styles['menu-name']} ${router.pathname === '/problem' ? styles.active : ''}`}
+                    onClick={handleTestLinkClick}
                   >
                     유형 테스트
                   </Link>

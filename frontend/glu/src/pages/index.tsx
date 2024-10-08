@@ -55,7 +55,7 @@ export default function MainPage() {
         </div>
         <Image
           className={styles['main-character']}
-          src="/images/glu_character_shadow.png"
+          src="/images/character/character/glu_character_shadow.png"
           alt="Glu Character"
           width={300}
           height={356}
