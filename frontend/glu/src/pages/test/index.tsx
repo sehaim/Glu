@@ -174,7 +174,7 @@ export default function Test({
             </div>
           </div>
           <Image
-            src="/images/character/glu_character_shadow_small.webp"
+            src="/images/character/glu_character_shadow.png"
             alt="Glu Character"
             width={300}
             height={356}
