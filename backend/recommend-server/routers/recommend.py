@@ -307,20 +307,20 @@ def make_type_problems(user_id, user_problemtype_level):
             # 20개
             else:
                 wrong_status = get_wrong_status(int(user_id))
-                #틀린 기록 없음
-                if wrong_status == {}:
+                top_classifications = top_n_classification(type_counts[i], wrong_status)
+
+                pt_detail_classifications = [item for item in top_classifications if item[1].startswith(detail_code)]
+                print(f"pt_detail {detail_code}", pt_detail_classifications)
+
+                #빈 배열일때
+                if not pt_detail_classifications :
                     fetched_problems = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
                         level=f"PL0{user_level + detail_levels[idx]}",
                         limit=type_counts[idx]
                     )
-                #틀린 기록 있음
-                else:
-                    top_classifications = top_n_classification(type_counts[i], wrong_status)
-
-                    pt_detail_classifications = [item for item in top_classifications if item[1].startswith(detail_code)]
-                    print(f"pt_detail {detail_code}", pt_detail_classifications)
-
+                #빈 배열 아닐때
+                else :
                     correct_ids = get_correct_ids(int(user_id))
                     wrong_ids = get_wrong_ids(int(user_id))
 
@@ -445,4 +445,14 @@ def top_n_classification(n, map):
 
     result_sorted = sorted(result, key=lambda x: x[2], reverse=True)
 
-    return result_sorted[:n]
+    # n개까지 결과를 채움
+    final_result = result_sorted[:n]
+
+    # 결과가 n개보다 적으면 처음부터 순서대로 더 채움
+    if len(final_result) < n:
+        index = 0
+        while len(final_result) < n:
+            final_result.append(result_sorted[index % len(result_sorted)])
+            index += 1
+
+    return final_result
