@@ -32,18 +32,12 @@ export const logoutAPI = async () => {
     const authAxios = createAuthAxios();
     await authAxios.post(`auth/logout`);
     deleteCookie('accessToken');
-    window.location.href = '/';
-    const alertResult = await sweetalertConfirm(
-      '로그아웃',
-      '로그아웃이 완료되었습니다.',
-    );
-    if (alertResult.isConfirmed) {
-      window.location.href = '/';
-    }
+    return await sweetalertConfirm('로그아웃', '로그아웃이 완료되었습니다.');
   } catch {
     sweetalertError(
       '로그아웃 오류',
       '로그아웃 도중 오류가 발생했습니다. 다시 시도해주세요.',
     );
+    return null;
   }
 };

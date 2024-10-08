@@ -129,7 +129,7 @@ export default function MytestAttendance({
                   )}
                   {hasAttendance(day) && (
                     <Image
-                      src="/images/glu_character_shadow.png"
+                      src="/images/mytest/stamp.png"
                       alt="attendance mark"
                       className={styles['attendance-icon']}
                       width={70}
