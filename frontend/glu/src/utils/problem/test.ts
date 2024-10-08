@@ -33,7 +33,7 @@ export const getRecommendedTestProblemsAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(`recommend/test/general`);
+    const res = await authAxios.get(`/recommend/test/general`);
 
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {

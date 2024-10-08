@@ -45,7 +45,7 @@ export const getSolvedTypeTestAPI = async (
     const params = new URLSearchParams();
     params.append('problemTypeCode', problemTypeCode);
     params.append('page', String(page));
-    params.append('size', '5');
+    params.append('size', '7');
 
     if (status) {
       params.append('status', status);
