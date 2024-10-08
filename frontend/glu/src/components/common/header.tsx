@@ -112,7 +112,7 @@ export default function Header({ color }: { color: string }) {
                 <li>
                   <Link
                     href="/test"
-                    className={`${styles['menu-name']} router.pathname === '/test' ? styles.active : ''`}
+                    className={`${styles['menu-name']} ${router.pathname === '/test' ? styles.active : ''}`}
                   >
                     종합 테스트
                   </Link>
@@ -143,7 +143,7 @@ export default function Header({ color }: { color: string }) {
               <li>
                 <Link
                   href="/signup"
-                  className={`${styles['menu-name']} router.pathname === '/signup' ? styles.active : ''`}
+                  className={`${styles['menu-name']} ${router.pathname === '/signup' ? styles.active : ''}`}
                 >
                   회원가입
                 </Link>
@@ -152,12 +152,18 @@ export default function Header({ color }: { color: string }) {
           ) : (
             <ul>
               <li>
-                <Link href="/mytest/growth" className={styles['menu-name']}>
+                <Link
+                  href="/mytest/growth"
+                  className={`${styles['menu-name']} ${router.pathname.startsWith('/mytest') ? styles.active : ''}`}
+                >
                   나의 학습
                 </Link>
               </li>
               <li>
-                <Link href="/mypage" className={styles['menu-name']}>
+                <Link
+                  href="/mypage"
+                  className={`${styles['menu-name']} ${router.pathname === '/mypage' ? styles.active : ''}`}
+                >
                   나의 정보
                 </Link>
               </li>

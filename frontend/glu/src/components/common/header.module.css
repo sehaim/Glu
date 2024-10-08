@@ -109,6 +109,11 @@
   color: var(--PINK);
 }
 
+.active {
+  color: var(--PINK);
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .info-menu {
     display: none;
