@@ -264,8 +264,10 @@ async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-Us
 
     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
-    while (len(selected_problems) != 30):
-        selected_problems = make_type_problems(user_id, user_problemtype_level)
+    print("selected_problems", selected_problems)
+    print("len_type_problems" , len(selected_problems))
+    # while (len(selected_problems) != 30):
+    #     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
     return selected_problems
 
