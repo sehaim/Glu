@@ -25,7 +25,6 @@ export const getSolvedComprehensiveTestAPI = async (
     );
     return res.data;
   } catch {
-    console.log('에러'); // 추후 콘솔 수정
     return null;
   }
 };
@@ -37,6 +36,7 @@ export const getSolvedTypeTestAPI = async (
   status?: string,
   hasMemo?: boolean,
   isFavorite?: boolean,
+  sort?: string,
   context?: GetServerSidePropsContext,
 ) => {
   try {
@@ -45,7 +45,7 @@ export const getSolvedTypeTestAPI = async (
     const params = new URLSearchParams();
     params.append('problemTypeCode', problemTypeCode);
     params.append('page', String(page));
-    params.append('size', '4');
+    params.append('size', '5');
 
     if (status) {
       params.append('status', status);
@@ -55,6 +55,9 @@ export const getSolvedTypeTestAPI = async (
     }
     if (isFavorite !== undefined) {
       params.append('isFavorite', String(isFavorite));
+    }
+    if (sort !== undefined) {
+      params.append('sort', String(sort));
     }
 
     const res = await authAxios.get(`problems/solve?${params.toString()}`);

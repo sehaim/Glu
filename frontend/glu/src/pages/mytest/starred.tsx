@@ -11,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     undefined,
     undefined,
     true,
+    undefined,
     context,
   );
 
@@ -20,6 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     undefined,
     undefined,
     true,
+    undefined,
     context,
   );
 
@@ -29,20 +31,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     undefined,
     undefined,
     true,
+    undefined,
     context,
   );
 
   const testDataList = [
     {
-      problemType: { code: 'PT001', name: '어휘 및 문법' },
+      problemType: { code: 'PT01', name: '어휘 및 문법' },
       problemData: problemData01,
     },
     {
-      problemType: { code: 'PT002', name: '독해' },
+      problemType: { code: 'PT02', name: '독해' },
       problemData: problemData02,
     },
     {
-      problemType: { code: 'PT003', name: '추론' },
+      problemType: { code: 'PT03', name: '추론' },
       problemData: problemData03,
     },
   ];
@@ -65,16 +68,14 @@ export default function MytestStarredPage({
 }: MytestStarredPageProps) {
   return (
     <div className={styles.container}>
-      <div className={styles.section}>
-        {testDataList.map((testData) => (
-          <MytestTestCardList
-            key={testData.problemType.code}
-            testData={testData?.problemData}
-            problemType={testData?.problemType}
-            pageType="starred"
-          />
-        ))}
-      </div>
+      {testDataList.map((testData) => (
+        <MytestTestCardList
+          key={testData.problemType.code}
+          testData={testData?.problemData}
+          problemType={testData?.problemType}
+          pageType="starred"
+        />
+      ))}
     </div>
   );
 }

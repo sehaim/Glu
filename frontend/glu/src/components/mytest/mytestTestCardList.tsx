@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './mytestTestCardList.module.css';
 import TestCardItem from '../test/testCardItem';
 import PaginationBar from '../common/paginationBar';
+import MytestSortOptions from './mytestSortOption';
 
 interface MytestCardListProps {
   testData: SolvedProblemResponse;
@@ -21,35 +22,39 @@ export default function MytestTestCardList({
 
   const handlePageClick = async (page: number) => {
     setCurrentPage(page);
+    const newPage = page - 1;
 
     if (page !== 1) {
       if (pageType === 'starred') {
         const data = await getSolvedTypeTestAPI(
           problemType.code,
-          currentPage - 1,
+          newPage,
           undefined,
           undefined,
           true,
+          undefined,
           undefined,
         );
         setProblemList(data?.content);
       } else if (pageType === 'correct') {
         const data = await getSolvedTypeTestAPI(
           problemType.code,
-          currentPage - 1,
+          newPage,
           'CORRECT',
           undefined,
-          true,
+          undefined,
+          undefined,
           undefined,
         );
         setProblemList(data?.content);
       } else if (pageType === 'incorrect') {
         const data = await getSolvedTypeTestAPI(
           problemType.code,
-          currentPage - 1,
+          newPage,
           'WRONG',
           undefined,
-          true,
+          undefined,
+          undefined,
           undefined,
         );
         setProblemList(data?.content);
@@ -57,9 +62,57 @@ export default function MytestTestCardList({
     }
   };
 
+  const [sortOption, setSortOption] = useState('createdDate,desc');
+
+  const handleSortChange = async (value: string) => {
+    setSortOption(value);
+
+    const newPage = currentPage - 1;
+
+    if (pageType === 'starred') {
+      const data = await getSolvedTypeTestAPI(
+        problemType.code,
+        newPage,
+        undefined,
+        undefined,
+        true,
+        sortOption,
+        undefined,
+      );
+      setProblemList(data?.content);
+    } else if (pageType === 'correct') {
+      const data = await getSolvedTypeTestAPI(
+        problemType.code,
+        newPage,
+        'CORRECT',
+        undefined,
+        undefined,
+        sortOption,
+        undefined,
+      );
+      setProblemList(data?.content);
+    } else if (pageType === 'incorrect') {
+      const data = await getSolvedTypeTestAPI(
+        problemType.code,
+        newPage,
+        'WRONG',
+        undefined,
+        undefined,
+        sortOption,
+        undefined,
+      );
+      setProblemList(data?.content);
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles['type-name']}>{problemType.name}</div>
+      <div className={styles['title-line']}>
+        <div className={styles['type-name']}>{problemType.name}</div>
+        <div className={styles['option-line']}>
+          <MytestSortOptions onChange={handleSortChange} />
+        </div>
+      </div>
       <div className={styles['card-list-container']}>
         {problemList.map((problem) => (
           <TestCardItem key={problem.problemId} problem={problem} />

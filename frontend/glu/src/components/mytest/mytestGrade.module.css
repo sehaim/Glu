@@ -2,6 +2,7 @@
   width: 400px;
   height: 100%;
   background-color: var(--WHITE);
+  opacity: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
