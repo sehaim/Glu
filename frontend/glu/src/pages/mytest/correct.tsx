@@ -11,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     'CORRECT',
     undefined,
     undefined,
+    undefined,
     context,
   );
 
@@ -18,6 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     'PT02',
     0,
     'CORRECT',
+    undefined,
     undefined,
     undefined,
     context,
@@ -29,20 +31,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     'CORRECT',
     undefined,
     undefined,
+    undefined,
     context,
   );
 
   const testDataList = [
     {
-      problemType: { code: 'PT001', name: '어휘 및 문법' },
+      problemType: { code: 'PT01', name: '어휘 및 문법' },
       problemData: problemData01,
     },
     {
-      problemType: { code: 'PT002', name: '독해' },
+      problemType: { code: 'PT02', name: '독해' },
       problemData: problemData02,
     },
     {
-      problemType: { code: 'PT003', name: '추론' },
+      problemType: { code: 'PT03', name: '추론' },
       problemData: problemData03,
     },
   ];

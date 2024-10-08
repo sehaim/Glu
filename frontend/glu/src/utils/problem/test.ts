@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
-import { createAuthAxios } from '../common';
+import { setCookie } from 'cookies-next';
+import { createAuthAxios, refreshUserAPI } from '../common';
 
 interface ProblemSolveRequest {
   problemId: string;
@@ -13,7 +14,7 @@ export const getRecommendedLevelTestProblemsAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(`/recommend/test/level`);
+    const res = await authAxios.get(`recommend/test/level`);
 
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {
@@ -32,7 +33,7 @@ export const getRecommendedTestProblemsAPI = async (
 ) => {
   try {
     const authAxios = createAuthAxios(context);
-    const res = await authAxios.get(`/recommend/test/general`);
+    const res = await authAxios.get(`recommend/test/general`);
 
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {
@@ -55,6 +56,12 @@ export const postTestProblemGradingAPI = async (
     const res = await authAxios.post(`tests/grading`, {
       totalSolvedTime,
       problemSolveRequestList,
+    });
+
+    const newToken = await refreshUserAPI();
+    setCookie('accessToken', newToken, {
+      maxAge: 60 * 60 * 24 * 14,
+      path: '/',
     });
 
     // 커스텀 응답에서 httpStatus 확인
