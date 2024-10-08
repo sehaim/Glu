@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--DARKPINK);
+}
+
+.label {
+  font-family: 'PT';
+  color: var(--TEXT_SECONDARY);
+  margin-left: 15px;
+}
