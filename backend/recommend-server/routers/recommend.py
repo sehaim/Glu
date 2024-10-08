@@ -248,10 +248,37 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 )
 async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     user_problemtype_level = {}
-
+    user_info = {
+        "problemTypeList": [
+            {
+                "level": 1,
+                "score": 100,
+                "type": {
+                    "code": "PT01",
+                    "name": ""
+                }
+            },
+            {
+                "level": 1,
+                "score": 100,
+                "type": {
+                    "code": "PT02",
+                    "name": ""
+                }
+            },
+            {
+                "level": 1,
+                "score": 100,
+                "type": {
+                    "code": "PT03",
+                    "name": ""
+                }
+            }
+        ]
+    }
     try:
         # 사용자 정보 API 호출
-        user_info = await get_user_info(user_id)
+        # user_info = await get_user_info(user_id)
 
         for problemType in user_info['problemTypeList']:
             user_problemtype_level[problemType['type']['code']] = problemType['level']
@@ -298,13 +325,19 @@ def make_type_problems(user_id, user_problemtype_level):
 
         idx = 0
         for detail_code in detail_codes:
+            if idx >= len(detail_levels) or idx >= len(type_counts):
+                break
+
+            current_level = user_level + detail_levels[idx]
+            current_count = type_counts[idx]
+
             # 10개
             if pt_type == "PT01":
                 # 문제 가져오기
                 fetched_problems = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
-                    level=f"PL0{user_level + detail_levels[idx]}",
-                    limit=type_counts[idx]
+                    level=f"PL0{current_level}",
+                    limit=current_count
                 )
             # 20개
             else:
@@ -318,8 +351,8 @@ def make_type_problems(user_id, user_problemtype_level):
                 if not pt_detail_classifications :
                     fetched_problems = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
-                        level=f"PL0{user_level + detail_levels[idx]}",
-                        limit=type_counts[idx]
+                        level=f"PL0{current_level}",
+                        limit=current_count
                     )
                 #빈 배열 아닐때
                 else :
@@ -446,15 +479,21 @@ def top_n_classification(n, map):
             result.append((ckey, dkey, count, avg_vector))
 
     result_sorted = sorted(result, key=lambda x: x[2], reverse=True)
+    final_result = []
 
-    # n개까지 결과를 채움
-    final_result = result_sorted[:n]
-
-    # 결과가 n개보다 적으면 처음부터 순서대로 더 채움
-    if len(final_result) < n:
-        index = 0
-        while len(final_result) < n:
-            final_result.append(result_sorted[index % len(result_sorted)])
-            index += 1
+    if not result_sorted:
+        try:
+            random_problems = get_random_problems_by_code_and_level()
+            final_result.extend(random_problems)
+        except Exception as e:
+            return final_result  # 빈 리스트 반환
+    else:
+        if len(result_sorted) >= n:
+            final_result = result_sorted[:n]
+        else:
+            index = 0
+            while len(final_result) < n:
+                final_result.append(result_sorted[index % len(result_sorted)])
+                index += 1
 
     return final_result
