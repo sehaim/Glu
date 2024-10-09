@@ -95,7 +95,7 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
 
   return (
     <div className={styles.container}>
-      <h5 className={styles['container-title']}>나의 메모</h5>
+      <p className={styles['container-title']}>나의 메모</p>
       {isEditingMemo ? (
         <>
           <textarea
