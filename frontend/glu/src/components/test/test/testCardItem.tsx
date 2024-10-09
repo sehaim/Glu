@@ -31,7 +31,7 @@ export default function TestCardItem({ problem }: TestCardItemProps) {
     <div
       className={styles['card-container']}
       style={{
-        backgroundColor: `rgb(255, ${160 + (4 - problemLevel) * 15}, ${160 + (4 - problemLevel) * 15})`,
+        backgroundColor: `rgb(255, ${180 + (4 - problemLevel) * 15}, ${180 + (4 - problemLevel) * 15})`,
       }}
     >
       <div className={`${styles.element} ${styles.level}`}>

@@ -123,7 +123,7 @@
   width: 100%;
   padding: 24px;
   background-color: var(--LIGHTGRAY);
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 .solution-problem {
@@ -136,15 +136,15 @@
 
 .solution-type {
   font-family: 'PT';
-  color: var(--TEXT_SECONDARY);
-  margin-bottom: 8px;
-  font-size: 16px;
+  color: var(--PINK);
+  margin-bottom: 20px;
+  font-size: 18px;
 }
 
 .solution-title {
   color: var(--BLACK);
-  font-family: 'BMJUA';
-  font-size: 18px;
+  font-family: 'PTBOLD';
+  font-size: 20px;
 }
 
 .problem-content {
@@ -153,7 +153,7 @@
   padding: 16px 24px;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
   width: calc(50% - 12px);
   min-height: 100px;
@@ -170,7 +170,7 @@
 .problem-option-item {
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .user-answer {
@@ -180,6 +180,7 @@
 .problem-solution {
   background-color: var(--WHITE);
   border: 2px dashed var(--SKYBLUE);
+  border-radius: 10px;
   padding: 16px 24px;
   width: 100%;
   color: var(--TEXT_SECONDARY);
@@ -189,13 +190,19 @@
 .correct-message {
   color: var(--GREEN);
   margin-bottom: 12px;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .incorrect-message {
   color: var(--RED);
   margin-bottom: 12px;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.solution-content {
+  font-size: 18px;
 }
 
 .levelUp {

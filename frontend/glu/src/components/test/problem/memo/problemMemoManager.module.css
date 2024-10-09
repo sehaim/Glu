@@ -43,6 +43,7 @@
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   line-height: 1.5; /* 줄 간격 */
+  font-size: 16px;
   resize: none; /* 크기 조절 막기 */
   outline: none; /* 클릭 시 외곽선 제거 */
   margin-bottom: 16px;

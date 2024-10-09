@@ -26,18 +26,23 @@
 
 .status-like-wrapper {
   background-color: var(--WHITE);
+  opacity: 80%;
   padding: 4px 16px;
   border-radius: 10px;
 }
 
 .status-like-icon {
-  color: var(--TEXT_SECONDARY);
+  color: var(--ORANGE);
   font-size: 16px;
   cursor: pointer;
 }
 
 .status-like {
   color: var(--ORANGE);
+}
+
+.status-like-icon:hover {
+  transform: scale(1.1);
 }
 
 .info-container {
@@ -56,9 +61,13 @@
   padding: 4px;
   padding-top: 8px;
   color: var(--WHITE);
-  text-shadow: 1px 1px 2px var(--BLUE);
+  text-shadow:
+    -1px -1px 0 #608dcc,
+    1px -1px 0 #608dcc,
+    -1px 1px 0 #608dcc,
+    1px 1px 0 #608dcc;
   font-family: 'BMJUA';
-  font-size: 20px;
+  font-size: 22px;
   text-align: center;
   z-index: 2;
 }
@@ -72,7 +81,7 @@
   z-index: 2; /* 텍스트가 이미지 위에 위치하도록 설정 */
   background: radial-gradient(
     circle,
-    rgb(188, 230, 236) 90%,
+    rgb(188, 230, 236) 50%,
     rgba(255, 255, 255, 0) 90%
   );
   padding: 8px 4px;
@@ -92,8 +101,8 @@
   margin-top: 24px;
   padding: 24px 80px;
   padding-left: 96px;
-  font-family: 'BMJUA';
-  font-size: 18px;
+  font-family: 'PTBOLD';
+  font-size: 20px;
   z-index: 1; /* problem-type보다 낮게 설정 */
 }
 
@@ -102,12 +111,6 @@
     width: 720px;
   }
 }
-
-/* @media (max-width: 1024px) {
-  .container {
-    width: 720px;
-  }
-} */
 
 @media (max-width: 768px) {
   .container {

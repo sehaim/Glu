@@ -265,7 +265,10 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                         : [problem.metadata.options]
                       ) // 문자열일 경우 배열로 변환
                         .map((problemOption: string, optionIndex: number) => (
-                          <p key={problemOption}>
+                          <p
+                            key={problemOption}
+                            className={styles['problem-option-item']}
+                          >
                             {optionIndex + 1}. {problemOption}{' '}
                           </p>
                         ))}
@@ -282,7 +285,9 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                     {problem.userAnswer}
                   </p>
                 )}
-                {problem.solution}
+                <div className={styles['solution-content']}>
+                  {problem.solution}
+                </div>
               </div>
             </div>
           ))}
