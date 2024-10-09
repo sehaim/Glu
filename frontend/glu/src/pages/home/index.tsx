@@ -116,6 +116,14 @@ export default function Home(): JSX.Element {
     };
   }, []);
 
+  useEffect(() => {
+    if (router.asPath.includes('#section3')) {
+      const section = document.getElementById('section3');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [router.asPath]);
   return (
     <div className={styles.container}>
       <section
@@ -198,6 +206,7 @@ export default function Home(): JSX.Element {
       <section
         ref={section3Ref}
         className={`${styles.section} ${styles.section3}`}
+        id="section3"
       >
         <div
           id={styles['section3-content-wrapper']}

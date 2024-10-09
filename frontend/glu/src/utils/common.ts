@@ -129,3 +129,16 @@ export const sweetalertError = (
     allowOutsideClick: false,
   });
 };
+
+export const sweetalertLevelTest = () => {
+  return Swal.fire({
+    title: '레벨 테스트',
+    html: '레벨 테스트 응시 후, <br> 종합 테스트를 추천받을 수 있습니다.',
+    imageUrl: '/images/problem/pencil.png',
+    imageWidth: 35,
+    imageHeight: 35,
+    imageAlt: 'Pencil icon',
+    confirmButtonColor: 'var(--ORANGE)',
+    confirmButtonText: '레벨테스트 보러 가기',
+  });
+};
