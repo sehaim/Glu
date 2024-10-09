@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
 			throw new LoginInValidException();
 		}
 
-		tokenSave(httpResponse, findUser.get().getId(), findUser.get().getNickname(), findUser.get().getIsFirst());
+		tokenSave(httpResponse, findUser.get().getId(), findUser.get().getNickname(), findUser.get().getIsFirst() == 0);
 	}
 
 
@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
 		Users findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-		tokenSave(httpResponse, userId, findUser.getNickname(), findUser.getIsFirst());
+		tokenSave(httpResponse, userId, findUser.getNickname(), findUser.getIsFirst() == 0);
 	}
 
 	private void tokenSave(HttpServletResponse httpResponse, Long userId, String nickname, boolean isFirst) {
