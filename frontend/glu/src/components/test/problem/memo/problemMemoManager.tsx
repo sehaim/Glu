@@ -31,12 +31,6 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
     {
       cacheTime: 30 * 60 * 1000, // 30분 동안 캐시 유지
       staleTime: 5 * 60 * 1000, // 5분 동안 신선한 데이터로 간주
-      onSuccess: (data) => {
-        console.log('memo 가져오기 성공:', data);
-      },
-      onError: (error) => {
-        console.error('memo 가져오는 중 오류 발생:', error);
-      },
     },
   );
 
