@@ -82,7 +82,7 @@ export default function ProblemHeader({
       <div className={styles['info-container']}>
         <div className={styles['problem-type']}>
           <Image
-            src="/images/problem/cloud.png"
+            src="/images/problem/cloud.webp"
             alt="Problem Type"
             width={175}
             height={115}
