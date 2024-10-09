@@ -150,15 +150,14 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
     return [problem for problem, _ in sorted_problems[:3]]
 
 
-def get_random_problems_by_log(detail_code: str, level: int, classification: int, correct_ids: list[str],
+def get_random_problems_by_log(detail_code: str, level: str, correct_ids: list[str],
                                wrong_ids: list[str], vector, num):
-    print("log call", detail_code, level, classification, correct_ids, wrong_ids, vector, num)
+    print("log call", detail_code, level, correct_ids, wrong_ids, vector, num)
 
     # MongoDB에서 문제를 조회
     problem_data = list(problem_collection.find({
         "problemTypeDetailCode": detail_code,
-        "problemLevelCode": f"PL0{level}",
-        "classification": classification
+        "problemLevelCode": level,
     }))
 
     problems_with_scores = []

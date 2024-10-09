@@ -210,8 +210,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 
                             fetched_problems = get_random_problems_by_log(
                                 detail_code=classification[1],
-                                level=level,
-                                classification=classification[0],
+                                level=f"PL0{level}",
                                 correct_ids=correct_ids,
                                 wrong_ids=wrong_ids,
                                 vector=classification[3],
@@ -249,29 +248,38 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     user_problemtype_level = {}
     user_info = {
+        "id": "glu",
+        "nickname": "glu",
+        "stage": 1,
+        "exp": 14,
+        "imageUrl": "https://eglubucket.s3.ap-northeast-2.amazonaws.com/characters/glu_character.png",
+        "dayCount": 1,
+        "birth": "2009-01-01",
+        "createDate": "2024-10-09",
+        "attendanceRate": 100,
         "problemTypeList": [
             {
-                "level": 1,
-                "score": 100,
+                "level": 6,
+                "score": 62,
                 "type": {
                     "code": "PT01",
-                    "name": ""
+                    "name": "어휘 및 문법"
                 }
             },
             {
-                "level": 1,
-                "score": 100,
+                "level": 6,
+                "score": 30,
                 "type": {
                     "code": "PT02",
-                    "name": ""
+                    "name": "독해"
                 }
             },
             {
-                "level": 1,
-                "score": 100,
+                "level": 6,
+                "score": 30,
                 "type": {
                     "code": "PT03",
-                    "name": ""
+                    "name": "추론"
                 }
             }
         ]
@@ -291,7 +299,9 @@ async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-Us
 
     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
-    print("selected_problems", selected_problems)
+    print("selected =====================================")
+    for selected_problem in selected_problems:
+        print(selected_problem)
     print("len_type_problems" , len(selected_problems))
     # while (len(selected_problems) != 30):
     #     selected_problems = make_type_problems(user_id, user_problemtype_level)
@@ -331,6 +341,8 @@ def make_type_problems(user_id, user_problemtype_level):
             current_level = user_level + detail_levels[idx]
             current_count = type_counts[idx]
 
+            print(f"current_level PL0{current_level}")
+
             # 10개
             if pt_type == "PT01":
                 # 문제 가져오기
@@ -361,13 +373,14 @@ def make_type_problems(user_id, user_problemtype_level):
 
                     fetched_problems = get_random_problems_by_log(
                         detail_code=detail_code,
-                        level=user_level + detail_levels[idx],
-                        classification=pt_detail_classifications[0][0],
+                        level=f"PL0{current_level}",
                         correct_ids=correct_ids,
                         wrong_ids=wrong_ids,
                         vector=pt_detail_classifications[0][3],
                         num=type_counts[idx]
                     )
+
+                print(f"pt_detail {detail_code}  fetched_problems {fetched_problems}")
 
             for fetched_problem in fetched_problems:
                 response = ProblemResponse.from_problem(fetched_problem)
