@@ -1,12 +1,12 @@
 import { FaCheck } from 'react-icons/fa';
 import { LuDot } from 'react-icons/lu';
-import styles from './problemNavigationManager.module.css'; // 새로운 CSS 파일로 스타일을 분리
+import styles from './problemNavigationManager.module.css';
 
 interface ProblemAnswer {
   problemId: string;
-  userAnswer: string; // 사용자의 선택
-  problemAnswer: string; // 문제의 정답
-  solvedTime?: number; // 풀이 시간 (선택적)
+  userAnswer: string;
+  problemAnswer: string;
+  solvedTime?: number;
 }
 
 interface ProblemSolvedNavigationProps {
@@ -26,33 +26,32 @@ export default function ProblemSolvedNavigation({
 
   return (
     <div className={styles.container}>
-      <h5 className={styles['container-title']}>해결한 문제</h5>
+      <p className={styles['container-title']}>해결한 문제</p>
       <ul className={styles['solved-button-list']}>
         {answers.map((answer, index) => (
-          <button
-            key={answer.problemId}
-            type="button"
-            className={`${styles['solved-button']} ${
-              answer.userAnswer !== '' ? styles.answered : styles.unanswered
-            } ${
-              index === currentProblemIndex && styles['solved-button-active']
-            }`}
-            onClick={() => handleProblemIndexChange(index)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                handleProblemIndexChange(index);
-              }
-            }}
-          >
-            <p className={styles['solved-button-number']}>{index + 1}번</p>
-            <p className={styles['solved-button-status']}>
-              {answer.userAnswer !== '' ? (
-                <FaCheck className={styles.solve} />
-              ) : (
-                <LuDot className={styles['solve-not']} />
-              )}
-            </p>
-          </button>
+          <li key={answer.problemId} className={styles['solved-list-item']}>
+            <button
+              type="button"
+              className={`${styles['solved-button']} ${
+                answer.userAnswer !== '' ? styles.answered : styles.unanswered
+              } ${index === currentProblemIndex && styles['solved-button-active']}`}
+              onClick={() => handleProblemIndexChange(index)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleProblemIndexChange(index);
+                }
+              }}
+            >
+              <p className={styles['solved-button-number']}>{index + 1}번</p>
+              <p className={styles['solved-button-status']}>
+                {answer.userAnswer !== '' ? (
+                  <FaCheck className={styles.solve} />
+                ) : (
+                  <LuDot className={styles['solve-not']} />
+                )}
+              </p>
+            </button>
+          </li>
         ))}
       </ul>
     </div>
