@@ -69,6 +69,7 @@ export default function ProblemOptionList({
             width={100} // 적절한 width 설정
             height={100} // 적절한 height 설정
             className={styles['problem-option-image']}
+            unoptimized
           />
         </div>
       ))}
