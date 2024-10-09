@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Problem } from '@/types/ProblemTypes';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
-import Link from 'next/link';
 import { getRecommendedTypeProblemsAPI } from '@/utils/problem/problem';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import TestCardItem from '@/components/test/test/testCardItem';
 import styles from './problemList.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -69,24 +69,12 @@ export default function ProblemList({ initialProblems }: ProblemListProps) {
 
       <div className={styles['content-wrapper']}>
         <div className={styles['test-category']}>
-          <h3 className={styles['page-subTitle']}>단어와 문장규칙</h3>
+          <h3 className={styles['page-subTitle']}>추천 문제</h3>
           <div className={styles['test-cards']}>
             {problems
               .slice(problemIndex * LIMIT, (problemIndex + 1) * LIMIT)
-              .map((test) => (
-                <Link href={`/problem/${test.problemId}`} key={test.problemId}>
-                  <div className={styles['test-card']}>
-                    <span>
-                      {test.title.length > 8
-                        ? `${test.title.slice(0, 8)}..`
-                        : test.title}
-                    </span>
-
-                    <span className={styles['level-span']}>
-                      {test.problemLevel.name}
-                    </span>
-                  </div>
-                </Link>
+              .map((problem) => (
+                <TestCardItem key={problem.problemId} problem={problem} />
               ))}
           </div>
           <div className={styles.pagination}>

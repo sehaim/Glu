@@ -1,12 +1,12 @@
 import { FaStar } from 'react-icons/fa6';
-import { SolvedProblem } from '@/types/ProblemTypes';
+import { Problem, SolvedProblem } from '@/types/ProblemTypes';
 import { postProblemLikeAPI, deleteProblemLikeAPI } from '@/utils/problem/like';
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from './testCardItem.module.css';
 
 interface TestCardItemProps {
-  problem: SolvedProblem;
+  problem: SolvedProblem | Problem;
 }
 
 export default function TestCardItem({ problem }: TestCardItemProps) {
@@ -21,6 +21,10 @@ export default function TestCardItem({ problem }: TestCardItemProps) {
       postProblemLikeAPI(problem.problemId);
     }
     setIsFavorite(!isFavorite);
+  };
+
+  const isSolvedProblem = (p: SolvedProblem | Problem): p is SolvedProblem => {
+    return 'solveDate' in p;
   };
 
   return (
@@ -45,7 +49,7 @@ export default function TestCardItem({ problem }: TestCardItemProps) {
         {problem.problemTypeDetail.name}
       </Link>
       <div className={`${styles.element} ${styles.date}`}>
-        {problem.solveDate.slice(0, 10)}
+        {isSolvedProblem(problem) ? problem.solveDate.slice(0, 10) : ''}
       </div>
     </div>
   );

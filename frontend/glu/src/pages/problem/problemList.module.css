@@ -19,6 +19,19 @@
   max-width: 1200px;
 }
 
+.content-wrapper-column {
+  display: flex;
+  flex-direction: column;
+  flex-direction: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-family: 'PT';
+  line-height: 24px;
+  color: var(--TEXT_SECONDARY);
+  max-width: 1200px;
+}
+
 .page-title,
 .page-subTitle {
   font-family: 'HDBOLD';
