@@ -29,6 +29,10 @@
   overflow: hidden;
 }
 
+.solved-button-list li {
+  list-style: none;
+}
+
 .solved-button {
   display: flex;
   justify-content: space-between;
