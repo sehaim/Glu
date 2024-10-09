@@ -47,12 +47,17 @@ public class UserProblemType extends BaseTimeEntity {
 
 	public void updateScore(Integer score) {
 
+		int num = problemTypeCode.getCode().charAt(problemTypeCode.getCode().length() - 1) - '0';
+
 		//처음이면
-		if (user.getIsFirst()) {
+		if ((user.getIsFirst() & (1 << num)) == 0) {
 			int age = calculateAge(user.getBirth());
 			int userLevel = calculateUserLevel(age);
 			this.score = Math.max(100, 90 * userLevel);
 		}
+
+		Integer isFirst = user.getIsFirst();
+		user.updateIsFirst(isFirst | (1 << num));
 
 		this.score = Math.max(100, score + this.score);
 		this.level = Math.min(Math.max((this.score / 100), 1), 7);

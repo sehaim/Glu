@@ -14,7 +14,6 @@ class ScoreUpdateTest {
         // 5세 테스트
         Users user5 = Users.builder()
                 .birth(LocalDate.now().minusYears(5))
-                .isFirst(true)
                 .build();
         UserProblemType userProblemType5 = new UserProblemType(null, 1, 100, user5, ProblemTypeCode.PT01);
         userProblemType5.updateScore(50);
@@ -24,7 +23,6 @@ class ScoreUpdateTest {
         // 8세 테스트
         Users user8 = Users.builder()
                 .birth(LocalDate.now().minusYears(8))
-                .isFirst(true)
                 .build();
         UserProblemType userProblemType8 = new UserProblemType(null, 1, 100, user8, ProblemTypeCode.PT01);
         userProblemType8.updateScore(50);
@@ -34,7 +32,6 @@ class ScoreUpdateTest {
         // 12세 테스트
         Users user12 = Users.builder()
                 .birth(LocalDate.now().minusYears(12))
-                .isFirst(true)
                 .build();
         UserProblemType userProblemType12 = new UserProblemType(null, 1, 100, user12, ProblemTypeCode.PT01);
         userProblemType12.updateScore(50);
@@ -44,7 +41,6 @@ class ScoreUpdateTest {
         // 15세 테스트 (12세 초과)
         Users user15 = Users.builder()
                 .birth(LocalDate.now().minusYears(15))
-                .isFirst(true)
                 .build();
         UserProblemType userProblemType15 = new UserProblemType(null, 1, 100, user15, ProblemTypeCode.PT01);
         userProblemType15.updateScore(50);
@@ -56,10 +52,11 @@ class ScoreUpdateTest {
     void testUpdateScore_NotFirstTime() {
         Users user = Users.builder()
                 .birth(LocalDate.now().minusYears(25))
-                .isFirst(false)
+                .isFirst(2)
                 .build();
         UserProblemType userProblemType = new UserProblemType(null, 2, 200, user, ProblemTypeCode.PT01);
         userProblemType.updateScore(50);
+
         assertEquals(50, userProblemType.getScore());
         assertEquals(2, userProblemType.getLevel());
     }
@@ -68,7 +65,7 @@ class ScoreUpdateTest {
     void testUpdateScore_MaxScore() {
         Users user = Users.builder()
                 .birth(LocalDate.now().minusYears(25))
-                .isFirst(false)
+                .isFirst(14)
                 .build();
         UserProblemType userProblemType = new UserProblemType(null, 7, 700, user, ProblemTypeCode.PT01);
         userProblemType.updateScore(150);
