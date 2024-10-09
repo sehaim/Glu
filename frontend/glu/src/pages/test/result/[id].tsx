@@ -8,10 +8,11 @@ import { RootState } from '@/store';
 import { resetLevel } from '@/store/levelupSlice';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import Loading from '@/components/common/loading';
-import { getTestResultAPI } from '@/utils/problem/test';
+import { getTestResultAPI, getTestResultCSRAPI } from '@/utils/problem/test';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import LevelUpModal from '@/components/test/result/levelUpModal';
+import { useRouter } from 'next/router';
 import styles from './testResult.module.css';
 
 interface TestResultResponse {
@@ -53,13 +54,46 @@ interface TestResultProps {
 }
 
 export default function TestResult({ testResultResponse }: TestResultProps) {
+  const router = useRouter();
+  const { id } = router.query;
   const dispatch = useDispatch();
-  const { totalCorrectCount, totalSolvedTime, problemTypeList, problemList } =
-    testResultResponse;
+  const [totalCorrectCount, setTotalCorrectCount] = useState(
+    testResultResponse.totalCorrectCount,
+  );
+  const [totalSolvedTime, setTotalSolvedTime] = useState(
+    testResultResponse.totalSolvedTime,
+  );
+  const [problemTypeList, setProblemTypeList] = useState(
+    testResultResponse.problemTypeList,
+  );
+  const [problemList, setProblemList] = useState(
+    testResultResponse.problemList,
+  );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { levelImage, isLeveledUp } = useSelector(
     (state: RootState) => state.levelup,
   );
+
+  useEffect(() => {
+    if (problemList.length !== 15) {
+      const fetchAgain = async () => {
+        if (typeof id === 'string') {
+          try {
+            const res = await getTestResultCSRAPI(id);
+
+            setTotalCorrectCount(res.data.totalCorrectCount);
+            setTotalSolvedTime(res.data.totalSolvedTime);
+            setProblemList(res.data.gradingResultByProblemList);
+            setProblemTypeList(res.data.gradingResultByTypeList);
+          } catch (error) {
+            console.error('데이터를 다시 가져오는 중 오류 발생:', error);
+          }
+        }
+      };
+
+      fetchAgain(); // 함수 호출
+    }
+  }, [problemList]);
 
   const data = problemTypeList.map((item) => ({
     axis: item.problemType.name,
@@ -195,9 +229,12 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
               key={problem.problemId + String(index)}
               className={styles['solution-item']}
             >
-              <p className={styles['solution-title']}>
+              <div className={styles['solution-title']}>
+                <p className={styles['solution-type']}>
+                  {problem.problemType.name}
+                </p>
                 {index + 1}. {problem.title}
-              </p>
+              </div>
               <div className={styles['solution-problem']}>
                 <div className={styles['problem-content']}>
                   {problem.content}

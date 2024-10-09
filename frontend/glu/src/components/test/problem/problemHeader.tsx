@@ -65,7 +65,9 @@ export default function ProblemHeader({
     <div className={styles.container}>
       <div className={styles['status-container']}>
         <div className={styles['status-level-wrapper']}>
-          <div className={styles['status-level']}>{problemLevel}</div>
+          <div className={styles['status-level']}>
+            LV.{problemLevel.slice(-1)}
+          </div>
         </div>
         <div className={styles['status-like-wrapper']}>
           <div className={styles['status-like-icon']} onClick={handleLikeClick}>

@@ -39,6 +39,7 @@ export interface Problem {
   problemTypeDetail: ProblemTypeDetail;
   metadata: ProblemOption;
   solution: string;
+  isFavorite: boolean;
 }
 
 export interface SolvedProblem {
