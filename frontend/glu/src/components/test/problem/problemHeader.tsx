@@ -84,8 +84,8 @@ export default function ProblemHeader({
           <Image
             src="/images/problem/cloud.png"
             alt="Problem Type"
-            width={160}
-            height={110}
+            width={175}
+            height={115}
             priority // 중요한 이미지일 경우 빠르게 로드
             className={styles['problem-type-image']}
           />

@@ -22,6 +22,7 @@ import { GetServerSideProps } from 'next';
 import { getCookie } from 'cookies-next';
 import jwt from 'jsonwebtoken';
 import { login } from '@/store/authSlice';
+import Head from 'next/head';
 import styles from './testProblems.module.css';
 
 interface ProblemAnswer {
@@ -189,6 +190,16 @@ export default function Test({ initialProblems }: TestProps) {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>종합 테스트</title>
+        <meta property="og:title" content="종합 테스트" />
+        <meta
+          property="og:description"
+          content="총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로 평가합니다."
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+
       <div className={styles['problem-container']}>
         <div className={styles['problem-navigation']}>
           <ProblemSolvedNavigation
