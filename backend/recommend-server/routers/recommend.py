@@ -247,46 +247,10 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
 )
 async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     user_problemtype_level = {}
-    user_info = {
-        "id": "glu",
-        "nickname": "glu",
-        "stage": 1,
-        "exp": 14,
-        "imageUrl": "https://eglubucket.s3.ap-northeast-2.amazonaws.com/characters/glu_character.png",
-        "dayCount": 1,
-        "birth": "2009-01-01",
-        "createDate": "2024-10-09",
-        "attendanceRate": 100,
-        "problemTypeList": [
-            {
-                "level": 6,
-                "score": 62,
-                "type": {
-                    "code": "PT01",
-                    "name": "어휘 및 문법"
-                }
-            },
-            {
-                "level": 6,
-                "score": 30,
-                "type": {
-                    "code": "PT02",
-                    "name": "독해"
-                }
-            },
-            {
-                "level": 6,
-                "score": 30,
-                "type": {
-                    "code": "PT03",
-                    "name": "추론"
-                }
-            }
-        ]
-    }
+
     try:
         # 사용자 정보 API 호출
-        # user_info = await get_user_info(user_id)
+        user_info = await get_user_info(user_id)
 
         for problemType in user_info['problemTypeList']:
             user_problemtype_level[problemType['type']['code']] = problemType['level']
@@ -299,10 +263,10 @@ async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-Us
 
     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
-    print("selected =====================================")
-    for selected_problem in selected_problems:
-        print(selected_problem)
-    print("len_type_problems" , len(selected_problems))
+    # print("selected =====================================")
+    # for selected_problem in selected_problems:
+    #     print(selected_problem)
+    # print("len_type_problems" , len(selected_problems))
     # while (len(selected_problems) != 30):
     #     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
@@ -340,8 +304,6 @@ def make_type_problems(user_id, user_problemtype_level):
 
             current_level = user_level + detail_levels[idx]
             current_count = type_counts[idx]
-
-            print(f"current_level PL0{current_level}")
 
             # 10개
             if pt_type == "PT01":
@@ -396,7 +358,6 @@ def make_type_problems(user_id, user_problemtype_level):
     description="현재 문제와 유사한 특성을 갖는 문제 3개를 추천해줍니다."
 )
 async def get_similar_problem_set(problem_id: str, user_id: Optional[str] = Header(None, alias="X-User-Id")):
-    print("/similar problem_id", problem_id)
 
     if not user_id:
         raise HTTPException(status_code=400, detail="유저ID가 없습니다.")

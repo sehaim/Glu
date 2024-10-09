@@ -71,8 +71,6 @@ def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_
         # 필터 조건에 맞는 전체 문서 수 확인
         total_count = problem_collection.count_documents(filter_conditions)
 
-        print(f"get_random level {level} detail_code {detail_code} total_count {total_count}")
-
         if total_count < limit:
             return []
 
@@ -152,7 +150,6 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
 
 def get_random_problems_by_log(detail_code: str, level: str, correct_ids: list[str],
                                wrong_ids: list[str], vector, num):
-    print("log call", detail_code, level, correct_ids, wrong_ids, vector, num)
 
     # MongoDB에서 문제를 조회
     problem_data = list(problem_collection.find({
