@@ -203,7 +203,7 @@ export default function Test({ initialProblems }: TestProps) {
             <ProblemHeader
               problemId={currentProblem.problemId}
               problemIndex={currentProblemIndex + 1}
-              problemLevel={currentProblem?.problemLevel?.name}
+              problemLevel={currentProblem?.problemLevel?.code}
               problemType={currentProblem?.problemType?.name}
               problemTitle={currentProblem?.title}
             />
