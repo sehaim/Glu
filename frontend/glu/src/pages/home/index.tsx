@@ -117,13 +117,38 @@ export default function Home(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (router.asPath.includes('#section3')) {
-      const section = document.getElementById('section3');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
+    const handleRouteChangeComplete = (url: string | string[]) => {
+      if (url.includes('#section3')) {
+        section3Ref.current?.scrollIntoView({ behavior: 'smooth' });
+
+        // IntersectionObserver 설정
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setTimeout(() => {
+                  window.history.replaceState(null, '', router.pathname);
+                }, 1000);
+                observer.disconnect();
+              }
+            });
+          },
+          { threshold: 0.5 },
+        );
+
+        if (section3Ref.current) {
+          observer.observe(section3Ref.current);
+        }
       }
-    }
-  }, [router.asPath]);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router]);
+
   return (
     <div className={styles.container}>
       <section
