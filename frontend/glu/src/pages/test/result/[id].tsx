@@ -170,6 +170,7 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
             alt="레벨업 이미지"
             width={300}
             height={356}
+            unoptimized
           />
         </div>
       </LevelUpModal>
