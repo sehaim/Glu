@@ -80,7 +80,7 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
         if (typeof id === 'string') {
           try {
             const res = await getTestResultCSRAPI(id);
-            console.log(res);
+
             setTotalCorrectCount(res.data.totalCorrectCount);
             setTotalSolvedTime(res.data.totalSolvedTime);
             setProblemList(res.data.gradingResultByProblemList);

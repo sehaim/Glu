@@ -47,8 +47,6 @@ export default function ProblemOptionList({
     }
   };
 
-  console.log(options);
-
   return (
     <div className={styles['problem-option-list']}>
       {options?.map((option, index) => (
