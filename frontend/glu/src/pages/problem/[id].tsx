@@ -109,6 +109,7 @@ export default function Test() {
             alt="레벨업 이미지"
             width={300}
             height={356}
+            unoptimized
           />
         </div>
       </LevelUpModal>
