@@ -72,9 +72,9 @@ export default function ProblemHeader({
         <div className={styles['status-like-wrapper']}>
           <div className={styles['status-like-icon']} onClick={handleLikeClick}>
             {liked ? (
-              <BsStarFill className={styles['status-like']} />
+              <BsStarFill className={styles['status-like']} size={20} />
             ) : (
-              <BsStar />
+              <BsStar size={20} />
             )}
           </div>
         </div>

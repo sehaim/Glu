@@ -127,7 +127,7 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
         <div className={styles['memo-textarea-button-list']}>
           <SecondaryButton
             label="메모 작성"
-            size="small"
+            size="medium"
             onClick={handleNewMemo}
           />
         </div>
