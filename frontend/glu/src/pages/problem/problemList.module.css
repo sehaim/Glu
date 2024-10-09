@@ -59,41 +59,9 @@
 }
 
 .test-cards {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.test-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--LIGHTPINK);
-  border: 3px solid var(--WHITE);
-  border-radius: 10px;
-  padding: 20px;
-  width: 150px;
-  height: 80px;
-  font-family: 'BMJUA';
-  font-size: 18px;
-  color: var(--TEXT_SECONDARY);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.test-card:hover {
-  background-color: var(--PINK);
-  transform: translateY(-5px);
-}
-
-.level-span {
-  font-size: 16px;
-  color: var(--GRAY);
 }
 
 .pagination {
