@@ -117,7 +117,7 @@ export default function Test() {
         <div className={styles['problem-container']}>
           <div className={styles.problem}>
             <ProblemHeader
-              problemLevel={problem.problemLevel.name}
+              problemLevel={problem.problemLevel.code}
               problemType={problem.problemType.name}
               problemTitle={problem.title}
               problemId={problem.problemId.toString()}

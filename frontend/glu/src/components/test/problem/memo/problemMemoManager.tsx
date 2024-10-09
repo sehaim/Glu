@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import { Memo } from '@/types/MemoTypes';
 import {
@@ -89,9 +89,9 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
     }
   };
 
-  // useEffect(() => {
-  //   getMemos();
-  // }, [problemId]);
+  useEffect(() => {
+    handleMemoCancel();
+  }, [problemId]);
 
   return (
     <div className={styles.container}>

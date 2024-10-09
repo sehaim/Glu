@@ -134,6 +134,13 @@
   gap: 24px;
 }
 
+.solution-type {
+  font-family: 'PT';
+  color: var(--TEXT_SECONDARY);
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
 .solution-title {
   color: var(--BLACK);
   font-family: 'BMJUA';
@@ -164,9 +171,6 @@
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   font-size: 14px;
-}
-
-.problem-image-item {
 }
 
 .user-answer {
