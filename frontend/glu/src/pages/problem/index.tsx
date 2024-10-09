@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Problem } from '@/types/ProblemTypes';
 import SecondaryButton from '@/components/common/buttons/secondaryButton';
 import { getRecommendedTypeProblemsAPI } from '@/utils/problem/problem';
@@ -28,18 +28,60 @@ interface ProblemListProps {
 
 export default function ProblemList({ initialProblems }: ProblemListProps) {
   const username = useSelector((state: RootState) => state.auth.nickname);
-  const [problems] = useState<Problem[]>(initialProblems);
-  const [problemIndex, setProblemIndex] = useState(0);
   const LIMIT = 10;
 
-  const handleNextCard = () => {
-    const newIndex = problemIndex + 1;
-    if (newIndex * LIMIT < problems.length) setProblemIndex(newIndex);
+  const vocabularyProblems = useMemo(
+    () =>
+      initialProblems.filter((problem) => problem.problemType.code === 'PT01'),
+    [initialProblems],
+  );
+
+  const readingProblems = useMemo(
+    () =>
+      initialProblems.filter((problem) => problem.problemType.code === 'PT02'),
+    [initialProblems],
+  );
+
+  const inferenceProblems = useMemo(
+    () =>
+      initialProblems.filter((problem) => problem.problemType.code === 'PT03'),
+    [initialProblems],
+  );
+
+  const [vocabIndex, setVocabIndex] = useState(0);
+  const [readingIndex, setReadingIndex] = useState(0);
+  const [inferenceIndex, setInferenceIndex] = useState(0);
+
+  // 개별 페이지네이션 함수
+  const handleNextVocab = () => {
+    const newIndex = vocabIndex + 1;
+    if (newIndex * LIMIT < vocabularyProblems.length) setVocabIndex(newIndex);
   };
 
-  const handlePrevCard = () => {
-    const newIndex = problemIndex - 1;
-    if (newIndex >= 0) setProblemIndex(newIndex);
+  const handlePrevVocab = () => {
+    const newIndex = vocabIndex - 1;
+    if (newIndex >= 0) setVocabIndex(newIndex);
+  };
+
+  const handleNextReading = () => {
+    const newIndex = readingIndex + 1;
+    if (newIndex * LIMIT < readingProblems.length) setReadingIndex(newIndex);
+  };
+
+  const handlePrevReading = () => {
+    const newIndex = readingIndex - 1;
+    if (newIndex >= 0) setReadingIndex(newIndex);
+  };
+
+  const handleNextInference = () => {
+    const newIndex = inferenceIndex + 1;
+    if (newIndex * LIMIT < inferenceProblems.length)
+      setInferenceIndex(newIndex);
+  };
+
+  const handlePrevInference = () => {
+    const newIndex = inferenceIndex - 1;
+    if (newIndex >= 0) setInferenceIndex(newIndex);
   };
 
   return (
@@ -67,12 +109,13 @@ export default function ProblemList({ initialProblems }: ProblemListProps) {
         </div>
       </div>
 
-      <div className={styles['content-wrapper']}>
+      <div className={styles['content-wrapper-column']}>
+        {/* 어휘 및 문법 */}
         <div className={styles['test-category']}>
-          <h3 className={styles['page-subTitle']}>추천 문제</h3>
+          <h3 className={styles['page-subTitle']}>어휘 및 문법</h3>
           <div className={styles['test-cards']}>
-            {problems
-              .slice(problemIndex * LIMIT, (problemIndex + 1) * LIMIT)
+            {vocabularyProblems
+              .slice(vocabIndex * LIMIT, (vocabIndex + 1) * LIMIT)
               .map((problem) => (
                 <TestCardItem key={problem.problemId} problem={problem} />
               ))}
@@ -81,14 +124,68 @@ export default function ProblemList({ initialProblems }: ProblemListProps) {
             <SecondaryButton
               label="이전"
               size="small"
-              onClick={handlePrevCard}
-              disabled={problemIndex === 0}
+              onClick={handlePrevVocab}
+              disabled={vocabIndex === 0}
             />
             <SecondaryButton
               label="다음"
               size="small"
-              onClick={handleNextCard}
-              disabled={(problemIndex + 1) * LIMIT >= problems.length}
+              onClick={handleNextVocab}
+              disabled={(vocabIndex + 1) * LIMIT >= vocabularyProblems.length}
+            />
+          </div>
+        </div>
+
+        {/* 독해 */}
+        <div className={styles['test-category']}>
+          <h3 className={styles['page-subTitle']}>독해</h3>
+          <div className={styles['test-cards']}>
+            {readingProblems
+              .slice(readingIndex * LIMIT, (readingIndex + 1) * LIMIT)
+              .map((problem) => (
+                <TestCardItem key={problem.problemId} problem={problem} />
+              ))}
+          </div>
+          <div className={styles.pagination}>
+            <SecondaryButton
+              label="이전"
+              size="small"
+              onClick={handlePrevReading}
+              disabled={readingIndex === 0}
+            />
+            <SecondaryButton
+              label="다음"
+              size="small"
+              onClick={handleNextReading}
+              disabled={(readingIndex + 1) * LIMIT >= readingProblems.length}
+            />
+          </div>
+        </div>
+
+        {/* 추론 */}
+        <div className={styles['test-category']}>
+          <h3 className={styles['page-subTitle']}>추론</h3>
+          <div className={styles['test-cards']}>
+            {inferenceProblems
+              .slice(inferenceIndex * LIMIT, (inferenceIndex + 1) * LIMIT)
+              .map((problem) => (
+                <TestCardItem key={problem.problemId} problem={problem} />
+              ))}
+          </div>
+          <div className={styles.pagination}>
+            <SecondaryButton
+              label="이전"
+              size="small"
+              onClick={handlePrevInference}
+              disabled={inferenceIndex === 0}
+            />
+            <SecondaryButton
+              label="다음"
+              size="small"
+              onClick={handleNextInference}
+              disabled={
+                (inferenceIndex + 1) * LIMIT >= inferenceProblems.length
+              }
             />
           </div>
         </div>
