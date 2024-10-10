@@ -15,6 +15,7 @@ interface InputItemProps {
   canEdit?: boolean;
   isBirth?: boolean;
   children?: React.ReactNode;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 export default function InputItem({
@@ -30,6 +31,7 @@ export default function InputItem({
   canEdit = true,
   isBirth = false,
   children,
+  onKeyDown,
 }: InputItemProps) {
   return (
     <div className={styles.container} id={styles[direction]}>
@@ -48,6 +50,7 @@ export default function InputItem({
             placeholder={placeholder}
             disabled={!canEdit}
             className={error ? 'input-error' : ''}
+            onKeyDown={onKeyDown}
           />
         )}
         {error && errorMsg ? (

@@ -128,6 +128,13 @@ export default function SignupPage() {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSignUp();
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.section}>
@@ -144,6 +151,7 @@ export default function SignupPage() {
                 ? '아이디는 6자 이상의 영문, 숫자를 포함해야 합니다.'
                 : undefined
             }
+            onKeyDown={handleKeyDown}
           >
             <SecondaryButton
               label="중복 확인"
@@ -162,6 +170,7 @@ export default function SignupPage() {
                 ? '닉네임은 2자 이상의 영문 또는 한글만 포함해야 합니다.'
                 : undefined
             }
+            onKeyDown={handleKeyDown}
           />
           <InputItem
             value={password}
@@ -174,6 +183,7 @@ export default function SignupPage() {
                 ? '비밀번호는 8자 이상의 영문, 숫자, 특수문자를 포함해야 합니다.'
                 : undefined
             }
+            onKeyDown={handleKeyDown}
           />
           <InputItem
             value={passwordCheck}
@@ -181,6 +191,7 @@ export default function SignupPage() {
             label="비밀번호 확인"
             placeholder="비밀번호 확인"
             error={passwordError}
+            onKeyDown={handleKeyDown}
           >
             <div className={styles['password-error']}>{passwordCheckError}</div>
           </InputItem>
@@ -188,6 +199,7 @@ export default function SignupPage() {
             label="생년월일"
             isBirth
             onBirthChange={handleBirthChange}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <PrimaryButton label="가입하기" size="medium" onClick={handleSignUp} />
