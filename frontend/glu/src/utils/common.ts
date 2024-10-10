@@ -11,7 +11,7 @@ export const sweetalertConfirm = (
 ) => {
   return Swal.fire({
     title: header,
-    text: content,
+    html: content,
     icon: 'success',
     confirmButtonText: button || '확인',
     allowOutsideClick: false,
@@ -25,7 +25,7 @@ export const sweetalertError = (
 ) => {
   return Swal.fire({
     title: header,
-    text: content,
+    html: content,
     icon: 'error',
     confirmButtonColor: 'var(--RED)',
     confirmButtonText: button || '확인',
