@@ -154,6 +154,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
         raise HTTPException(status_code=400, detail=str(e))
 
     selected_problems = []
+    problem_id_list = []
     type_index = [0, 1, 2]
 
     # 3개 PT01 PT02 PT03
@@ -203,7 +204,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                                 correct_ids=correct_ids,
                                 wrong_ids=wrong_ids,
                                 vector=classification[3],
-                                num=1
+                                num=1,
+                                problem_id_list=problem_id_list
                             )
                     else:
                         # 틀린 문제 없을때
@@ -214,8 +216,10 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                                 limit=1
                             )
 
-            response = ProblemResponse.from_problem(fetched_problems[0])
-            selected_problems.append(response)
+            if fetched_problems:
+                response = ProblemResponse.from_problem(fetched_problems[0])
+                selected_problems.append(response)
+                problem_id_list.append(fetched_problems[0].id)
 
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
