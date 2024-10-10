@@ -243,7 +243,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                             wrong_ids = get_wrong_ids(int(user_id))
 
                             fetched_problems = get_random_problems_by_log(
-                                detail_code=classification[1],
+                                detail_code=detail_code,
                                 levels=user_levels,
                                 correct_ids=correct_ids,
                                 wrong_ids=wrong_ids,
