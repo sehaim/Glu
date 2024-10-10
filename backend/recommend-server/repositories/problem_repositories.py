@@ -150,7 +150,7 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
 
 
 def get_random_problems_by_log(detail_code: str, levels: List[str], correct_ids: list[str],
-                               wrong_ids: list[str], vector, num, problem_id: str = None):
+                               wrong_ids: list[str], vector, num, problem_id_list: list[str] = None):
 
     # 기본 필터 조건 설정
     filter_conditions = {
@@ -158,10 +158,11 @@ def get_random_problems_by_log(detail_code: str, levels: List[str], correct_ids:
         "problemTypeDetailCode": detail_code
     }
 
-    # problem_id가 제공된 경우, 해당 ID를 제외하는 조건 추가
-    if problem_id:
-        filter_conditions["_id"] = {"$ne": ObjectId(problem_id)}
+    # 여러 개의 problem_id가 제공된 경우, 해당 ID들을 제외하는 조건 추가
+    if problem_id_list:
+        filter_conditions["_id"] = {"$nin": [ObjectId(problem_id) for problem_id in problem_id_list]}
 
+    # MongoDB에서 문제를 조회
     problem_data = list(problem_collection.find(filter_conditions))
 
     problems_with_scores = []
@@ -180,8 +181,9 @@ def get_random_problems_by_log(detail_code: str, levels: List[str], correct_ids:
     # 코사인 유사도 기준으로 정렬 (내림차순)
     sorted_problems = sorted(problems_with_scores, key=lambda x: x[1], reverse=True)
 
+    # 중복된 ID를 방지하고 상위 num개의 Problem 객체를 선택
     selected_problems = []
-    selected_ids = {problem_id} if problem_id else set()  # 이전에 제외한 ID를 저장
+    selected_ids = set(problem_id_list) if problem_id_list else set()  # 이미 제외된 ID들을 저장
     for problem, _ in sorted_problems:
         if problem.id not in selected_ids:
             selected_problems.append(problem)
