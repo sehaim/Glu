@@ -55,7 +55,7 @@ def get_problem_by_ids(problem_ids: list[str]):
         return None
 
 
-def get_random_problems_by_code_and_level(levels: List[str], detail_code: str, problem_id: str = None, limit: int = 3):
+def get_random_problems_by_code_and_level(levels: List[str], detail_code: str, problem_id: str = None, problem_id_list: list[str] = None, limit: int = 3):
 
     try:
         # 기본 필터 조건 설정
@@ -67,6 +67,10 @@ def get_random_problems_by_code_and_level(levels: List[str], detail_code: str, p
         # problem_id가 제공된 경우, 해당 ID를 제외하는 조건 추가
         if problem_id:
             filter_conditions["_id"] = {"$ne": ObjectId(problem_id)}
+
+        # 여러 개의 problem_id가 제공된 경우, 해당 ID들을 제외하는 조건 추가
+        if problem_id_list:
+            filter_conditions["_id"] = {"$nin": [ObjectId(problem_id) for problem_id in problem_id_list]}
 
         # 필터 조건에 맞는 전체 문서 수 확인
         total_count = problem_collection.count_documents(filter_conditions)
