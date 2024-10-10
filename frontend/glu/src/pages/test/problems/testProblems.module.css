@@ -9,10 +9,15 @@
 
 .problem-container {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.problem-section {
+  display: flex;
   justify-content: center;
-  align-items: flex-start;
   gap: 24px;
-  margin-bottom: 40px;
 }
 
 .problem {
@@ -20,24 +25,26 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .problem-content {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   margin-top: 64px;
   gap: 20px;
-
-  min-height: 300px;
+  min-height: 400px;
+  width: 100%;
+  padding: 0 15px;
 }
 
 .problem-button-list {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 780px;
-  margin: 64px 0px;
+  width: 100%;
+  margin: 40px 0px;
 }
 
 .problem-button-list button:first-child {
@@ -70,14 +77,13 @@
   z-index: 10;
 }
 
-@media (max-width: 1200px) {
-  .problem-button-list {
-    width: 720px;
-  }
-}
-
 @media (max-width: 1024px) {
   .problem-container {
+    align-items: center;
+  }
+
+  .problem-section {
+    align-items: center;
     flex-direction: column;
   }
 
@@ -99,6 +105,7 @@
 @media (max-width: 768px) {
   .problem-content {
     flex-direction: column;
+    width: 400px;
   }
 
   .problem-button-list {

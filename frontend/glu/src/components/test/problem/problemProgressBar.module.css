@@ -1,7 +1,7 @@
 .progressbar-container {
   position: relative;
-  padding-right: 0px 50px;
-  width: 780px;
+  padding: 0px 20px;
+  width: 100%;
   background: linear-gradient(
     to bottom,
     var(--YELLOW) 70%,
@@ -11,7 +11,7 @@
 
 .progressbar {
   position: relative;
-  width: 770px;
+  width: 100%;
   height: 160px;
 }
 
@@ -30,26 +30,6 @@
   bottom: 20px;
   width: 120px;
   height: 120px;
-}
-
-@media (max-width: 1200px) {
-  .progressbar-container {
-    width: 720px;
-  }
-
-  .progressbar {
-    width: 670px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .progressbar-container {
-    width: 720px;
-  }
-
-  .progressbar {
-    width: 670px;
-  }
 }
 
 @media (max-width: 768px) {

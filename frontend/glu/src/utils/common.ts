@@ -104,7 +104,7 @@ export const createAuthAxios = (context?: {
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (error.response.httpStatus === 401) {
+      if (error.response.data.httpStatus === 401) {
         const newToken = context
           ? await refreshUserAPI(context)
           : await refreshUserAPI();

@@ -15,7 +15,7 @@ export default function ProblemProgressBar({
           src="/images/character/glu_character_small.webp"
           alt="character"
           className={styles['progress-character']}
-          style={{ left: `calc(${progressPercentage}%` }}
+          style={{ left: `calc(${progressPercentage}% )` }}
           width={80}
           height={110}
         />

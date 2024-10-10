@@ -1,9 +1,8 @@
 .problem-option-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  width: 100%;
 }
 
 .problem-option {
@@ -11,7 +10,6 @@
   justify-content: space-between;
   align-items: center;
   background-color: var(--WHITE);
-  width: 340px;
   padding: 16px 24px;
   border-radius: 10px;
   cursor: pointer;
@@ -47,19 +45,12 @@
   font-size: 18px;
 }
 
-@media (max-width: 1200px) {
-  .problem-option {
-    width: 320px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .problem-option {
-    width: 320px;
-  }
-}
-
 @media (max-width: 768px) {
+  .problem-option-list {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
   .problem-content {
     flex-direction: column;
   }
@@ -68,10 +59,6 @@
     width: 24px;
     height: 24px;
     font-size: 12px;
-  }
-
-  .problem-option {
-    width: 400px;
   }
 }
 
