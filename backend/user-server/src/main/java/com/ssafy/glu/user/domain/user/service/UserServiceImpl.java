@@ -267,7 +267,7 @@ public class UserServiceImpl implements UserService {
 		Integer after = findUser.updateStage(upScore + attendScore);
 
 		return new ExpUpdateResponse(beforeStage != after,
-			beforeStage != after ? images.get(beforeStage - 1) : images.get(after - 1));
+			beforeStage == after ? images.get(beforeStage - 1) : images.get(after - 1));
 	}
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
