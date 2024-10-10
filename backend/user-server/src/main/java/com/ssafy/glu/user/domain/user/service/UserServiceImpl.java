@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 		List<UserProblemType> userProblemTypes = userProblemTypeRepository.findAllByUserId(userId);
 
 		List<String> levelImages = levelConfig.getImages();
-		String userImage = levelImages.get(findUser.getStage());
+		String userImage = levelImages.get(findUser.getStage() - 1);
 
 		long attendanceDay = attendanceRepository.countByUsersId(userId);
 		Integer rate = calculateAttendanceRate(findUser.getCreatedDate(), attendanceDay);
@@ -285,7 +285,7 @@ public class UserServiceImpl implements UserService {
 		Integer after = findUser.updateStage(upScore + attendScore);
 
 		return new ExpUpdateResponse(beforeStage != after,
-			beforeStage != after ? images.get(beforeStage) : images.get(after));
+			beforeStage != after ? images.get(beforeStage - 1) : images.get(after - 1));
 	}
 
 	private int calculateScore(Map<String, Integer> userLevels, ExpUpdateRequest.ProblemInfo problemInfo) {
