@@ -5,6 +5,13 @@
   align-items: center;
 }
 
+.inner-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .problem-container {
   display: flex;
   justify-content: center;
@@ -90,6 +97,25 @@
   z-index: 10;
 }
 
+.recommend-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.recommend-title {
+  color: var(--PINK);
+  font-family: 'BMJUA';
+  font-size: 24px;
+  margin: 16px 0px;
+  white-space: nowrap;
+}
+
+.recommend-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
 @media (max-width: 1200px) {
   .problem-button-list {
     width: 720px;
@@ -116,6 +142,10 @@
 }
 
 @media (max-width: 768px) {
+  .inner-container {
+    width: 400px;
+  }
+
   .problem-content {
     flex-direction: column;
   }
@@ -130,6 +160,10 @@
 }
 
 @media (max-width: 480px) {
+  .inner-container {
+    width: 320px;
+  }
+
   .problem-button-list {
     width: 320px;
   }
