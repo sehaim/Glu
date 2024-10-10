@@ -13,7 +13,6 @@ import {
   hasKorean,
   hasNumber,
   hasSpecialChar,
-  sweetalertConfirm,
   sweetalertError,
 } from '@/utils/common';
 import styles from './mypage.module.css';
