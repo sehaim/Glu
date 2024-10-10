@@ -15,6 +15,8 @@ export const loginAPI = async (data: LoginUser) => {
     setCookie('accessToken', res.headers.accesstoken, {
       maxAge: 60 * 60 * 24 * 14,
       path: '/',
+      secure: true, // HTTPS에서만 전송
+      sameSite: 'none',
     });
     window.location.href = '/home';
   } catch (err) {

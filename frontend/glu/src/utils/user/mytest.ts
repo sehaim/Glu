@@ -50,7 +50,7 @@ export const getSolvedTypeTestAPI = async (
     if (status) {
       params.append('status', status);
     }
-    if (hasMemo !== undefined) {
+    if (hasMemo !== undefined && hasMemo) {
       params.append('hasMemo', String(hasMemo));
     }
     if (isFavorite !== undefined) {
