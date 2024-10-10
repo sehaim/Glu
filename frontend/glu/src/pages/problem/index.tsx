@@ -28,7 +28,7 @@ interface ProblemListProps {
 
 export default function ProblemList({ initialProblems }: ProblemListProps) {
   const username = useSelector((state: RootState) => state.auth.nickname);
-  const LIMIT = 10;
+  const LIMIT = 5;
 
   const vocabularyProblems = useMemo(
     () =>
