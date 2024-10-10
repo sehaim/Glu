@@ -59,10 +59,13 @@ export const postTestProblemGradingAPI = async (
     });
 
     const newToken = await refreshUserAPI();
-    setCookie('accessToken', newToken, {
-      maxAge: 60 * 60 * 24 * 14,
-      path: '/',
-    });
+    console.log(newToken);
+    if (newToken) {
+      setCookie('accessToken', newToken, {
+        maxAge: 60 * 60 * 24 * 14,
+        path: '/',
+      });
+    }
 
     // 커스텀 응답에서 httpStatus 확인
     if (res.data.httpStatus === 400) {
