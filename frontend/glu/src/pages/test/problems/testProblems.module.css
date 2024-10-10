@@ -9,6 +9,13 @@
 
 .problem-container {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.problem-section {
+  display: flex;
   justify-content: center;
   gap: 24px;
 }
@@ -18,7 +25,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 800px;
   width: 100%;
 }
 
@@ -38,7 +44,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 64px 0px;
+  margin: 40px 0px;
 }
 
 .problem-button-list button:first-child {
@@ -71,14 +77,13 @@
   z-index: 10;
 }
 
-@media (max-width: 1200px) {
-  .problem-button-list {
-    width: 720px;
-  }
-}
-
 @media (max-width: 1024px) {
   .problem-container {
+    align-items: center;
+  }
+
+  .problem-section {
+    align-items: center;
     flex-direction: column;
   }
 

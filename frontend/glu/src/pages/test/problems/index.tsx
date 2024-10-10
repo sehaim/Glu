@@ -205,52 +205,27 @@ export default function Test({ initialProblems }: TestProps) {
       </Head>
 
       <div className={styles['problem-container']}>
-        <div className={styles['problem-navigation']}>
-          <ProblemSolvedNavigation
-            answers={answers}
-            currentProblemIndex={currentProblemIndex}
-            onProblemIndexChange={handlProblemIndex}
-          />
-        </div>
-
-        {currentProblem && (
-          <div className={styles.problem}>
-            <ProblemHeader
-              problemId={currentProblem.problemId}
-              problemIndex={currentProblemIndex + 1}
-              problemLevel={currentProblem?.problemLevel?.code}
-              problemType={currentProblem?.problemType?.name}
-              problemTitle={currentProblem?.title}
+        <div className={styles['problem-section']}>
+          <div className={styles['problem-navigation']}>
+            <ProblemSolvedNavigation
+              answers={answers}
+              currentProblemIndex={currentProblemIndex}
+              onProblemIndexChange={handlProblemIndex}
             />
-            <div className={styles['problem-content']}>
-              <ProblemContentText problemContent={currentProblem?.content} />
-              {currentProblem.problemTypeDetail.code === 'PT0311' && (
-                <ProblemImageOptionList
-                  problemOptions={
-                    Array.isArray(currentProblem.metadata.options)
-                      ? currentProblem.metadata.options // string[]일 경우
-                      : [currentProblem.metadata.options] // string일 경우 배열로 변환
-                  }
-                  problemId={answers[currentProblemIndex]?.problemId}
-                  selectedOption={answers[currentProblemIndex]?.userAnswer}
-                  onTestProblemAnswer={handleAnswer}
-                />
-              )}
-              {currentProblem.questionType.code === 'QT02' && (
-                <ProblemInputField
-                  placeholder={
-                    Array.isArray(currentProblem.metadata.options)
-                      ? currentProblem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
-                      : currentProblem.metadata.options // string일 경우 그대로 사용
-                  }
-                  initialAnswer={answers[currentProblemIndex].userAnswer}
-                  problemId={answers[currentProblemIndex]?.problemId}
-                  onTestProblemAnswer={handleAnswer}
-                />
-              )}
-              {currentProblem.problemTypeDetail.code !== 'PT0311' &&
-                currentProblem.questionType.code !== 'QT02' && (
-                  <ProblemOptionList
+          </div>
+          {currentProblem && (
+            <div className={styles.problem}>
+              <ProblemHeader
+                problemId={currentProblem.problemId}
+                problemIndex={currentProblemIndex + 1}
+                problemLevel={currentProblem?.problemLevel?.code}
+                problemType={currentProblem?.problemType?.name}
+                problemTitle={currentProblem?.title}
+              />
+              <div className={styles['problem-content']}>
+                <ProblemContentText problemContent={currentProblem?.content} />
+                {currentProblem.problemTypeDetail.code === 'PT0311' && (
+                  <ProblemImageOptionList
                     problemOptions={
                       Array.isArray(currentProblem.metadata.options)
                         ? currentProblem.metadata.options // string[]일 경우
@@ -261,38 +236,64 @@ export default function Test({ initialProblems }: TestProps) {
                     onTestProblemAnswer={handleAnswer}
                   />
                 )}
+                {currentProblem.questionType.code === 'QT02' && (
+                  <ProblemInputField
+                    placeholder={
+                      Array.isArray(currentProblem.metadata.options)
+                        ? currentProblem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
+                        : currentProblem.metadata.options // string일 경우 그대로 사용
+                    }
+                    initialAnswer={answers[currentProblemIndex].userAnswer}
+                    problemId={answers[currentProblemIndex]?.problemId}
+                    onTestProblemAnswer={handleAnswer}
+                  />
+                )}
+                {currentProblem.problemTypeDetail.code !== 'PT0311' &&
+                  currentProblem.questionType.code !== 'QT02' && (
+                    <ProblemOptionList
+                      problemOptions={
+                        Array.isArray(currentProblem.metadata.options)
+                          ? currentProblem.metadata.options // string[]일 경우
+                          : [currentProblem.metadata.options] // string일 경우 배열로 변환
+                      }
+                      problemId={answers[currentProblemIndex]?.problemId}
+                      selectedOption={answers[currentProblemIndex]?.userAnswer}
+                      onTestProblemAnswer={handleAnswer}
+                    />
+                  )}
+              </div>
+              <div className={styles['problem-button-list']}>
+                {currentProblemIndex > 0 ? (
+                  <PrimaryButton
+                    size="small"
+                    label="이전 문제"
+                    onClick={handlePrevProblem}
+                  />
+                ) : (
+                  <div />
+                )}
+                {currentProblemIndex === problems.length - 1 ? (
+                  <PrimaryButton
+                    size="small"
+                    label="제출하기"
+                    onClick={handleSubmit}
+                  />
+                ) : (
+                  <PrimaryButton
+                    size="small"
+                    label="다음 문제"
+                    onClick={handleNextProblem}
+                  />
+                )}
+              </div>
             </div>
-            <div className={styles['problem-button-list']}>
-              {currentProblemIndex > 0 ? (
-                <PrimaryButton
-                  size="small"
-                  label="이전 문제"
-                  onClick={handlePrevProblem}
-                />
-              ) : (
-                <div />
-              )}
-              {currentProblemIndex === problems.length - 1 ? (
-                <PrimaryButton
-                  size="small"
-                  label="제출하기"
-                  onClick={handleSubmit}
-                />
-              ) : (
-                <PrimaryButton
-                  size="small"
-                  label="다음 문제"
-                  onClick={handleNextProblem}
-                />
-              )}
-            </div>
-            <ProblemProgressBar progressPercentage={progressPercentage} />
+          )}
+          <div className={styles['problem-memo']}>
+            <ProblemMemoManager problemId={currentProblem.problemId} />
           </div>
-        )}
-
-        <div className={styles['problem-memo']}>
-          <ProblemMemoManager problemId={currentProblem.problemId} />
         </div>
+
+        <ProblemProgressBar progressPercentage={progressPercentage} />
       </div>
     </div>
   );

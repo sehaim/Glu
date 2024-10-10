@@ -20,6 +20,8 @@
 }
 
 .problem {
+  width: 100%;
+  max-width: 1024px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,12 +29,14 @@
 }
 
 .problem-content {
+  width: 100%;
   display: flex;
   flex-direction: column;
   min-height: 400px;
   align-items: flex-start;
   margin-top: 64px;
   gap: 20px;
+  padding: 0 15px;
 }
 
 .problem-button-list {
@@ -62,6 +66,7 @@
   color: var(--TEXT_SECONDARY);
   line-height: 24px;
   width: 100%;
+  font-size: 18px;
 }
 
 .problem-solution-correct {
