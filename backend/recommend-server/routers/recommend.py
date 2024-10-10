@@ -192,7 +192,13 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                     )
                 else:
                     wrong_status = get_wrong_status(int(user_id))
+
+                    print(f"wrong_status {wrong_status}")
+
                     if wrong_status != {}:
+
+                        print("1111111111111111111")
+
                         top_classifications = top_n_classification(2, wrong_status)
                         for classification in top_classifications:
                             correct_ids = get_correct_ids(int(user_id))
@@ -208,6 +214,10 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                                 problem_id_list=problem_id_list
                             )
                     else:
+
+
+                        print("22222222222222222")
+
                         # 틀린 문제 없을때
                         if fetched_problems == None:
                             fetched_problems = get_random_problems_by_code_and_level(
@@ -220,6 +230,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                 response = ProblemResponse.from_problem(fetched_problems[0])
                 selected_problems.append(response)
                 problem_id_list.append(fetched_problems[0].id)
+
+            print(f"len selected_problems: {len(selected_problems)}")
 
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
