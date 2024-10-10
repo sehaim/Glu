@@ -9,13 +9,22 @@ import com.ssafy.glu.problem.domain.common.dto.CommonCodeResponse;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
 import com.ssafy.glu.problem.domain.problem.domain.UserProblemLog;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
+@Schema(description = "유형 채점 결과 응답 DTO")
 public record TypeGradingResultResponse(
+	@Schema(description = "정답 수", example = "3")
 	Integer correctCount,
+
+	@Schema(description = "문제 유형")
 	CommonCodeResponse problemType,
+
+	@Schema(description = "획득 점수", example = "10")
 	Integer acquiredScore,
+
+	@Schema(description = "총 점수", example = "100")
 	Integer totalScore
 ) {
 	public static TypeGradingResultResponse of(Integer correctCount, CommonCodeResponse problemType,

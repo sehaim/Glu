@@ -4,10 +4,13 @@ import java.util.Map;
 
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "사용자 점수 DTO")
 public class UserScore {
+	@Schema(description = "문제 유형별 점수 맵")
 	private Map<ProblemTypeCode, ProblemTypeScore> scoreByProblemType;
 
 	// 특정 문제 유형의 점수 가져오기
