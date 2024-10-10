@@ -44,7 +44,7 @@
   color: var(--TEXT_SECONDARY);
   width: calc(100% - 42px);
   font-family: 'PT';
-  font-size: 16px;
+  font-size: 18px;
 }
 
 @media (max-width: 1200px) {
