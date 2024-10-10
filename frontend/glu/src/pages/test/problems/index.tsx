@@ -156,7 +156,9 @@ export default function Test({ initialProblems }: TestProps) {
         problemSolveRequests,
       );
 
-      if (res.data.isStageUp) {
+      // eslint-disable-next-line no-constant-condition
+      if (true) {
+        // res.data.isStageUp
         dispatch(levelUp({ level: 2, levelImage: res.data.stageUpUrl }));
       }
       dispatch(login({ isFirst: false }));

@@ -287,7 +287,7 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                   </p>
                 )}
                 <div className={styles['solution-content']}>
-                  {problem.solution}
+                  (정답: {problem.answer}) {problem.solution}
                 </div>
               </div>
             </div>
