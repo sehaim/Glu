@@ -67,11 +67,14 @@ export const refreshUserAPI = async (context?: {
       context ? { req: context.req, res: context.res } : {},
     );
 
-    sweetalertError(
+    const result = await sweetalertError(
       '로그인 만료',
       '로그인 시간이 만료되었습니다. 다시 로그인해주세요.',
     );
 
+    if (result.isConfirmed) {
+      return null;
+    }
     return null;
   }
 };
@@ -104,10 +107,11 @@ export const createAuthAxios = (context?: {
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (error.response.data.httpStatus === 401) {
+      if (error?.response?.data?.httpStatus === 401) {
         const newToken = context
           ? await refreshUserAPI(context)
           : await refreshUserAPI();
+        console.log(newToken);
         if (newToken) {
           // 새로운 토큰으로 헤더 업데이트
           const updatedConfig = {
@@ -127,10 +131,14 @@ export const createAuthAxios = (context?: {
                   res: context.res,
                   maxAge: 60 * 60 * 24 * 14,
                   path: '/',
+                  secure: true, // HTTPS에서만 전송
+                  sameSite: 'none',
                 }
               : {
                   maxAge: 60 * 60 * 24 * 14,
                   path: '/',
+                  secure: true, // HTTPS에서만 전송
+                  sameSite: 'none',
                 },
           );
 
