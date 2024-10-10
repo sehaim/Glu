@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import InputItem from '@/components/common/inputs/inputItem';
 import PrimaryButton from '@/components/common/buttons/primaryButton';
 import { useState } from 'react';
@@ -25,6 +27,13 @@ export default function LoginPage() {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleLogin();
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.section}>
@@ -34,11 +43,13 @@ export default function LoginPage() {
             value={id}
             onChange={(e) => setId(e.target.value)}
             label="아이디"
+            onKeyDown={handleKeyDown}
           />
           <InputItem
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             label="비밀번호"
+            onKeyDown={handleKeyDown}
           />
         </div>
         <PrimaryButton label="로그인" size="medium" onClick={handleLogin} />

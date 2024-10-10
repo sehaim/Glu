@@ -48,6 +48,11 @@ select {
   font-size: 15px;
 }
 
+.input-error {
+  border-color: var(--RED);
+  border-width: 2px;
+}
+
 .loading-screen {
   position: fixed;
   top: 0;

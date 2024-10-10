@@ -9,10 +9,13 @@ interface InputItemProps {
   onBirthChange?: (birth: Birth) => void;
   label: string;
   placeholder?: string;
+  error?: boolean;
+  errorMsg?: string | undefined;
   direction?: string;
   canEdit?: boolean;
   isBirth?: boolean;
   children?: React.ReactNode;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 export default function InputItem({
@@ -22,10 +25,13 @@ export default function InputItem({
   onBirthChange,
   label,
   placeholder = '',
+  error = false,
+  errorMsg,
   direction = 'column',
   canEdit = true,
   isBirth = false,
   children,
+  onKeyDown,
 }: InputItemProps) {
   return (
     <div className={styles.container} id={styles[direction]}>
@@ -43,7 +49,16 @@ export default function InputItem({
             onChange={onChange}
             placeholder={placeholder}
             disabled={!canEdit}
+            className={error ? 'input-error' : ''}
+            onKeyDown={onKeyDown}
           />
+        )}
+        {error && errorMsg ? (
+          <div className={styles['error-box']}>
+            <div className={styles['error-message']}>{errorMsg}</div>
+          </div>
+        ) : (
+          ''
         )}
       </div>
     </div>

@@ -8,6 +8,13 @@ import { Birth, MypageUser } from '@/types/UserTypes';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/authSlice';
 import { getCookie } from 'cookies-next';
+import {
+  hasEnglish,
+  hasKorean,
+  hasNumber,
+  hasSpecialChar,
+  sweetalertError,
+} from '@/utils/common';
 import styles from './mypage.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -54,6 +61,17 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
 
   // 닉네임 변경
   const handleNicknameSubmit = () => {
+    if (
+      nickname.length < 2 ||
+      hasNumber(nickname) ||
+      hasSpecialChar(nickname)
+    ) {
+      sweetalertError(
+        '닉네임 변경',
+        '닉네임은 2자 이상의 영문 또는 한글만 포함해야 합니다.',
+      );
+      return;
+    }
     putUserInfoAPI(nickname, undefined, undefined, undefined);
     dispatch(login({ nickname }));
   };
@@ -80,6 +98,28 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
   }, [newPassword, newPasswordCheck]);
 
   const handlePasswordSubmit = async () => {
+    if (
+      currentPassword === '' ||
+      newPassword === '' ||
+      newPasswordCheck === ''
+    ) {
+      sweetalertError('비밀번호 변경', '모든 항목을 정확히 입력해주세요.');
+      return;
+    }
+    if (
+      newPassword.length < 8 ||
+      !hasEnglish(newPassword) ||
+      !hasNumber(newPassword) ||
+      !hasSpecialChar(newPassword) ||
+      newPassword !== newPasswordCheck ||
+      hasKorean(newPassword)
+    ) {
+      sweetalertError(
+        '비밀번호 변경',
+        '비밀번호는 8자 이상의<br>영문, 숫자, 특수문자를 포함해야 합니다.',
+      );
+      return;
+    }
     await putUserInfoAPI(undefined, currentPassword, newPassword, undefined);
     handleCloseModal();
   };
@@ -89,9 +129,16 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
     setBirth(newBirth);
   }, []);
 
-  const handleBirthSubmit = () => {
+  const handleBirthSubmit = async () => {
     const formattedBirth = `${birth.year}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`;
-    putUserInfoAPI(undefined, undefined, undefined, formattedBirth);
+    await putUserInfoAPI(undefined, undefined, undefined, formattedBirth);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handlePasswordSubmit();
+    }
   };
 
   return (
@@ -173,18 +220,21 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
             label="현재 비밀번호"
             placeholder="현재 비밀번호를 입력해주세요."
             onChange={(e) => setCurrentPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <InputItem
             value={newPassword}
             label="새로운 비밀번호"
             placeholder="8자 이상의 영문, 숫자, 특수기호"
             onChange={(e) => setNewPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <InputItem
             value={newPasswordCheck}
             label="비밀번호 확인"
             placeholder="비밀번호를 다시 입력해주세요."
             onChange={(e) => setNewPasswordCheck(e.target.value)}
+            onKeyDown={handleKeyDown}
           >
             <div className={styles['password-error']}>{passwordError}</div>
           </InputItem>
