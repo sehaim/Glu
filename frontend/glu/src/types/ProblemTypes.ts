@@ -57,6 +57,7 @@ export interface SolvedProblem {
   isFavorite: boolean;
   solveTime: number;
   solveDate: string;
+  answer: string;
 }
 
 export interface SolvedProblemResponse {
