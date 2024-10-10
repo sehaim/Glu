@@ -19,7 +19,9 @@ import Loading from '@/components/common/loading';
 import ProblemInputField from '@/components/test/problem/problemInputField';
 import ProblemImageOptionList from '@/components/test/problem/problemImageOptionList';
 import { GetServerSideProps } from 'next';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { getCookie } from 'cookies-next';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jwt from 'jsonwebtoken';
 import { login } from '@/store/authSlice';
 import Head from 'next/head';
@@ -112,6 +114,8 @@ export default function Test({ initialProblems }: TestProps) {
   }, [problems]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     const start = Date.now();
     setStartTime(start);
 
