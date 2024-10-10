@@ -165,7 +165,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
         detail_types = [0, 1, 2]
         detail_types.extend(random.choices(type_index, k=2))
 
-
         # 인덱스와 레벨 배열 매칭
         indices = list(range(len(detail_types)))
 
@@ -192,7 +191,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                     )
                 else:
                     wrong_status = get_wrong_status(int(user_id))
-                    if wrong_status == {}:
+                    if wrong_status != {}:
                         top_classifications = top_n_classification(2, wrong_status)
                         for classification in top_classifications:
                             correct_ids = get_correct_ids(int(user_id))
