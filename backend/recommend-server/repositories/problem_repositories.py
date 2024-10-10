@@ -105,6 +105,7 @@ def get_random_problems_by_code_and_level(levels: List[str], detail_code: str, p
         return []
 
 
+
 def cosine_similarity(vec_a: list[float], vec_b: list[float]) -> float:
     """두 벡터 간의 코사인 유사도를 계산합니다."""
     if len(vec_a) != len(vec_b):
@@ -149,13 +150,19 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
 
 
 def get_random_problems_by_log(detail_code: str, levels: List[str], correct_ids: list[str],
-                               wrong_ids: list[str], vector, num):
+                               wrong_ids: list[str], vector, num, problem_id: str = None):
 
-    # MongoDB에서 문제를 조회
-    problem_data = list(problem_collection.find({
-        "problemTypeDetailCode": detail_code,
+    # 기본 필터 조건 설정
+    filter_conditions = {
         "problemLevelCode": {"$in": levels},
-    }))
+        "problemTypeDetailCode": detail_code
+    }
+
+    # problem_id가 제공된 경우, 해당 ID를 제외하는 조건 추가
+    if problem_id:
+        filter_conditions["_id"] = {"$ne": ObjectId(problem_id)}
+
+    problem_data = list(problem_collection.find(filter_conditions))
 
     problems_with_scores = []
     for problem_dict in problem_data:
@@ -172,6 +179,15 @@ def get_random_problems_by_log(detail_code: str, levels: List[str], correct_ids:
 
     # 코사인 유사도 기준으로 정렬 (내림차순)
     sorted_problems = sorted(problems_with_scores, key=lambda x: x[1], reverse=True)
+
+    selected_problems = []
+    selected_ids = {problem_id} if problem_id else set()  # 이전에 제외한 ID를 저장
+    for problem, _ in sorted_problems:
+        if problem.id not in selected_ids:
+            selected_problems.append(problem)
+            selected_ids.add(problem.id)
+            if len(selected_problems) == num:
+                break
 
     # 상위 num개의 Problem 객체만 반환
     return [problem for problem, _ in sorted_problems[:num]]
