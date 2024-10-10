@@ -1,7 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 import React, { useEffect, useRef, useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as d3 from 'd3';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import throttle from 'lodash/throttle';
 
 interface RadarGraphProps {
   data: {
@@ -18,11 +21,11 @@ export default function RadarGraph({ data, maxScore }: RadarGraphProps) {
   const [initialRender, setInitialRender] = useState(true); // 첫 번째 렌더링 여부
 
   useEffect(() => {
-    const updateWidth = () => {
+    const updateWidth = throttle(() => {
       if (containerRef.current) {
         setWidth(containerRef.current.offsetWidth);
       }
-    };
+    }, 100); // 100ms 간격으로 throttling 적용
 
     // 페이지가 처음 로드될 때와 창 크기가 변경될 때 width를 업데이트
     window.addEventListener('resize', updateWidth);
@@ -30,6 +33,7 @@ export default function RadarGraph({ data, maxScore }: RadarGraphProps) {
 
     return () => {
       window.removeEventListener('resize', updateWidth);
+      updateWidth.cancel(); // 이벤트 리스너 제거 시 throttle 해제
     };
   }, []);
 
