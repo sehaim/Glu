@@ -15,6 +15,7 @@ public record ProblemGradingResultResponse(
 	String problemId,
 	String title,
 	String content,
+	String answer,
 
 	// 문제 Option 등이 담긴 정보
 	Map<String, Object> metadata,
@@ -37,6 +38,8 @@ public record ProblemGradingResultResponse(
 			.problemId(problem.getProblemId())
 			.title(problem.getTitle())
 			.content(problem.getContent())
+			.answer(problem.getAnswer())
+
 			.metadata(problem.getMetadata())
 			.solution(problem.getSolution())
 
@@ -61,6 +64,8 @@ public record ProblemGradingResultResponse(
 			.problemId(problem.getProblemId())
 			.title(problem.getTitle())
 			.content(problem.getContent())
+			.answer(problem.getAnswer())
+
 			.metadata(problem.getMetadata())
 			.solution(problem.getSolution())
 			.isCorrect(userProblemLog.isCorrect())
