@@ -55,12 +55,12 @@ def get_problem_by_ids(problem_ids: list[str]):
         return None
 
 
-def get_random_problems_by_code_and_level(level: str, detail_code: str, problem_id: str = None, limit: int = 3):
+def get_random_problems_by_code_and_level(levels: List[str], detail_code: str, problem_id: str = None, limit: int = 3):
 
     try:
         # 기본 필터 조건 설정
         filter_conditions = {
-            "problemLevelCode": level,
+            "problemLevelCode": {"$in": levels},
             "problemTypeDetailCode": detail_code
         }
 
@@ -148,13 +148,13 @@ def get_similar(level_code: str, type_detail_code: str, vector: list[float], pro
     return [problem for problem, _ in sorted_problems[:3]]
 
 
-def get_random_problems_by_log(detail_code: str, level: str, correct_ids: list[str],
+def get_random_problems_by_log(detail_code: str, levels: List[str], correct_ids: list[str],
                                wrong_ids: list[str], vector, num):
 
     # MongoDB에서 문제를 조회
     problem_data = list(problem_collection.find({
         "problemTypeDetailCode": detail_code,
-        "problemLevelCode": level,
+        "problemLevelCode": {"$in": levels},
     }))
 
     problems_with_scores = []
