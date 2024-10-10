@@ -100,11 +100,7 @@ public class MockFactory {
 	}
 
 	//===== UserProblemStatus =====//
-	public static UserProblemStatus createUserProblemStatus(Long userId, Problem problem) {
-		return new UserProblemStatus(
-			Problem.Status.CORRECT, RANDOM.nextInt(5) + 5, RANDOM.nextInt(5), userId, new ArrayList<>(),
-			RANDOM.nextBoolean(), problem);
-	}
+
 	public static UserProblemStatus createUserProblemStatus(Long userId, Problem.Status status, Problem problem, Map<Long, String> memoList, boolean isFavorite) {
 		// 랜덤한 문자열 생성
 		int randomAttemptCount = RANDOM.nextInt(1,5);

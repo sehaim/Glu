@@ -6,8 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum ProblemTypeCode {
-	PT01("어휘 및 문법", List.of(ProblemTypeDetailCode.PT0111, ProblemTypeDetailCode.PT0112, ProblemTypeDetailCode.PT0121,
-		ProblemTypeDetailCode.PT0122, ProblemTypeDetailCode.PT0123, ProblemTypeDetailCode.PT0124)),
+	PT01("어휘 및 문법", List.of(ProblemTypeDetailCode.PT0111, ProblemTypeDetailCode.PT0112, ProblemTypeDetailCode.PT0121)),
 	PT02("독해", List.of(ProblemTypeDetailCode.PT0211, ProblemTypeDetailCode.PT0221, ProblemTypeDetailCode.PT0222)),
 	PT03("추론", List.of(ProblemTypeDetailCode.PT0311, ProblemTypeDetailCode.PT0312, ProblemTypeDetailCode.PT0321));
 
