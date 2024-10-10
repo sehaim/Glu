@@ -2,6 +2,9 @@ package com.ssafy.glu.user.domain.user.event;
 
 import java.util.List;
 
+import com.ssafy.glu.user.domain.user.domain.Users;
+import com.ssafy.glu.user.domain.user.exception.UserNotFoundException;
+import com.ssafy.glu.user.domain.user.repository.UserRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ProblemSolvedEventConsumer {
 
 	private final UserProblemTypeRepository userProblemTypeRepository;
+	private final UserRepository userRepository;
+
 
 	@KafkaListener(topics = "${kafka.topic.problem-solved}", groupId = "user-score")
 	@Transactional

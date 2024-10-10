@@ -42,7 +42,7 @@ public class Users extends BaseTimeEntity {
 	@Builder.Default
 	private Integer dayCount = 0;
 	@Builder.Default
-	private Boolean isFirst = true;
+	private Integer isFirst = 0;
 
 	public void updateUser(String password, String nickname, LocalDate birth) {
 		if(StringUtils.hasText(password)) this.password = password;
@@ -54,10 +54,13 @@ public class Users extends BaseTimeEntity {
 		this.isDeleted = true;
 	}
 
+	public void updateIsFirst(int num) {
+		isFirst = num;
+	}
+
 	public Integer updateStage(Integer score) {
 		this.exp = Math.max(100, score + this.exp);
 		this.stage = Math.min(Math.max((exp / 100), 1), 7);
-		this.isFirst = false;
 		return this.stage;
 	}
 
