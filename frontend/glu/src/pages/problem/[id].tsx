@@ -162,6 +162,7 @@ export default function Test() {
                         ? problem.metadata.options.join(', ') // string[]일 경우, 문자열로 변환 (쉼표로 연결된 문자열)
                         : problem.metadata.options // string일 경우 그대로 사용
                     }
+                    initialAnswer={answer}
                     onSingleProblemAnswer={handleAnswer}
                   />
                 )}
