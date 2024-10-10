@@ -80,7 +80,6 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
         if (typeof id === 'string') {
           try {
             const res = await getTestResultCSRAPI(id);
-
             setTotalCorrectCount(res.data.totalCorrectCount);
             setTotalSolvedTime(res.data.totalSolvedTime);
             setProblemList(res.data.gradingResultByProblemList);
@@ -258,6 +257,7 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                               width={100}
                               height={100}
                               className={styles['problem-image']}
+                              unoptimized
                             />
                           </div>
                         ))
