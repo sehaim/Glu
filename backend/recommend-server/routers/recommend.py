@@ -117,8 +117,6 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
                 limit=count
             )
 
-            print(f"pt_type {pt_type} detail_code {detail_code} level PL0{user_level} fetched_problems {fetched_problems}")
-
             # fetched_problems가 MongoDB에서 가져온 경우 ObjectId를 문자열로 변환
             for problem in fetched_problems:
                 response = ProblemResponse.from_problem(problem)
@@ -220,7 +218,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
             response = ProblemResponse.from_problem(fetched_problems[0])
             selected_problems.append(response)
 
-    # print(selected_problems)
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
         raise HTTPException(
@@ -254,13 +251,6 @@ async def get_type_problem_set(user_id: Optional[str] = Header(None, alias="X-Us
         raise HTTPException(status_code=400, detail=str(e))
 
     selected_problems = make_type_problems(user_id, user_problemtype_level)
-
-    # print("selected =====================================")
-    # for selected_problem in selected_problems:
-    #     print(selected_problem)
-    # print("len_type_problems" , len(selected_problems))
-    # while (len(selected_problems) != 30):
-    #     selected_problems = make_type_problems(user_id, user_problemtype_level)
 
     return selected_problems
 
@@ -296,7 +286,6 @@ def make_type_problems(user_id, user_problemtype_level):
                 top_classifications = top_n_classification(type_counts[i], wrong_status)
 
                 pt_detail_classifications = [item for item in top_classifications if item[1].startswith(detail_code)]
-                print(f"pt_detail {detail_code}", pt_detail_classifications)
 
                 #빈 배열일때
                 if not pt_detail_classifications :
@@ -318,8 +307,6 @@ def make_type_problems(user_id, user_problemtype_level):
                         vector=pt_detail_classifications[0][3],
                         num=type_counts[idx]
                     )
-
-                print(f"pt_detail {detail_code}  fetched_problems {fetched_problems}")
 
             for fetched_problem in fetched_problems:
                 response = ProblemResponse.from_problem(fetched_problem)
