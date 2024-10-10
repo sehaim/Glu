@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 780px;
+  width: 100%;
 }
 
 .status-container {
@@ -142,11 +142,5 @@
     padding-bottom: 32px;
     font-family: 'BMJUA';
     font-size: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    width: 320px;
   }
 }

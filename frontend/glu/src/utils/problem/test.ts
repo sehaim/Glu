@@ -59,7 +59,6 @@ export const postTestProblemGradingAPI = async (
     });
 
     const newToken = await refreshUserAPI();
-    console.log(newToken);
     if (newToken) {
       setCookie('accessToken', newToken, {
         maxAge: 60 * 60 * 24 * 14,
