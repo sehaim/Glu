@@ -269,7 +269,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                 problem_id_list.append(fetched_problems[0].id)
 
             print(f"pt_type {pt_type} len selected_problems: {len(selected_problems)}")
-
+            print("fetched_problems:", fetched_problems)
     # 총 15문제가 선택되었는지 확인
     if len(selected_problems) != 15:
         raise HTTPException(
