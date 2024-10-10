@@ -140,47 +140,9 @@ async def get_level_test(user_id: Optional[str] = Header(None, alias="X-User-Id"
 async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-Id")):
     user_problemtype_level = {}
 
-    user_info = {
-      "id": "gluglu24",
-      "nickname": "gluglu",
-      "stage": 1,
-      "exp": 68,
-      "imageUrl": "https://eglubucket.s3.ap-northeast-2.amazonaws.com/characters/level1.png",
-      "dayCount": 1,
-      "birth": "2014-09-27",
-      "createDate": "2024-08-10",
-      "attendanceRate": 25,
-      "problemTypeList": [
-        {
-          "level": 4,
-          "score": 99,
-          "type": {
-            "code": "PT01",
-            "name": "어휘 및 문법"
-          }
-        },
-        {
-          "level": 4,
-          "score": 52,
-          "type": {
-            "code": "PT02",
-            "name": "독해"
-          }
-        },
-        {
-          "level": 4,
-          "score": 68,
-          "type": {
-            "code": "PT03",
-            "name": "추론"
-          }
-        }
-      ]
-    }
-
     try:
         # 사용자 정보 API 호출
-        # user_info = await get_user_info(user_id)
+        user_info = await get_user_info(user_id)
 
         for problemType in user_info['problemTypeList']:
             user_problemtype_level[problemType['type']['code']] = problemType['level']
@@ -231,11 +193,7 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                 else:
                     wrong_status = get_wrong_status(int(user_id))
 
-                    print(f"wrong_status {wrong_status}")
-
                     if wrong_status != {}:
-
-                        print("1111111111111111111")
 
                         top_classifications = top_n_classification(2, wrong_status)
                         for classification in top_classifications:
@@ -252,8 +210,6 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                                 problem_id_list=problem_id_list
                             )
                     else:
-
-                        print("22222222222222222")
 
                         # 틀린 문제 없을때
                         if fetched_problems == None:
