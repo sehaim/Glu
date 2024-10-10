@@ -12,6 +12,8 @@
   flex-direction: column;
   width: 100%;
   max-width: 1200px;
+  min-height: calc(100vh - 140px);
+  justify-content: space-between;
 }
 
 .problem-section {
