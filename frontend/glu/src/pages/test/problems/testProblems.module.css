@@ -28,6 +28,8 @@
   align-items: flex-start;
   margin-top: 64px;
   gap: 20px;
+
+  min-height: 300px;
 }
 
 .problem-button-list {
@@ -77,6 +79,10 @@
 @media (max-width: 1024px) {
   .problem-container {
     flex-direction: column;
+  }
+
+  .problem-content {
+    height: auto;
   }
 
   .problem-button-list {
