@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ComprehensiveTestRecord } from '@/types/TestTypes';
 import Link from 'next/link';
 import { getSolvedComprehensiveTestAPI } from '@/utils/user/mytest';
@@ -29,14 +29,25 @@ export default function MytestComprehensiveTestRecordList({
     '걸린 시간',
   ];
 
-  const handlePageClick = async (page: number) => {
-    setCurrentPage(page);
+  const fetchResults = useCallback(
+    async (page = currentPage) => {
+      const newPage = page - 1;
 
-    if (page !== 1) {
-      const data = await getSolvedComprehensiveTestAPI(page - 1, 5);
-      setTestList(data?.content);
-    }
+      const data = await getSolvedComprehensiveTestAPI(newPage, 5);
+      if (data) {
+        setTestList(data.content);
+      }
+    },
+    [currentPage],
+  );
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
   };
+
+  useEffect(() => {
+    fetchResults();
+  }, [currentPage, fetchResults]);
 
   return (
     <div className={styles.container}>
