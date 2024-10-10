@@ -5,11 +5,16 @@ import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeCode;
 import com.ssafy.glu.problem.domain.problem.domain.ProblemTypeDetailCode;
 import com.ssafy.glu.problem.domain.problem.domain.QuestionTypeCode;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
+@Schema(description = "공통 코드 응답 DTO")
 public record CommonCodeResponse(
+	@Schema(description = "코드 값", example = "PL01")
 	String code,
+
+	@Schema(description = "코드 이름", example = "유아")
 	String name
 ) {
 	public static CommonCodeResponse of(ProblemLevelCode problemLevelCode) {
@@ -48,3 +53,4 @@ public record CommonCodeResponse(
 			.build();
 	}
 }
+
