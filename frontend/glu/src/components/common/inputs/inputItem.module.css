@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  margin: 5px 0;
+  position: relative;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-label {
+  font-family: 'PT';
+  font-size: 16px;
+  color: var(--TEXT_SECONDARY);
+  margin-right: 10px;
+}
+
+.error-box {
+  position: absolute;
+  background-color: rgba(255, 104, 104, 0.437);
+  top: 82%;
+  left: 5%;
+  white-space: nowrap;
+  width: auto;
+  display: inline-block;
+  padding: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--LIGHTPINK);
+}
+
+.error-message {
+  font-family: 'PT';
+  font-size: 12px;
+  color: var(--TEXT_PRIMARY);
+}
+
+#row {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#column {
+  flex-direction: column;
+}
+
+#row-input {
+  width: 60%;
+}

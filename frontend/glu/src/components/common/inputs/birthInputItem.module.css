@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+}
+
+.input-label {
+  font-family: 'PT';
+  font-size: 16px;
+  color: var(--TEXT_SECONDARY);
+  margin-left: 6px;
+}
+
+@media (max-width: 1120px) {
+  .container {
+    flex-wrap: wrap;
+  }
+}

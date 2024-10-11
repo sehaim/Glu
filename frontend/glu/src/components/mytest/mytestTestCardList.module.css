@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 500px;
+  background-color: var(--WHITE);
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  opacity: 80%;
+  align-items: center;
+}
+
+.title-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.option-line {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  min-width: 260px;
+  max-width: 350px;
+  justify-content: space-between;
+}
+
+.type-name {
+  font-family: 'HDBOLD';
+  font-size: 24px;
+  color: var(--PINK);
+}
+
+.card-list-container {
+  width: 100%;
+  max-width: 1500px;
+  min-height: 120px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+  position: relative;
+  padding: 0 20px;
+}
+
+@media (max-width: 1700px) {
+  .card-list-container {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 1500px) {
+  .card-list-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .card-list-container {
+    grid-template-columns: repeat(2, 1fr); /* 1개의 항목을 한 줄에 표시 */
+  }
+}
+
+.test-record-null {
+  font-family: 'PT';
+  font-size: 16px;
+  color: var(--TEXT_SECONDARY);
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

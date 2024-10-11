@@ -1,0 +1,233 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 960px;
+  height: 100%;
+  min-height: calc(100vh - 60px);
+}
+
+.section-title {
+  color: var(--TEXT_PRIMARY);
+  font-family: 'HDBOLD';
+  font-size: 42px;
+}
+
+.section-describe {
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 18px;
+  line-height: 24px;
+  margin-top: 24px;
+}
+
+.section1 {
+  justify-content: space-between;
+  padding: 20px;
+}
+
+#section1-text-wrapper {
+  flex-direction: column;
+  width: 60%;
+  max-width: 520px;
+  animation: slideUpBounce 3s ease-in-out 1;
+}
+
+#section1-image-wrapper {
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+}
+
+#main-character {
+  animation: slideUpBounce 3.5s ease-in-out 1;
+}
+
+.section2 {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#section2-text-wrapper {
+  flex-direction: column;
+  animation: slideInFromRightBounce 3s ease-in-out 1;
+}
+
+#section2-content-wrapper {
+  flex-direction: column;
+  margin-top: 48px;
+  animation: slideInFromRightBounce 3.5s ease-in-out 1;
+  padding: 20px;
+}
+
+.section2-title {
+  color: var(--PINK);
+  font-family: 'HDBOLD';
+  font-size: 24px;
+}
+
+.section2-describe {
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 18px;
+  line-height: 24px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.section3 {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#section3-text-wrapper {
+  animation: slideUpBounce 3s ease-in-out 1;
+}
+
+#section3-content-wrapper {
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  animation: popIn 2s ease-in-out 1;
+  padding: 20px;
+}
+
+#section3-graph-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+  width: 100%;
+}
+
+#graph-image {
+  margin-right: 60px;
+}
+
+#section3-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+  width: 100%;
+}
+
+#section3-button {
+  background-color: var(--PINK);
+  color: var(--WHITE);
+  border: 0px;
+  border-radius: 10px;
+  padding: 16px 36px;
+  cursor: pointer;
+  font-family: 'BMJUA';
+  font-size: 18px;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: flex;
+}
+
+@keyframes slideUpBounce {
+  0% {
+    transform: translateY(64px); /* 시작할 때 화면 아래에 위치 */
+    opacity: 0; /* 요소가 처음에 보이지 않음 */
+  }
+  25% {
+    transform: translateY(-20px); /* 위로 약간 튕김 */
+    opacity: 1; /* 요소가 서서히 나타남 */
+  }
+  50% {
+    transform: translateY(10px); /* 다시 아래로 살짝 내려옴 */
+  }
+  100% {
+    transform: translateY(0); /* 최종적으로 제자리에 고정 */
+  }
+}
+
+@keyframes slideInFromRightBounce {
+  0% {
+    transform: translateX(64px); /* 화면 밖 오른쪽에서 시작 */
+    opacity: 0; /* 처음에는 투명 */
+  }
+  30% {
+    transform: translateX(-20px); /* 중간에 오른쪽으로 약간 튕기는 느낌 */
+    opacity: 1; /* 서서히 나타남 */
+  }
+  50% {
+    transform: translateX(10px); /* 최종적으로 제자리에 고정 */
+  }
+  100% {
+    transform: translateX(0); /* 최종적으로 제자리에 고정 */
+  }
+}
+
+/* 애니메이션 정의 */
+@keyframes popIn {
+  0% {
+    transform: scale(0); /* 크기 0에서 시작 */
+  }
+  80% {
+    transform: scale(1.05); /* 약간 커졌다가 */
+  }
+  100% {
+    transform: scale(1); /* 정상 크기로 돌아옴 */
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 0px;
+  }
+
+  .section-title {
+    font-size: 32px;
+  }
+
+  .section-describe {
+    font-size: 16px;
+  }
+
+  .section1 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  #section1-text-wrapper {
+    width: 100%;
+  }
+
+  #section1-image-wrapper {
+    width: 100%;
+  }
+
+  #section3-graph-wrapper {
+    flex-direction: column;
+  }
+
+  .section2-title {
+    font-size: 24px;
+  }
+
+  .section2-describe {
+    font-size: 16px;
+  }
+
+  #graph-image {
+    margin-right: 0px;
+  }
+}

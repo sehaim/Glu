@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-button {
+  padding: 6px 10px;
+  margin: 0 5px;
+  background-color: var(--WHITE);
+  color: var(--DARKYELLOW);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'PT';
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.page-button-active {
+  background-color: var(--YELLOW);
+  color: var(--ORANGE);
+  font-weight: 700;
+}
+
+.page-button:hover {
+  background-color: var(--DARKYELLOW);
+  color: var(--WHITE);
+  font-weight: 700;
+}
+
+.dir-button {
+  background: none;
+  border-style: none;
+  cursor: pointer;
+  color: var(--ORANGE);
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  padding-top: 2px;
+}
+
+.dir-button-disabled {
+  visibility: hidden;
+}
+
+.dir-button:hover {
+  background-color: var(--YELLOW);
+}

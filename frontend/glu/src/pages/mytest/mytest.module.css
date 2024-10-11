@@ -1,0 +1,30 @@
+.container {
+  width: 100%;
+  padding: 20px;
+}
+
+.growth-container {
+  width: 100%;
+  height: 1300px;
+  padding: 20px;
+  display: flex;
+}
+
+.row {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.growth-section {
+  width: 72%;
+  min-width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--WHITE);
+  opacity: 90%;
+  padding: 30px;
+  border-radius: 15px;
+  margin-left: 20px;
+}

@@ -1,0 +1,48 @@
+.problem-image {
+  background-color: var(--WHITE);
+  border-radius: 10px;
+  padding: 24px;
+  color: var(--TEXT_SECONDARY);
+  font-family: 'PT';
+  font-size: 18px;
+  line-height: 24px;
+  white-space: pre-wrap;
+  width: 420px;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1200px) {
+  .problem-image {
+    width: 100%;
+    font-size: 16px;
+    width: 380px;
+  }
+}
+
+/* 
+@media (max-width: 1024px) {
+  .problem-image {
+    width: 100%;
+    font-size: 16px;
+    width: 380px;
+  }
+} */
+
+@media (max-width: 768px) {
+  .problem-image {
+    width: 100%;
+    font-size: 16px;
+    width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .problem-image {
+    font-size: 16px;
+    width: 320px;
+  }
+}
