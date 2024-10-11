@@ -120,6 +120,7 @@ export default function Test() {
       {/* 레벨업 모달 */}
       <LevelUpModal show={isModalOpen} onClose={handleLevelUpModalClose}>
         <div className={styles.levelUp}>
+          <h2 className={styles['levelUp-title']}>레벨업!</h2>
           <Image
             className={styles['levelUp-image']}
             src={stageImage}

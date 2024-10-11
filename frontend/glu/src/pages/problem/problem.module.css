@@ -120,6 +120,34 @@
   gap: 24px;
 }
 
+.levelUp {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding: 18%;
+  background-color: var(--LIGHTYELLOW);
+  border-radius: 100%;
+  position: relative;
+}
+
+.levelUp-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.levelUp-title {
+  font-family: 'BMJUA';
+  font-size: 35px;
+  color: var(--DARKPINK);
+  position: absolute;
+  top: 5%;
+}
+
 @media (max-width: 1200px) {
   .problem-button-list {
     width: 720px;

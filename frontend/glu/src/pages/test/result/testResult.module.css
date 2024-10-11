@@ -206,17 +206,31 @@
 }
 
 .levelUp {
+  width: 400px;
+  height: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 40px;
+  justify-content: center;
+  align-self: center;
+  padding: 18%;
+  background-color: var(--LIGHTYELLOW);
+  border-radius: 100%;
+  position: relative;
+}
+
+.levelUp-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
 }
 
 .levelUp-title {
   font-family: 'BMJUA';
-  font-size: 28px;
-  color: var(--PINK);
+  font-size: 35px;
+  color: var(--DARKPINK);
+  position: absolute;
+  top: 5%;
 }
 
 @media (max-width: 1200px) {
