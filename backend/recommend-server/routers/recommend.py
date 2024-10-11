@@ -179,7 +179,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                 fetched_problems = get_random_problems_by_code_and_level(
                     detail_code=detail_code,
                     levels=user_levels,
-                    limit=1
+                    limit=1,
+                    problem_id_list=problem_id_list
                 )
                 idx = idx + 1
             else:
@@ -188,7 +189,8 @@ async def get_general_test(user_id: Optional[str] = Header(None, alias="X-User-I
                     fetched_problems = get_random_problems_by_code_and_level(
                         detail_code=detail_code,
                         levels=user_levels,
-                        limit=1
+                        limit=1,
+                        problem_id_list=problem_id_list
                     )
                 else:
                     wrong_status = get_wrong_status(int(user_id))
