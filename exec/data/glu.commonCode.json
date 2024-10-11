@@ -1,0 +1,168 @@
+[{
+  "_id": "PT",
+  "typeCode": "PT",
+  "name": "문제 유형",
+  "parent_code": null
+},
+{
+  "_id": "PL",
+  "typeCode": "PL",
+  "name": "문제 레벨",
+  "parent_code": null
+},
+{
+  "_id": "QT",
+  "typeCode": "QT",
+  "name": "질문 유형",
+  "parent_code": null
+},
+{
+  "_id": "PT01",
+  "typeCode": "PT01",
+  "name": "어휘 및 문법",
+  "parent_code": "PT"
+},
+{
+  "_id": "PT02",
+  "typeCode": "PT02",
+  "name": "독해",
+  "parent_code": "PT"
+},
+{
+  "_id": "PT03",
+  "typeCode": "PT03",
+  "name": "추론",
+  "parent_code": "PT"
+},
+{
+  "_id": "PT0111",
+  "typeCode": "PT0111",
+  "name": "옳게 설명하는 문장 고르기",
+  "parent_code": "PT01"
+},
+{
+  "_id": "PT0112",
+  "typeCode": "PT0112",
+  "name": "문장의 해당 단어의 유의어/반의어 단어 고르기",
+  "parent_code": "PT01"
+},
+{
+  "_id": "PT0121",
+  "typeCode": "PT0121",
+  "name": "문맥상 올바른 맞춤법 고르기",
+  "parent_code": "PT01"
+},
+{
+  "_id": "PT0122",
+  "typeCode": "PT0122",
+  "name": "동사 형용사 구분하기",
+  "parent_code": "PT01"
+},
+{
+  "_id": "PT0123",
+  "typeCode": "PT0123",
+  "name": "빈칸에 들어갈 알맞은 접속사 찾기",
+  "parent_code": "PT01"
+},
+{
+  "_id": "PT0124",
+  "typeCode": "PT0124",
+  "name": "문장 구조에 맞는 어미 구분하기",
+  "parent_code": "PT01"
+},
+{
+  "_id": "PT0211",
+  "typeCode": "PT0211",
+  "name": "명시적 내용 확인하기",
+  "parent_code": "PT02"
+},
+{
+  "_id": "PT0221",
+  "typeCode": "PT0221",
+  "name": "핵심어 파악하기",
+  "parent_code": "PT02"
+},
+{
+  "_id": "PT0222",
+  "typeCode": "PT0222",
+  "name": "내용 파악하기",
+  "parent_code": "PT02"
+},
+{
+  "_id": "PT0311",
+  "typeCode": "PT0311",
+  "name": "문장을 통해 알맞은 그림 유추 고르기",
+  "parent_code": "PT03"
+},
+{
+  "_id": "PT0312",
+  "typeCode": "PT0312",
+  "name": "함축적 내용 추론하기",
+  "parent_code": "PT03"
+},
+{
+  "_id": "PT0321",
+  "typeCode": "PT0321",
+  "name": "빈칸 추론하기",
+  "parent_code": "PT03"
+},
+{
+  "_id": "PL01",
+  "typeCode": "PL01",
+  "name": "유아",
+  "parent_code": "PL"
+},
+{
+  "_id": "PL02",
+  "typeCode": "PL02",
+  "name": "초등 1학년",
+  "parent_code": "PL"
+},
+{
+  "_id": "PL03",
+  "typeCode": "PL03",
+  "name": "초등 2학년",
+  "parent_code": "PL"
+},
+{
+  "_id": "PL04",
+  "typeCode": "PL04",
+  "name": "초등 3학년",
+  "parent_code": "PL"
+},
+{
+  "_id": "PL05",
+  "typeCode": "PL05",
+  "name": "초등 4학년",
+  "parent_code": "PL"
+},
+{
+  "_id": "PL06",
+  "typeCode": "PL06",
+  "name": "초등 5학년",
+  "parent_code": "PL"
+},
+{
+  "_id": "PL07",
+  "typeCode": "PL07",
+  "name": "초등 6학년",
+  "parent_code": "PL"
+},
+{
+  "_id": "QT01",
+  "typeCode": "QT01",
+  "name": "객관식",
+  "parent_code": "QT"
+},
+{
+  "_id": "QT02",
+  "typeCode": "QT02",
+  "name": "단답식",
+  "parent_code": "QT"
+},
+{
+  "_id": "QT03",
+  "typeCode": "QT03",
+  "name": "서술형",
+  "parent_code": "QT"
+}]
