@@ -21,11 +21,11 @@ export default function ProblemProgressBar({
         />
       </div>
       <Image
-        src="/images/problem/house.webp"
+        src="/images/problem/house.png"
         alt="house"
         className={styles['progress-house']}
-        width={120}
-        height={120}
+        width={140}
+        height={140}
       />
     </div>
   );

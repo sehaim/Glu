@@ -26,10 +26,10 @@
 
 .progress-house {
   position: absolute;
-  right: 0;
+  right: 20px;
   bottom: 20px;
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
 }
 
 @media (max-width: 768px) {
