@@ -1,0 +1,33 @@
+.bar {
+  width: 100%;
+  max-width: 500px;
+  height: 35px;
+  background-color: var(--WHITEPINK);
+  border-style: solid;
+  border-radius: 15px;
+  border-color: var(--LIGHTPINK);
+  border-width: 2px;
+  overflow: hidden;
+  position: relative;
+  padding: 3px 4px 3px 4px;
+}
+
+.fill {
+  height: 100%;
+  background-color: var(--PINK);
+  border-radius: 15px 15px 15px 15px;
+  transition: width 0.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 8px;
+}
+
+.label {
+  color: var(--TEXT_SECONDARY);
+  font-family: 'BMJUA';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}

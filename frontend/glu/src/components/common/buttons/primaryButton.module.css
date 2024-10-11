@@ -1,0 +1,32 @@
+.button {
+  border-radius: 20px;
+  background-color: var(--PINK);
+  font-family: 'BMJUA';
+  color: var(--WHITE);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 5px 3px rgba(255, 155, 155, 0.5);
+}
+
+.small {
+  font-size: 16px;
+  padding: 8px 15px;
+}
+
+.medium {
+  font-size: 20px;
+  padding: 10px 25px;
+}
+
+.large {
+  font-size: 24px;
+  padding: 12px 30px;
+}

@@ -1,0 +1,33 @@
+.button {
+  border-radius: 10px;
+  background-color: var(--LIGHTPINK);
+  font-family: 'PT';
+  color: var(--TEXT_PRIMARY);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* 비활성화되지 않은 버튼에만 호버 스타일 적용 */
+.button:not(:disabled):hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 3px 1px rgba(255, 155, 155, 0.5);
+}
+
+.small {
+  font-size: 13px;
+  padding: 5px 10px;
+}
+
+.medium {
+  font-size: 15px;
+  padding: 8px 15px;
+}
+
+.large {
+  font-size: 18px;
+  padding: 12px 20px;
+}

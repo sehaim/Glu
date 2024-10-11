@@ -1,0 +1,34 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section {
+  width: 300px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: 'HDBOLD';
+  font-size: 32px;
+  color: var(--TEXT_PRIMARY);
+  text-align: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.password-error {
+  font-family: 'PT';
+  font-size: 12px;
+  color: var(--RED);
+}

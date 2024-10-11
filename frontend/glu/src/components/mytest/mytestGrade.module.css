@@ -1,0 +1,89 @@
+.container {
+  width: 400px;
+  height: 100%;
+  background-color: var(--WHITE);
+  opacity: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-family: 'BMJUA';
+  font-size: 20px;
+  color: var(--TEXT_SECONDARY);
+}
+
+.img-container {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding: 18%;
+  background-color: var(--LIGHTYELLOW);
+  border-radius: 100%;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.character-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.flex-line {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exp-title {
+  color: var(--PINK);
+  font-family: 'BMJUA';
+  font-size: 24px;
+}
+
+.exp-container {
+  width: 75%;
+}
+
+.triangle-graph-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.bar-graph-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.problem-name {
+  font-family: 'BMJUA';
+  color: var(--TEXT_SECONDARY);
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.level {
+  font-family: 'BMJUA';
+  color: var(--PINK);
+  font-size: 17px;
+}
+
+#bar-graph-line {
+  padding: 0 15px;
+}
