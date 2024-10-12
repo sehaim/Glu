@@ -6,12 +6,14 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableMongoRepositories
 @EnableMongoAuditing
 @EnableFeignClients
 @EnableKafka
+@EnableScheduling
 public class GluProblemApplication {
 
     public static void main(String[] args) {

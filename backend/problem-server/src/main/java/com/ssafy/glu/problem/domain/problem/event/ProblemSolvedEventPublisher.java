@@ -1,33 +1,29 @@
 package com.ssafy.glu.problem.domain.problem.event;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
-
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
 import com.ssafy.glu.problem.domain.problem.dto.event.ProblemSolvedEvent;
 import com.ssafy.glu.problem.domain.problem.dto.grading.GradeResult;
 import com.ssafy.glu.problem.domain.problem.dto.request.ProblemSolveRequest;
-
+import com.ssafy.glu.problem.global.event.service.OutboxEventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class ProblemSolvedEventPublisher {
+    private final OutboxEventService outboxEventService;
 
-	private final KafkaTemplate<String, ProblemSolvedEvent> kafkaTemplate;
+    @Value("${kafka.topic.problem-solved}")
+    private String problemSolvedTopic;
 
-	@Value("${kafka.topic.problem-solved}")
-	private String problemSolvedTopic;
+    public void publish(Long userId, Problem problem, GradeResult gradeResult, ProblemSolveRequest request) {
+        publish(userId, null, problem, gradeResult, request);
+    }
 
-	public void publish(Long userId, Problem problem, GradeResult gradeResult, ProblemSolveRequest request) {
-		ProblemSolvedEvent event = ProblemSolvedEvent.of(userId, problem, gradeResult, request);
-		kafkaTemplate.send(problemSolvedTopic, event);
-	}
-
-	public void publish(Long userId, String testId, Problem problem, GradeResult gradeResult,
-		ProblemSolveRequest request) {
-		ProblemSolvedEvent event = ProblemSolvedEvent.of(userId, testId, problem, gradeResult, request);
-		kafkaTemplate.send(problemSolvedTopic, event);
-	}
+    public void publish(Long userId, String testId, Problem problem, GradeResult gradeResult,
+                        ProblemSolveRequest request) {
+        ProblemSolvedEvent event = ProblemSolvedEvent.of(userId, testId, problem, gradeResult, request);
+        outboxEventService.saveOutBoxAndSendEvent(problemSolvedTopic, event);
+    }
 }

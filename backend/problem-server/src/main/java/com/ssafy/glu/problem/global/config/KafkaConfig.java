@@ -33,7 +33,7 @@ public class KafkaConfig {
 	String GROUP_ID_USER_PROBLEM_STATUS;
 
 	@Bean
-	public ProducerFactory<String, ProblemSolvedEvent> producerFactory() {
+	public ProducerFactory<String, Object> producerFactory() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_BOOTSTRAP_SERVERS);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -42,7 +42,7 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public KafkaTemplate<String, ProblemSolvedEvent> kafkaTemplate() {
+	public KafkaTemplate<String, Object> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
 	}
 
