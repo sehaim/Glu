@@ -29,11 +29,11 @@ public class OutboxEvent extends BaseTimeDocument {
     }
 
     public void fail() {
-        status = Status.PENDING;
+        status = Status.FAILED;
     }
 
     public enum Status{
-        PENDING, // 보류
+        PENDING, // 보류 - 전송 전
         SENT, // 전송 성공
         FAILED; // 전송 실패
     }
