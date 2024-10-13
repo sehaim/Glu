@@ -138,11 +138,11 @@ public class ProblemServiceImpl implements ProblemService {
 		// 채점 및 유저 점수 업데이트
 		GradeResult gradeResult = problemGradingService.gradeProblem(user, problem, request);
 
-		// 문제 풀이 이벤트 발행
-		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
-
 		// 캐릭터 성장 API 요청
 		ExpUpdateResponse expUpdateResponse = userService.updateUserExp(user, userId, gradeResult);
+
+		// 문제 풀이 이벤트 발행
+		problemSolvedEventPublisher.publish(userId, problem, gradeResult, request);
 
 		return ProblemGradingResponse.of(gradeResult, expUpdateResponse);
 	}

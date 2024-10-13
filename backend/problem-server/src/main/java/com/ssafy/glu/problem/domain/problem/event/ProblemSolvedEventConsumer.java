@@ -29,6 +29,7 @@ public class ProblemSolvedEventConsumer {
 
 	@KafkaListener(topics = "${kafka.topic.problem-solved}", groupId = "${kafka.consumer.group-id.user-problem-log}")
 	public void consumeProblemSolvedEventForLog(ProblemSolvedEvent event) {
+		log.info("[Kafka] 문제 풀이 이력 생성, event : {}", event);
 		Problem problem = getProblemOrThrow(event.problemId());
 
 		UserProblemLog userProblemLog = saveUserProblemLog(event, problem);
