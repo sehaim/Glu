@@ -1,6 +1,8 @@
 package com.ssafy.glu.problem.domain.problem.event;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.glu.problem.domain.problem.domain.Problem;
@@ -27,6 +29,9 @@ public class ProblemSolvedEventConsumer {
 	private final ProblemRepository problemRepository;
 	private final TestRepository testRepository;
 
+	@Retryable(
+			backoff = @Backoff(delay = 2000, multiplier = 2)
+	)
 	@KafkaListener(topics = "${kafka.topic.problem-solved}", groupId = "${kafka.consumer.group-id.user-problem-log}")
 	public void consumeProblemSolvedEventForLog(ProblemSolvedEvent event) {
 		log.info("[Kafka] 문제 풀이 이력 생성, event : {}", event);
@@ -45,6 +50,9 @@ public class ProblemSolvedEventConsumer {
 		}
 	}
 
+	@Retryable(
+			backoff = @Backoff(delay = 2000, multiplier = 2)
+	)
 	@KafkaListener(topics = "${kafka.topic.problem-solved}", groupId = "${kafka.consumer.group-id.user-problem-status}")
 	public void consumeProblemSolvedEventForStatus(ProblemSolvedEvent event) {
 		log.info("[Kafka] 문제 풀이 상태 업데이트, event : {}", event);
