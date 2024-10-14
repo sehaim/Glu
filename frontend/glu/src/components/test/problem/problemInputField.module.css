@@ -11,11 +11,11 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .problem-input::placeholder {
-  font-size: 18px;
+  font-size: 22px;
 }
 
 @media (max-width: 1200px) {
