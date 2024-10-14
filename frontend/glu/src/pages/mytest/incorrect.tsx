@@ -3,6 +3,7 @@ import { getSolvedTypeTestAPI } from '@/utils/user/mytest';
 import { ProblemType, SolvedProblemResponse } from '@/types/ProblemTypes';
 import MytestTestCardList from '@/components/mytest/mytestTestCardList';
 import { getCookie } from 'cookies-next';
+import Head from 'next/head';
 import styles from './mytest.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -81,6 +82,11 @@ export default function MytestIncorrectPage({
 }: MytestIncorrectPageProps) {
   return (
     <div className={styles.container}>
+      <Head>
+        <title>나의 학습 - 틀린 문제</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      </Head>
       {testDataList.map((testData) => (
         <MytestTestCardList
           key={testData.problemType.code}
