@@ -59,6 +59,7 @@ export default function App({
         />
         <meta name="author" content="ssafy" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
