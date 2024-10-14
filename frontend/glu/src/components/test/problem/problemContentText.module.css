@@ -10,4 +10,7 @@
   width: 100%;
   max-height: 500px;
   overflow: auto;
+
+  /* 스크롤 스타일 추가 */
+  scrollbar-color: var(--LIGHTPINK) var(--WHITE); /* Firefox */
 }

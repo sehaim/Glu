@@ -27,6 +27,7 @@
   border-radius: 10px;
   font-family: 'PT';
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .solved-list-item {
