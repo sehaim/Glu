@@ -98,7 +98,7 @@ export default function ProblemList({ initialProblems }: ProblemListProps) {
       <div className={styles['content-wrapper']}>
         <div>
           <h2 className={styles['page-title']}>유형 테스트 추천</h2>
-          <p>
+          <p className={styles['page-text']}>
             <span id={styles.username}>{username}</span>님을 위한 유형별 추천
             문제입니다.
             <br />

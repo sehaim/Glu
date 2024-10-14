@@ -265,7 +265,7 @@ export default function Test({ initialProblems }: TestProps) {
               <div className={styles['problem-button-list']}>
                 {currentProblemIndex > 0 ? (
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="이전 문제"
                     onClick={handlePrevProblem}
                   />
@@ -274,13 +274,13 @@ export default function Test({ initialProblems }: TestProps) {
                 )}
                 {currentProblemIndex === problems.length - 1 ? (
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="제출하기"
                     onClick={handleSubmit}
                   />
                 ) : (
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="다음 문제"
                     onClick={handleNextProblem}
                   />

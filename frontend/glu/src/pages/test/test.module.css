@@ -50,6 +50,8 @@
 
 .content {
   height: 120px;
+  font-size: 22px;
+  line-height: 1.5;
 }
 
 #username {

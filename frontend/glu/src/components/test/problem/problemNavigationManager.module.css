@@ -1,18 +1,15 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 180px;
+  width: 200px;
   position: sticky;
   top: 60px;
   z-index: 10;
 }
 
 .container-title {
-  width: 120px;
   color: var(--TEXT_SECONDARY);
-  font-size: 16px;
+  font-size: 22px;
   font-family: 'PTBOLD';
   margin: 32px 0px;
 }
@@ -22,8 +19,8 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 132px;
-  padding: 10px 0px;
+  width: 100%;
+  padding: 10px 10px;
   background-color: var(--WHITE);
   color: var(--TEXT_SECONDARY);
   border: none;
@@ -34,14 +31,16 @@
 
 .solved-list-item {
   list-style: none;
+  width: 100%;
 }
 
 .solved-button {
+  font-size: 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 24px;
-  width: 120px;
+  padding: 12px 24px;
+  width: 100%;
   border: none;
   background-color: var(--WHITE);
   color: var(--TEXT_SECONDARY);

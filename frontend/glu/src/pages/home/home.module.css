@@ -11,7 +11,7 @@
   justify-content: center;
   align-items: center;
   width: 80%;
-  max-width: 960px;
+  max-width: 980px;
   height: 100%;
   min-height: calc(100vh - 60px);
 }
@@ -25,8 +25,8 @@
 .section-describe {
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 22px;
+  line-height: 1.5;
   margin-top: 24px;
 }
 
@@ -66,7 +66,7 @@
   flex-direction: column;
   margin-top: 48px;
   animation: slideInFromRightBounce 3.5s ease-in-out 1;
-  padding: 20px;
+  padding: 20px 0;
 }
 
 .section2-title {
@@ -78,8 +78,8 @@
 .section2-describe {
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 22px;
+  line-height: 1.5;
   margin-top: 8px;
   margin-bottom: 24px;
 }
