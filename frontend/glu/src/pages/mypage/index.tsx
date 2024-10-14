@@ -15,8 +15,8 @@ import {
   hasSpecialChar,
   sweetalertError,
 } from '@/utils/common';
-import styles from './mypage.module.css';
 import Head from 'next/head';
+import styles from './mypage.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req, res } = context;
