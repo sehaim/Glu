@@ -42,12 +42,14 @@
   width: 15%;
   text-align: center;
   color: var(--TEXT_SECONDARY);
+  font-size: 18px;
 }
 
 .element {
   width: 15%;
   text-align: center;
   color: var(--TEXT_PRIMARY);
+  font-size: 18px;
 }
 
 .test-record-null {
