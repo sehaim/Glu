@@ -94,6 +94,7 @@ export default function ProblemList({ initialProblems }: ProblemListProps) {
         />
         <meta property="og:type" content="website" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
 
       <div className={styles['content-wrapper']}>
