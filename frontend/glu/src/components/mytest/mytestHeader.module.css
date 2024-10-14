@@ -24,7 +24,7 @@
 .page-name {
   font-family: 'BMJUA';
   color: var(--TEXT_SECONDARY);
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
   display: inline-block;
   transition: transform 0.3s ease;

@@ -97,7 +97,7 @@ export default function RadarGraph({ data, maxScore }: RadarGraphProps) {
         .attr('y', labelCoord.y)
         .attr('text-anchor', 'middle')
         .attr('font-family', 'PT')
-        .attr('font-size', '16px')
+        .attr('font-size', '18px')
         .attr('fill', 'var(--TEXT_SECONDARY)')
         .text(d.axis);
     });

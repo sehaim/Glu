@@ -56,6 +56,7 @@
   left: 10%;
   width: 80%;
   color: var(--TEXT_PRIMARY);
+  font-size: 18px;
 }
 
 .date {
