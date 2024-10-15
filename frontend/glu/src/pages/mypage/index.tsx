@@ -146,7 +146,7 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
     <div id="page-container">
       <Head>
         <title>나의 정보</title>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
       <div id="page-title">나의 정보</div>

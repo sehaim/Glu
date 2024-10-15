@@ -62,7 +62,7 @@ export default function MytestGrowthPage({
     <div className={`${styles['growth-container']} ${styles.row}`}>
       <Head>
         <title>나의 학습 - 나의 성장</title>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
       <MytestGrade userInfo={userInfo} />

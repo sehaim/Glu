@@ -120,7 +120,7 @@ export default function Test({
           content="총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로 평가합니다."
         />
         <meta property="og:type" content="website" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
 

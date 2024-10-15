@@ -84,7 +84,7 @@ export default function MytestStarredPage({
     <div className={styles.container}>
       <Head>
         <title>나의 학습 - 찜한 문제</title>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
       {testDataList.map((testData) => (
