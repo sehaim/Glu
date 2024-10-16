@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface OutboxEventRepository extends MongoRepository<OutboxEvent, String> {
     List<OutboxEvent> findAllByStatusIsNot(OutboxEvent.Status status);
+    List<OutboxEvent> findAllByStatus(OutboxEvent.Status status);
 }

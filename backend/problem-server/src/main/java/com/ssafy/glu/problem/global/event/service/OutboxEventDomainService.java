@@ -45,6 +45,6 @@ public class OutboxEventDomainService implements OutboxEventService{
 
     @Override
     public List<OutboxEvent> getEventListNotSent() {
-        return outboxEventRepository.findAllByStatusIsNot(OutboxEvent.Status.SENT);
+        return outboxEventRepository.findAllByStatus(OutboxEvent.Status.FAILED);
     }
 }
