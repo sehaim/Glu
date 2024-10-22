@@ -15,6 +15,7 @@ import {
   hasSpecialChar,
   sweetalertError,
 } from '@/utils/common';
+import Head from 'next/head';
 import styles from './mypage.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -143,6 +144,11 @@ export default function Mypage({ userInfo, currentBirth }: MypageProps) {
 
   return (
     <div id="page-container">
+      <Head>
+        <title>나의 정보</title>
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      </Head>
       <div id="page-title">나의 정보</div>
       <div className={styles.section}>
         <div className={styles['inline-items']}>

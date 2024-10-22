@@ -4,10 +4,13 @@
   padding: 24px;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 18px;
+  font-size: 22px;
   line-height: 24px;
   white-space: pre-wrap;
   width: 100%;
   max-height: 500px;
   overflow: auto;
+
+  /* 스크롤 스타일 추가 */
+  scrollbar-color: var(--LIGHTPINK) var(--WHITE); /* Firefox */
 }

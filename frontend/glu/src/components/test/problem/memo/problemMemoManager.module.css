@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  width: 180px;
+  width: 200px;
   position: sticky;
   top: 60px;
   z-index: 10;
@@ -12,9 +12,10 @@
 .container-title {
   width: 180px;
   color: var(--TEXT_SECONDARY);
-  font-size: 16px;
+  font-size: 22px;
   font-family: 'PTBOLD';
   margin: 32px 0px;
+  align-self: start;
 }
 
 .memo-textarea-button-list {
@@ -37,7 +38,7 @@
 
 .memo-textarea {
   width: 100%;
-  min-height: 150px;
+  min-height: 180px;
   padding: 12px;
   background-color: #ffeff1; /* 메모 배경색 */
   border: 2px solid #ffcccb; /* 메모 테두리 */
@@ -46,7 +47,7 @@
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   line-height: 1.5; /* 줄 간격 */
-  font-size: 16px;
+  font-size: 20px;
   resize: none; /* 크기 조절 막기 */
   outline: none; /* 클릭 시 외곽선 제거 */
   margin-bottom: 16px;

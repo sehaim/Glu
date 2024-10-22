@@ -184,7 +184,7 @@ export default function Test() {
                 <div className={styles['problem-button-list']}>
                   <div />
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="제출하기"
                     onClick={handleSubmit}
                   />

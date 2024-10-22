@@ -50,6 +50,8 @@
 
 .content {
   height: 120px;
+  font-size: 22px;
+  line-height: 1.5;
 }
 
 #username {
@@ -89,9 +91,9 @@
 .last-test-item {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-start;
-  width: 200px;
+  width: 230px;
   margin-bottom: 20px;
 }
 
@@ -99,12 +101,14 @@
   color: var(--TEXT_SECONDARY);
   white-space: nowrap;
   width: 80px;
+  font-size: 24px;
 }
 
 .last-test-item-content {
   color: var(--PINK);
   white-space: nowrap;
   width: 120px;
+  font-size: 24px;
 }
 
 .last-test-item-column {

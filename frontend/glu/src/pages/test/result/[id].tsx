@@ -287,7 +287,12 @@ export default function TestResult({ testResultResponse }: TestResultProps) {
                   </p>
                 )}
                 <div className={styles['solution-content']}>
-                  (정답: {problem.answer}) {problem.solution}
+                  {!problem.isCorrect && (
+                    <p className={styles['correct-answer']}>
+                      (정답: {problem.answer})
+                    </p>
+                  )}
+                  {problem.solution}
                 </div>
               </div>
             </div>

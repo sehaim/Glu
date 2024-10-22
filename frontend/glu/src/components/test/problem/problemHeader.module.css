@@ -19,7 +19,7 @@
 .status-level {
   color: var(--PINK);
   font-family: 'BMJUA';
-  font-size: 24px;
+  font-size: 28px;
   margin-top: 4px;
   white-space: nowrap;
 }
@@ -67,7 +67,7 @@
     -1px 1px 0 #608dcc,
     1px 1px 0 #608dcc;
   font-family: 'BMJUA';
-  font-size: 22px;
+  font-size: 28px;
   text-align: center;
   z-index: 2;
 }
@@ -102,7 +102,7 @@
   padding: 24px 80px;
   padding-left: 96px;
   font-family: 'PTBOLD';
-  font-size: 20px;
+  font-size: 25px;
   z-index: 1; /* problem-type보다 낮게 설정 */
 }
 

@@ -8,7 +8,7 @@
 
 .section-name {
   font-family: 'BMJUA';
-  font-size: 20px;
+  font-size: 24px;
   color: var(--TEXT_SECONDARY);
   margin-right: 30px;
 }
@@ -42,12 +42,14 @@
   width: 15%;
   text-align: center;
   color: var(--TEXT_SECONDARY);
+  font-size: 18px;
 }
 
 .element {
   width: 15%;
   text-align: center;
   color: var(--TEXT_PRIMARY);
+  font-size: 18px;
 }
 
 .test-record-null {

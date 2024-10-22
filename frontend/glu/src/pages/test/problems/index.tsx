@@ -202,6 +202,8 @@ export default function Test({ initialProblems }: TestProps) {
           content="총 15문제로, 모든 유형이 포함되어 나의 문해력을 종합적으로 평가합니다."
         />
         <meta property="og:type" content="website" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
 
       <div className={styles['problem-container']}>
@@ -265,7 +267,7 @@ export default function Test({ initialProblems }: TestProps) {
               <div className={styles['problem-button-list']}>
                 {currentProblemIndex > 0 ? (
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="이전 문제"
                     onClick={handlePrevProblem}
                   />
@@ -274,13 +276,13 @@ export default function Test({ initialProblems }: TestProps) {
                 )}
                 {currentProblemIndex === problems.length - 1 ? (
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="제출하기"
                     onClick={handleSubmit}
                   />
                 ) : (
                   <PrimaryButton
-                    size="small"
+                    size="medium"
                     label="다음 문제"
                     onClick={handleNextProblem}
                   />
