@@ -107,9 +107,9 @@ compileQuerydsl {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "S11P21A506"
-        property "sonar.host.url", "https://sonarqube.ssafy.com"
-        property "sonar.login", "sqp_b3fa7cadca89073407d24b679e64fa2cc2555f33"
+        property "sonar.projectKey", ""
+        property "sonar.host.url", ""
+        property "sonar.login", ""
         property "sonar.java.enablePreviewFeatures", "true"
         property "sonar.scm.provider", "git"
         property "sonar.java.binaries", "$buildDir\\classes\\java\\main"
