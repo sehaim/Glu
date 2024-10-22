@@ -2,15 +2,15 @@
 
 ## 목차
 
-[1. 개발 환경](https://www.notion.so/GLU-af0cbfcc6e65470c8d2b739c514d9bbe?pvs=21)
+1. 개발 환경
 
-[2. 빌드 시 사용되는 환경 변수](https://www.notion.so/GLU-af0cbfcc6e65470c8d2b739c514d9bbe?pvs=21)
+2. 빌드 시 사용되는 환경 변수
 
-[3. 배포 시 특이사항 기재](https://www.notion.so/GLU-af0cbfcc6e65470c8d2b739c514d9bbe?pvs=21)
+3. 배포 시 특이사항 기재
 
-[4. DB 접속 정보](https://www.notion.so/GLU-af0cbfcc6e65470c8d2b739c514d9bbe?pvs=21)
+4. DB 접속 정보
 
-[5. 외부 서비스 정보](https://www.notion.so/GLU-af0cbfcc6e65470c8d2b739c514d9bbe?pvs=21)
+5. 외부 서비스 정보
 
 ## 1. 개발 환경
 
@@ -945,13 +945,14 @@ chmod +R 666 /var/run/docker.sock
 
 ---
 
-| MARIA_DB_URL | mysql+pymysql://ssafyglu:ssafyglu2024!@glu-database.cdiwiuwicat1.ap-northeast-2.rds.amazonaws.com:3306 |
+| KEY | VALUE |
 | --- | --- |
-| MARIADB_DATABASE | glu |
-| MONGODB_URL | mongodb+srv://S11P22A506:denr23bdoE@ssafy.ngivl.mongodb.net/S11P22A506?authSource=admin |
-| MONGODB_DATABASE | S11P22A506 |
-| S3_REGION | ap-northeast-2 |
-| S3_BUCKET | eglubucket |
+| MARIA_DB_URL | . |
+| MARIADB_DATABASE | . |
+| MONGODB_URL | . |
+| MONGODB_DATABASE | . |
+| S3_REGION | . |
+| S3_BUCKET | . |
 
 ## 5. 외부 서비스 정보
 
