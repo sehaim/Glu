@@ -45,7 +45,7 @@
   flex: 1;
   color: var(--TEXT_SECONDARY);
   font-family: 'BMJUA';
-  font-size: 18px;
+  font-size: 24px;
   white-space: nowrap;
 }
 
@@ -57,7 +57,7 @@
 .item-content-text {
   color: var(--PINK);
   font-family: 'BMJUA';
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .result-table {
@@ -71,7 +71,7 @@
   text-align: center;
   padding: 6px;
   font-family: 'BMJUA';
-  font-size: 16px;
+  font-size: 20spx;
 }
 
 .result-table tr:nth-child(even) {
@@ -138,13 +138,13 @@
   font-family: 'PT';
   color: var(--PINK);
   margin-bottom: 20px;
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .solution-title {
   color: var(--BLACK);
   font-family: 'PTBOLD';
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .problem-content {
@@ -153,8 +153,8 @@
   padding: 16px 24px;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 22px;
+  line-height: 1.3;
   width: calc(50% - 12px);
   min-height: 100px;
 }
@@ -170,11 +170,12 @@
 .problem-option-item {
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
-  font-size: 18px;
+  font-size: 22px;
 }
 
-.user-answer {
-  color: var(--TEXT_PRIMARY);
+.correct-answer {
+  color: var(--GREEN);
+  margin-right: 10px;
 }
 
 .problem-solution {
@@ -190,19 +191,21 @@
 .correct-message {
   color: var(--GREEN);
   margin-bottom: 12px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 800;
 }
 
 .incorrect-message {
   color: var(--RED);
   margin-bottom: 12px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 800;
 }
 
 .solution-content {
-  font-size: 18px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
 }
 
 .levelUp {

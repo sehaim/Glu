@@ -106,18 +106,18 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
           <div className={styles['memo-textarea-button-list']}>
             <SecondaryButton
               label="저장"
-              size="small"
+              size="medium"
               onClick={handleMemoSave}
             />
             <SecondaryButton
               label="취소"
-              size="small"
+              size="medium"
               onClick={handleMemoCancel}
             />
             {selectedMemoIndex !== null && (
               <SecondaryButton
                 label="삭제"
-                size="small"
+                size="medium"
                 onClick={handleMemoDelete}
               />
             )}
@@ -127,7 +127,7 @@ export default function ProblemMemoManager({ problemId }: MemoManagerProps) {
         <div className={styles['memo-textarea-button-list']}>
           <SecondaryButton
             label="메모 작성"
-            size="medium"
+            size="large"
             onClick={handleNewMemo}
           />
         </div>

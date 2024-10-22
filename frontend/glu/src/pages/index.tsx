@@ -42,8 +42,8 @@ export default function MainPage() {
             <div>프로그램</div>
           </div>
           <div className={styles['section-describe']}>
-            내 문해력 수준에 맞는 문제 추천 서비스를 통해 쉽고 재미있게 문해력을
-            향상시킬 수 있습니다.
+            내 문해력 수준에 맞는 문제 추천 서비스를 통해 <br /> 쉽고 재미있게
+            문해력을 향상시킬 수 있습니다.
           </div>
           <div className={styles['button-container']}>
             <PrimaryButton

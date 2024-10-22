@@ -18,7 +18,7 @@
 
 .section-name {
   font-family: 'BMJUA';
-  font-size: 20px;
+  font-size: 24px;
   color: var(--TEXT_SECONDARY);
   margin-right: 30px;
 }
@@ -84,6 +84,7 @@
   font-family: 'HD';
   color: var(--TEXT_PRIMARY);
   text-align: left;
+  font-size: 18px;
 }
 
 .other-month-day {

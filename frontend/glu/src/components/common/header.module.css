@@ -41,7 +41,7 @@
 }
 
 .info-menu ul li {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   cursor: pointer;
@@ -56,7 +56,7 @@
 }
 
 .user-menu ul li {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--TEXT_SECONDARY);
   font-family: 'PT';
   cursor: pointer;
