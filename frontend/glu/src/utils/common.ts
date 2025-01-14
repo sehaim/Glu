@@ -129,19 +129,17 @@ export const createAuthAxios = (context?: {
               ? {
                   req: context.req,
                   res: context.res,
-                  maxAge: 60 * 60 * 24 * 14,
                   path: '/',
                   secure: true, // HTTPS에서만 전송
                   sameSite: 'none',
                 }
               : {
-                  maxAge: 60 * 60 * 24 * 14,
                   path: '/',
                   secure: true, // HTTPS에서만 전송
                   sameSite: 'none',
                 },
           );
-
+          
           return axios(updatedConfig); // 요청 재시도
         }
       }
